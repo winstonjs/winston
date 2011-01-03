@@ -53,7 +53,7 @@ helpers.assertLogger = function (logger) {
   assert.isFunction(logger.log);
   assert.isFunction(logger.add);
   assert.isFunction(logger.remove);
-  assert.equal(logger.level, 2);
+  assert.equal(logger.level, "info");
 };
 
 helpers.assertConsole = function (transport) {

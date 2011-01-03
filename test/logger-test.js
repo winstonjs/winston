@@ -20,7 +20,7 @@ vows.describe('winton/logger').addBatch({
   "The winston logger": {
     "the logger() method": {
       topic: function () {
-       return new (winston.Logger)({transports: {"Console": {level: 2}}});
+       return new (winston.Logger)({transports: {"Console": {level: "info"}}});
       },
       "should return a winston Logger": function (logger) {
         helpers.assertLogger(logger);
