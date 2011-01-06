@@ -1,5 +1,5 @@
 /*
- * loggly-test.js: Tests for instances of the Loggly transport
+ * riak-test.js: Tests for instances of the Riak transport
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE

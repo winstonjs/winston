@@ -40,28 +40,31 @@ helpers.loadConfig = function () {
 };
 
 helpers.size = function(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
+  var size = 0, key;
+  for (key in obj) {
+    if (obj.hasOwnProperty(key)) size++;
+  }
+  
+  return size;
 };
 
-
-helpers.assertLogger = function (logger) {
+helpers.assertLogger = function (logger, level) {
   assert.instanceOf(logger, winston.Logger);
   assert.isFunction(logger.log);
   assert.isFunction(logger.add);
   assert.isFunction(logger.remove);
-  assert.equal(logger.level, "info");
+  assert.equal(logger.level, level || "info");
+  Object.keys(logger.levels).forEach(function (method) {
+    assert.isFunction(logger[method]);
+  });
 };
 
 helpers.assertConsole = function (transport) {
-  assert.instanceOf(transport, winston.Transports.Console);
+  assert.instanceOf(transport, winston.transports.Console);
   assert.isFunction(transport.log);
 };
 
 helpers.assertRiak = function (transport) {
-  assert.instanceOf(transport, winston.Transports.Riak);
+  assert.instanceOf(transport, winston.transports.Riak);
   assert.isFunction(transport.log);
 };

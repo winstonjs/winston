@@ -11,6 +11,7 @@
   "dependencies": {
     "colors": ">= 0.3.0",
     "eyes": ">= 0.1.6",
+    "loggly": ">= 0.1.0",
     "riak-js": ">= 0.3.0beta4",
     "vows": ">= 0.5.2"
   },
