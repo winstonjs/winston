@@ -14,24 +14,6 @@ var path = require('path'),
     winston = require('winston'),
     helpers = require('./helpers');
 
-function testLevels (transport) {
-  var tests = {};
-  
-  Object.keys(winston.Logger.prototype.levels).forEach(function (level) {
-    tests['with the ' + level + ' level'] = {
-      topic: function () {
-        transport.log(level, 'test message', {}, this.callback);
-      },
-      "should respond with true": function (err, logged) {
-        assert.isNull(err);
-        assert.isTrue(logged);
-      }
-    };
-  });
-  
-  return tests;
-}
-
 var transport = new (winston.transports.Console)();
 
 vows.describe('winston/transports/console').addBatch({
@@ -39,6 +21,9 @@ vows.describe('winston/transports/console').addBatch({
     "should have the proper methods defined": function () {
       helpers.assertConsole(transport);
     },
-    "the log() method": testLevels(transport)
+    "the log() method": helpers.testLevels(transport, "should respond with true", function (err, logged) {
+      assert.isNull(err);
+      assert.isTrue(logged);
+    })
   }
 }).export(module);

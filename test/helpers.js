@@ -20,16 +20,11 @@ var helpers = exports;
 
 helpers.loadConfig = function () {
   try {
-    var configFile = path.join(__dirname, 'data', 'test-config.json'),
+    if (helpers.config) return helpers.config;
+    var configFile = path.join(__dirname, 'test-config.json'),
         stats = fs.statSync(configFile)
         config = JSON.parse(fs.readFileSync(configFile).toString());
-    if (config.subdomain === 'test-subdomain' 
-        || config.auth.username === 'test-username'
-        || config.auth.password === 'test-password') {
-      util.puts('Config file test-config.json must be updated with valid data before running tests');
-      process.exit(0);
-    }
-
+    
     helpers.config = config;
     return config;
   }
@@ -64,7 +59,36 @@ helpers.assertConsole = function (transport) {
   assert.isFunction(transport.log);
 };
 
+helpers.assertLoggly = function (transport) {
+  assert.instanceOf(transport, winston.transports.Loggly);
+  assert.isFunction(transport.log);  
+};
+
 helpers.assertRiak = function (transport) {
   assert.instanceOf(transport, winston.transports.Riak);
   assert.isFunction(transport.log);
+};
+
+helpers.testLevels = function (transport, assertMsg, assertFn) {
+  var tests = {};
+  Object.keys(winston.Logger.prototype.levels).forEach(function (level) {
+    var test = {
+      topic: function () {
+        transport.log(level, 'test message', {}, this.callback);
+      }
+    };
+    
+    test[assertMsg] = assertFn;
+    tests['with the ' + level + ' level'] = test;
+  });
+  
+  var test = {
+    topic: function () {
+      transport.log('info', 'test message', { metadata: true }, this.callback);
+    }
+  };
+  
+  test[assertMsg] = assertFn;
+  tests['when passed metadata'] = test;
+  return tests;
 };
