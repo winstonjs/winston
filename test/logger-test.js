@@ -38,7 +38,7 @@ vows.describe('winton/logger').addBatch({
       },
       "should add the console Transport onto transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
-        helpers.assertConsole(logger.transports.Console);
+        helpers.assertConsole(logger.transports.console);
       },
       "should throw an error when the same Transport is added": function (logger) {
         assert.throws(function () { logger.add('console') }, Error);
@@ -58,8 +58,8 @@ vows.describe('winton/logger').addBatch({
         },
         "should be able to add multiple transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 2);
-          helpers.assertConsole(logger.transports.Console);
-          helpers.assertRiak(logger.transports.Riak);
+          helpers.assertConsole(logger.transports.console);
+          helpers.assertRiak(logger.transports.riak);
         }
       }
     }
@@ -81,7 +81,7 @@ vows.describe('winton/logger').addBatch({
       },
       "should remove the Console transport from transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
-        helpers.assertRiak(logger.transports.Riak);
+        helpers.assertRiak(logger.transports.riak);
       },
       "and removing an additional transport": {
         topic: function (logger) {

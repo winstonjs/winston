@@ -21,7 +21,7 @@ vows.describe('winston/transports/console').addBatch({
     "should have the proper methods defined": function () {
       helpers.assertConsole(transport);
     },
-    "the log() method": helpers.testLevels(transport, "should respond with true", function (err, logged) {
+    "the log() method": helpers.testLevels(transport, "should respond with true", function (ign, err, logged) {
       assert.isNull(err);
       assert.isTrue(logged);
     })

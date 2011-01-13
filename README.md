@@ -25,7 +25,31 @@ Winston is designed to be a simple and universal logging library with support fo
 
 ## Inspirations
 
-## Tests
+## Run Tests
+All of the winston tests are written in [vows][1], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/test-config.json before running tests:
+<pre>
+  {
+    "transports": {
+      "console": {},
+      "riak": {},
+      "loggly": {
+        "subdomain": "your-subdomain",
+        "inputToken": "really-long-token-you-got-from-loggly",
+        "auth": {
+          "username": "your-username",
+          "password": "your-password"
+        }
+      }
+    }
+  }
+</pre>
 
-## Author: [Charlie Robbins](http://twitter.com/indexzero)
-## Contributors: [Matthew Bergman](http://github.com/fotoverite)
+Once you have valid Rackspace credentials you can run tests with [vows][1]:
+<pre>
+  vows test/*-test.js --spec
+</pre>
+
+#### Author: [Charlie Robbins](http://twitter.com/indexzero)
+#### Contributors: [Matthew Bergman](http://github.com/fotoverite)
+
+[1]: http://vowsjs.org

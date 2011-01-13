@@ -22,7 +22,7 @@ vows.describe('winston/transports/loggly').addBatch({
     "should have the proper methods defined": function () {
       helpers.assertLoggly(transport);
     },
-    "the log() method": helpers.testLevels(transport, "should log messages to loggly", function (err, result) {
+    "the log() method": helpers.testLevels(transport, "should log messages to loggly", function (ign, err, result) {
       assert.isNull(err);
       assert.isObject(result);
       assert.equal(result.response, 'ok');

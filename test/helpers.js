@@ -74,7 +74,7 @@ helpers.testLevels = function (transport, assertMsg, assertFn) {
   Object.keys(winston.Logger.prototype.levels).forEach(function (level) {
     var test = {
       topic: function () {
-        transport.log(level, 'test message', {}, this.callback);
+        transport.log(level, 'test message', {}, this.callback.bind(this, null));
       }
     };
     
@@ -84,7 +84,7 @@ helpers.testLevels = function (transport, assertMsg, assertFn) {
   
   var test = {
     topic: function () {
-      transport.log('info', 'test message', { metadata: true }, this.callback);
+      transport.log('info', 'test message', { metadata: true }, this.callback.bind(this, null));
     }
   };
   
