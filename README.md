@@ -32,10 +32,11 @@ There also seemed to be a log of libraries out there that were coupling their im
 ## Adding Custom Logging Transports
 
 ## Inspirations
-1. [log.js](https://github.com/visionmedia/log.js)
-2. [socket.io](http://socket.io)
-3. [node-rlog](https://github.com/jbrisbin/node-rlog)
-4. 
+1. [npm](https://github.com/isaacs/npm/blob/master/lib/utils/log.js)
+2. [log.js](https://github.com/visionmedia/log.js)
+3. [socket.io](http://socket.io)
+4. [node-rlog](https://github.com/jbrisbin/node-rlog)
+5. [BigBrother](https://github.com/feisty/BigBrother)
 
 ## Road Map
 1. Make levels configurable for user preference (npm-style, syslog-style, etc)
