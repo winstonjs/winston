@@ -36,6 +36,13 @@ There also seemed to be a log of libraries out there that were coupling their im
 2. [socket.io](http://socket.io)
 3. [node-rlog](https://github.com/jbrisbin/node-rlog)
 
+## Road Map
+1. Make levels configurable for user preference (npm-style, syslog-style, etc)
+2. Create API for reading from logs across all transports.  
+3. Add more transports and make existing transports more robust:
+  a. Riak
+  b. CouchDB
+  c. Redis
 
 ## Run Tests
 All of the winston tests are written in [vows][1], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/test-config.json before running tests:

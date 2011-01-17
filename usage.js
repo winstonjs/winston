@@ -24,9 +24,7 @@ winston.add('loggly', {
 });
 
 // Remove console (set by default)
-winston.remove('console');
-
-winston.load('config-file.json');
+winston.remove(winston.transports.Console);
 
 //
 // Remark: These statements are equivalent
@@ -42,17 +40,18 @@ winston.info('some message', { metadata: 'hi'});
 
 var options = {
   emitErrs: false,
-  transports: {
-    'riak': winston.default, 
-    'loggly': {
+  transports: [
+    new (winston.transports.Riak)(),
+    new (winston.transports.Loggly)({
       subdomain: 'winston',
       inputToken: 'really-long-thing-you-got-from-loggly',
       auth: {
         username: 'user',
         password: 'pass'
       }
-    }
-  }
+    })
+  ]
 }
+
 var logger = new (winston.Logger)(options);
 logger.log('info', { message: 'some message' });
