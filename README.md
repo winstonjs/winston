@@ -21,13 +21,19 @@ Winston is designed to be a simple and universal logging library with support fo
 
 There also seemed to be a log of libraries out there that were coupling their implementation of logging (i.e. where the logs to) to the API that they exposed to the programmer. This library aims to decouple those parts of the process to make it more flexible and extensible.
 
-## Supported Transports
+## Usage
+There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger
+
+### Using the Default Logger
+
+### Instantiating your own Logger
+
+### Supported Transports
 1. Console
 2. Files
 3. Riak
 4. Loggly
 
-## Usage
 
 ## Adding Custom Logging Transports
 
