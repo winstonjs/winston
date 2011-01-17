@@ -35,11 +35,13 @@ There also seemed to be a log of libraries out there that were coupling their im
 1. [log.js](https://github.com/visionmedia/log.js)
 2. [socket.io](http://socket.io)
 3. [node-rlog](https://github.com/jbrisbin/node-rlog)
+4. 
 
 ## Road Map
 1. Make levels configurable for user preference (npm-style, syslog-style, etc)
-2. Create API for reading from logs across all transports.  
-3. Add more transports and make existing transports more robust:
+2. Improve support for adding custom Transports not defined in Winston core.
+3. Create API for reading from logs across all transports.  
+4. Add more transports and make existing transports more robust:
   a. Riak
   b. CouchDB
   c. Redis
@@ -49,8 +51,7 @@ All of the winston tests are written in [vows][1], and cover all of the use case
 <pre>
   {
     "transports": {
-      "console": {},
-      "riak": {},
+      "riak": { "debug": false },
       "loggly": {
         "subdomain": "your-subdomain",
         "inputToken": "really-long-token-you-got-from-loggly",
