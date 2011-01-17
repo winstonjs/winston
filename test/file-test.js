@@ -16,8 +16,8 @@ var path = require('path'),
     helpers = require('./helpers');
 
 var stream = fs.createWriteStream(path.join(__dirname, 'testfile.log')),
-    fileTransport = new (winston.transports.File)(path.join(__dirname, 'testfilename.log')),
-    streamTransport = new (winston.transports.File)(stream);
+    fileTransport = new (winston.transports.File)({ filename: path.join(__dirname, 'testfilename.log') }),
+    streamTransport = new (winston.transports.File)({ stream: stream });
 
 vows.describe('winston/transports/console').addBatch({
   "An instance of the File Transport": {

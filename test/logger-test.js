@@ -10,13 +10,14 @@ require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
 
 var path = require('path'),
     vows = require('vows'),
+    eyes = require('eyes'),
     assert = require('assert'),
     winston = require('winston'),
     helpers = require('./helpers');
 
 vows.describe('winton/logger').addBatch({
   "An instance of winston.Logger": {
-    topic: new (winston.Logger)({ transports: { console: { level: "info" }}}), 
+    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }), 
     "should have the correct methods / properties defined": function (logger) {
       helpers.assertLogger(logger);
     },
@@ -34,14 +35,14 @@ vows.describe('winton/logger').addBatch({
     },
     "the add() method with a supported transport": {
       topic: function (logger) {       
-        return logger.add("console");  
+        return logger.add(winston.transports.Console);  
       },
       "should add the console Transport onto transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
         helpers.assertConsole(logger.transports.console);
       },
       "should throw an error when the same Transport is added": function (logger) {
-        assert.throws(function () { logger.add('console') }, Error);
+        assert.throws(function () { logger.add(winston.transports.Console) }, Error);
       },
       "the log() method": {
         topic: function (logger) {
@@ -52,32 +53,73 @@ vows.describe('winton/logger').addBatch({
           helpers.assertConsole(transport);
         }
       },
+      "the profile() method": {
+        "when passed a callback": {
+          topic: function (logger) {
+            var that = this;
+            logger.profile('test1');
+            setTimeout(function () {
+              logger.profile('test1', function (err, level, msg) {
+                that.callback(err, level, msg, logger);
+              });
+            }, 1000);
+          },
+          "should respond with the appropriate profile message": function (err, level, msg, logger) {
+            assert.isNull(err);
+            assert.equal(level, 'info');
+            assert.match(msg, /(\d+)ms/);
+            assert.isTrue(typeof logger.profilers['test'] === 'undefined');
+          }
+        },
+        "when not passed a callback": {
+          topic: function (logger) {
+            var that = this;
+            logger.profile('test2');
+            logger.once('log', that.callback.bind(null, null));
+            setTimeout(function () {
+              logger.profile('test2');
+            }, 1000);
+          },
+          "should respond with the appropriate profile message": function (err, transport, level, msg) {
+            assert.isNull(err);
+            assert.equal(level, 'info');
+            assert.match(msg, /(\d+)ms/);
+          }
+        }
+      },
       "and adding an additional transport": {
         topic: function (logger) {       
-          return logger.add("Riak", {}); 
+          return logger.add(winston.transports.File, { 
+            filename: path.join(__dirname, 'testfile2.log') 
+          }); 
         },
         "should be able to add multiple transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 2);
           helpers.assertConsole(logger.transports.console);
-          helpers.assertRiak(logger.transports.riak);
+          helpers.assertFile(logger.transports.file);
         }
       }
     }
   }
 }).addBatch({
   "The winston logger": {
-    topic: new (winston.Logger)({ transports: { console: {}, riak: {} } }),
+    topic: new (winston.Logger)({ 
+      transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.Riak)()
+      ] 
+    }),
     "should return have two transports": function(logger) {
       assert.equal(helpers.size(logger.transports), 2);
     },
     "the remove() with an unadded transport": {
       "should throw an Error": function (logger) {
-       assert.throws(function () { logger.remove('loggly') }, Error);
+        assert.throws(function () { logger.remove(winston.transports.Loggly) }, Error);
       }
     },
     "the remove() method with an added transport": {
       topic: function (logger) {
-         return logger.remove('console');  
+         return logger.remove(winston.transports.Console);  
       },
       "should remove the Console transport from transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
@@ -85,7 +127,7 @@ vows.describe('winton/logger').addBatch({
       },
       "and removing an additional transport": {
         topic: function (logger) {
-           return logger.remove('riak');  
+           return logger.remove(winston.transports.Riak);  
         },
         "should remove Riak transport from transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 0);
