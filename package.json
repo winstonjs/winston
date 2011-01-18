@@ -3,6 +3,9 @@
   "description": "A multi-transport async logging library for Node.js",
   "version": "0.1.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
+  "contributors": [
+    { "name": "Matthew Bergman", "email": "mzbphoto@gmail.com" }, 
+  ],
   "repository": {
       "type": "git",
       "url": "http://github.com/indexzero/winston.git" 
@@ -11,7 +14,7 @@
   "dependencies": {
     "colors": ">= 0.3.0",
     "eyes": ">= 0.1.6",
-    "loggly": ">= 0.1.0",
+    "loggly": ">= 0.1.1",
     "riak-js": ">= 0.3.0beta4",
     "vows": ">= 0.5.2"
   },
