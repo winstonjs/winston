@@ -2,7 +2,7 @@
 
 A multi-transport async logging library for node.js.
 
-<span style="font-size:36px; font-weight:bold">CHILL WINSTON!" ... I put it in the logs.</span>
+<span style="font-size:28px; font-weight:bold">CHILL WINSTON!" ... I put it in the logs.</span>
 
 ## Installation
 
