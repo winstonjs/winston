@@ -1,8 +1,6 @@
 # winston
 
-A multi-transport async logging library for node.js.
-
-<span style="font-size:28px; font-weight:bold">&quot;CHILL WINSTON!&quot; ... I put it in the logs.</span>
+A multi-transport async logging library for node.js. <span style="font-size:28px; font-weight:bold;">&quot;CHILL WINSTON! ... I put it in the logs.&quot;</span>
 
 ## Installation
 
@@ -93,7 +91,7 @@ Currently, winston only supports [npm][0] style logging levels, but it is on the
     info: 2,     // logger.info('info msg');
     warn: 3,     // logger.warn('warn msg');
     debug: 4,    // logger.debug('debug msg');
-    error: 5     // logger.debug('error msg');
+    error: 5     // logger.error('error msg');
   };
 </pre>
 
@@ -105,6 +103,19 @@ Each instance of winston.Logger is also an instance of an [EventEmitter][1]. A l
   });
   
   logger.info('CHILL WINSTON!', { seriously: true });
+</pre>
+
+It is also worth mentioning that the logger also emits an 'error' event which you should handle or suppress if you don't want unhandled exceptions:
+<pre>
+  //
+  // Handle errors
+  //
+  logger.on('error', function (err) { /* Do Something */ });
+  
+  //
+  // Or just suppress them.
+  //
+  logger.emitErrs = false;
 </pre>
 
 Every logging method described in the previous section also takes an optional callback which will be called only when all of the transports have logged the specified message.
