@@ -2,7 +2,7 @@
 
 A multi-transport async logging library for node.js.
 
-<span style="font-size:28px; font-weight:bold">CHILL WINSTON!" ... I put it in the logs.</span>
+<span style="font-size:28px; font-weight:bold">&quot;CHILL WINSTON!&quot; ... I put it in the logs.</span>
 
 ## Installation
 
@@ -274,7 +274,7 @@ All of the winston tests are written in [vows][13], and cover all of the use cas
   }
 </pre>
 
-Once you have valid Rackspace credentials you can run tests with [vows][13]:
+Once you have valid configuration and credentials you can run tests with [vows][13]:
 <pre>
   vows test/*-test.js --spec
 </pre>
