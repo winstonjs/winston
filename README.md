@@ -2,7 +2,7 @@
 
 A multi-transport async logging library for node.js.
 
-### "CHILL WINSTON!" ... I put it in the logs.
+<span style="font-size:36px; font-weight:bold">CHILL WINSTON!" ... I put it in the logs.</span>
 
 ## Installation
 
@@ -17,9 +17,9 @@ A multi-transport async logging library for node.js.
 </pre>
 
 ## Motivation
-Winston is designed to be a simple and universal logging library with support for multiple transports. A transport is essentially a storage device for your logs. Each instance of the winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file. 
+Winston is designed to be a simple and universal logging library with support for multiple transports. A transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file. 
 
-There also seemed to be a log of libraries out there that were coupling their implementation of logging (i.e. how the logs are stored / indexed) to the API that they exposed to the programmer. This library aims to decouple those parts of the process to make it more flexible and extensible.
+There also seemed to be a lot of logging libraries out there that coupled their implementation of logging (i.e. how the logs are stored / indexed) to the API that they exposed to the programmer. This library aims to decouple those parts of the process to make it more flexible and extensible.
 
 ## Usage
 There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger. The former is merely intended to be a convenient shared logger to use throughout your application if you so choose. 
@@ -62,6 +62,7 @@ You can work with this logger in the same way that you work with the default log
   
   //
   // Adding / Removing Transports
+  //   (Yes It's chainable)
   //
   logger.add(winston.transports.Riak)
         .remove(winston.transports.Console);
@@ -87,12 +88,12 @@ Currently, winston only supports [npm][0] style logging levels, but it is on the
 <pre>
   // TODO: Make levels configurable
   var levels = Logger.prototype.levels = {
-    silly: 0, 
-    verbose: 1, 
-    info: 2, 
-    warn: 3,
-    debug: 4, 
-    error: 5
+    silly: 0,    // logger.silly('silly msg');
+    verbose: 1,  // logger.verbose('verbose msg');
+    info: 2,     // logger.info('info msg');
+    warn: 3,     // logger.warn('warn msg');
+    debug: 4,    // logger.debug('debug msg');
+    error: 5     // logger.debug('error msg');
   };
 </pre>
 
@@ -106,7 +107,7 @@ Each instance of winston.Logger is also an instance of an [EventEmitter][1]. A l
   logger.info('CHILL WINSTON!', { seriously: true });
 </pre>
 
-Every logging method described in the previous section also takes an optional callback which will be raised only when all of the transports have logged the specified message.
+Every logging method described in the previous section also takes an optional callback which will be called only when all of the transports have logged the specified message.
 <pre>
   logger.info('CHILL WINSTON!', { seriously: true }, function (err, level, msg, meta) {
     // [msg] and [meta] have now been logged at [level] to **every** transport.
@@ -146,7 +147,7 @@ In addition to logging messages and metadata, winston also has a simple profilin
 All profile messages are set to the 'info' by default. There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
 ## Working with Transports
-Right now there are four transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Pull requests will not be accepted without associated tests.
+Right now there are four transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
    
 1. __Console:__ Output to the terminal
 2. __Files:__ Append to a file
@@ -159,6 +160,7 @@ Right now there are four transports supported by winston core. If you have a tra
 </pre>
 
 The Console transport takes two simple options:
+
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output
 * __colorize:__ Boolean flag indicating if we should colorize output. *[not implemented]*
@@ -170,7 +172,8 @@ The Console transport takes two simple options:
   winston.add(winston.transports.File, options)
 </pre>
 
-The File transport should really be the 'Stream' transport since it will accept any WritableStream. It is named such because it will also accept filenames via the 'filename' option:
+The File transport should really be the 'Stream' transport since it will accept any [WritableStream][14]. It is named such because it will also accept filenames via the 'filename' option:
+
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __colorize:__ Boolean flag indicating if we should colorize output. *[not implemented]*
@@ -185,6 +188,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 </pre>
 
 In addition to the options accepted by the [riak-js][3] [client][4], the Riak transport also accepts the following options. It is worth noting that the riak-js debug option is set to *false* by default:
+
 * __level:__ Level of messages that this transport should log.
 * __bucketName:__ The name of the Riak bucket you wish your logs to be in.
 
@@ -196,6 +200,7 @@ In addition to the options accepted by the [riak-js][3] [client][4], the Riak tr
 </pre>
 
 The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
+
 * __level:__ Level of messages that this transport should log. 
 * __subdomain:__ The subdomain of your Loggly account. *[required]*
 * __auth__: The authentication information for your Loggly account. *[required with inputName]*
@@ -205,6 +210,34 @@ The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementatio
 *Metadata:* Logged in suggested [Loggly format][2]
 
 ### Adding Custom Transports
+Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
+<pre>
+  var winston = require('winston');
+  
+  var CustomLogger = winston.transports.CustomerLogger = function (options) {
+    //
+    // Name this logger
+    //
+    this.name = 'customLogger';
+    
+    //
+    // Set the level from your options
+    //
+    this.level = options.level || 'info';
+    
+    //
+    // Configure your storage backing as you see fit
+    //
+  };
+  
+  CustomLogger.prototype.log = function (level, msg, meta, callback) {
+    //
+    // Store this message and metadata, maybe use some custom logic
+    // then callback indicating success.
+    //
+    callback(null, true); 
+  };
+</pre> 
 
 ## What's Next?
 Winston is stable and under active development. It is supported by and used at [Nodejitsu][5]. 
@@ -221,10 +254,7 @@ Winston is stable and under active development. It is supported by and used at [
 1. Make levels configurable for user preference (npm-style, syslog-style, etc)
 2. Improve support for adding custom Transports not defined in Winston core.
 3. Create API for reading from logs across all transports.  
-4. Add more transports and make existing transports more robust:
-  a. Riak
-  b. CouchDB
-  c. Redis
+4. Add more transports and make existing transports more robust: Riak, CouchDB, Redis
 
 ## Run Tests
 All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/test-config.json before running tests:
@@ -266,3 +296,4 @@ Once you have valid Rackspace credentials you can run tests with [vows][13]:
 [11]: https://github.com/jbrisbin/node-rlog
 [12]: https://github.com/feisty/BigBrother
 [13]: http://vowsjs.org
+[14]: http://nodejs.org/docs/v0.3.5/api/streams.html#writable_Stream
