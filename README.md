@@ -174,7 +174,7 @@ The Console transport takes two simple options:
 
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output
-* __colorize:__ Boolean flag indicating if we should colorize output. *[not implemented]*
+* __colorize:__ Boolean flag indicating if we should colorize output.
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -187,7 +187,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
-* __colorize:__ Boolean flag indicating if we should colorize output. *[not implemented]*
+* __colorize:__ Boolean flag indicating if we should colorize output.
 * __filename:__ The filename of the logfile to write output to.
 * __stream:__ The WriteableStream to write output to.
 
@@ -201,7 +201,20 @@ The File transport should really be the 'Stream' transport since it will accept 
 In addition to the options accepted by the [riak-js][3] [client][4], the Riak transport also accepts the following options. It is worth noting that the riak-js debug option is set to *false* by default:
 
 * __level:__ Level of messages that this transport should log.
-* __bucketName:__ The name of the Riak bucket you wish your logs to be in.
+* __bucket:__ The name of the Riak bucket you wish your logs to be in or a function to generate bucket names dynamically.
+
+<pre>
+  // Use a single bucket for all your logs
+  var singleBucketTransport = new (winston.transports.Riak)({ bucket: 'some-logs-go-here' });
+  
+  // Generate a dynamic bucket based on the date and level
+  var dynamicBucketTransport = new (winston.transports.Riak)({
+    bucket: function (level, msg, meta, now) {
+      var d = new Date(now);
+      return level + [d.getDate(), d.getMonth(), d.getFullYear()].join('-');
+    }
+  });
+</pre>
 
 *Metadata:* Logged as JSON literal in Riak
 
@@ -265,7 +278,7 @@ Winston is stable and under active development. It is supported by and used at [
 1. Make levels configurable for user preference (npm-style, syslog-style, etc)
 2. Improve support for adding custom Transports not defined in Winston core.
 3. Create API for reading from logs across all transports.  
-4. Add more transports and make existing transports more robust: Riak, CouchDB, Redis
+4. Add more transports: CouchDB, Redis
 
 ## Run Tests
 All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/test-config.json before running tests:
