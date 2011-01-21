@@ -15,17 +15,36 @@ var path = require('path'),
     helpers = require('./helpers');
     
 var config = helpers.loadConfig(),
-    transport = new (winston.transports.Loggly)(config.transports.loggly);
+    tokenTransport = new (winston.transports.Loggly)({ 
+      subdomain: config.transports.loggly.subdomain,
+      inputToken: config.transports.loggly.inputToken
+    }),
+    nameTransport = new (winston.transports.Loggly)({ 
+      subdomain: config.transports.loggly.subdomain,
+      inputName: config.transports.loggly.inputName,
+      auth: config.transports.loggly.auth
+    });
 
 vows.describe('winston/transports/loggly').addBatch({
   "An instance of the Loggly Transport": {
-    "should have the proper methods defined": function () {
-      helpers.assertLoggly(transport);
+    "when passed an input token": {
+      "should have the proper methods defined": function () {
+        helpers.assertLoggly(tokenTransport);
+      },
+      "the log() method": helpers.testLevels(tokenTransport, "should log messages to loggly", function (ign, err, result) {
+        assert.isNull(err);
+        assert.isObject(result);
+        assert.equal(result.response, 'ok');
+      })
     },
-    "the log() method": helpers.testLevels(transport, "should log messages to loggly", function (ign, err, result) {
-      assert.isNull(err);
-      assert.isObject(result);
-      assert.equal(result.response, 'ok');
-    })
+    "when passed an input name": {
+      "should have the proper methods defined": function () {
+        helpers.assertLoggly(nameTransport);
+      },
+      "the log() method": helpers.testLevels(nameTransport, "should log messages to loggly", function (ign, err, result) {
+        assert.isNull(err);
+        assert.isTrue(result === true || result.response === 'ok');
+      })
+    }
   }
 }).export(module);

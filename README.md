@@ -85,7 +85,7 @@ Setting the level for your logging message can be accomplished in one of two way
 Currently, winston only supports [npm][0] style logging levels, but it is on the roadmap to support customizable logging levels. 
 <pre>
   // TODO: Make levels configurable
-  var levels = Logger.prototype.levels = {
+  var levels = {
     silly: 0,    // logger.silly('silly msg');
     verbose: 1,  // logger.verbose('verbose msg');
     info: 2,     // logger.info('info msg');

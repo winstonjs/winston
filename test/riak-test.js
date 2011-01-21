@@ -12,6 +12,7 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     winston = require('winston'),
+    utils = require('winston/utils'),
     helpers = require('./helpers');
     
 var config = helpers.loadConfig(),
