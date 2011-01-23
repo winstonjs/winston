@@ -142,20 +142,21 @@ The way these objects is stored varies from transport to transport (to best supp
 In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
 <pre>
   //
-  // Start profile of 'test' 
+  // Start profile of 'test'
+  // Remark: Consider using Date.now() with async operations 
   //
   winston.profile('test');
   
   setTimeout(function () {
     //
     // Stop profile of 'test'. Logging will now take place:
-    //   "17 Jan 21:00:00 - info: 1000ms - test"
+    //   "17 Jan 21:00:00 - info: test duration=1000ms"
     //
     winston.profile('test');
   }, 1000);
 </pre> 
 
-All profile messages are set to the 'info' by default. There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
+All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
 ## Working with Transports
 Right now there are four transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
