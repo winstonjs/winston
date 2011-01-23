@@ -58,15 +58,15 @@ vows.describe('winton/logger').addBatch({
             var that = this;
             logger.profile('test1');
             setTimeout(function () {
-              logger.profile('test1', function (err, level, msg) {
-                that.callback(err, level, msg, logger);
+              logger.profile('test1', function (err, level, msg, meta) {
+                that.callback(err, level, msg, meta, logger);
               });
             }, 1000);
           },
-          "should respond with the appropriate profile message": function (err, level, msg, logger) {
+          "should respond with the appropriate profile message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(msg, /(\d+)ms/);
+            assert.match(meta.duration, /(\d+)ms/);
             assert.isTrue(typeof logger.profilers['test'] === 'undefined');
           }
         },
@@ -79,10 +79,10 @@ vows.describe('winton/logger').addBatch({
               logger.profile('test2');
             }, 1000);
           },
-          "should respond with the appropriate profile message": function (err, transport, level, msg) {
+          "should respond with the appropriate profile message": function (err, transport, level, msg, meta) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(msg, /(\d+)ms/);
+            assert.match(meta.duration, /(\d+)ms/);
           }
         }
       },
