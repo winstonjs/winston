@@ -26,6 +26,7 @@ vows.describe('winston').addBatch({
       assert.isFunction(winston.transports.Loggly);
       assert.isFunction(winston.transports.Riak);
       assert.isObject(winston.defaultTransports().console);
+      assert.isFalse(winston.emitErrs);
       
       ['Logger', 'defaultTransports', 'add', 'remove']
         .concat(Object.keys(winston.Logger.prototype.levels))
