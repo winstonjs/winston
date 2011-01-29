@@ -32,6 +32,18 @@ vows.describe('winton/logger').addBatch({
     "the log() method should throw an error": function (logger) {
       assert.throws(function () { logger.log('anything') }, Error);
     },
+    "the extend() method called on an empty object": {
+      topic: function (logger) {
+        var empty = {};
+        logger.extend(empty);
+        return empty;
+      },
+      "should define the appropriate methods": function (extended) {
+        ['log', 'profile'].concat(Object.keys(winston.Logger.prototype.levels)).forEach(function (method) {
+          assert.isFunction(extended[method]);
+        });
+      }
+    },
     "the add() method with a supported transport": {
       topic: function (logger) {       
         return logger.add(winston.transports.Console);  

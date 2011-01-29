@@ -158,6 +158,20 @@ In addition to logging messages and metadata, winston also has a simple profilin
 
 All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
+### Extending another object with Logging functionality
+Often in a given code base with lots of Loggers it is useful to add logging methods a different object so that these methods can be called with less syntax. Winston exposes this functionality via the 'extend' method:
+
+<pre>
+  var myObject = {};
+  
+  logger.extend(myObject);
+  
+  //
+  // You can now call logger methods on 'myObject'
+  //
+  myObject.info('127.0.0.1 - there's no place like home');
+</pre>
+
 ## Working with Transports
 Right now there are four transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
    
