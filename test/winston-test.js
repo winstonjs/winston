@@ -29,7 +29,7 @@ vows.describe('winston').addBatch({
       assert.isFalse(winston.emitErrs);
       
       ['Logger', 'defaultTransports', 'add', 'remove']
-        .concat(Object.keys(winston.Logger.prototype.levels))
+        .concat(Object.keys(winston.levels))
         .forEach(function (m) {
           assert.isFunction(winston[m]);
         });
@@ -44,7 +44,7 @@ vows.describe('winston').addBatch({
         return empty;
       },
       "should define the appropriate methods": function (extended) {
-        ['log', 'profile'].concat(Object.keys(winston.Logger.prototype.levels)).forEach(function (method) {
+        ['log', 'profile'].concat(Object.keys(winston.levels)).forEach(function (method) {
           assert.isFunction(extended[method]);
         });
       }

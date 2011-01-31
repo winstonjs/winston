@@ -36,10 +36,12 @@ vows.describe('winton/logger').addBatch({
       topic: function (logger) {
         var empty = {};
         logger.extend(empty);
-        return empty;
+        return {extended: empty, levels: logger.levels};
       },
-      "should define the appropriate methods": function (extended) {
-        ['log', 'profile'].concat(Object.keys(winston.Logger.prototype.levels)).forEach(function (method) {
+      "should define the appropriate methods": function (object) {
+        var levels = object.levels;
+        var extended = object.extended;
+        ['log', 'profile'].concat(Object.keys(levels)).forEach(function (method) {
           assert.isFunction(extended[method]);
         });
       }
@@ -143,6 +145,129 @@ vows.describe('winton/logger').addBatch({
         "should remove Riak transport from transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 0);
         }
+      }
+    }
+  }
+}).addBatch({
+  "The winston logger": {
+    topic: new (winston.Logger)({ 
+      transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.Riak)()
+      ] 
+    }),
+    "the setLevel() method with no options": {
+      topic: function(logger) {
+        var logger = new (winston.Logger);
+        return logger.setLevel('new');
+      },
+      "should add level to the Logger": function(logger) {
+        assert.isNotNull(logger.levels['new']);
+      }, 
+      "should add the level log function to the logger": function(logger) {
+        assert.isFunction(logger.new);
+      },
+      "should increment the levels for the logger correctly": function(logger) {
+        assert.equal(logger.levels['new'], 0);
+        assert.equal(logger.levels['silly'], 1);
+        assert.equal(logger.levels['verbose'], 2);
+        assert.equal(logger.levels['info'], 3);
+        assert.equal(logger.levels['warn'], 4);
+        assert.equal(logger.levels['debug'], 5);
+        assert.equal(logger.levels['error'], 6);
+
+      }, 
+      "should not effect the winston library default levels or functions": function(logger) {
+        assert.isUndefined(winston.new);
+      },
+    },
+    "the setLevel() method with position option": {
+       topic: function(logger) {
+        logger = new (winston.Logger);
+        return logger.setLevel('new', {position: 4});
+      },
+      "should increment the levels for the logger correctly": function (logger) {
+        assert.equal(logger.levels['silly'], 0);
+        assert.equal(logger.levels['verbose'], 1);
+        assert.equal(logger.levels['info'], 2);
+        assert.equal(logger.levels['warn'], 3);
+        assert.equal(logger.levels['new'], 4);
+        assert.equal(logger.levels['debug'], 5);
+        assert.equal(logger.levels['error'], 6);
+      }
+    },
+    "the setLevel() method being called with an already set level": {
+        topic: function(logger) {
+          logger = new (winston.Logger);
+          return logger.setLevel('silly', {position: 4});
+        }, 
+        "It should remove the level and set it by the options given": function (logger) {
+          assert.equal(logger.levels['verbose'], 0);
+          assert.equal(logger.levels['info'], 1);
+          assert.equal(logger.levels['warn'], 2);
+          assert.equal(logger.levels['debug'], 3);
+          assert.equal(logger.levels['silly'], 4);
+          assert.equal(logger.levels['error'], 5);
+        }
+    },
+    "the setLevel() method being called with position set to greater then the available methods": {
+        topic: function(logger) {
+          logger = new (winston.Logger);
+          return logger.setLevel('insane', {position: 20});
+        }, 
+        "It set the level last": function (logger) {
+          assert.equal(logger.levels['silly'], 0);
+
+          assert.equal(logger.levels['silly'], 0);
+          assert.equal(logger.levels['verbose'], 1);
+          assert.equal(logger.levels['info'], 2);
+          assert.equal(logger.levels['warn'], 3);
+          assert.equal(logger.levels['debug'], 4);
+          assert.equal(logger.levels['error'], 5);
+          assert.equal(logger.levels['insane'], 6);
+        }
+    }
+  }
+}).addBatch({
+  "The winston logger": {
+    topic: new (winston.Logger)({ 
+      transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.Riak)()
+      ] 
+    }),
+    "the removeLevel() method": {
+      topic: function(logger) {
+        var logger = new (winston.Logger);
+        return logger.removeLevel('warn');
+      },
+      "should remove level from the Logger": function(logger) {
+        assert.isUndefined(logger.levels['warn']);
+      }, 
+      "should remove the level log function to the logger": function(logger) {
+        assert.isUndefined(logger.warn);
+      },
+      "should decrement the levels for the logger correctly": function(logger) {
+        assert.equal(logger.levels['silly'], 0);
+        assert.equal(logger.levels['verbose'], 1);
+        assert.equal(logger.levels['info'], 2);
+        assert.equal(logger.levels['debug'], 3);
+        assert.equal(logger.levels['error'], 4);
+
+      }, 
+      "should not effect the winston library default levels or functions": function(logger) {
+        assert.isFunction(winston.warn);
+        assert.isNumber(winston.levels['warn']);
+      },
+    },
+    "should reset the logging level of the Logger if set level is removed": function(logger) {
+      var logger = new (winston.Logger);
+      logger.removeLevel(logger.level);
+      assert.equal(logger.level, 'warn');
+    },
+    "the removeLevel() with a undefined level": {
+      "should throw an Error": function (logger) {
+        assert.throws(function () { logger.removeLevel('fake') }, Error);
       }
     }
   }

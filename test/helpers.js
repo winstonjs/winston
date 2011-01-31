@@ -13,10 +13,14 @@ var fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('winston');
-    loggly = require('loggly');
-
+    winston = require('winston'),
+    loggly = require('loggly')
+    
 var helpers = exports;
+
+helpers.npmLevels =  require('../lib/winston/levels').npm;
+helpers.syslogLevels = require('../lib/winston/levels').syslog
+
 
 helpers.loadConfig = function () {
   try {
@@ -76,13 +80,14 @@ helpers.assertRiak = function (transport) {
 
 helpers.testLevels = function (transport, assertMsg, assertFn) {
   var tests = {};
-  Object.keys(winston.Logger.prototype.levels).forEach(function (level) {
+  
+  Object.keys(helpers.npmLevels).forEach(function (level) {
     var test = {
       topic: function () {
         transport.log(level, 'test message', {}, this.callback.bind(this, null));
       }
     };
-    
+   
     test[assertMsg] = assertFn;
     tests['with the ' + level + ' level'] = test;
   });
