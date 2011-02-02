@@ -77,7 +77,7 @@ helpers.assertRiak = function (transport) {
 helpers.testLevels = function (transport, assertMsg, assertFn) {
   var tests = {};
   
-  Object.keys(winston.levels.npm).forEach(function (level) {
+  Object.keys(winston.config.npm.levels).forEach(function (level) {
     var test = {
       topic: function () {
         transport.log(level, 'test message', {}, this.callback.bind(this, null));
