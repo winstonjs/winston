@@ -18,10 +18,6 @@ var fs = require('fs'),
     
 var helpers = exports;
 
-helpers.npmLevels =  require('../lib/winston/levels').npm;
-helpers.syslogLevels = require('../lib/winston/levels').syslog
-
-
 helpers.loadConfig = function () {
   try {
     if (helpers.config) return helpers.config;
@@ -81,7 +77,7 @@ helpers.assertRiak = function (transport) {
 helpers.testLevels = function (transport, assertMsg, assertFn) {
   var tests = {};
   
-  Object.keys(helpers.npmLevels).forEach(function (level) {
+  Object.keys(winston.levels.npm).forEach(function (level) {
     var test = {
       topic: function () {
         transport.log(level, 'test message', {}, this.callback.bind(this, null));
