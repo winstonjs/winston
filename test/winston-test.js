@@ -34,7 +34,7 @@ vows.describe('winston').addBatch({
           assert.isFunction(winston[key]);
         });
     },
-    "the log() method": helpers.testLevels(winston, "should respond without an error", function (err) {
+    "the log() method": helpers.testNpmLevels(winston, "should respond without an error", function (err) {
       assert.isNull(err);
     }),
     "the extend() method called on an empty object": {
@@ -47,6 +47,40 @@ vows.describe('winston').addBatch({
         ['log', 'profile'].concat(Object.keys(winston.config.npm.levels)).forEach(function (method) {
           assert.isFunction(extended[method]);
         });
+      }
+    }
+  }
+}).addBatch({
+  "The winston module": {
+    "the setLevels() method": {
+      topic: function () {
+        winston.setLevels(winston.config.syslog.levels);
+        return null;
+      },
+      "should have the proper methods defined": function () {
+        assert.isObject(winston.transports);
+        assert.isFunction(winston.transports.Console);
+        assert.isFunction(winston.transports.Loggly);
+        assert.isFunction(winston.transports.Riak);
+        assert.isObject(winston.defaultTransports().console);
+        assert.isFalse(winston.emitErrs);
+        assert.isObject(winston.config);
+        
+        var newLevels = Object.keys(winston.config.syslog.levels);
+        ['Logger', 'defaultTransports', 'add', 'remove', 'extend']
+          .concat(newLevels)
+          .forEach(function (key) {
+            assert.isFunction(winston[key]);
+          });
+        
+        
+        Object.keys(winston.config.npm.levels)
+          .filter(function (key) {
+            return newLevels.indexOf(key) === -1;
+          })
+          .forEach(function (key) {
+            assert.isTrue(typeof winston[key] === 'undefined');
+          });
       }
     }
   }

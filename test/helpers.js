@@ -74,10 +74,18 @@ helpers.assertRiak = function (transport) {
   assert.isFunction(transport.log);
 };
 
-helpers.testLevels = function (transport, assertMsg, assertFn) {
+helpers.testNpmLevels = function (transport, assertMsg, assertFn) {
+  return helpers.testLevels(winston.config.npm.levels, transport, assertMsg, assertFn);
+};
+
+helpers.testSyslogLevels = function (transport, assertMsg, assertFn) {
+  return helpers.testLevels(winston.config.syslog.levels, transport, assertMsg, assertFn);
+};
+
+helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   var tests = {};
   
-  Object.keys(winston.config.npm.levels).forEach(function (level) {
+  Object.keys(levels).forEach(function (level) {
     var test = {
       topic: function () {
         transport.log(level, 'test message', {}, this.callback.bind(this, null));

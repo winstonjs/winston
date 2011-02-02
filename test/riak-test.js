@@ -23,7 +23,7 @@ vows.describe('winston/transports/riak').addBatch({
     "should have the proper methods defined": function () {
       helpers.assertRiak(transport);
     },
-    "the log() method": helpers.testLevels(transport, "should log messages to riak", function (ign, err, meta, result) {
+    "the log() method": helpers.testNpmLevels(transport, "should log messages to riak", function (ign, err, meta, result) {
       assert.isNull(err);
       assert.isObject(result);
     })

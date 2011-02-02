@@ -31,7 +31,7 @@ vows.describe('winston/transports/loggly').addBatch({
       "should have the proper methods defined": function () {
         helpers.assertLoggly(tokenTransport);
       },
-      "the log() method": helpers.testLevels(tokenTransport, "should log messages to loggly", function (ign, err, result) {
+      "the log() method": helpers.testNpmLevels(tokenTransport, "should log messages to loggly", function (ign, err, result) {
         assert.isNull(err);
         assert.isObject(result);
         assert.equal(result.response, 'ok');
@@ -41,7 +41,7 @@ vows.describe('winston/transports/loggly').addBatch({
       "should have the proper methods defined": function () {
         helpers.assertLoggly(nameTransport);
       },
-      "the log() method": helpers.testLevels(nameTransport, "should log messages to loggly", function (ign, err, result) {
+      "the log() method": helpers.testNpmLevels(nameTransport, "should log messages to loggly", function (ign, err, result) {
         assert.isNull(err);
         assert.isTrue(result === true || result.response === 'ok');
       })

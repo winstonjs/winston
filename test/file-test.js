@@ -25,7 +25,7 @@ vows.describe('winston/transports/console').addBatch({
       "should have the proper methods defined": function () {
         helpers.assertFile(fileTransport);
       },
-      "the log() method": helpers.testLevels(fileTransport, "should respond with true", function (ign, err, logged) {
+      "the log() method": helpers.testNpmLevels(fileTransport, "should respond with true", function (ign, err, logged) {
         assert.isNull(err);
         assert.isTrue(logged);
       })
@@ -34,7 +34,7 @@ vows.describe('winston/transports/console').addBatch({
       "should have the proper methods defined": function () {
         helpers.assertFile(streamTransport);
       },
-      "the log() method": helpers.testLevels(streamTransport, "should respond with true", function (ign, err, logged) {
+      "the log() method": helpers.testNpmLevels(streamTransport, "should respond with true", function (ign, err, logged) {
         assert.isNull(err);
         assert.isTrue(logged);
       })
