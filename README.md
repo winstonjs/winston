@@ -333,7 +333,7 @@ Winston is stable and under active development. It is supported by and used at [
 6. [Loggly][7]
 
 ### Road Map
-1. Make levels configurable for user preference (npm-style, syslog-style, etc)
+1. Graylog2 format support.
 2. Improve support for adding custom Transports not defined in Winston core.
 3. Create API for reading from logs across all transports.  
 4. Add more transports: CouchDB, Redis
