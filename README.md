@@ -82,18 +82,61 @@ Setting the level for your logging message can be accomplished in one of two way
   winston.info('127.0.0.1 - there's no place like home');
 </pre>
 
-Currently, winston only supports [npm][0] style logging levels, but it is on the roadmap to support customizable logging levels. 
+As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0] style logging levels. Changing logging levels is easy:
 <pre>
-  // TODO: Make levels configurable
-  var levels = {
-    silly: 0,    // logger.silly('silly msg');
-    verbose: 1,  // logger.verbose('verbose msg');
-    info: 2,     // logger.info('info msg');
-    warn: 3,     // logger.warn('warn msg');
-    debug: 4,    // logger.debug('debug msg');
-    error: 5     // logger.error('error msg');
-  };
+  //
+  // Change levels on the default winston logger
+  //
+  winston.setLevels(winston.config.syslog.levels);
+  
+  //
+  // Change levels on an instance of a logger
+  //
+  logger.setLevels(winston.config.syslog.levels);
 </pre>
+
+Calling `.setLevels` on a logger will remove all of the previous helper methods for the old levels and define helper methods for the new levels. Thus, you should be careful about the logging statements you use when changing levels. For example, if you ran this code after changing to the syslog levels:
+
+<pre>
+  //
+  // Logger does not have 'silly' defined since that level is not in the syslog levels 
+  //
+  logger.silly('some silly message');
+</pre>
+
+### Using Custom Logging Levels
+In addition to the predefined `npm` and `syslog` levels available in Winston, you can also choose to define your own:
+
+<pre>
+  var myCustomLevels = {
+    levels: {
+      foo: 0,
+      bar: 1,
+      baz: 2,
+      foobar: 3
+    },
+    colors: {
+      foo: 'blue',
+      bar: 'green',
+      baz: 'yellow',
+      foobar: 'red'
+    }
+  };
+  
+  var customLevelLogger = new (winston.Logger)({ levels: myCustomLevels.levels }); 
+  customLevelLogger.foobar('some foobar level-ed message');
+</pre>
+
+Although there is slight repetition in this data structure, it enables simple encapsulation if you not to have colors. If you do wish to have colors, in addition to passing the levels to the Logger itself, you must make winston aware of them:
+
+<pre>
+  //
+  // Make winston aware of these colors
+  //
+  winston.addColors(myCustomLevels.colors);
+</pre> 
+
+This enables transports with the 'colorize' option set to appropriately color the output of custom levels.
 
 ### Events and Callbacks in Winston
 Each instance of winston.Logger is also an instance of an [EventEmitter][1]. A log event will be raised each time a transport successfully logs a message:
