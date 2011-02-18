@@ -1,14 +1,14 @@
 {
   "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
-    { "name": "Matthew Bergman", "email": "mzbphoto@gmail.com" }, 
+    { "name": "Matthew Bergman", "email": "mzbphoto@gmail.com" }
   ],
   "repository": {
-      "type": "git",
-      "url": "http://github.com/indexzero/winston.git" 
+    "type": "git",
+    "url": "http://github.com/indexzero/winston.git" 
   },
   "keywords": ["logging", "sysadmin", "tools"],
   "dependencies": {
