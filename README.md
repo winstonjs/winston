@@ -62,7 +62,7 @@ You can work with this logger in the same way that you work with the default log
   // Adding / Removing Transports
   //   (Yes It's chainable)
   //
-  logger.add(winston.transports.Riak)
+  logger.add(winston.transports.File)
         .remove(winston.transports.Console);
 </pre>
 
@@ -176,10 +176,9 @@ In addition to logging string messages, winston will also optionally log additio
 
 The way these objects is stored varies from transport to transport (to best support the storage mechanisms offered). Here's a quick summary of how each transports handles metadata:
 
-1. __Console:__ Logged via util.inspect(meta);
-2. __File:__ Logged via util.inspect(meta);
-3. __Riak:__ Logged as JSON literal in Riak
-4. __Loggly:__ Logged in suggested [Loggly format][2]
+1. __Console:__ Logged via util.inspect(meta)
+2. __File:__ Logged via util.inspect(meta)
+3. __Loggly:__ Logged in suggested [Loggly format][2]
 
 ### Profiling with Winston
 In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
@@ -220,8 +219,7 @@ Right now there are four transports supported by winston core. If you have a tra
    
 1. __Console:__ Output to the terminal
 2. __Files:__ Append to a file
-3. __Riak:__ Log to a remote Riak server
-4. __Loggly:__ Log to Logging-as-a-Service platform Loggly
+3. __Loggly:__ Log to Logging-as-a-Service platform Loggly
 
 ### Console Transport
 <pre>
@@ -250,31 +248,6 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __stream:__ The WriteableStream to write output to.
 
 *Metadata:* Logged via util.inspect(meta);
-
-### Riak Transport
-<pre>
-  winston.add(winston.transports.Riak, options);
-</pre>
-
-In addition to the options accepted by the [riak-js][3] [client][4], the Riak transport also accepts the following options. It is worth noting that the riak-js debug option is set to *false* by default:
-
-* __level:__ Level of messages that this transport should log.
-* __bucket:__ The name of the Riak bucket you wish your logs to be in or a function to generate bucket names dynamically.
-
-<pre>
-  // Use a single bucket for all your logs
-  var singleBucketTransport = new (winston.transports.Riak)({ bucket: 'some-logs-go-here' });
-  
-  // Generate a dynamic bucket based on the date and level
-  var dynamicBucketTransport = new (winston.transports.Riak)({
-    bucket: function (level, msg, meta, now) {
-      var d = new Date(now);
-      return level + [d.getDate(), d.getMonth(), d.getFullYear()].join('-');
-    }
-  });
-</pre>
-
-*Metadata:* Logged as JSON literal in Riak
 
 ### Loggly Transport
 <pre>
@@ -343,7 +316,6 @@ All of the winston tests are written in [vows][13], and cover all of the use cas
 <pre>
   {
     "transports": {
-      "riak": { "debug": false },
       "loggly": {
         "subdomain": "your-subdomain",
         "inputToken": "really-long-token-you-got-from-loggly",
