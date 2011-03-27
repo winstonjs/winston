@@ -24,7 +24,7 @@ vows.describe('winston').addBatch({
       assert.isObject(winston.transports);
       assert.isFunction(winston.transports.Console);
       assert.isFunction(winston.transports.Loggly);
-      assert.isFunction(winston.transports.Riak);
+      //assert.isFunction(winston.transports.Riak);
       assert.isObject(winston.defaultTransports().console);
       assert.isFalse(winston.emitErrs);
       assert.isObject(winston.config);
@@ -61,7 +61,7 @@ vows.describe('winston').addBatch({
         assert.isObject(winston.transports);
         assert.isFunction(winston.transports.Console);
         assert.isFunction(winston.transports.Loggly);
-        assert.isFunction(winston.transports.Riak);
+        //assert.isFunction(winston.transports.Riak);
         assert.isObject(winston.defaultTransports().console);
         assert.isFalse(winston.emitErrs);
         assert.isObject(winston.config);

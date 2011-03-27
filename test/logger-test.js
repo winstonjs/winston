@@ -117,7 +117,7 @@ vows.describe('winton/logger').addBatch({
     topic: new (winston.Logger)({ 
       transports: [
         new (winston.transports.Console)(),
-        new (winston.transports.Riak)()
+        new (winston.transports.File)({ filename: path.join(__dirname, 'filelog.log' )})
       ] 
     }),
     "should return have two transports": function(logger) {
@@ -134,13 +134,13 @@ vows.describe('winton/logger').addBatch({
       },
       "should remove the Console transport from transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
-        helpers.assertRiak(logger.transports.riak);
+        helpers.assertFile(logger.transports.file);
       },
       "and removing an additional transport": {
         topic: function (logger) {
-           return logger.remove(winston.transports.Riak);  
+           return logger.remove(winston.transports.File);  
         },
-        "should remove Riak transport from transports": function (logger) {
+        "should remove File transport from transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 0);
         }
       }
