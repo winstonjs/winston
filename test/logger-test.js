@@ -64,6 +64,14 @@ vows.describe('winton/logger').addBatch({
           helpers.assertConsole(transport);
         }
       },
+      "the push/pop() method": {
+        topic: function (logger) {
+          logger.push('a').push('b').log('info', 'test message', this.callback).pop().pop();
+        },
+        "should emit the 'log' event with the appropriate context": function (err, lvl, msg) {
+          assert.match(msg, /\[a::b\]/);
+        }
+      },
       "the profile() method": {
         "when passed a callback": {
           topic: function (logger) {
