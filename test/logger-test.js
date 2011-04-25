@@ -129,18 +129,16 @@ vows.describe('winton/logger').addBatch({
     }),
     "the withContext() method": {
       topic: function(logger) {
-        var clone = logger.withContext('clone');
-        clone.__logger = logger;
-        return clone;
+        return logger.withContext('clone');
       },
       "it should create a copy of the logger": function(clone) {
         assert.isObject(clone);
-        assert.isObject(clone.__logger);
-        assert.notEqual(clone, clone.__logger);
+        assert.isObject(clone.__original__);
+        assert.notEqual(clone, clone.__original__);
       },
       "and push provided context to the copy instance only": function(clone) {
-        assert.length(clone.__logger.context,  0);
-        assert.length(clone.context,           1);
+        assert.length(clone.__original__.context,  0);
+        assert.length(clone.context,               1);
       }
     }
   }
