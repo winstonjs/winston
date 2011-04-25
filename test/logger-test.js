@@ -121,6 +121,30 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
+  "An instance of winston.Logger with transports": {
+    topic: new (winston.Logger)({ 
+      transports: [
+        new (winston.transports.Console)(),
+      ] 
+    }),
+    "the withContext() method": {
+      topic: function(logger) {
+        var clone = logger.withContext('clone');
+        clone.__logger = logger;
+        return clone;
+      },
+      "it should create a copy of the logger": function(clone) {
+        assert.isObject(clone);
+        assert.isObject(clone.__logger);
+        assert.notEqual(clone, clone.__logger);
+      },
+      "and push provided context to the copy instance only": function(clone) {
+        assert.length(clone.__logger.context,  0);
+        assert.length(clone.context,           1);
+      }
+    }
+  }
+}).addBatch({
   "The winston logger": {
     topic: new (winston.Logger)({ 
       transports: [
