@@ -106,3 +106,29 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   tests['when passed metadata'] = test;
   return tests;
 };
+
+helpers.testWithContext = function (logger) {
+  return {
+    topic: function() {
+      return logger.withContext('clone');
+    },
+    "it should create a copy of the logger": function (clone) {
+      assert.isObject(clone);
+      assert.isObject(clone.__original__);
+      assert.notEqual(clone, clone.__original__);
+    },
+    "and push provided context to the copy instance only": function (clone) {
+      assert.length(clone.__original__.context,  0);
+      assert.length(clone.context,               1);
+    },
+    "calling push() method": {
+      topic: function (clone) {
+        return clone.push('clone');
+      },
+      "should push new context to the stack of clone": function (clone) {
+        assert.length(clone.__original__.context,  0);
+        assert.length(clone.context,               2);
+      }
+    }
+  };
+};

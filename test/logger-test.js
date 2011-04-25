@@ -113,24 +113,22 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "winston.Logger#withContext": {
-    topic: function() {
-      var logger = new (winston.Logger)({ 
-        transports: [
-          new (winston.transports.Console)(),
-        ] 
-      });
-      return logger.withContext('clone');
+  "winston.Logger#withContext": helpers.testWithContext(
+    new (winston.Logger)({ 
+      transports: [
+        new (winston.transports.Console)(),
+      ] 
+    })
+  )
+}).addBatch({
+  "winston defaultLogger": {
+    topic: winston,
+    "should response to withContext, push and pop methods": function (logger) {
+      assert.isFunction(logger.withContext);
+      assert.isFunction(logger.push);
+      assert.isFunction(logger.pop);
     },
-    "it should create a copy of the logger": function(clone) {
-      assert.isObject(clone);
-      assert.isObject(clone.__original__);
-      assert.notEqual(clone, clone.__original__);
-    },
-    "and push provided context to the copy instance only": function(clone) {
-      assert.length(clone.__original__.context,  0);
-      assert.length(clone.context,               1);
-    }
+    "deals withContext, just as normal logger, so": helpers.testWithContext(winston)
   }
 }).addBatch({
   "When winston.Logger with transports": {
