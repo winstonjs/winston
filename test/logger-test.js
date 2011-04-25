@@ -149,7 +149,7 @@ vows.describe('winton/logger').addBatch({
           logger.log('info', 'test message', this.callback);
         },
         "message should be prefixed with specified context": function (err, lvl, msg) {
-          assert.match(msg, /\[con::t::ext\]/);
+          assert.match(msg, /^\[con::t::ext\]/);
         }
       },
       "and then calls pop() method": {

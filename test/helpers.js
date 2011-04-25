@@ -121,6 +121,14 @@ helpers.testWithContext = function (logger) {
       assert.length(clone.__original__.context,  0);
       assert.length(clone.context,               1);
     },
+    "calling level methods, e.g. info(),": {
+      topic: function (clone) {
+        clone.info('test message', this.callback);
+      },
+      "will use right log() method": function (err, lvl, msg) {
+        assert.match(msg, /^\[clone\]/);
+      }
+    },
     "calling push() method": {
       topic: function (clone) {
         return clone.push('clone');
