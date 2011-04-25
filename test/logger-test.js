@@ -64,14 +64,6 @@ vows.describe('winton/logger').addBatch({
           helpers.assertConsole(transport);
         }
       },
-      "the push/pop() method": {
-        topic: function (logger) {
-          logger.push('a').push('b').log('info', 'test message', this.callback).pop().pop();
-        },
-        "should emit the 'log' event with the appropriate context": function (err, lvl, msg) {
-          assert.match(msg, /\[a::b\]/);
-        }
-      },
       "the profile() method": {
         "when passed a callback": {
           topic: function (logger) {
@@ -121,24 +113,62 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "An instance of winston.Logger with transports": {
+  "winston.Logger#withContext": {
+    topic: function() {
+      var logger = new (winston.Logger)({ 
+        transports: [
+          new (winston.transports.Console)(),
+        ] 
+      });
+      return logger.withContext('clone');
+    },
+    "it should create a copy of the logger": function(clone) {
+      assert.isObject(clone);
+      assert.isObject(clone.__original__);
+      assert.notEqual(clone, clone.__original__);
+    },
+    "and push provided context to the copy instance only": function(clone) {
+      assert.length(clone.__original__.context,  0);
+      assert.length(clone.context,               1);
+    }
+  }
+}).addBatch({
+  "When winston.Logger with transports": {
     topic: new (winston.Logger)({ 
       transports: [
         new (winston.transports.Console)(),
       ] 
     }),
-    "the withContext() method": {
-      topic: function(logger) {
-        return logger.withContext('clone');
+    "calls push() method": {
+      topic: function (logger) {
+        return logger.push('con').push('t').push('ext');
       },
-      "it should create a copy of the logger": function(clone) {
-        assert.isObject(clone);
-        assert.isObject(clone.__original__);
-        assert.notEqual(clone, clone.__original__);
+      "it should add specified context to the stack": function (logger) {
+        assert.length(logger.context, 3);
       },
-      "and push provided context to the copy instance only": function(clone) {
-        assert.length(clone.__original__.context,  0);
-        assert.length(clone.context,               1);
+      "and then calls log() method": {
+        topic: function (logger) {
+          logger.log('info', 'test message', this.callback);
+        },
+        "message should be prefixed with specified context": function (err, lvl, msg) {
+          assert.match(msg, /\[con::t::ext\]/);
+        }
+      },
+      "and then calls pop() method": {
+        topic: function (logger) {
+          return logger.pop();
+        },
+        "should pop one last context out": function (logger) {
+          assert.length(logger.context, 2);
+        },
+        "until there no more contexts left, calling log() method": {
+          topic: function (logger) {
+            logger.pop(-1).log('info', 'test message', this.callback);
+          },
+          "should log message without any prefix": function (err, lvl, msg) {
+            assert.equal(msg, 'test message');
+          }
+        }
       }
     }
   }
