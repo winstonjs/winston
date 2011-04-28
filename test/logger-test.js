@@ -116,7 +116,7 @@ vows.describe('winton/logger').addBatch({
   "winston.Logger#withContext": helpers.testWithContext(
     new (winston.Logger)({ 
       transports: [
-        new (winston.transports.Console)(),
+        new (winston.transports.Console)()
       ] 
     })
   )
