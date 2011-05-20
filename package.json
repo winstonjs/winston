@@ -12,9 +12,10 @@
   },
   "keywords": ["logging", "sysadmin", "tools"],
   "dependencies": {
-    "colors": ">= 0.3.0",
-    "eyes": ">= 0.1.6",
-    "loggly": ">= 0.1.4"
+    "colors": "0.x.x",
+    "eyes": "0.1.x",
+    "loggly": "0.1.x",
+    "riak-js": ">= 0.4.0rc2"
   },
   "devDependencies": {
     "vows": ">= 0.5.2"
