@@ -18,9 +18,9 @@
     "riak-js": ">= 0.4.0rc2"
   },
   "devDependencies": {
-    "vows": ">= 0.5.2"
+    "vows": "0.5.x"
   },
   "main": "./lib/winston",
   "scripts": { "test": "vows test/*-test.js --spec" },
-  "engines": { "node": ">= 0.3.0" }
+  "engines": { "node": "0.3.x" }
 }
