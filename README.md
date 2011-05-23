@@ -329,6 +329,7 @@ The MongoDB transport takes the following options. 'db' is required:
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __db:__ The name of the database you want to log to. *[required]*
 * __collection__: The name of the collection you want to store log messages in, defaults to 'log'.
+* __safe:__ Boolean indicating if you want eventual consistency on your log messages, if set to true it requires an extra round trip to the server to ensure the write was committed, defaults to true.
 * __host:__ The host running MongoDB, defaults to localhost.
 * __port:__ The port on the host that MongoDB is running on, defaults to MongoDB's default port.
 
