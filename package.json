@@ -22,5 +22,5 @@
   },
   "main": "./lib/winston",
   "scripts": { "test": "vows test/*-test.js --spec" },
-  "engines": { "node": "0.3.x" }
+  "engines": { "node": ">= 0.4.0" }
 }
