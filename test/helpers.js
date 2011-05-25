@@ -74,6 +74,11 @@ helpers.assertRiak = function (transport) {
   assert.isFunction(transport.log);
 };
 
+helpers.assertMongoDB = function (transport) {
+  assert.instanceOf(transport, winston.transports.MongoDB);
+  assert.isFunction(transport.log);
+};
+
 helpers.testNpmLevels = function (transport, assertMsg, assertFn) {
   return helpers.testLevels(winston.config.npm.levels, transport, assertMsg, assertFn);
 };

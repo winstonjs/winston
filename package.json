@@ -15,7 +15,8 @@
     "colors": "0.x.x",
     "eyes": "0.1.x",
     "loggly": "0.1.x",
-    "riak-js": ">= 0.4.0rc2"
+    "riak-js": ">= 0.4.0rc2",
+	"mongodb": ""
   },
   "devDependencies": {
     "vows": "0.5.x"
