@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     { "name": "Matthew Bergman", "email": "mzbphoto@gmail.com" }
@@ -16,7 +16,7 @@
     "eyes": "0.1.x",
     "loggly": "0.1.x",
     "riak-js": ">= 0.4.0rc2",
-	"mongodb": ""
+    "mongodb": "0.9.x"
   },
   "devDependencies": {
     "vows": "0.5.x"
