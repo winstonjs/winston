@@ -77,14 +77,14 @@ Setting the level for your logging message can be accomplished in one of two way
   //
   // Any logger instance
   //
-  logger.log('info', '127.0.0.1 - there's no place like home');
-  logger.info('127.0.0.1 - there's no place like home');
+  logger.log('info', "127.0.0.1 - there's no place like home");
+  logger.info("127.0.0.1 - there's no place like home");
   
   //
   // Default logger
   //
-  winston.log('info', '127.0.0.1 - there's no place like home');
-  winston.info('127.0.0.1 - there's no place like home');
+  winston.log('info', "127.0.0.1 - there's no place like home");
+  winston.info("127.0.0.1 - there's no place like home");
 ```
 
 As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0] style logging levels. Changing logging levels is easy:
