@@ -16,7 +16,6 @@
     "eyes": "0.1.x",
     "loggly": "0.3.x",
     "riak-js": ">= 0.4.0rc2",
-    "mongodb": "0.9.x"
   },
   "devDependencies": {
     "vows": "0.5.x"

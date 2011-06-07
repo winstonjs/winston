@@ -319,8 +319,11 @@ The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementatio
 *Metadata:* Logged in suggested [Loggly format][2]
 
 ### MongoDB Transport
+As of `0.3.0` the MongoDB transport has been broken out into a new module: [winston-mongodb][16]. Using it is just as easy:
+
 ``` js
-  winston.add(winston.transports.MongoDB, options);
+  var MongoDB = require('winston-mongoDB').MongoDB;
+  winston.add(MongoDB, options);
 ```
 
 The MongoDB transport takes the following options. 'db' is required:
@@ -334,7 +337,6 @@ The MongoDB transport takes the following options. 'db' is required:
 * __port:__ The port on the host that MongoDB is running on, defaults to MongoDB's default port.
 
 *Metadata:* Logged as a native JSON object.
-
 
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
@@ -427,3 +429,5 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [13]: http://vowsjs.org
 [14]: http://nodejs.org/docs/v0.3.5/api/streams.html#writable_Stream
 [15]: http://github.com/nodejitsu/require-analyzer
+[16]: http://github.com/indexzero/winston-mongodb
+[17]: http://github.com/indexzero/winston-riak
