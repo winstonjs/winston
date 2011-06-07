@@ -18,11 +18,11 @@ var fs = require('fs'),
     
 var helpers = exports;
 
-helpers.loadConfig = function () {
+helpers.loadConfig = function (dir) {
   try {
     if (helpers.config) return helpers.config;
-    var configFile = path.join(__dirname, 'test-config.json'),
-        stats = fs.statSync(configFile)
+    var configFile = path.join(dir || __dirname, 'test-config.json'),
+        stats = fs.statSync(configFile),
         config = JSON.parse(fs.readFileSync(configFile).toString());
     
     helpers.config = config;
@@ -37,7 +37,9 @@ helpers.loadConfig = function () {
 helpers.size = function(obj) {
   var size = 0, key;
   for (key in obj) {
-    if (obj.hasOwnProperty(key)) size++;
+    if (obj.hasOwnProperty(key)) {
+      size++;
+    }
   }
   
   return size;
