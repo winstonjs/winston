@@ -318,6 +318,34 @@ The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementatio
 
 *Metadata:* Logged in suggested [Loggly format][2]
 
+### Riak Transport
+As of `0.3.0` the Riak transport has been broken out into a new module: [winston-riak][17]. Using it is just as easy:
+
+``` js
+  var Riak = require('winston-riak').Riak;
+  winston.add(Riak, options);
+```
+
+In addition to the options accepted by the [riak-js][3] [client][4], the Riak transport also accepts the following options. It is worth noting that the riak-js debug option is set to *false* by default:
+
+* __level:__ Level of messages that this transport should log.
+* __bucket:__ The name of the Riak bucket you wish your logs to be in or a function to generate bucket names dynamically.
+
+``` js
+  // Use a single bucket for all your logs
+  var singleBucketTransport = new (Riak)({ bucket: 'some-logs-go-here' });
+  
+  // Generate a dynamic bucket based on the date and level
+  var dynamicBucketTransport = new (Riak)({
+    bucket: function (level, msg, meta, now) {
+      var d = new Date(now);
+      return level + [d.getDate(), d.getMonth(), d.getFullYear()].join('-');
+    }
+  });
+```
+
+*Metadata:* Logged as JSON literal in Riak
+
 ### MongoDB Transport
 As of `0.3.0` the MongoDB transport has been broken out into a new module: [winston-mongodb][16]. Using it is just as easy:
 

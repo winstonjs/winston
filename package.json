@@ -14,8 +14,7 @@
   "dependencies": {
     "colors": "0.x.x",
     "eyes": "0.1.x",
-    "loggly": "0.3.x",
-    "riak-js": ">= 0.4.0rc2",
+    "loggly": "0.3.x"
   },
   "devDependencies": {
     "vows": "0.5.x"
