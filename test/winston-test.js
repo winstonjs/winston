@@ -8,7 +8,8 @@
 
 require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
 
-var path = require('path'),
+var fs = require('fs'),
+    path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     winston = require('winston'),
@@ -33,6 +34,16 @@ vows.describe('winston').addBatch({
         .forEach(function (key) {
           assert.isFunction(winston[key]);
         });
+    },
+    "it should": {
+      topic: function () {
+        fs.readFile(path.join(__dirname, '..', 'package.json'), this.callback);
+      },
+      "have the correct version set": function (err, data) {
+        assert.isNull(err);
+        data = JSON.parse(data.toString());
+        assert.equal(winston.version, data.version);
+      }
     },
     "the log() method": helpers.testNpmLevels(winston, "should respond without an error", function (err) {
       assert.isNull(err);
