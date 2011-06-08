@@ -14,7 +14,8 @@
   "dependencies": {
     "colors": "0.x.x",
     "eyes": "0.1.x",
-    "loggly": "0.3.x"
+    "loggly": "0.3.x",
+    "pkginfo": "0.2.x"
   },
   "devDependencies": {
     "vows": "0.5.x"
