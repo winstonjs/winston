@@ -1,5 +1,5 @@
 /*
- * console-test.js: Tests for instances of the Console transport
+ * file-test.js: Tests for instances of the File transport
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -19,7 +19,7 @@ var stream = fs.createWriteStream(path.join(__dirname, 'testfile.log')),
     fileTransport = new (winston.transports.File)({ filename: path.join(__dirname, 'testfilename.log') }),
     streamTransport = new (winston.transports.File)({ stream: stream });
 
-vows.describe('winston/transports/console').addBatch({
+vows.describe('winston/transports/file').addBatch({
   "An instance of the File Transport": {
     "when passed a valid filename": {
       "should have the proper methods defined": function () {
