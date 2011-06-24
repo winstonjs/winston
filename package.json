@@ -5,7 +5,8 @@
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     { "name": "Matthew Bergman", "email": "mzbphoto@gmail.com" },
-    { "name": "Marak Squires", "email": "marak@nodejitsu.com" }
+    { "name": "Marak Squires", "email": "marak@nodejitsu.com" },
+    { "name": "Squeeks", "email": "privacymyass@gmail.com" },
   ],
   "repository": {
     "type": "git",
@@ -16,7 +17,8 @@
     "colors": "0.x.x",
     "eyes": "0.1.x",
     "loggly": "0.3.x",
-    "pkginfo": "0.2.x"
+    "pkginfo": "0.2.x",
+    "glossy": "> 0.0.2"
   },
   "devDependencies": {
     "vows": "0.5.x"
