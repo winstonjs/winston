@@ -11,17 +11,22 @@ require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
 var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
+    http = require('http'),
     assert = require('assert'),
     winston = require('winston'),
     helpers = require('./helpers');
-
-console.log(winston.transports.Webhook);
 
 var webhookTransport = new (winston.transports.Webhook)({ 
   "host": "localhost",
   "port": 8080,
   "path": "/winston-test"
 });
+
+var server = http.createServer(function (req, res) {
+  res.end();
+});
+
+server.listen(8080);
 
 vows.describe('winston/transports/webhook').addBatch({
   "An instance of the Webhook Transport": {
@@ -33,6 +38,12 @@ vows.describe('winston/transports/webhook').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    }
+  }
+}).addBatch({
+  "When the tests are over": {
+    "the server should cleanup": function () {
+      server.close();
     }
   }
 }).export(module);

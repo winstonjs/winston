@@ -11,10 +11,11 @@ require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
 var fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
+    http = require('http'),
     assert = require('assert'),
     winston = require('winston'),
     helpers = require('./helpers');
-    
+  
 vows.describe('winston').addBatch({
   "The winston module": {
     topic: function () {
@@ -25,7 +26,6 @@ vows.describe('winston').addBatch({
       assert.isObject(winston.transports);
       assert.isFunction(winston.transports.Console);
       assert.isFunction(winston.transports.Loggly);
-      //assert.isFunction(winston.transports.Riak);
       assert.isObject(winston.defaultTransports().console);
       assert.isFalse(winston.emitErrs);
       assert.isObject(winston.config);
@@ -72,7 +72,7 @@ vows.describe('winston').addBatch({
         assert.isObject(winston.transports);
         assert.isFunction(winston.transports.Console);
         assert.isFunction(winston.transports.Loggly);
-        //assert.isFunction(winston.transports.Riak);
+        assert.isFunction(winston.transports.Webhook);
         assert.isObject(winston.defaultTransports().console);
         assert.isFalse(winston.emitErrs);
         assert.isObject(winston.config);
