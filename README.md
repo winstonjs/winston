@@ -412,7 +412,7 @@ Winston is stable and under active development. It is supported by and used at [
 1. Graylog2 format support.
 2. Improve support for adding custom Transports not defined in Winston core.
 3. Create API for reading from logs across all transports.  
-4. Add more transports: CouchDB, Redis
+4. Add more transports: Redis
 
 ## Run Tests
 All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/test-config.json before running tests:
@@ -439,7 +439,7 @@ Once you have valid configuration and credentials you can run tests with [vows][
 ```
 
 #### Author: [Charlie Robbins](http://twitter.com/indexzero)
-#### Contributors: [Matthew Bergman](http://github.com/fotoverite)
+#### Contributors: [Matthew Bergman](http://github.com/fotoverite), [Marak Squires](http://github.com/marak)
 
 [0]: https://github.com/isaacs/npm/blob/master/lib/utils/log.js
 [1]: http://nodejs.org/docs/v0.3.5/api/events.html#events.EventEmitter
