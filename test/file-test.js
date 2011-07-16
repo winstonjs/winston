@@ -40,4 +40,13 @@ vows.describe('winston/transports/file').addBatch({
       })
     }
   }
+}).addBatch({
+  "These tests have a non-deterministic end": {
+    topic: function () {
+      setTimeout(this.callback, 200);
+    },
+    "and this should be fixed before releasing": function () {
+      assert.isTrue(true);
+    }
+  }
 }).export(module);
