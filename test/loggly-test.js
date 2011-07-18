@@ -13,7 +13,7 @@ var path = require('path'),
     assert = require('assert'),
     winston = require('winston'),
     helpers = require('./helpers');
-    
+
 var config = helpers.loadConfig(),
     tokenTransport = new (winston.transports.Loggly)({ 
       subdomain: config.transports.loggly.subdomain,

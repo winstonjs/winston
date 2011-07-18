@@ -42,6 +42,14 @@ vows.describe('winston/transports/webhook').addBatch({
   }
 }).addBatch({
   "When the tests are over": {
+    topic: function () {
+      //
+      // Delay destruction of the server since the 
+      // WebHook transport responds before the request
+      // has actually be completed.
+      //
+      setTimeout(this.callback, 1000);
+    },
     "the server should cleanup": function () {
       server.close();
     }
