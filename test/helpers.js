@@ -66,6 +66,11 @@ helpers.assertFile = function (transport) {
   assert.isFunction(transport.log);
 }
 
+helpers.assertFileroller = function (transport) {
+  assert.instanceOf(transport, winston.transports.Fileroller);
+  assert.isFunction(transport.log);
+}
+
 helpers.assertLoggly = function (transport) {
   assert.instanceOf(transport, winston.transports.Loggly);
   assert.isFunction(transport.log);  
