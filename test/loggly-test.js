@@ -31,10 +31,9 @@ vows.describe('winston/transports/loggly').addBatch({
       "should have the proper methods defined": function () {
         helpers.assertLoggly(tokenTransport);
       },
-      "the log() method": helpers.testNpmLevels(tokenTransport, "should log messages to loggly", function (ign, err, result) {
+      "the log() method": helpers.testNpmLevels(tokenTransport, "should log messages to loggly", function (ign, err, logged) {
         assert.isNull(err);
-        assert.isObject(result);
-        assert.equal(result.response, 'ok');
+        assert.isTrue(logged);
       })
     },
     "when passed an input name": {
