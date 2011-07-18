@@ -19,17 +19,17 @@ var fs = require('fs'),
 vows.describe('winston').addBatch({
   "The winston module": {
     topic: function () {
-      winston.defaultTransports().console.level = 'silly';
+      winston.defaultTransports.console.level = 'silly';
       return null;
     },
     "should have the correct methods defined": function () {
       assert.isObject(winston.transports);
       assert.isFunction(winston.transports.Console);
       assert.isFunction(winston.transports.Loggly);
-      assert.isObject(winston.defaultTransports().console);
+      assert.isObject(winston.defaultTransports.console);
       assert.isFalse(winston.emitErrs);
       assert.isObject(winston.config);
-      ['Logger', 'defaultTransports', 'add', 'remove', 'extend']
+      ['Logger', 'add', 'remove', 'extend']
         .concat(Object.keys(winston.config.npm.levels))
         .forEach(function (key) {
           assert.isFunction(winston[key]);
@@ -73,12 +73,12 @@ vows.describe('winston').addBatch({
         assert.isFunction(winston.transports.Console);
         assert.isFunction(winston.transports.Loggly);
         assert.isFunction(winston.transports.Webhook);
-        assert.isObject(winston.defaultTransports().console);
+        assert.isObject(winston.defaultTransports.console);
         assert.isFalse(winston.emitErrs);
         assert.isObject(winston.config);
         
         var newLevels = Object.keys(winston.config.syslog.levels);
-        ['Logger', 'defaultTransports', 'add', 'remove', 'extend']
+        ['Logger', 'add', 'remove', 'extend']
           .concat(newLevels)
           .forEach(function (key) {
             assert.isFunction(winston[key]);
