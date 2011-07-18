@@ -1,8 +1,5 @@
 test/test-config.json
-test/testfile.log
-test/testfile2.log
-test/testfilename.log
-test/filelog.log
+test/*.log
 node_modules/
 node_modules/*
 npm-debug.log
