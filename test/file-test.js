@@ -15,8 +15,8 @@ var path = require('path'),
     winston = require('winston'),
     helpers = require('./helpers');
 
-var stream = fs.createWriteStream(path.join(__dirname, 'testfile.log')),
-    fileTransport = new (winston.transports.File)({ filename: path.join(__dirname, 'testfilename.log') }),
+var stream = fs.createWriteStream(path.join(__dirname, 'fixtures', 'testfile.log')),
+    fileTransport = new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'testfilename.log') }),
     streamTransport = new (winston.transports.File)({ stream: stream });
 
 vows.describe('winston/transports/file').addBatch({

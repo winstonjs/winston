@@ -101,7 +101,7 @@ vows.describe('winton/logger').addBatch({
       "and adding an additional transport": {
         topic: function (logger) {       
           return logger.add(winston.transports.File, { 
-            filename: path.join(__dirname, 'testfile2.log') 
+            filename: path.join(__dirname, 'fixtures', 'testfile2.log') 
           }); 
         },
         "should be able to add multiple transports": function (logger) {
@@ -117,7 +117,7 @@ vows.describe('winton/logger').addBatch({
     topic: new (winston.Logger)({ 
       transports: [
         new (winston.transports.Console)(),
-        new (winston.transports.File)({ filename: path.join(__dirname, 'filelog.log' )})
+        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'filelog.log' )})
       ] 
     }),
     "should return have two transports": function(logger) {

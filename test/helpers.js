@@ -21,7 +21,7 @@ var helpers = exports;
 helpers.loadConfig = function (dir) {
   try {
     if (helpers.config) return helpers.config;
-    var configFile = path.join(dir || __dirname, 'test-config.json'),
+    var configFile = path.join(dir || __dirname, 'fixtures', 'test-config.json'),
         stats = fs.statSync(configFile),
         config = JSON.parse(fs.readFileSync(configFile).toString());
     
@@ -29,7 +29,7 @@ helpers.loadConfig = function (dir) {
     return config;
   }
   catch (ex) {
-    util.puts('Config file test-config.json must be created with valid data before running tests');
+    util.puts('test/fixtures/test-config.json must be created with valid data before running tests');
     process.exit(0);
   }
 };
