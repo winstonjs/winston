@@ -6,14 +6,12 @@
  *
  */
 
-require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
-
 var assert = require('assert'),
     exec = require('child_process').exec,
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('winston'),
+    winston = require('../lib/winston'),
     helpers = require('./helpers');
 
 var maxsizeTransport = new winston.transports.File({

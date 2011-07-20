@@ -6,14 +6,12 @@
  *
  */
 
-require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
-
 var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
     http = require('http'),
     assert = require('assert'),
-    winston = require('winston'),
+    winston = require('../lib/winston'),
     helpers = require('./helpers');
 
 var webhookTransport = new (winston.transports.Webhook)({ 

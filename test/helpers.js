@@ -6,14 +6,12 @@
  *
  */
 
-require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
- 
 var fs = require('fs'),
     util = require('util'),
     path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('winston'),
+    winston = require('../lib/winston'),
     loggly = require('loggly')
     
 var helpers = exports;

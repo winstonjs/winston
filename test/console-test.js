@@ -6,12 +6,10 @@
  *
  */
 
-require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
-
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('winston'),
+    winston = require('../lib/winston'),
     helpers = require('./helpers');
 
 var npmTransport = new (winston.transports.Console)(),

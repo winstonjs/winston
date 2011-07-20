@@ -1,4 +1,4 @@
-var winston = require('winston');
+var winston = require('../lib/winston');
 
 //
 // Create a new winston logger instance with two tranports: Console, and Webhook

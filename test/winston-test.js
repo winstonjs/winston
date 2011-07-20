@@ -6,14 +6,12 @@
  *
  */
 
-require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
-
 var fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
     http = require('http'),
     assert = require('assert'),
-    winston = require('winston'),
+    winston = require('../lib/winston'),
     helpers = require('./helpers');
   
 vows.describe('winston').addBatch({

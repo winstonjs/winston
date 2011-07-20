@@ -6,13 +6,11 @@
  *
  */
 
-require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
-
 var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
     assert = require('assert'),
-    winston = require('winston'),
+    winston = require('../lib/winston'),
     helpers = require('./helpers');
 
 var stream = fs.createWriteStream(path.join(__dirname, 'fixtures', 'testfile.log')),
