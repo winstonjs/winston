@@ -315,6 +315,7 @@ The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementatio
 * __auth__: The authentication information for your Loggly account. *[required with inputName]*
 * __inputName:__ The name of the input this instance should log to.
 * __inputToken:__ The input token of the input this instance should log to.
+* __json:__ If true, messages will be sent to Loggly as JSON.
 
 *Metadata:* Logged in suggested [Loggly format][2]
 
