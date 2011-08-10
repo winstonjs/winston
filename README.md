@@ -371,7 +371,8 @@ The MongoDB transport takes the following options. 'db' is required:
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
 ``` js
-  var winston = require('winston');
+  var util = require('util'),
+      winston = require('winston');
   
   var CustomLogger = winston.transports.CustomerLogger = function (options) {
     //
@@ -388,6 +389,12 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
     // Configure your storage backing as you see fit
     //
   };
+  
+  //
+  // Inherit from `winston.Transport` so you can take advantage
+  // of the base functionality and `.handleExceptions()`.
+  //
+  util.inherits(CustomLogger, winston.Transport);
   
   CustomLogger.prototype.log = function (level, msg, meta, callback) {
     //
