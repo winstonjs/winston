@@ -19,7 +19,7 @@
     "pkginfo": "0.2.x"
   },
   "devDependencies": {
-    "vows": "0.5.x"
+    "vows": "0.5.x >=0.5.11"
   },
   "main": "./lib/winston",
   "scripts": { "test": "vows test/*-test.js --spec" },
