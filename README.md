@@ -70,6 +70,42 @@ You can work with this logger in the same way that you work with the default log
         .remove(winston.transports.Console);
 ```
 
+### Handling Uncaught Exceptions with winston
+
+With `winston`, it is possible to catch and log `uncaughtException` events from your process. There are two distinct ways of enabling this functionality either through the default winston logger or your own logger instance.
+
+If you want to use this feature with the default logger simply call `.handleExceptions()` with a transport instance.
+
+``` js
+  //
+  // You can add a separate exception logger by passing it to `.handleExceptions`
+  //
+  winston.handleExceptions(new winston.transports.File({ filename: 'path/to/exceptions.log' }))
+  
+  //
+  // Alternatively you can set `.handleExceptions` to true when adding transports to winston
+  //
+  winston.add(winston.transports.File, { 
+    filename: 'path/to/all-logs.log', 
+    handleExceptions: true 
+  });
+  
+  winston.handleExceptions();
+```
+
+When working with custom logger instances, you can pass in separate transports to the `exceptionHandlers` property or set `.handleExceptions` on any transport.
+
+``` js
+  var logger = new (winston.Logger)({
+    transports: [
+      new winston.transports.File({ filename: 'path/to/all-logs.log' })
+    ]
+    exceptionHandlers: [
+      new winston.transports.File({ filename: 'path/to/exceptions.log' })
+    ]
+  });
+```
+
 ### Using Logging Levels
 Setting the level for your logging message can be accomplished in one of two ways. You can pass a string representing the logging level to the log() method or use the level specified methods defined on every winston Logger. 
 
