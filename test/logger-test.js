@@ -55,7 +55,7 @@ vows.describe('winton/logger').addBatch({
       },
       "the log() method": {
         topic: function (logger) {
-          logger.once('log', this.callback);
+          logger.once('logging', this.callback);
           logger.log('info', 'test message');
         },
         "should emit the 'log' event with the appropriate transport": function (transport, ign) {
@@ -84,7 +84,7 @@ vows.describe('winton/logger').addBatch({
           topic: function (logger) {
             var that = this;
             logger.profile('test2');
-            logger.once('log', that.callback.bind(null, null));
+            logger.once('logging', that.callback.bind(null, null));
             setTimeout(function () {
               logger.profile('test2');
             }, 1000);
@@ -99,7 +99,7 @@ vows.describe('winton/logger').addBatch({
       "and adding an additional transport": {
         topic: function (logger) {       
           return logger.add(winston.transports.File, { 
-            filename: path.join(__dirname, 'fixtures', 'testfile2.log') 
+            filename: path.join(__dirname, 'fixtures', 'logs', 'testfile2.log') 
           }); 
         },
         "should be able to add multiple transports": function (logger) {
@@ -115,7 +115,7 @@ vows.describe('winton/logger').addBatch({
     topic: new (winston.Logger)({ 
       transports: [
         new (winston.transports.Console)(),
-        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'filelog.log' )})
+        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
       ] 
     }),
     "should return have two transports": function(logger) {

@@ -15,7 +15,7 @@ var assert = require('assert'),
     helpers = require('./helpers');
 
 function assertTimestamp (basename, options) {
-  var filename = path.join(__dirname, 'fixtures', basename + '.log');
+  var filename = path.join(__dirname, 'fixtures', 'logs', basename + '.log');
   
   try { fs.unlinkSync(filename) }
   catch (ex) { }
@@ -42,14 +42,17 @@ vows.describe('winston/transport/timestamp').addBatch({
     "with file transport": {
       "with value set to false": assertTimestamp('noTimestamp', { 
         pattern: /^info\:/, 
+        json: false,
         timestamp: false 
       }),
       "with value set to true ": assertTimestamp('defaultTimestamp', { 
         pattern: /^\d\d? \w{3}/,
+        json: false,
         timestamp: true 
       }),
       "and function value": assertTimestamp('customTimestamp', {
         pattern: /^\d{8}\./,
+        json: false,
         timestamp: function () {
           return '20110803.171657';
         }

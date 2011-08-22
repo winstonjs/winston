@@ -16,7 +16,8 @@ var assert = require('assert'),
 
 var maxsizeTransport = new winston.transports.File({
   timestamp: false,
-  filename: path.join(__dirname, 'fixtures', 'testmaxsize.log'),
+  json: false,
+  filename: path.join(__dirname, 'fixtures', 'logs', 'testmaxsize.log'),
   maxsize: 4096
 });
     
@@ -25,7 +26,7 @@ vows.describe('winston/transports/file/maxsize').addBatch({
     "when passed a valid filename": {
       "the log() method": {
         topic: function () {
-          exec('rm -rf ' + path.join(__dirname, 'fixtures', 'testmaxsize*'), this.callback);
+          exec('rm -rf ' + path.join(__dirname, 'fixtures', 'logs', 'testmaxsize*'), this.callback);
         },
         "when passed more than the maxsize": {
           topic: function () {
@@ -54,7 +55,7 @@ vows.describe('winston/transports/file/maxsize').addBatch({
               
               that.files.push(file);
               
-              if (parseInt(count, 10) == 5) {
+              if (that.files.length === 5) {
                 return that.callback();
               }
               
