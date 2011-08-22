@@ -6,13 +6,14 @@
  *
  */
 
-var fs = require('fs'),
-    util = require('util'),
+var assert = require('assert'),
+    fs = require('fs'),
     path = require('path'),
+    spawn = require('child_process').spawn,
+    util = require('util'),
+    loggly = require('loggly'),
     vows = require('vows'),
-    assert = require('assert'),
-    winston = require('../lib/winston'),
-    loggly = require('loggly')
+    winston = require('../lib/winston');    
     
 var helpers = exports;
 
@@ -42,6 +43,12 @@ helpers.size = function(obj) {
   
   return size;
 };
+
+helpers.tryUnlink = function (file) {
+  try { fs.unlinkSync(file) }
+  catch (ex) { }
+}
+
 
 helpers.assertProcessInfo = function (info) {
   assert.isNumber(info.pid);
@@ -100,6 +107,29 @@ helpers.assertWebhook = function (transport) {
   assert.instanceOf(transport, winston.transports.Webhook);
   assert.isFunction(transport.log);
 };
+
+helpers.assertHandleExceptions = function (options) {
+  return {
+    topic: function () {
+      var that = this,
+          child = spawn('node', [options.script]);
+
+      helpers.tryUnlink(options.logfile);
+      child.on('exit', function () {
+        fs.readFile(options.logfile, that.callback);
+      });
+    },
+    "should save the error information to the specified file": function (err, data) {
+      assert.isTrue(!err);
+      data = JSON.parse(data);
+
+      assert.isObject(data);
+      helpers.assertProcessInfo(data.process);
+      helpers.assertOsInfo(data.os);
+      helpers.assertTrace(data.trace);
+    }
+  }
+}
 
 helpers.testNpmLevels = function (transport, assertMsg, assertFn) {
   return helpers.testLevels(winston.config.npm.levels, transport, assertMsg, assertFn);

@@ -17,7 +17,7 @@ var fs = require('fs'),
 vows.describe('winston').addBatch({
   "The winston module": {
     topic: function () {
-      winston.defaultTransports.console.level = 'silly';
+      winston.default.transports.console.level = 'silly';
       return null;
     },
     "should have the correct methods defined": function () {
@@ -28,7 +28,7 @@ vows.describe('winston').addBatch({
       assert.isFunction(winston.transports.File);
       assert.isFunction(winston.transports.Loggly);
       assert.isFunction(winston.transports.Webhook);
-      assert.isObject(winston.defaultTransports.console);
+      assert.isObject(winston.default.transports.console);
       assert.isFalse(winston.emitErrs);
       assert.isObject(winston.config);
       ['Logger', 'add', 'remove', 'extend']
@@ -75,7 +75,7 @@ vows.describe('winston').addBatch({
         assert.isFunction(winston.transports.Console);
         assert.isFunction(winston.transports.Loggly);
         assert.isFunction(winston.transports.Webhook);
-        assert.isObject(winston.defaultTransports.console);
+        assert.isObject(winston.default.transports.console);
         assert.isFalse(winston.emitErrs);
         assert.isObject(winston.config);
         

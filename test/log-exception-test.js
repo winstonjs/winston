@@ -7,39 +7,38 @@
  */
 
 var assert = require('assert'),
-    fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn,
     vows = require('vows'),
     winston = require('../lib/winston'),
     helpers = require('./helpers');
 
-function tryUnlink (file) {
-  try { fs.unlinkSync(file) }
-  catch (ex) { }
-}
-
 vows.describe('winston/exception').addBatch({
   "When using winston": {
     "the handleException() method": {
+      "with a custom winston.Logger instance": helpers.assertHandleExceptions({
+        script: path.join(__dirname, 'fixtures', 'scripts', 'log-exceptions.js'),
+        logfile: path.join(__dirname, 'fixtures', 'logs', 'exception.log')
+      }),
+      "with the default winston logger": helpers.assertHandleExceptions({
+        script: path.join(__dirname, 'fixtures', 'scripts', 'default-exceptions.js'),
+        logfile: path.join(__dirname, 'fixtures', 'logs', 'default-exception.log')
+      })
+    },
+    "the unhandleException() method": {
       topic: function () {
         var that = this,
-            child = spawn('node', [path.join(__dirname, 'fixtures', 'log-exceptions.js')]),
-            exception = path.join(__dirname, 'fixtures', 'logs', 'exception.log');
+            child = spawn('node', [path.join(__dirname, 'fixtures', 'scripts', 'unhandle-exceptions.js')]),
+            exception = path.join(__dirname, 'fixtures', 'logs', 'unhandle-exception.log');
         
-        tryUnlink(exception);
+        helpers.tryUnlink(exception);
         child.on('exit', function () {
-          fs.readFile(exception, that.callback);
+          path.exists(exception, that.callback.bind(this, null));
         });
       },
-      "should save the error information to the specified file": function (err, data) {
+      "should not write to the specified error file": function (err, exists) {
         assert.isTrue(!err);
-        data = JSON.parse(data);
-        
-        assert.isObject(data);
-        helpers.assertProcessInfo(data.process);
-        helpers.assertOsInfo(data.os);
-        //helpers.assertTrace(data.trace);
+        assert.isFalse(exists);
       }
     }
   }

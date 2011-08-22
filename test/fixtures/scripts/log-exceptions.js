@@ -7,11 +7,14 @@
  */
  
 var path = require('path'),
-    winston = require('../../lib/winston');
+    winston = require('../../../lib/winston');
 
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.File)({ filename: path.join(__dirname, 'logs', 'exception.log') })
+    new (winston.transports.File)({ 
+      filename: path.join(__dirname, '..', 'logs', 'exception.log'),
+      handleExceptions: true
+    })
   ]
 });
 
