@@ -5,13 +5,13 @@ var winston = require('../lib/winston');
 //
 //
 // The Console transport will simply output to the console screen
-// The Couchdb tranports will perform an HTTP POST request to the specific CouchDB instances
+// The Couchdb tranport will perform an HTTP POST request to the specified CouchDB instance
 //
 var logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)(),
-    new (winston.transports.Couchdb)({ 'host': 'localhost', 'db': 'logs' }),
-    new (winston.transports.Couchdb)({ 'user': 'admin', 'pass': 'admin', 'host': 'example.iriscouch.com', 'db': 'logs' })
+    new (winston.transports.Couchdb)({ 'host': 'localhost', 'db': 'logs' })
+    // if you need auth do this: new (winston.transports.Couchdb)({ 'user': 'admin', 'pass': 'admin', 'host': 'localhost', 'db': 'logs' })
   ]
 });
 
