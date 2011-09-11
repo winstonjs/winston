@@ -108,6 +108,11 @@ helpers.assertWebhook = function (transport) {
   assert.isFunction(transport.log);
 };
 
+helpers.assertCouchdb = function (transport) {
+  assert.instanceOf(transport, winston.transports.Couchdb);
+  assert.isFunction(transport.log);
+};
+
 helpers.assertHandleExceptions = function (options) {
   return {
     topic: function () {
