@@ -387,7 +387,7 @@ In addition to the options accepted by the [riak-js][3] [client][4], the Riak tr
 As of `0.3.0` the MongoDB transport has been broken out into a new module: [winston-mongodb][16]. Using it is just as easy:
 
 ``` js
-  var MongoDB = require('winston-mongoDB').MongoDB;
+  var MongoDB = require('winston-mongodb').MongoDB;
   winston.add(MongoDB, options);
 ```
 
