@@ -24,6 +24,6 @@
     "vows": "0.5.x >=0.5.11"
   },
   "main": "./lib/winston",
-  "scripts": { "test": "vows test/*-test.js --spec" },
+  "scripts": { "test": "vows test/*-test.js --spec --isolate" },
   "engines": { "node": ">= 0.4.0" }
 }
