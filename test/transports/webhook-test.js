@@ -11,8 +11,8 @@ var path = require('path'),
     fs = require('fs'),
     http = require('http'),
     assert = require('assert'),
-    winston = require('../lib/winston'),
-    helpers = require('./helpers');
+    winston = require('../../lib/winston'),
+    helpers = require('../helpers');
 
 var webhookTransport = new (winston.transports.Webhook)({ 
   "host": "localhost",

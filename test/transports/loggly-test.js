@@ -9,8 +9,8 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('../lib/winston'),
-    helpers = require('./helpers');
+    winston = require('../../lib/winston'),
+    helpers = require('../helpers');
 
 var config = helpers.loadConfig(),
     tokenTransport = new (winston.transports.Loggly)({ 

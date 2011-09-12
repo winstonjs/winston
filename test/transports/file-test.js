@@ -10,11 +10,11 @@ var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
     assert = require('assert'),
-    winston = require('../lib/winston'),
-    helpers = require('./helpers');
+    winston = require('../../lib/winston'),
+    helpers = require('../helpers');
 
-var stream = fs.createWriteStream(path.join(__dirname, 'fixtures', 'logs', 'testfile.log')),
-    fileTransport = new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'testfilename.log') }),
+var stream = fs.createWriteStream(path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')),
+    fileTransport = new (winston.transports.File)({ filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log') }),
     streamTransport = new (winston.transports.File)({ stream: stream });
 
 vows.describe('winston/transports/file').addBatch({
