@@ -213,6 +213,67 @@ Every logging method described in the previous section also takes an optional ca
   });
 ```
 
+### Working with multiple Loggers in winston
+
+Often in larger, more complex applications it is necessary to have multiple logger instances with different settings. Each logger is responsible for a different feature area (or category). This is exposed in `winston` in two ways: through `winston.loggers` and instances of `winston.Container`. In fact, `winston.loggers` is just a predefined instance of `winston.Container`:
+
+``` js
+  var winston = require('winston');
+  
+  //
+  // Configure the logger for `category1`
+  //
+  winston.loggers.add('category1', {
+    console: {
+      level: 'silly',
+      colorize: 'true'
+    },
+    file: {
+      filename: '/path/to/some/file'
+    }
+  });
+  
+  //
+  // Configure the logger for `category2`
+  //
+  winston.loggers.add('category2', {
+    couchdb: {
+      host: '127.0.0.1',
+      port: 5984
+    }
+  });
+```
+
+Now that your loggers are setup you can require winston _in any file in your application_ and access these pre-configured loggers:
+
+``` js
+  var winston = require('winston');
+  
+  //
+  // Grab your preconfigured logger
+  //
+  var category1 = winston.loggers.get('category1');
+  
+  category1.info('logging from your IoC container-based logger');
+```
+
+If you prefer to manage the `Container` yourself you can simply instantiate one:
+
+``` js
+  var winston = require('winston'),
+      container = new winston.Container();
+  
+  container.add('category1', {
+    console: {
+      level: 'silly',
+      colorize: 'true'
+    },
+    file: {
+      filename: '/path/to/some/file'
+    }
+  });
+```
+
 ### Logging with Metadata
 In addition to logging string messages, winston will also optionally log additional JSON metadata objects. Adding metadata is simple:
 
@@ -479,7 +540,7 @@ All of the winston tests are written in [vows][13], and cover all of the use cas
 Once you have valid configuration and credentials you can run tests with [vows][13]:
 
 ```
-  vows test/*-test.js --spec
+  vows --spec --isolate
 ```
 
 #### Author: [Charlie Robbins](http://twitter.com/indexzero)
