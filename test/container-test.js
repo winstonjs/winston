@@ -32,6 +32,17 @@ vows.describe('winston/container').addBatch({
           assert.isTrue(existing === logger);
         }
       },
+      "the has() method": {
+        topic: function (logger, container) {
+          this.callback.apply(this, arguments);
+        },
+        "should indicate `default-test` logger exists": function (existing, container) {
+          assert.isTrue(container.has('default-test'));
+        },
+        "should indicate `not-has` logger doesnt exists": function (existing, container) {
+          assert.isFalse(container.has('not-has'));
+        }
+      },
       "the close() method": {
         topic: function (logger, container) {
           this.callback.apply(this, arguments);
