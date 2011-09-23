@@ -1,0 +1,2 @@
+before_script: "npm install --dev"
+script: "npm test"
