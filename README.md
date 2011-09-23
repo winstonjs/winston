@@ -274,6 +274,52 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
   });
 ```
 
+### Sharing transports between Loggers in winston
+
+``` js
+  var winston = require('winston');
+
+  //
+  // Setup transports to be shared across all loggers
+  // in three ways:
+  //
+  // 1. By setting it on the default Container
+  // 2. By passing `transports` into the constructor function of winston.Container
+  // 3. By passing `transports` into the `.get()` or `.add()` methods 
+  //
+
+  //
+  // 1. By setting it on the default Container
+  //
+  winston.loggers.options.transports = [
+    // Setup your shared transports here
+  ];
+
+  //
+  // 2. By passing `transports` into the constructor function of winston.Container
+  //
+  var container = new winston.Container({
+    transports: [
+      // Setup your shared transports here
+    ]
+  });
+
+  //
+  // 3. By passing `transports` into the `.get()` or `.add()` methods 
+  // 
+  winston.loggers.add('some-category', {
+    transports: [
+      // Setup your shared transports here
+    ]
+  });
+
+  container.add('some-category', {
+    transports: [
+      // Setup your shared transports here
+    ]
+  });
+```
+
 ### Logging with Metadata
 In addition to logging string messages, winston will also optionally log additional JSON metadata objects. Adding metadata is simple:
 
