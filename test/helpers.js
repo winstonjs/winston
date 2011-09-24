@@ -158,13 +158,23 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
     tests['with the ' + level + ' level'] = test;
   });
   
-  var test = {
+  var metadatatest = {
     topic: function () {
       transport.log('info', 'test message', { metadata: true }, this.callback.bind(this, null));
     }
   };
   
-  test[assertMsg] = assertFn;
-  tests['when passed metadata'] = test;
+  metadatatest[assertMsg] = assertFn;
+  tests['when passed metadata'] = metadatatest;
+
+  var primmetadatatest = {
+    topic: function() {
+      transport.log('info', 'test message', 'metadata', this.callback.bind(this, null));
+    }
+  };
+
+  primmetadatatest[assertMsg] = assertFn;
+  tests['when passed primitive metadata'] = primmetadatatest;
+
   return tests;
 };
