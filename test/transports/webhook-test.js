@@ -28,7 +28,28 @@ var httpsWebhookTransport = new (winston.transports.Webhook)({
   "ssl": true
 });
 
+var authWebhookTransport = new (winston.transports.Webhook)({
+  "host": "localhost",
+  "port": 8080,
+  "path": "/winston-auth-test",
+  "auth": {
+    "username": "winston",
+    "password": "churchill"
+  }
+});
+
+var requestsAuthenticated = true;
+
 var server = http.createServer(function (req, res) {
+  if (req.url == '/winston-auth-test') {
+    //
+    // Test if request has been correctly authenticated
+    //
+    // Strip 'Basic' from Authorization header
+    var signature = req.headers['authorization'].substr(6);
+    requestsAuthenticated = requestsAuthenticated &&
+      new Buffer(signature, 'base64').toString('utf8') == 'winston:churchill';
+  }
   res.end();
 });
 
@@ -66,6 +87,17 @@ vows.describe('winston/transports/webhook').addBatch({
         assert.isTrue(logged);
       })
     }
+  },
+  "An http Basic Auth instance of the Webhook Transport": {
+    "when passed valid options": {
+      "should have the proper methods defined": function () {
+        helpers.assertWebhook(authWebhookTransport);
+      },
+      "the log() method": helpers.testNpmLevels(authWebhookTransport, "should respond with true", function (ign, err, logged) {
+        assert.isNull(err);
+        assert.isTrue(logged);
+      })
+    }
   }
 }).addBatch({
   "When the tests are over": {
@@ -79,6 +111,9 @@ vows.describe('winston/transports/webhook').addBatch({
     },
     "the server should cleanup": function () {
       server.close();
+    },
+    "requests have been correctly authenticated": function () {
+      assert.ok(requestsAuthenticated);
     }
   }
 }).export(module);
