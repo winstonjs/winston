@@ -93,6 +93,21 @@ If you want to use this feature with the default logger simply call `.handleExce
   winston.handleExceptions();
 ```
 
+## to exit or not to exit
+
+by default, winston will exit after logging an uncaughtException. if this is not the behavior you want,
+set `exitOnError = false`
+
+``` js
+
+var logger = new (winston.Logger)({exitOnError: false})
+
+//or, like this:
+
+logger.exitOnError = false
+
+```
+
 When working with custom logger instances, you can pass in separate transports to the `exceptionHandlers` property or set `.handleExceptions` on any transport.
 
 ``` js
