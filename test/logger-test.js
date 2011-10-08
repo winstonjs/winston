@@ -37,7 +37,7 @@ vows.describe('winton/logger').addBatch({
         return empty;
       },
       "should define the appropriate methods": function (extended) {
-        ['log', 'profile'].concat(Object.keys(winston.config.npm.levels)).forEach(function (method) {
+        ['log', 'profile', 'startTimer'].concat(Object.keys(winston.config.npm.levels)).forEach(function (method) {
           assert.isFunction(extended[method]);
         });
       }
@@ -93,6 +93,43 @@ vows.describe('winton/logger').addBatch({
             assert.isNull(err);
             assert.equal(level, 'info');
             assert.match(meta.duration, /(\d+)ms/);
+          }
+        }
+      },
+      "the startTimer() method": {
+        "when passed a callback": {
+          topic: function (logger) {
+            var that = this;
+            var timer = logger.startTimer()
+            setTimeout(function () {
+              timer.done('test', function(err, level, msg, meta) {
+                that.callback(err, level, msg, meta, logger);
+              });
+            }, 1000);
+          },
+          "should respond with the appropriate message": function(err, level, msg, meta, logger) {
+            assert.isNull(err);
+            assert.equal(level, 'info');
+            assert.match(meta.duration, /(\d+)ms/);
+          }
+        },
+        "when not passed a callback": {
+          topic: function (logger) {
+            var that = this;
+            var timer = logger.startTimer()
+            logger.once('logging', that.callback.bind(null, null));
+            setTimeout(function () {
+              timer.done();
+            }, 1000);
+          },
+          "should respond with the appropriate message": function(err, transport, level, msg, meta) {
+            assert.isNull(err);
+            assert.equal(level, 'info');
+            assert.match(meta.duration, /(\d+)ms/);
+            
+            var duration = parseInt(meta.duration);
+            assert.isNumber(duration);
+            assert.isTrue(duration > 900 && duration < 1100);
           }
         }
       },

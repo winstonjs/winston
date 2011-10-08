@@ -57,7 +57,7 @@ vows.describe('winston').addBatch({
         return empty;
       },
       "should define the appropriate methods": function (extended) {
-        ['log', 'profile'].concat(Object.keys(winston.config.npm.levels)).forEach(function (method) {
+        ['log', 'profile', 'startTimer'].concat(Object.keys(winston.config.npm.levels)).forEach(function (method) {
           assert.isFunction(extended[method]);
         });
       }
