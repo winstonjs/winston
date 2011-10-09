@@ -99,13 +99,12 @@ by default, winston will exit after logging an uncaughtException. if this is not
 set `exitOnError = false`
 
 ``` js
+  var logger = new (winston.Logger)({ exitOnError: false });
 
-var logger = new (winston.Logger)({exitOnError: false})
-
-//or, like this:
-
-logger.exitOnError = false
-
+  //
+  // or, like this:
+  //
+  logger.exitOnError = false;
 ```
 
 When working with custom logger instances, you can pass in separate transports to the `exceptionHandlers` property or set `.handleExceptions` on any transport.
@@ -119,6 +118,21 @@ When working with custom logger instances, you can pass in separate transports t
       new winston.transports.File({ filename: 'path/to/exceptions.log' })
     ]
   });
+```
+
+The `exitOnError` option can also be a function to prevent exit on only certain types of errors:
+
+``` js
+  function ignoreEpipe(err) {
+    return err.code !== 'EPIPE';
+  }
+
+  var logger = new (winston.Logger)({ exitOnError: ignoreEpipe });
+
+  //
+  // or, like this:
+  //
+  logger.exitOnError = ignoreEpipe;
 ```
 
 ### Using Logging Levels
