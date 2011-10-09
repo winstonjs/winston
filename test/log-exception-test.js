@@ -13,7 +13,7 @@ var assert = require('assert'),
     winston = require('../lib/winston'),
     helpers = require('./helpers');
 
-vows.describe('winston/exception').addBatch({
+vows.describe('winston/logger/exceptions').addBatch({
   "When using winston": {
     "the handleException() method": {
       "with a custom winston.Logger instance": helpers.assertHandleExceptions({
@@ -23,7 +23,20 @@ vows.describe('winston/exception').addBatch({
       "with the default winston logger": helpers.assertHandleExceptions({
         script: path.join(__dirname, 'fixtures', 'scripts', 'default-exceptions.js'),
         logfile: path.join(__dirname, 'fixtures', 'logs', 'default-exception.log')
-      })
+      }),
+      "when a custom exitOnError function is set": {
+        topic: function () {
+          var that = this,
+              scriptDir = path.join(__dirname, 'fixtures', 'scripts');
+          
+          that.child = spawn('node', [path.join(scriptDir, 'exit-on-error.js')]);
+          setTimeout(this.callback.bind(this), 1500);
+        },
+        "should not exit the process": function () {
+          assert.isFalse(this.child.killed);
+          this.child.kill();
+        }
+      }
     },
     "the unhandleException() method": {
       topic: function () {

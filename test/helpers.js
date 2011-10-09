@@ -47,8 +47,7 @@ helpers.size = function(obj) {
 helpers.tryUnlink = function (file) {
   try { fs.unlinkSync(file) }
   catch (ex) { }
-}
-
+};
 
 helpers.assertProcessInfo = function (info) {
   assert.isNumber(info.pid);
