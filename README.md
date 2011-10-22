@@ -213,7 +213,7 @@ This enables transports with the 'colorize' option set to appropriately color th
 Each instance of winston.Logger is also an instance of an [EventEmitter][1]. A log event will be raised each time a transport successfully logs a message:
 
 ``` js
-  logger.on('log', function (transport, level, msg, meta) {
+  logger.on('logging', function (transport, level, msg, meta) {
     // [msg] and [meta] have now been logged at [level] to [transport]
   });
   
