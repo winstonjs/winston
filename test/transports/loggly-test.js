@@ -32,7 +32,15 @@ vows.describe('winston/transports/loggly').addBatch({
       "the log() method": helpers.testNpmLevels(tokenTransport, "should log messages to loggly", function (ign, err, logged) {
         assert.isNull(err);
         assert.isTrue(logged);
-      })
+      }),
+      "the log() method with no metadata": {
+        topic: function () {
+        tokenTransport.log('info', 'test-message', null, this.callback.bind(null, null));
+        },
+        "should respond immediately": function () {
+          assert.isTrue(true);
+        }
+      }
     },
     "when passed an input name": {
       "should have the proper methods defined": function () {
