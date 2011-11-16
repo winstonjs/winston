@@ -112,6 +112,11 @@ helpers.assertCouchdb = function (transport) {
   assert.isFunction(transport.log);
 };
 
+helpers.assertRedis = function (transport) {
+  assert.instanceOf(transport, winston.transports.Redis);
+  assert.isFunction(transport.log);
+};
+
 helpers.assertHandleExceptions = function (options) {
   return {
     topic: function () {
