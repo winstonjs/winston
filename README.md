@@ -1,4 +1,4 @@
-# winston
+# winston [![Build Status](https://secure.travis-ci.org/flatiron/winston.png)](http://travis-ci.org/flatiron/winston)
 
 A multi-transport async logging library for node.js. <span style="font-size:28px; font-weight:bold;">&quot;CHILL WINSTON! ... I put it in the logs.&quot;</span>
 
@@ -639,3 +639,4 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [15]: http://github.com/nodejitsu/require-analyzer
 [16]: http://github.com/indexzero/winston-mongodb
 [17]: http://github.com/indexzero/winston-riak
+
