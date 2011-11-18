@@ -28,8 +28,8 @@ helpers.loadConfig = function (dir) {
     return config;
   }
   catch (ex) {
-    util.puts('test/fixtures/test-config.json must be created with valid data before running tests');
-    process.exit(0);
+    console.error('test/fixtures/test-config.json must be created with valid data before running tests');
+    return false;
   }
 };
 

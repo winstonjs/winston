@@ -12,8 +12,13 @@ var path = require('path'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
 
-var config = helpers.loadConfig(),
-    tokenTransport = new (winston.transports.Loggly)({ 
+var config = helpers.loadConfig();
+
+if (!config) {
+  return;
+}
+
+var tokenTransport = new (winston.transports.Loggly)({
       subdomain: config.transports.loggly.subdomain,
       inputToken: config.transports.loggly.inputToken
     }),
@@ -53,3 +58,4 @@ vows.describe('winston/transports/loggly').addBatch({
     }
   }
 }).export(module);
+
