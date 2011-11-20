@@ -539,6 +539,26 @@ The MongoDB transport takes the following options. 'db' is required:
 
 *Metadata:* Logged as a native JSON object.
 
+### SimpleDB Transport
+
+The [winston-simpledb][18] transport is just as easy:
+
+``` js
+  var SimpleDB = require('winston-simpledb').SimpleDB;
+  winston.add(MongoDB, options);
+```
+
+The SimpleDB transport takes the following options. All items marked with an asterisk are required:
+
+* __awsAccessKey__:* your AWS Access Key
+* __secretAccessKey__:* your AWS Secret Access Key
+* __awsAccountId__:* your AWS Account Id
+* __domainName__:* a string or function that returns the domain name to log to
+* __region__:* the region your domain resides in
+* __itemName__: a string ('uuid', 'epoch', 'timestamp') or function that returns the item name to log
+
+*Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
+
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
@@ -639,4 +659,4 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [15]: http://github.com/nodejitsu/require-analyzer
 [16]: http://github.com/indexzero/winston-mongodb
 [17]: http://github.com/indexzero/winston-riak
-
+[18]: http://github.com/appsattic/winston-simpledb
