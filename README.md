@@ -454,9 +454,10 @@ Right now there are four transports supported by winston core. If you have a tra
 
 The Console transport takes two simple options:
 
-* __level:__ Level of messages that this transport should log.
-* __silent:__ Boolean flag indicating whether to suppress output
-* __colorize:__ Boolean flag indicating if we should colorize output.
+* __level:__ Level of messages that this transport should log (default 'debug').
+* __silent:__ Boolean flag indicating whether to suppress output (default true).
+* __colorize:__ Boolean flag indicating if we should colorize output (default false).
+* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false).
 
 *Metadata:* Logged via util.inspect(meta);
 
