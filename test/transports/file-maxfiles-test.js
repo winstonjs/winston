@@ -69,11 +69,11 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
          
           logKbytes(4, j);
         },
-        "should be only max files": function () {
-          ['A', 'B', 'C', 'D', 'E'].forEach(function (name, inx) {
-            var file = path.join(__dirname, '..', 'fixtures', 'logs', ((inx === 0) ? 'testmaxfiles.log' : 'testmaxfiles' + inx + '.log'));
+        "should be only 3 files called 5.log, 4.log and 3.log": function () {
+          for (var o = 0; o < 6; o++) {
+            var file = path.join(__dirname, '..', 'fixtures', 'logs', ((o === 0) ? 'testmaxfiles.log' : 'testmaxfiles' + o + '.log'));
             // There should be no files with that name
-            if (inx === 3 || inx === 4) {
+            if (o > 0 && o < 3) {
               assert.throws(function () {
                 fs.statSync(file);
               }, Error);
@@ -83,7 +83,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
                 fs.statSync(file);
               }, Error);
             }
-          });
+          }
         },
         "should have the correct content": function () {
           ['C', 'D', 'E'].forEach(function (name, inx) {
