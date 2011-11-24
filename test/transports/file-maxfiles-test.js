@@ -61,7 +61,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
           
           maxfilesTransport.on('logged', function () {
             j++;
-            if (j === 5)
+            if (j === 6)
               return that.callback();
             else
               logKbytes(4, j);
@@ -73,7 +73,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
           for (var o = 0; o < 6; o++) {
             var file = path.join(__dirname, '..', 'fixtures', 'logs', ((o === 0) ? 'testmaxfiles.log' : 'testmaxfiles' + o + '.log'));
             // There should be no files with that name
-            if (o > 0 && o < 3) {
+            if (o >= 0 && o < 3) {
               assert.throws(function () {
                 fs.statSync(file);
               }, Error);
@@ -86,11 +86,11 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
           }
         },
         "should have the correct content": function () {
-          ['C', 'D', 'E'].forEach(function (name, inx) {
-            var content = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', 
-              ((inx === 0) ? 'testmaxfiles.log' : 'testmaxfiles' + inx + '.log')), 'utf-8');
+          ['D', 'E', 'F'].forEach(function (name, inx) {
+            var counter = inx + 3,
+                content = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles' + counter + '.log'), 'utf-8');
             // The content minus the 7 characters added by winston
-            assert.length(content.match(new RegExp(name, 'g')), 4068);
+            assert.lengthOf(content.match(new RegExp(name, 'g')), 4068);
           });
         }
       }
