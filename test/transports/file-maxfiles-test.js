@@ -16,7 +16,7 @@ var assert = require('assert'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
 
-var maxsizeTransport = new winston.transports.File({
+var maxfilesTransport = new winston.transports.File({
   timestamp: false,
   json: false,
   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles.log'),
@@ -27,7 +27,16 @@ var maxsizeTransport = new winston.transports.File({
 vows.describe('winston/transports/file/maxfiles').addBatch({
   "An instance of the File Transport": {
     "when passed a valid filename": {
-      "the log() method": {
+      "checks option": {
+        topic: maxfilesTransport,
+        "should be a valid transporter": function (transportTest) {
+          helpers.assertFile(transportTest);
+        },
+        "should set the maxFiles option correctly": function (transportTest) {
+          assert.isNumber(transportTest.maxFiles);
+        }
+      },
+      "delete old test files": {
         topic: function () {
           exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles*'), this.callback);
         },
@@ -50,11 +59,11 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
               // [info](4)[ :](2)[\n](1)
               //
               for (var i = 0; i < kbytes; i++) {
-                maxsizeTransport.log('info', data(that.files.length), null, function () { });
+                maxfilesTransport.log('info', data(that.files.length), null, function () { });
               }
             }
             
-            maxsizeTransport.on('open', function (file) {
+            maxfilesTransport.on('open', function (file) {
               var match = file.match(/(\d+)\.log$/),
                   count = match ? match[1] : 0;
               
