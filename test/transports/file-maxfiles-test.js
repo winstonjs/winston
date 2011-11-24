@@ -27,71 +27,71 @@ var maxfilesTransport = new winston.transports.File({
 vows.describe('winston/transports/file/maxfiles').addBatch({
   "An instance of the File Transport": {
     "when passed a valid filename": {
-      "checks option": {
-        topic: maxfilesTransport,
-        "should be a valid transporter": function (transportTest) {
-          helpers.assertFile(transportTest);
-        },
-        "should set the maxFiles option correctly": function (transportTest) {
-          assert.isNumber(transportTest.maxFiles);
-        }
+      topic: maxfilesTransport,
+      "should be a valid transporter": function (transportTest) {
+        helpers.assertFile(transportTest);
       },
-      "delete old test files": {
+      "should set the maxFiles option correctly": function (transportTest) {
+        assert.isNumber(transportTest.maxFiles);
+      }
+    },
+    "when delete old test files": {
+      topic: function () {
+        exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles*'), this.callback);
+      },
+      "and when passed more files than the maxFiles": {
         topic: function () {
-          exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles*'), this.callback);
-        },
-        "when passed more files than the maxFiles": {
-          topic: function () {
-            var that = this,
-                data = function (ch) {
-                  return new Array(1018).join(String.fromCharCode(65 + ch));
-                }; 
-            
+          var that = this,
+              data = function (ch) {
+                return new Array(1018).join(String.fromCharCode(65 + ch));
+              };
+          
+          function logKbytes (kbytes, txt) {
             //
-            // Setup a list of files which we will later stat.
+            // With no timestamp and at the info level,
+            // winston adds exactly 7 characters: 
+            // [info](4)[ :](2)[\n](1)
             //
-            that.files = [];
-            
-            function logKbytes (kbytes) {
-              //
-              // With no timestamp and at the info level,
-              // winston adds exactly 7 characters: 
-              // [info](4)[ :](2)[\n](1)
-              //
-              for (var i = 0; i < kbytes; i++) {
-                maxfilesTransport.log('info', data(that.files.length), null, function () { });
-              }
+            for (var i = 0; i < kbytes; i++) {
+              maxfilesTransport.log('info', data(txt), null, function () { });
             }
-            
-            maxfilesTransport.on('open', function (file) {
-              var match = file.match(/(\d+)\.log$/),
-                  count = match ? match[1] : 0;
-              
-              that.files.push(file);
-              
-              if (that.files.length === 5) {
-                return that.callback();
-              }
-              
-              logKbytes(4);
-            });
-            
-            logKbytes(4);
-          },
-          "should delete old files correctly": function () {
-            this.files.forEach(function (file) {
-              try {
-                var stats = fs.statSync(file);
-                assert.equal(stats.size, 4096);
-              }
-              catch (ex) {
-                assert.isNull(ex);
-              }
-            });
-          },
-          "should move logs to new names": function () {
-            assert.isFalse(true);
           }
+          
+          var j = 0;
+          
+          maxfilesTransport.on('logged', function () {
+            j++;
+            if (j === 5)
+              return that.callback();
+            else
+              logKbytes(4, j);
+          });
+         
+          logKbytes(4, j);
+        },
+        "should be only max files": function () {
+          ['A', 'B', 'C', 'D', 'E'].forEach(function (name, inx) {
+            var file = path.join(__dirname, '..', 'fixtures', 'logs', ((inx === 0) ? 'testmaxfiles.log' : 'testmaxfiles' + inx + '.log'));
+            // There should be no files with that name
+            if (inx === 3 || inx === 4) {
+              assert.throws(function () {
+                fs.statSync(file);
+              }, Error);
+            } else {
+              // The other files should be exist
+              assert.doesNotThrow(function () {
+                fs.statSync(file);
+              }, Error);
+            }
+          });
+        },
+        "should have the correct content": function () {
+          ['C', 'D', 'E'].forEach(function (name, inx) {
+            var content = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', 
+              ((inx === 0) ? 'testmaxfiles.log' : 'testmaxfiles' + inx + '.log')), 'utf-8');
+            // The content minus the 7 characters added by winston
+            assert.length(content.match(new RegExp(name, 'g')), 4068);
+          });
         }
       }
     }
