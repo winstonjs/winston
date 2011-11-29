@@ -618,7 +618,7 @@ Winston is stable and under active development. It is supported by and used at [
 4. Add more transports: Redis
 
 ## Run Tests
-All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/test-config.json before running tests:
+All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/fixtures/test-config.json before running tests:
 
 ``` js
   {
