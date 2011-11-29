@@ -42,11 +42,13 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
       "and when passed more files than the maxFiles": {
         topic: function () {
           var that = this,
-              data = function (ch) {
-                return new Array(1018).join(String.fromCharCode(65 + ch));
-              };
-          
-          function logKbytes (kbytes, txt) {
+              created = 0;
+              
+          function data(ch) {
+            return new Array(1018).join(String.fromCharCode(65 + ch));
+          };
+      
+          function logKbytes(kbytes, txt) {
             //
             // With no timestamp and at the info level,
             // winston adds exactly 7 characters: 
@@ -57,38 +59,39 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
             }
           }
           
-          var j = 0;
-          
           maxfilesTransport.on('logged', function () {
-            j++;
-            if (j === 6)
+            if (++created === 6) {
               return that.callback();
-            else
-              logKbytes(4, j);
+            }
+            
+            logKbytes(4, created);
           });
          
-          logKbytes(4, j);
+          logKbytes(4, created);
         },
         "should be only 3 files called 5.log, 4.log and 3.log": function () {
-          for (var o = 0; o < 6; o++) {
-            var file = path.join(__dirname, '..', 'fixtures', 'logs', ((o === 0) ? 'testmaxfiles.log' : 'testmaxfiles' + o + '.log'));
+          for (var num = 0; num < 6; num++) {
+            var file = !num ? 'testmaxfiles.log' : 'testmaxfiles' + num + '.log',
+                fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
+            
             // There should be no files with that name
-            if (o >= 0 && o < 3) {
-              assert.throws(function () {
+            if (num >= 0 && num < 3) {
+              return assert.throws(function () {
                 fs.statSync(file);
               }, Error);
-            } else {
-              // The other files should be exist
-              assert.doesNotThrow(function () {
-                fs.statSync(file);
-              }, Error);
-            }
+            } 
+
+            // The other files should be exist
+            assert.doesNotThrow(function () {
+              fs.statSync(file);
+            }, Error);
           }
         },
         "should have the correct content": function () {
           ['D', 'E', 'F'].forEach(function (name, inx) {
             var counter = inx + 3,
-                content = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles' + counter + '.log'), 'utf-8');
+                logsDir = path.join(__dirname, '..', 'fixtures', 'logs'),
+                content = fs.readFileSync(path.join(logsDir, 'testmaxfiles' + counter + '.log'), 'utf-8');
             // The content minus the 7 characters added by winston
             assert.lengthOf(content.match(new RegExp(name, 'g')), 4068);
           });
