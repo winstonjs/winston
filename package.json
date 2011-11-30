@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     { "name": "Matthew Bergman", "email": "mzbphoto@gmail.com" },
