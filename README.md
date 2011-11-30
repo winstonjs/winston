@@ -562,6 +562,29 @@ The SimpleDB transport takes the following options. All items marked with an ast
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
 
+### Mail Transport
+
+The [winston-mail][19] is an email transport:
+
+``` js
+  var Mail = require('winston-simpledb').Mail;
+  winston.add(Mail, options);
+```
+
+The Mail transport uses [node-mail][20] behind the scenes.  Options are the following, `to` and `host` are required:
+
+* __to:__ The address(es) you want to send to. *[required]*
+* __from:__ The address you want to send from. (default: `winston@[server-host-name]`)
+* __host:__ SMTP server hostname
+* __port:__ SMTP port (default: 587 or 25)
+* __secure:__ Use secure
+* __username__ User for server auth
+* __password__ Password for server auth
+* __level:__ Level of messages that this transport should log. 
+* __silent:__ Boolean flag indicating whether to suppress output.
+
+*Metadata:* Stringified as JSON in email.
+
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
@@ -663,3 +686,5 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [16]: http://github.com/indexzero/winston-mongodb
 [17]: http://github.com/indexzero/winston-riak
 [18]: http://github.com/appsattic/winston-simpledb
+[19]: http://github.com/wavded/winston-mail
+[20]: https://github.com/weaver/node-mail
