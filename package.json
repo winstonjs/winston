@@ -21,7 +21,7 @@
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
-    "vows": "0.5.x >=0.5.11"
+    "vows": "0.6.x"
   },
   "main": "./lib/winston",
   "scripts": { "test": "vows --spec --isolate" },
