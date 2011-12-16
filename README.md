@@ -567,7 +567,7 @@ The SimpleDB transport takes the following options. All items marked with an ast
 The [winston-mail][19] is an email transport:
 
 ``` js
-  var Mail = require('winston-simpledb').Mail;
+  var Mail = require('winston-mail').Mail;
   winston.add(Mail, options);
 ```
 
