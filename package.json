@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/indexzero/winston.git" 
+    "url": "https://github.com/flatiron/winston.git"
   },
   "keywords": ["logging", "sysadmin", "tools"],
   "dependencies": {
