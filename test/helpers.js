@@ -33,7 +33,7 @@ helpers.loadConfig = function (dir) {
   }
 };
 
-helpers.size = function(obj) {
+helpers.size = function (obj) {
   var size = 0, key;
   for (key in obj) {
     if (obj.hasOwnProperty(key)) {
@@ -167,7 +167,7 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   tests['when passed metadata'] = metadatatest;
 
   var primmetadatatest = {
-    topic: function() {
+    topic: function () {
       transport.log('info', 'test message', 'metadata', this.callback.bind(this, null));
     }
   };
