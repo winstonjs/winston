@@ -181,4 +181,19 @@ vows.describe('winton/logger').addBatch({
       }
     }
   }
+}).addBatch({
+  "The winston logger": {
+    topic: new (winston.Logger)({
+      transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      ]
+    }),
+    "the clear() method": {
+      "should remove all transports": function (logger) {
+        logger.clear();
+        assert.equal(helpers.size(logger.transports), 0);
+      }
+    }
+  }
 }).export(module);
