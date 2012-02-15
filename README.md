@@ -548,7 +548,7 @@ The [winston-simpledb][18] transport is just as easy:
 
 ``` js
   var SimpleDB = require('winston-simpledb').SimpleDB;
-  winston.add(MongoDB, options);
+  winston.add(SimpleDB, options);
 ```
 
 The SimpleDB transport takes the following options. All items marked with an asterisk are required:
