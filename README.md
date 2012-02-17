@@ -585,6 +585,26 @@ The Mail transport uses [node-mail][20] behind the scenes.  Options are the foll
 
 *Metadata:* Stringified as JSON in email.
 
+### Amazon SNS (Simple Notification System) Transport
+
+The [winston-sns][21] transport uses amazon SNS to send emails, texts, or a bunch of other notifications.
+
+``` js
+  require('winston-sns').SNS;
+  winston.add(winston.transports.SNS, options);
+```
+
+Options:
+
+* __aws_key:__ Your Amazon Web Services Key. *[required]*
+* __aws_secret:__ Your Amazon Web Services Secret. *[required]*
+* __subscriber:__ Subscriber number - found in your SNS AWS Console, after clicking on a topic. Same as AWS Account ID. *[required]*
+* __topic_arn:__ Also found in SNS AWS Console - listed under a topic as Topic ARN. *[required]*
+* __region:__ AWS Region to use. Can be one of: `us-east-1`,`us-west-1`,`eu-west-1`,`ap-southeast-1`,`ap-northeast-1`,`us-gov-west-1`,`sa-east-1`. (default: `us-east-1`)
+* __subject:__ Subject for notifications. (default: "Winston Error Report")
+* __message:__ Message of notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Level '%l' Error:\n%e\n\nMetadata:\n%m")
+* __level:__ lowest level this transport will log. (default: `info`)
+
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
@@ -688,3 +708,4 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [18]: http://github.com/appsattic/winston-simpledb
 [19]: http://github.com/wavded/winston-mail
 [20]: https://github.com/weaver/node-mail
+[21]: https://github.com/jesseditson/winston-sns
