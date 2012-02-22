@@ -89,8 +89,6 @@ If you want to use this feature with the default logger simply call `.handleExce
     filename: 'path/to/all-logs.log', 
     handleExceptions: true 
   });
-  
-  winston.handleExceptions();
 ```
 
 ## to exit or not to exit
