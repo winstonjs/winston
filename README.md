@@ -585,6 +585,27 @@ The Mail transport uses [node-mail][20] behind the scenes.  Options are the foll
 
 *Metadata:* Stringified as JSON in email.
 
+### Graylog2 Transport
+
+[winston-graylog2][21] is a Graylog2 transport:
+
+``` js
+  var Graylog2 = require('winston-graylog2').Graylog2;
+  winston.add(Graylog2, options);
+```
+
+The Graylog2 transport connects to a Graylog2 server over UDP using the following options:
+
+* __level:__ Level of messages this transport should log. (default: info)
+* __silent:__ Boolean flag indicating whether to suppress output. (default: false)
+
+* __graylogHost:__ IP address or hostname of the graylog2 server. (default: localhost)
+* __graylogPort:__ Port to send messages to on the graylog2 server. (default: 12201)
+* __graylogHostname:__ The hostname associated with graylog2 messages. (default: require('os').hostname())
+* __graylogFacility:__ The graylog2 facility to send log messages.. (default: nodejs)
+
+*Metadata:* Stringified as JSON in the full message GELF field.
+
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
@@ -635,10 +656,9 @@ Winston is stable and under active development. It is supported by and used at [
 6. [Loggly][7]
 
 ### Road Map
-1. Graylog2 format support.
-2. Improve support for adding custom Transports not defined in Winston core.
-3. Create API for reading from logs across all transports.  
-4. Add more transports: Redis
+1. Improve support for adding custom Transports not defined in Winston core.
+2. Create API for reading from logs across all transports.  
+3. Add more transports: Redis
 
 ## Run Tests
 All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/fixtures/test-config.json before running tests:
@@ -688,3 +708,4 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [18]: http://github.com/appsattic/winston-simpledb
 [19]: http://github.com/wavded/winston-mail
 [20]: https://github.com/weaver/node-mail
+[21]: https://github.com/flite/winston-graylog2
