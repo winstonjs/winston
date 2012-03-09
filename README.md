@@ -469,10 +469,12 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __colorize:__ Boolean flag indicating if we should colorize output.
+* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false).
 * __filename:__ The filename of the logfile to write output to.
 * __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
+* __json:__ If true, messages will be logged as JSON (default true).
 
 *Metadata:* Logged via util.inspect(meta);
 
