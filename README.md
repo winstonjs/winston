@@ -473,6 +473,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
+* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false).
 
 *Metadata:* Logged via util.inspect(meta);
 
