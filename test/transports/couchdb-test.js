@@ -16,7 +16,7 @@ var path = require('path'),
 
 var couchdbTransport = new (winston.transports.Couchdb)({ 
   "host": "localhost",
-  "port": 1337,
+  "port": 4567,
   "db": "logs"
 });
 
@@ -24,7 +24,7 @@ var server = http.createServer(function (req, res) {
   res.end();
 });
 
-server.listen(1337);
+server.listen(4567);
 
 vows.describe('winston/transports/couchdb').addBatch({
   "An instance of the Couchdb Transport": {

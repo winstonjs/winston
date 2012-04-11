@@ -70,14 +70,24 @@ Console.prototype.log = function (level, msg, meta, callback) {
     meta:      meta,
     stringify: this.stringify,
     timestamp: this.timestamp,
-    levelDecorators: this.levelDecorators,
-    raw:       this.raw
+<<<<<<< HEAD
+    levelDecorators: this.levelDecorators
   });
 
   if (level === 'error' || (level === 'debug' && !self.debugToStdOut)) {
+    util.error(output);
+  }
+  else {
+    util.puts(output);
+=======
+    raw:       this.raw
+  });
+
+  if (level === 'error' || level === 'debug') {
     console.error(output);
   } else {
     console.log(output);
+>>>>>>> original/master
   }
 
   //

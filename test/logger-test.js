@@ -102,12 +102,12 @@ vows.describe('winton/logger').addBatch({
             var that = this;
             var timer = logger.startTimer()
             setTimeout(function () {
-              timer.done('test', function(err, level, msg, meta) {
+              timer.done('test', function (err, level, msg, meta) {
                 that.callback(err, level, msg, meta, logger);
               });
             }, 1000);
           },
-          "should respond with the appropriate message": function(err, level, msg, meta, logger) {
+          "should respond with the appropriate message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
             assert.equal(level, 'info');
             assert.match(meta.duration, /(\d+)ms/);
@@ -122,7 +122,7 @@ vows.describe('winton/logger').addBatch({
               timer.done();
             }, 1000);
           },
-          "should respond with the appropriate message": function(err, transport, level, msg, meta) {
+          "should respond with the appropriate message": function (err, transport, level, msg, meta) {
             assert.isNull(err);
             assert.equal(level, 'info');
             assert.match(meta.duration, /(\d+)ms/);
@@ -155,7 +155,7 @@ vows.describe('winton/logger').addBatch({
         new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
       ] 
     }),
-    "should return have two transports": function(logger) {
+    "should return have two transports": function (logger) {
       assert.equal(helpers.size(logger.transports), 2);
     },
     "the remove() with an unadded transport": {
@@ -178,6 +178,21 @@ vows.describe('winton/logger').addBatch({
         "should remove File transport from transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 0);
         }
+      }
+    }
+  }
+}).addBatch({
+  "The winston logger": {
+    topic: new (winston.Logger)({
+      transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      ]
+    }),
+    "the clear() method": {
+      "should remove all transports": function (logger) {
+        logger.clear();
+        assert.equal(helpers.size(logger.transports), 0);
       }
     }
   }

@@ -89,8 +89,6 @@ If you want to use this feature with the default logger simply call `.handleExce
     filename: 'path/to/all-logs.log', 
     handleExceptions: true 
   });
-  
-  winston.handleExceptions();
 ```
 
 ## to exit or not to exit
@@ -455,9 +453,9 @@ Right now there are four transports supported by winston core. If you have a tra
 The Console transport takes two simple options:
 
 * __level:__ Level of messages that this transport should log (default 'debug').
-* __silent:__ Boolean flag indicating whether to suppress output (default true).
+* __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
-* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false).
+* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -471,10 +469,12 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __colorize:__ Boolean flag indicating if we should colorize output.
+* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
 * __filename:__ The filename of the logfile to write output to.
 * __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
+* __json:__ If true, messages will be logged as JSON (default true).
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -548,7 +548,7 @@ The [winston-simpledb][18] transport is just as easy:
 
 ``` js
   var SimpleDB = require('winston-simpledb').SimpleDB;
-  winston.add(MongoDB, options);
+  winston.add(SimpleDB, options);
 ```
 
 The SimpleDB transport takes the following options. All items marked with an asterisk are required:
@@ -584,6 +584,47 @@ The Mail transport uses [node-mail][20] behind the scenes.  Options are the foll
 * __silent:__ Boolean flag indicating whether to suppress output.
 
 *Metadata:* Stringified as JSON in email.
+
+### Amazon SNS (Simple Notification System) Transport
+
+The [winston-sns][21] transport uses amazon SNS to send emails, texts, or a bunch of other notifications.
+
+``` js
+  require('winston-sns').SNS;
+  winston.add(winston.transports.SNS, options);
+```
+
+Options:
+
+* __aws_key:__ Your Amazon Web Services Key. *[required]*
+* __aws_secret:__ Your Amazon Web Services Secret. *[required]*
+* __subscriber:__ Subscriber number - found in your SNS AWS Console, after clicking on a topic. Same as AWS Account ID. *[required]*
+* __topic_arn:__ Also found in SNS AWS Console - listed under a topic as Topic ARN. *[required]*
+* __region:__ AWS Region to use. Can be one of: `us-east-1`,`us-west-1`,`eu-west-1`,`ap-southeast-1`,`ap-northeast-1`,`us-gov-west-1`,`sa-east-1`. (default: `us-east-1`)
+* __subject:__ Subject for notifications. (default: "Winston Error Report")
+* __message:__ Message of notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Level '%l' Error:\n%e\n\nMetadata:\n%m")
+* __level:__ lowest level this transport will log. (default: `info`)
+
+### Graylog2 Transport
+
+[winston-graylog2][22] is a Graylog2 transport:
+
+``` js
+  var Graylog2 = require('winston-graylog2').Graylog2;
+  winston.add(Graylog2, options);
+```
+
+The Graylog2 transport connects to a Graylog2 server over UDP using the following options:
+
+* __level:__ Level of messages this transport should log. (default: info)
+* __silent:__ Boolean flag indicating whether to suppress output. (default: false)
+
+* __graylogHost:__ IP address or hostname of the graylog2 server. (default: localhost)
+* __graylogPort:__ Port to send messages to on the graylog2 server. (default: 12201)
+* __graylogHostname:__ The hostname associated with graylog2 messages. (default: require('os').hostname())
+* __graylogFacility:__ The graylog2 facility to send log messages.. (default: nodejs)
+
+*Metadata:* Stringified as JSON in the full message GELF field.
 
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
@@ -635,10 +676,9 @@ Winston is stable and under active development. It is supported by and used at [
 6. [Loggly][7]
 
 ### Road Map
-1. Graylog2 format support.
-2. Improve support for adding custom Transports not defined in Winston core.
-3. Create API for reading from logs across all transports.  
-4. Add more transports: Redis
+1. Improve support for adding custom Transports not defined in Winston core.
+2. Create API for reading from logs across all transports.  
+3. Add more transports: Redis
 
 ## Run Tests
 All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/fixtures/test-config.json before running tests:
@@ -688,3 +728,5 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [18]: http://github.com/appsattic/winston-simpledb
 [19]: http://github.com/wavded/winston-mail
 [20]: https://github.com/weaver/node-mail
+[21]: https://github.com/jesseditson/winston-sns
+[22]: https://github.com/flite/winston-graylog2
