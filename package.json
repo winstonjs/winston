@@ -18,7 +18,9 @@
     "eyes": "0.1.x",
     "loggly": "0.3.x >=0.3.7",
     "pkginfo": "0.2.x",
-    "stack-trace": "0.0.x"
+    "stack-trace": "0.0.x",
+    "redis": ">=0.7.1",
+    "request": ">=2.9.202"
   },
   "devDependencies": {
     "vows": "0.6.x"
