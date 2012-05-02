@@ -571,15 +571,16 @@ The [winston-mail][19] is an email transport:
   winston.add(Mail, options);
 ```
 
-The Mail transport uses [node-mail][20] behind the scenes.  Options are the following, `to` and `host` are required:
+The Mail transport uses [emailjs](https://github.com/eleith/emailjs) behind the scenes.  Options are the following:
 
 * __to:__ The address(es) you want to send to. *[required]*
 * __from:__ The address you want to send from. (default: `winston@[server-host-name]`)
-* __host:__ SMTP server hostname
+* __host:__ SMTP server hostname (default: localhost)
 * __port:__ SMTP port (default: 587 or 25)
-* __secure:__ Use secure
 * __username__ User for server auth
 * __password__ Password for server auth
+* __ssl:__ Use SSL (boolean or object { key, ca, cert })
+* __tls:__ Boolean (if true, use starttls)
 * __level:__ Level of messages that this transport should log. 
 * __silent:__ Boolean flag indicating whether to suppress output.
 
