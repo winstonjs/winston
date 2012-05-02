@@ -196,4 +196,44 @@ vows.describe('winton/logger').addBatch({
       }
     }
   }
+}).addBatch({
+  "The winston logger": {
+    topic: new (winston.Logger)({
+      transports: [
+        new (winston.transports.File)({
+          filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )
+        })
+      ]
+    }),
+    "the query() method": {
+      topic: function(logger) {
+        logger.log('info', 'hello world', {});
+        logger.query({}, this.callback);
+      },
+      "should return matching results": function (err, results, logger) {
+        assert.equal(results.file.pop().message, 'hello world');
+      }
+    },
+    "the stream() method": {
+      topic: function(logger) {
+        var cb = this.callback;
+        var j = 10;
+        var i = 10;
+        var results = [];
+
+        logger.log('info', 'hello world', {});
+        logger.stream({}).on('log', function(log) {
+          results.push(log);
+          if (!--j) cb(results);
+        });
+
+        while (i--) logger.log('info', 'hello world ' + i, {});
+      },
+      "should stream logs": function (results, logger) {
+        results.forEach(function(log) {
+          assert.equal(log.message.indexOf('hello world'), 0);
+        });
+      }
+    }
+  }
 }).export(module);
