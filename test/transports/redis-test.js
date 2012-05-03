@@ -12,9 +12,8 @@ var path = require('path'),
     http = require('http'),
     assert = require('assert'),
     winston = require('../../lib/winston'),
-    helpers = require('../helpers');
-
-var transport = require('./transport');
+    helpers = require('../helpers'),
+    transport = require('./transport');
 
 vows.describe('winston/transports/redis').addBatch({
   "An instance of the Couchdb Transport": transport(winston.transports.Redis, {
