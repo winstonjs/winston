@@ -14,7 +14,10 @@ var path = require('path'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
 
-var couchdbTransport = new (winston.transports.Couchdb)({ 
+var transport = require('./transport');
+
+if (0) {
+var couchdbTransport = new (winston.transports.Couchdb)({
   "host": "localhost",
   "port": 4567,
   "db": "logs"
@@ -32,10 +35,12 @@ vows.describe('winston/transports/couchdb').addBatch({
       "should have the proper methods defined": function () {
         helpers.assertCouchdb(couchdbTransport);
       },
-      "the log() method": helpers.testNpmLevels(couchdbTransport, "should respond with true", function (ign, err, logged) {
-        assert.isNull(err);
-        assert.isTrue(logged);
-      })
+      "the log() method": helpers.testNpmLevels(couchdbTransport,
+        "should respond with true", function (ign, err, logged) {
+          assert.isNull(err);
+          assert.isTrue(logged);
+        }
+      )
     }
   }
 }).addBatch({
@@ -45,3 +50,12 @@ vows.describe('winston/transports/couchdb').addBatch({
     }
   }
 }).export(module);
+} else {
+vows.describe('winston/transports/couchdb').addBatch({
+  "An instance of the Couchdb Transport": transport(winston.transports.Couchdb, {
+    host: 'localhost',
+    port: 5984,
+    db: 'logs'
+  })
+}).export(module);
+}

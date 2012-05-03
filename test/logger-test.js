@@ -10,7 +10,8 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     winston = require('../lib/winston'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    transport = require('./transports/transport');
 
 vows.describe('winton/logger').addBatch({
   "An instance of winston.Logger": {
@@ -197,7 +198,10 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "The winston logger": {
+  "The winston logger": transport(winston.transport.File, {
+    filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log')
+  }),
+  "The winston logger_": {
     topic: new (winston.Logger)({
       transports: [
         new (winston.transports.File)({
@@ -207,11 +211,14 @@ vows.describe('winton/logger').addBatch({
     }),
     "the query() method": {
       topic: function(logger) {
-        logger.log('info', 'hello world', {});
-        logger.query({}, this.callback);
+        var cb = this.callback;
+        logger.log('info', 'hello world', {}, function() {
+          logger.query({}, cb);
+        });
       },
       "should return matching results": function (err, results, logger) {
-        assert.equal(results.file.pop().message, 'hello world');
+        results = results.file;
+        assert.equal(results.pop().message, 'hello world');
       }
     },
     "the stream() method": {
