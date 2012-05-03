@@ -16,7 +16,7 @@ var path = require('path'),
     transport = require('./transport');
 
 vows.describe('winston/transports/redis').addBatch({
-  "An instance of the Couchdb Transport": transport(winston.transports.Redis, {
+  "An instance of the Redis Transport": transport(winston.transports.Redis, {
     host: 'localhost',
     port: 6379
   })
