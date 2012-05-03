@@ -197,8 +197,4 @@ vows.describe('winton/logger').addBatch({
       }
     }
   }
-}).addBatch({
-  "The winston logger": transport(winston.transport.File, {
-    filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log')
-  })
 }).export(module);

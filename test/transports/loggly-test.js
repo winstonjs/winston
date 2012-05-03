@@ -10,7 +10,8 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     winston = require('../../lib/winston'),
-    helpers = require('../helpers');
+    helpers = require('../helpers'),
+    transport = require('./transport');
 
 var config = helpers.loadConfig();
 
@@ -22,7 +23,7 @@ var tokenTransport = new (winston.transports.Loggly)({
       subdomain: config.transports.loggly.subdomain,
       inputToken: config.transports.loggly.inputToken
     }),
-    nameTransport = new (winston.transports.Loggly)({ 
+    nameTransport = new (winston.transports.Loggly)({
       subdomain: config.transports.loggly.subdomain,
       inputName: config.transports.loggly.inputName,
       auth: config.transports.loggly.auth
@@ -57,5 +58,10 @@ vows.describe('winston/transports/loggly').addBatch({
       })
     }
   }
+}).addBatch({
+  // "An instance of the Loggly Transport": transport(winston.transports.Loggly, {
+  //   subdomain: config.transports.loggly.subdomain,
+  //   inputName: config.transports.loggly.inputName,
+  //   auth: config.transports.loggly.auth
+  // })
 }).export(module);
-
