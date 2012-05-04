@@ -20,7 +20,7 @@
     "pkginfo": "0.2.x",
     "stack-trace": "0.0.x",
     "redis": "0.7.x",
-    "cradle": "0.6.x",
+    "cradle": ">=0.3.0",
     "nssocket": "0.3.x",
     "request": "2.9.x"
   },
