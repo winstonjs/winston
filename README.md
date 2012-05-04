@@ -360,6 +360,39 @@ The way these objects is stored varies from transport to transport (to best supp
 2. __File:__ Logged via util.inspect(meta)
 3. __Loggly:__ Logged in suggested [Loggly format][2]
 
+### Beyond Logging
+
+Multiple core transports allow for streaming and querying.
+
+#### Querying
+
+Winston supports querying of logs with Loggly-like options.
+Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
+
+``` js
+var options = {
+  from: new Date - 24 * 60 * 60 * 1000,
+  until: new Date
+};
+
+// Find items logged between today and yesterday.
+winston.query(options, function(err, results) {
+  if (err) throw err;
+  console.log(results);
+});
+```
+
+#### Streaming
+
+Streaming allows you to stream your logs back from your chosen transport.
+
+``` js
+// Start at the end.
+winston.stream({ start: -1 }).on('log', function(log) {
+  console.log(log);
+});
+```
+
 ### Profiling with Winston
 In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
 
