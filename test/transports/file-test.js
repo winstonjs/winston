@@ -55,6 +55,6 @@ vows.describe('winston/transports/file').addBatch({
   }
 }).addBatch({
   "An instance of the File Transport": transport(winston.transports.File, {
-    filename: path.join(__dirname, '..', 'fixtures', 'logs', 'filelog.log')
+    filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
   })
 }).export(module);
