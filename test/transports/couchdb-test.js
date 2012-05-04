@@ -16,7 +16,7 @@ var path = require('path'),
     transport = require('./transport');
 
 vows.describe('winston/transports/couchdb').addBatch({
-  "An instance of the Couchdb Transport": transport(winston.transports.Couchdb, {
+  'An instance of the Couchdb Transport': transport(winston.transports.Couchdb, {
     host: 'localhost',
     port: 5984,
     db: 'logs'
