@@ -15,19 +15,19 @@ A multi-transport async logging library for node.js. <span style="font-size:28px
 ```
 
 ## Motivation
-Winston is designed to be a simple and universal logging library with support for multiple transports. A transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file. 
+Winston is designed to be a simple and universal logging library with support for multiple transports. A transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file.
 
 There also seemed to be a lot of logging libraries out there that coupled their implementation of logging (i.e. how the logs are stored / indexed) to the API that they exposed to the programmer. This library aims to decouple those parts of the process to make it more flexible and extensible.
 
 ## Usage
-There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger. The former is merely intended to be a convenient shared logger to use throughout your application if you so choose. 
+There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger. The former is merely intended to be a convenient shared logger to use throughout your application if you so choose.
 
 ### Using the Default Logger
 The default logger is accessible through the winston module directly. Any method that you could call on an instance of a logger is available on the default logger:
 
 ``` js
   var winston = require('winston');
-  
+
   winston.log('info', 'Hello distributed log files!');
   winston.info('Hello again distributed logs');
 ```
@@ -39,7 +39,7 @@ By default, only the Console transport is set on the default logger. You can add
   winston.remove(winston.transports.Console);
 ```
 
-For more documenation about working with each individual transport supported by Winston see the "Working with Transports" section below. 
+For more documenation about working with each individual transport supported by Winston see the "Working with Transports" section below.
 
 ### Instantiating your own Logger
 If you would prefer to manage the object lifetime of loggers you are free to instantiate them yourself:
@@ -53,7 +53,7 @@ If you would prefer to manage the object lifetime of loggers you are free to ins
   });
 ```
 
-You can work with this logger in the same way that you work with the default logger: 
+You can work with this logger in the same way that you work with the default logger:
 
 ``` js
   //
@@ -61,7 +61,7 @@ You can work with this logger in the same way that you work with the default log
   //
   logger.log('info', 'Hello distributed log files!');
   logger.info('Hello again distributed logs');
-  
+
   //
   // Adding / Removing Transports
   //   (Yes It's chainable)
@@ -81,13 +81,13 @@ If you want to use this feature with the default logger simply call `.handleExce
   // You can add a separate exception logger by passing it to `.handleExceptions`
   //
   winston.handleExceptions(new winston.transports.File({ filename: 'path/to/exceptions.log' }))
-  
+
   //
   // Alternatively you can set `.handleExceptions` to true when adding transports to winston
   //
-  winston.add(winston.transports.File, { 
-    filename: 'path/to/all-logs.log', 
-    handleExceptions: true 
+  winston.add(winston.transports.File, {
+    filename: 'path/to/all-logs.log',
+    handleExceptions: true
   });
 ```
 
@@ -134,7 +134,7 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
 ```
 
 ### Using Logging Levels
-Setting the level for your logging message can be accomplished in one of two ways. You can pass a string representing the logging level to the log() method or use the level specified methods defined on every winston Logger. 
+Setting the level for your logging message can be accomplished in one of two ways. You can pass a string representing the logging level to the log() method or use the level specified methods defined on every winston Logger.
 
 ``` js
   //
@@ -142,7 +142,7 @@ Setting the level for your logging message can be accomplished in one of two way
   //
   logger.log('info', "127.0.0.1 - there's no place like home");
   logger.info("127.0.0.1 - there's no place like home");
-  
+
   //
   // Default logger
   //
@@ -157,7 +157,7 @@ As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0
   // Change levels on the default winston logger
   //
   winston.setLevels(winston.config.syslog.levels);
-  
+
   //
   // Change levels on an instance of a logger
   //
@@ -168,7 +168,7 @@ Calling `.setLevels` on a logger will remove all of the previous helper methods 
 
 ``` js
   //
-  // Logger does not have 'silly' defined since that level is not in the syslog levels 
+  // Logger does not have 'silly' defined since that level is not in the syslog levels
   //
   logger.silly('some silly message');
 ```
@@ -191,8 +191,8 @@ In addition to the predefined `npm` and `syslog` levels available in Winston, yo
       foobar: 'red'
     }
   };
-  
-  var customLevelLogger = new (winston.Logger)({ levels: myCustomLevels.levels }); 
+
+  var customLevelLogger = new (winston.Logger)({ levels: myCustomLevels.levels });
   customLevelLogger.foobar('some foobar level-ed message');
 ```
 
@@ -214,7 +214,7 @@ Each instance of winston.Logger is also an instance of an [EventEmitter][1]. A l
   logger.on('logging', function (transport, level, msg, meta) {
     // [msg] and [meta] have now been logged at [level] to [transport]
   });
-  
+
   logger.info('CHILL WINSTON!', { seriously: true });
 ```
 
@@ -225,7 +225,7 @@ It is also worth mentioning that the logger also emits an 'error' event which yo
   // Handle errors
   //
   logger.on('error', function (err) { /* Do Something */ });
-  
+
   //
   // Or just suppress them.
   //
@@ -246,7 +246,7 @@ Often in larger, more complex applications it is necessary to have multiple logg
 
 ``` js
   var winston = require('winston');
-  
+
   //
   // Configure the logger for `category1`
   //
@@ -259,7 +259,7 @@ Often in larger, more complex applications it is necessary to have multiple logg
       filename: '/path/to/some/file'
     }
   });
-  
+
   //
   // Configure the logger for `category2`
   //
@@ -275,12 +275,12 @@ Now that your loggers are setup you can require winston _in any file in your app
 
 ``` js
   var winston = require('winston');
-  
+
   //
   // Grab your preconfigured logger
   //
   var category1 = winston.loggers.get('category1');
-  
+
   category1.info('logging from your IoC container-based logger');
 ```
 
@@ -289,7 +289,7 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
 ``` js
   var winston = require('winston'),
       container = new winston.Container();
-  
+
   container.add('category1', {
     console: {
       level: 'silly',
@@ -312,7 +312,7 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
   //
   // 1. By setting it on the default Container
   // 2. By passing `transports` into the constructor function of winston.Container
-  // 3. By passing `transports` into the `.get()` or `.add()` methods 
+  // 3. By passing `transports` into the `.get()` or `.add()` methods
   //
 
   //
@@ -332,8 +332,8 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
   });
 
   //
-  // 3. By passing `transports` into the `.get()` or `.add()` methods 
-  // 
+  // 3. By passing `transports` into the `.get()` or `.add()` methods
+  //
   winston.loggers.add('some-category', {
     transports: [
       // Setup your shared transports here
@@ -366,10 +366,10 @@ In addition to logging messages and metadata, winston also has a simple profilin
 ``` js
   //
   // Start profile of 'test'
-  // Remark: Consider using Date.now() with async operations 
+  // Remark: Consider using Date.now() with async operations
   //
   winston.profile('test');
-  
+
   setTimeout(function () {
     //
     // Stop profile of 'test'. Logging will now take place:
@@ -377,7 +377,7 @@ In addition to logging messages and metadata, winston also has a simple profilin
     //
     winston.profile('test');
   }, 1000);
-``` 
+```
 
 All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
@@ -406,12 +406,12 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
 
 ``` js
   var winston = require('winston');
-  
+
   //
   // Configure CLI output on the default logger
   //
   winston.cli();
-  
+
   //
   // Configure CLI on an instance of winston.Logger
   //
@@ -420,7 +420,7 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
       new (winston.transports.Console)()
     ]
   });
-  
+
   logger.cli();
 ```
 
@@ -429,9 +429,9 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
 
 ``` js
   var myObject = {};
-  
+
   logger.extend(myObject);
-  
+
   //
   // You can now call logger methods on 'myObject'
   //
@@ -440,7 +440,7 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
 
 ## Working with Transports
 Right now there are four transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
-   
+
 1. __Console:__ Output to the terminal
 2. __Files:__ Append to a file
 3. __Loggly:__ Log to Logging-as-a-Service platform Loggly
@@ -485,7 +485,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 
 The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
 
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __subdomain:__ The subdomain of your Loggly account. *[required]*
 * __auth__: The authentication information for your Loggly account. *[required with inputName]*
 * __inputName:__ The name of the input this instance should log to.
@@ -510,7 +510,7 @@ In addition to the options accepted by the [riak-js][3] [client][4], the Riak tr
 ``` js
   // Use a single bucket for all your logs
   var singleBucketTransport = new (Riak)({ bucket: 'some-logs-go-here' });
-  
+
   // Generate a dynamic bucket based on the date and level
   var dynamicBucketTransport = new (Riak)({
     bucket: function (level, msg, meta, now) {
@@ -532,7 +532,7 @@ As of `0.3.0` the MongoDB transport has been broken out into a new module: [wins
 
 The MongoDB transport takes the following options. 'db' is required:
 
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __db:__ The name of the database you want to log to. *[required]*
 * __collection__: The name of the collection you want to store log messages in, defaults to 'log'.
@@ -580,7 +580,7 @@ The Mail transport uses [node-mail][20] behind the scenes.  Options are the foll
 * __secure:__ Use secure
 * __username__ User for server auth
 * __password__ Password for server auth
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 
 *Metadata:* Stringified as JSON in email.
@@ -632,40 +632,40 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
 ``` js
   var util = require('util'),
       winston = require('winston');
-  
+
   var CustomLogger = winston.transports.CustomerLogger = function (options) {
     //
     // Name this logger
     //
     this.name = 'customLogger';
-    
+
     //
     // Set the level from your options
     //
     this.level = options.level || 'info';
-    
+
     //
     // Configure your storage backing as you see fit
     //
   };
-  
+
   //
   // Inherit from `winston.Transport` so you can take advantage
   // of the base functionality and `.handleExceptions()`.
   //
   util.inherits(CustomLogger, winston.Transport);
-  
+
   CustomLogger.prototype.log = function (level, msg, meta, callback) {
     //
     // Store this message and metadata, maybe use some custom logic
     // then callback indicating success.
     //
-    callback(null, true); 
+    callback(null, true);
   };
 ```
 
 ## What's Next?
-Winston is stable and under active development. It is supported by and used at [Nodejitsu][5]. 
+Winston is stable and under active development. It is supported by and used at [Nodejitsu][5].
 
 ### Inspirations
 1. [npm][0]
@@ -677,7 +677,7 @@ Winston is stable and under active development. It is supported by and used at [
 
 ### Road Map
 1. Improve support for adding custom Transports not defined in Winston core.
-2. Create API for reading from logs across all transports.  
+2. Create API for reading from logs across all transports.
 3. Add more transports: Redis
 
 ## Run Tests
