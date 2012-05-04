@@ -175,5 +175,17 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   primmetadatatest[assertMsg] = assertFn;
   tests['when passed primitive metadata'] = primmetadatatest;
 
+  var circmetadata = { }; 
+  circmetadata['metadata'] = circmetadata;
+
+  var circmetadatatest = {
+    topic: function () {
+      transport.log('info', 'test message', circmetadata, this.callback.bind(this, null));
+    }
+  };
+
+  circmetadatatest[assertMsg] = assertFn;
+  tests['when passed circular metadata'] = circmetadatatest;
+
   return tests;
 };
