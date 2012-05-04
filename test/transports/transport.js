@@ -72,11 +72,11 @@ module.exports = function (transport, options) {
 
         logger.log('info', 'hello world', {});
 
-        var cb = this.callback
-          , j = 10
-          , i = 10
-          , results = []
-          , stream = logger.stream({});
+        var cb = this.callback,
+            j = 10,
+            i = 10,
+            results = [],
+            stream = logger.stream({});
 
         stream.on('log', function(log) {
           results.push(log);
