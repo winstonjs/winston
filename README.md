@@ -150,6 +150,17 @@ Setting the level for your logging message can be accomplished in one of two way
   winston.info("127.0.0.1 - there's no place like home");
 ```
 
+Depending on how you have configured your transports, different transports can receive different log levels. For example, to write all messages to `logs.log`, while writing messages of level `error` or higher to `errors.log`, you would do
+
+``` js
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.File)({ filename: 'logs.log' }),
+      new (winston.transports.File)({ filename: 'errors.log', level: 'error' })
+    ]
+  });
+```
+
 As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0] style logging levels. Changing logging levels is easy:
 
 ``` js
