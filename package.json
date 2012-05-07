@@ -2,16 +2,19 @@
   "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
   "version": "0.5.11",
-  "author": "Charlie Robbins <charlie.robbins@gmail.com>",
-  "contributors": [
-    { "name": "Matthew Bergman", "email": "mzbphoto@gmail.com" },
-    { "name": "Marak Squires", "email": "marak@nodejitsu.com" }
+  "author": "Nodejitsu Inc. <info@nodejitsu.com>",
+  "maintainers": [
+    "indexzero <charlie@nodejitsu.com>"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/flatiron/winston.git"
   },
-  "keywords": ["logging", "sysadmin", "tools"],
+  "keywords": [
+    "logging",
+    "sysadmin",
+    "tools"
+  ],
   "dependencies": {
     "async": "0.1.x",
     "colors": "0.x.x",
@@ -25,6 +28,11 @@
     "vows": "0.6.x"
   },
   "main": "./lib/winston",
-  "scripts": { "test": "vows --spec --isolate" },
-  "engines": { "node": ">= 0.4.0" }
+  "scripts": {
+    "test": "vows --spec --isolate"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  }
 }
+
