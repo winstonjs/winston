@@ -11,27 +11,10 @@ var assert = require('assert'),
     path = require('path'),
     spawn = require('child_process').spawn,
     util = require('util'),
-    loggly = require('loggly'),
     vows = require('vows'),
     winston = require('../lib/winston');    
     
 var helpers = exports;
-
-helpers.loadConfig = function (dir) {
-  try {
-    if (helpers.config) return helpers.config;
-    var configFile = path.join(dir || __dirname, 'fixtures', 'test-config.json'),
-        stats = fs.statSync(configFile),
-        config = JSON.parse(fs.readFileSync(configFile).toString());
-    
-    helpers.config = config;
-    return config;
-  }
-  catch (ex) {
-    console.error('test/fixtures/test-config.json must be created with valid data before running tests');
-    return false;
-  }
-};
 
 helpers.size = function (obj) {
   var size = 0, key;

@@ -714,27 +714,10 @@ Winston is stable and under active development. It is supported by and used at [
 3. Add more transports: Redis
 
 ## Run Tests
-All of the winston tests are written in [vows][13], and cover all of the use cases described above. You will need to add valid credentials for the various transports included to test/fixtures/test-config.json before running tests:
-
-``` js
-  {
-    "transports": {
-      "loggly": {
-        "subdomain": "your-subdomain",
-        "inputToken": "really-long-token-you-got-from-loggly",
-        "auth": {
-          "username": "your-username",
-          "password": "your-password"
-        }
-      }
-    }
-  }
-```
-
-Once you have valid configuration and credentials you can run tests with [vows][13]:
+All of the winston tests are written in [vows][13], and designed to be run with npm. 
 
 ```
-  vows --spec --isolate
+  npm test
 ```
 
 #### Author: [Charlie Robbins](http://twitter.com/indexzero)
