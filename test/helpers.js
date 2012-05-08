@@ -97,11 +97,6 @@ helpers.assertFile = function (transport) {
   assert.isFunction(transport.log);
 }
 
-helpers.assertLoggly = function (transport) {
-  assert.instanceOf(transport, winston.transports.Loggly);
-  assert.isFunction(transport.log);  
-};
-
 helpers.assertWebhook = function (transport) {
   assert.instanceOf(transport, winston.transports.Webhook);
   assert.isFunction(transport.log);

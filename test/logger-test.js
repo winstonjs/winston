@@ -161,7 +161,7 @@ vows.describe('winton/logger').addBatch({
     },
     "the remove() with an unadded transport": {
       "should throw an Error": function (logger) {
-        assert.throws(function () { logger.remove(winston.transports.Loggly) }, Error);
+        assert.throws(function () { logger.remove(winston.transports.Webhook) }, Error);
       }
     },
     "the remove() method with an added transport": {

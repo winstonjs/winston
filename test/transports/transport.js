@@ -24,9 +24,6 @@ module.exports = function (transport, options) {
           case 'file':
             helpers.assertFile(transport);
             break;
-          case 'loggly':
-            helpers.assertLoggly(transport);
-            break;
           case 'webhook':
             helpers.assertWebhook(transport);
             break;

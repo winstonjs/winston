@@ -358,7 +358,6 @@ The way these objects is stored varies from transport to transport (to best supp
 
 1. __Console:__ Logged via util.inspect(meta)
 2. __File:__ Logged via util.inspect(meta)
-3. __Loggly:__ Logged in suggested [Loggly format][2]
 
 ### Beyond Logging
 
@@ -476,7 +475,6 @@ Right now there are four transports supported by winston core. If you have a tra
 
 1. __Console:__ Output to the terminal
 2. __Files:__ Append to a file
-3. __Loggly:__ Log to Logging-as-a-Service platform Loggly
 
 ### Console Transport
 ``` js
@@ -512,6 +510,8 @@ The File transport should really be the 'Stream' transport since it will accept 
 *Metadata:* Logged via util.inspect(meta);
 
 ### Loggly Transport
+_As of `0.6.0` the Loggly transport has been broken out into a new module: [winston-loggly][23]._
+
 ``` js
   winston.add(winston.transports.Loggly, options);
 ```
@@ -528,7 +528,7 @@ The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementatio
 *Metadata:* Logged in suggested [Loggly format][2]
 
 ### Riak Transport
-As of `0.3.0` the Riak transport has been broken out into a new module: [winston-riak][17]. Using it is just as easy:
+_As of `0.3.0` the Riak transport has been broken out into a new module: [winston-riak][17]._ Using it is just as easy:
 
 ``` js
   var Riak = require('winston-riak').Riak;
@@ -763,3 +763,4 @@ Once you have valid configuration and credentials you can run tests with [vows][
 [20]: https://github.com/weaver/node-mail
 [21]: https://github.com/jesseditson/winston-sns
 [22]: https://github.com/flite/winston-graylog2
+[23]: https://github.com/indexzero/winston-loggly
