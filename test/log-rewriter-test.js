@@ -17,8 +17,8 @@ vows.describe('winston/logger/rewriter').addBatch({
       new (winston.transports.Console)({ level: 'info' })
     ]}),
     "the addRewriter() method": {
-      topic: function(logger) {
-        logger.addRewriter(function(level, msg, meta) {
+      topic: function (logger) {
+        logger.addRewriter(function (level, msg, meta) {
           meta.level = level;
           meta.msg = msg;
           meta.foo = 'bar';
@@ -26,15 +26,15 @@ vows.describe('winston/logger/rewriter').addBatch({
         });
         return logger;
       },
-      "should add the rewriter": function(logger) {
+      "should add the rewriter": function (logger) {
         assert.equal(helpers.size(logger.rewriters), 1);
       },
       "the log() method": {
-        topic: function(logger) {
+        topic: function (logger) {
           logger.once('logging', this.callback);
           logger.log('info', 'test message', {"a": "b"});
         },
-        "should run the rewriter": function(transport, level, msg, meta) {
+        "should run the rewriter": function (transport, level, msg, meta) {
           assert.equal(meta.a, 'b');
           assert.equal(meta.level, 'info');
           assert.equal(meta.msg, 'test message');
@@ -48,22 +48,22 @@ vows.describe('winston/logger/rewriter').addBatch({
     topic: new (winston.Logger)({transports: [
       new (winston.transports.Console)({ level: 'info'})
     ], rewriters: [
-      function(level, msg, meta) {
+      function (level, msg, meta) {
         meta.level = level;
         meta.msg = msg;
         meta.foo = 'bar';
         return meta;
-      }      
+      }
     ]}),
-    "should add the rewriter": function(logger) {
+    "should add the rewriter": function (logger) {
       assert.equal(helpers.size(logger.rewriters), 1);
     },
     "the log() method": {
-      topic: function(logger) {
+      topic: function (logger) {
         logger.once('logging', this.callback);
         logger.log('info', 'test message', {"a": "b"});
       },
-      "should run the rewriter": function(transport, level, msg, meta) {
+      "should run the rewriter": function (transport, level, msg, meta) {
         assert.equal(meta.a, 'b');
         assert.equal(meta.level, 'info');
         assert.equal(meta.msg, 'test message');
@@ -76,21 +76,21 @@ vows.describe('winston/logger/rewriter').addBatch({
     topic: new (winston.Logger)({transports: [
       new (winston.transports.Console)({ level: 'info' })
     ], rewriters: [
-      function(level, msg, meta) {
+      function (level, msg, meta) {
         meta.numbers.push(1);
         return meta;
       },
-      function(level, msg, meta) {
+      function (level, msg, meta) {
         meta.numbers.push(2);
         return meta;
       }
     ]}),
     "the log() method": {
-      topic: function(logger) {
+      topic: function (logger) {
         logger.once('logging', this.callback);
         logger.log('info', 'test message', {"numbers": [0]});
       },
-      "should run the rewriters in correct order": function(transport, level, msg, meta) {
+      "should run the rewriters in correct order": function (transport, level, msg, meta) {
         assert.deepEqual(meta.numbers, [0, 1, 2]);
       }
     }

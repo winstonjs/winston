@@ -41,17 +41,17 @@ module.exports = function (transport, options) {
       }
     ),
     'the query() method': {
-      topic: function(logger) {
+      topic: function (logger) {
         if (!transport.query) return;
         var cb = this.callback;
         // TODO:
         // callback execution doesn't work correctly for
         // some transports.
-        //logger.log('info', 'hello world', {}, function() {
+        //logger.log('info', 'hello world', {}, function () {
         //  logger.query({}, cb);
         //});
         logger.log('info', 'hello world', {});
-        setTimeout(function() {
+        setTimeout(function () {
           logger.query({}, cb);
         }, 1000);
       },
@@ -64,7 +64,7 @@ module.exports = function (transport, options) {
       }
     },
     'the stream() method': {
-      topic: function() {
+      topic: function () {
         if (!transport.stream) return;
 
         logger.log('info', 'hello world', {});
@@ -75,19 +75,19 @@ module.exports = function (transport, options) {
             results = [],
             stream = logger.stream({});
 
-        stream.on('log', function(log) {
+        stream.on('log', function (log) {
           results.push(log);
           results.stream = stream;
           if (!--j) cb(null, results);
         });
 
-        stream.on('error', function() {});
+        stream.on('error', function () {});
 
         while (i--) logger.log('info', 'hello world ' + i, {});
       },
       'should stream logs': function (err, results) {
         if (!transport.stream) return;
-        results.forEach(function(log) {
+        results.forEach(function (log) {
           assert.ok(log.message.indexOf('hello world') === 0
                     || log.message.indexOf('test message') === 0);
         });
