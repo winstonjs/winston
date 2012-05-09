@@ -2,22 +2,6 @@
 
 A multi-transport async logging library for node.js. <span style="font-size:28px; font-weight:bold;">&quot;CHILL WINSTON! ... I put it in the logs.&quot;</span>
 
-* [Using the Default Logger](#using-the-default-logger)
-* [Instantiating your own Logger](#instantiating-your-own-logger)
-* [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
-* [To Exit or Not to Exit](#to-exit-or-not-to-exit)
-* [Using Logging Levels](#using-logging-levels)
-* [Using Custom Logging Levels](#using-custom-logging-levels)
-* [Events and Callbacks in Winston](#events-and-callbacks-in-winston)
-* [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
-* [Logging with Metadata](#logging-with-metadata)
-* [Streaming Logs](#streaming-logs)
-* [Querying Logs](#querying-logs)
-* [Profiling with Winston](#profiling-with-winston)
-* [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
-* [Extending another object with Logging](#extending-another-object-with-logging)
-* [Adding Custom Transports](#adding-custom-transports)
-
 ## Motivation
 Winston is designed to be a simple and universal logging library with support for multiple transports. A transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file.
 
@@ -25,6 +9,29 @@ There also seemed to be a lot of logging libraries out there that coupled their 
 
 ## Usage
 There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger. The former is merely intended to be a convenient shared logger to use throughout your application if you so choose.
+
+* Logging
+  * [Using the Default Logger](#using-the-default-logger)
+  * [Instantiating your own Logger](#instantiating-your-own-logger)
+  * [Logging with Metadata](#logging-with-metadata)
+* Transports
+* [Profiling](#profiling)
+* [Streaming Logs](#streaming-logs)
+* [Querying Logs](#querying-logs)  
+* Exceptions
+  * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
+  * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
+* Logging Levels
+  * [Using Logging Levels](#using-logging-levels)
+  * [Using Custom Logging Levels](#using-custom-logging-levels)
+* Further Reading
+  * [Events and Callbacks in Winston](#events-and-callbacks-in-winston)
+  * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
+  * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
+  * [Extending another object with Logging](#extending-another-object-with-logging)
+  * [Adding Custom Transports](#adding-custom-transports)
+
+## Logging
 
 ### Using the Default Logger
 The default logger is accessible through the winston module directly. Any method that you could call on an instance of a logger is available on the default logger:
@@ -73,6 +80,78 @@ You can work with this logger in the same way that you work with the default log
   logger.add(winston.transports.File)
         .remove(winston.transports.Console);
 ```
+
+### Logging with Metadata
+In addition to logging string messages, winston will also optionally log additional JSON metadata objects. Adding metadata is simple:
+
+``` js
+  winston.log('info', 'Test Log Message', { anything: 'This is metadata' });
+```
+
+The way these objects is stored varies from transport to transport (to best support the storage mechanisms offered). Here's a quick summary of how each transports handles metadata:
+
+1. __Console:__ Logged via util.inspect(meta)
+2. __File:__ Logged via util.inspect(meta)
+
+## Profiling
+In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
+
+``` js
+  //
+  // Start profile of 'test'
+  // Remark: Consider using Date.now() with async operations
+  //
+  winston.profile('test');
+
+  setTimeout(function () {
+    //
+    // Stop profile of 'test'. Logging will now take place:
+    //   "17 Jan 21:00:00 - info: test duration=1000ms"
+    //
+    winston.profile('test');
+  }, 1000);
+```
+
+All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
+
+
+## Querying Logs
+
+Winston supports querying of logs with Loggly-like options.
+Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
+
+``` js
+  var options = {
+    from: new Date - 24 * 60 * 60 * 1000,
+    until: new Date
+  };
+
+  //
+  // Find items logged between today and yesterday.
+  //
+  winston.query(options, function (err, results) {
+    if (err) {
+      throw err;
+    }
+    
+    console.log(results);
+  });
+```
+
+## Streaming Logs
+
+Streaming allows you to stream your logs back from your chosen transport.
+
+``` js
+  //
+  // Start at the end.
+  //
+  winston.stream({ start: -1 }).on('log', function(log) {
+    console.log(log);
+  });
+```
+
+## Exceptions
 
 ### Handling Uncaught Exceptions with winston
 
@@ -210,6 +289,8 @@ Although there is slight repetition in this data structure, it enables simple en
 ```
 
 This enables transports with the 'colorize' option set to appropriately color the output of custom levels.
+
+## Further Reading
 
 ### Events and Callbacks in Winston
 Each instance of winston.Logger is also an instance of an [EventEmitter][1]. A log event will be raised each time a transport successfully logs a message:
@@ -350,79 +431,6 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
     ]
   });
 ```
-
-### Logging with Metadata
-In addition to logging string messages, winston will also optionally log additional JSON metadata objects. Adding metadata is simple:
-
-``` js
-  winston.log('info', 'Test Log Message', { anything: 'This is metadata' });
-```
-
-The way these objects is stored varies from transport to transport (to best support the storage mechanisms offered). Here's a quick summary of how each transports handles metadata:
-
-1. __Console:__ Logged via util.inspect(meta)
-2. __File:__ Logged via util.inspect(meta)
-
-### Beyond Logging
-
-Multiple core transports allow for streaming and querying.
-
-#### Querying Logs
-
-Winston supports querying of logs with Loggly-like options.
-Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
-
-``` js
-  var options = {
-    from: new Date - 24 * 60 * 60 * 1000,
-    until: new Date
-  };
-
-  //
-  // Find items logged between today and yesterday.
-  //
-  winston.query(options, function (err, results) {
-    if (err) {
-      throw err;
-    }
-    
-    console.log(results);
-  });
-```
-
-#### Streaming Logs
-
-Streaming allows you to stream your logs back from your chosen transport.
-
-``` js
-  //
-  // Start at the end.
-  //
-  winston.stream({ start: -1 }).on('log', function(log) {
-    console.log(log);
-  });
-```
-
-### Profiling with Winston
-In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
-
-``` js
-  //
-  // Start profile of 'test'
-  // Remark: Consider using Date.now() with async operations
-  //
-  winston.profile('test');
-
-  setTimeout(function () {
-    //
-    // Stop profile of 'test'. Logging will now take place:
-    //   "17 Jan 21:00:00 - info: test duration=1000ms"
-    //
-    winston.profile('test');
-  }, 1000);
-```
-
-All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
 ### Using winston in a CLI tool
 A common use-case for logging is output to a CLI tool. Winston has a special helper method which will pretty print output from your CLI tool. Here's an example from the [require-analyzer][15] written by [Nodejitsu][5]:
