@@ -58,6 +58,9 @@ module.exports = function (transport, options) {
       'should return matching results': function (err, results) {
         if (!transport.query) return;
         results = results[transport.name];
+        while (!Array.isArray(results)) {
+          results = results[Object.keys(results).pop()];
+        }
         var log = results.pop();
         assert.ok(log.message.indexOf('hello world') === 0
                   || log.message.indexOf('test message') === 0);
