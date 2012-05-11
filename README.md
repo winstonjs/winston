@@ -10,7 +10,7 @@ There also seemed to be a lot of logging libraries out there that coupled their 
 ## Usage
 There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger. The former is merely intended to be a convenient shared logger to use throughout your application if you so choose.
 
-* Logging
+* [Logging](#logging)
   * [Using the Default Logger](#using-the-default-logger)
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
@@ -18,13 +18,13 @@ There are two different ways to use winston: directly via the default logger, or
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
 * [Querying Logs](#querying-logs)  
-* Exceptions
+* [Exceptions](#exceptions)
   * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
   * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
-* Logging Levels
+* [Logging Levels](#logging-levels)
   * [Using Logging Levels](#using-logging-levels)
   * [Using Custom Logging Levels](#using-custom-logging-levels)
-* Further Reading
+* [Further Reading](#further-reading)
   * [Events and Callbacks in Winston](#events-and-callbacks-in-winston)
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
@@ -116,7 +116,6 @@ All profile messages are set to the 'info' by default and both message and metad
 
 
 ## Querying Logs
-
 Winston supports querying of logs with Loggly-like options.
 Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
 
@@ -139,7 +138,6 @@ Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
 ```
 
 ## Streaming Logs
-
 Streaming allows you to stream your logs back from your chosen transport.
 
 ``` js
@@ -174,7 +172,7 @@ If you want to use this feature with the default logger simply call `.handleExce
   });
 ```
 
-## To Exit or Not to Exit
+### To Exit or Not to Exit
 
 by default, winston will exit after logging an uncaughtException. if this is not the behavior you want,
 set `exitOnError = false`
@@ -215,6 +213,8 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
   //
   logger.exitOnError = ignoreEpipe;
 ```
+
+## Logging Levels
 
 ### Using Logging Levels
 Setting the level for your logging message can be accomplished in one of two ways. You can pass a string representing the logging level to the log() method or use the level specified methods defined on every winston Logger.
