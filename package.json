@@ -17,7 +17,6 @@
     "colors": "0.x.x",
     "cradle": "0.6.x",
     "eyes": "0.1.x",
-    "nssocket": "0.3.x",
     "pkginfo": "0.2.x",
     "request": "2.9.x",
     "stack-trace": "0.0.x"
