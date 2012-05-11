@@ -14,7 +14,7 @@ module.exports = function (transport, options) {
   var transport = logger.transports[logger._names[0]];
 
   var out = {
-    topic: logger,
+    'topic': logger,
     'when passed valid options': {
       'should have the proper methods defined': function () {
         switch (transport.name) {
@@ -41,13 +41,12 @@ module.exports = function (transport, options) {
       }
     ),
     'the query() method': {
-      topic: function (logger) {
+      'topic': function (logger) {
         if (!transport.query) return;
         var cb = this.callback;
         logger.log('info', 'hello world', {}, function () {
           logger.query({}, cb);
         });
-        logger.log('info', 'hello world', {});
       },
       'should return matching results': function (err, results) {
         if (!transport.query) return;
@@ -61,7 +60,7 @@ module.exports = function (transport, options) {
       }
     },
     'the stream() method': {
-      topic: function () {
+      'topic': function () {
         if (!transport.stream) return;
 
         logger.log('info', 'hello world', {});
