@@ -433,7 +433,7 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
 ```
 
 ### Using winston in a CLI tool
-A common use-case for logging is output to a CLI tool. Winston has a special helper method which will pretty print output from your CLI tool. Here's an example from the [require-analyzer][15] written by [Nodejitsu][5]:
+A common use-case for logging is output to a CLI tool. Winston has a special helper method which will pretty print output from your CLI tool. Here's an example from the [require-analyzer][2] written by [Nodejitsu][3]:
 
 ```
   info:   require-analyzer starting in /Users/Charlie/Nodejitsu/require-analyzer
@@ -529,11 +529,11 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
 
 ### Inspirations
 1. [npm][0]
-2. [log.js][9]
-3. [socket.io][10]
-4. [node-rlog][11]
-5. [BigBrother][12]
-6. [Loggly][7]
+2. [log.js][4]
+3. [socket.io][5]
+4. [node-rlog][6]
+5. [BigBrother][7]
+6. [Loggly][8]
 
 ## Installation
 
@@ -548,10 +548,10 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
 ```
 
 ## Run Tests
-All of the winston tests are written in [vows][13], and designed to be run with npm. 
+All of the winston tests are written in [vows][9], and designed to be run with npm. 
 
-```
-  npm test
+``` bash
+  $ npm test
 ```
 
 #### Author: [Charlie Robbins](http://twitter.com/indexzero)
@@ -559,25 +559,11 @@ All of the winston tests are written in [vows][13], and designed to be run with 
 
 [0]: https://github.com/isaacs/npm/blob/master/lib/utils/log.js
 [1]: http://nodejs.org/docs/v0.3.5/api/events.html#events.EventEmitter
-[2]: http://wiki.loggly.com/loggingfromcode
-[3]: http://riakjs.org
-[4]: https://github.com/frank06/riak-js/blob/master/src/http_client.coffee#L10
-[5]: http://nodejitsu.com
-[6]: http://github.com/nodejitsu/node-loggly
-[7]: http://loggly.com
-[8]: http://www.loggly.com/product/
-[9]: https://github.com/visionmedia/log.js
-[10]: http://socket.io
-[11]: https://github.com/jbrisbin/node-rlog
-[12]: https://github.com/feisty/BigBrother
-[13]: http://vowsjs.org
-[14]: http://nodejs.org/docs/v0.3.5/api/streams.html#writable_Stream
-[15]: http://github.com/nodejitsu/require-analyzer
-[16]: http://github.com/indexzero/winston-mongodb
-[17]: http://github.com/indexzero/winston-riak
-[18]: http://github.com/appsattic/winston-simpledb
-[19]: http://github.com/wavded/winston-mail
-[20]: https://github.com/weaver/node-mail
-[21]: https://github.com/jesseditson/winston-sns
-[22]: https://github.com/flite/winston-graylog2
-[23]: https://github.com/indexzero/winston-loggly
+[2]: http://github.com/nodejitsu/require-analyzer
+[3]: http://nodejitsu.com
+[4]: https://github.com/visionmedia/log.js
+[5]: http://socket.io
+[6]: https://github.com/jbrisbin/node-rlog
+[7]: https://github.com/feisty/BigBrother
+[8]: http://loggly.com
+[9]: http://vowsjs.org

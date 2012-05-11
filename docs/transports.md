@@ -1,6 +1,35 @@
 # Additional Winston Transports
 
-## Console Transport
+* **[Winston Core](#winston-core)**
+  * [Console](#console-transport)
+  * [File](#file-transport)
+  * [Http](#http-transport)
+  * [Webhook](#webhook-transport)
+
+* **[Winston More](#winston-more)**
+  * [CouchDB](#couchdb-transport)
+  * [Loggly](#loggly-transport)
+  * [MongoDB](#mongodb-transport)
+  * [Redis](#redis-transport)
+  * [Riak](#riak-transport)
+  
+* **[Additional Transports]**
+  * [SimpleDB](#simpledb-transport)
+  * [Mail](#mail-transport)
+  * [Amazon SNS](#amazon-sns-transport)
+  * [Graylog2](#graylog2-transport)
+
+## Winston Core
+
+There are several core transports included in `winston`, which leverage the built-in networking and file I/O offered by node.js core.  
+
+* [Console](#console-transport)
+* [File](#file-transport)
+* [Http](#http-transport)
+* [Webhook](#webhook-transport)
+
+### Console Transport
+
 ``` js
   winston.add(winston.transports.Console, options)
 ```
@@ -14,12 +43,13 @@ The Console transport takes two simple options:
 
 *Metadata:* Logged via util.inspect(meta);
 
-## File Transport
+### File Transport
+
 ``` js
   winston.add(winston.transports.File, options)
 ```
 
-The File transport should really be the 'Stream' transport since it will accept any [WritableStream][14]. It is named such because it will also accept filenames via the 'filename' option:
+The File transport should really be the 'Stream' transport since it will accept any [WritableStream][0]. It is named such because it will also accept filenames via the 'filename' option:
 
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
@@ -33,14 +63,75 @@ The File transport should really be the 'Stream' transport since it will accept 
 
 *Metadata:* Logged via util.inspect(meta);
 
-## Loggly Transport
-_As of `0.6.0` the Loggly transport has been broken out into a new module: [winston-loggly][23]._
+## Http Transport
+
+``` js
+  winston.add(winston.transports.Http, options)
+```
+
+The `Http` transport is a generic way to log, query, and stream logs from an arbitrary Http endpoint, preferably [winstond][1]. It takes options that are passed to the node.js `http` or `https` request:
+
+* __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
+* __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
+* __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint 
+* __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
+* __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
+
+## Winston More
+
+Starting with `winston@0.3.0` an effort was made to remove any transport which added additional dependencies to `winston`. At the time there were several transports already in `winston` which will **always be supported by the winston core team.**
+
+* [CouchDB](#couchdb-transport)
+* [Redis](#redis-transport)
+* [MongoDB](#mongodb-transport)
+* [Riak](#riak-transport)
+* [Loggly](#loggly-transport)
+
+### CouchDB Transport
+
+_As of `winston@0.6.0` the CouchDB transport has been broken out into a new module: [winston-couchdb][2]._
+
+``` js
+  winston.add(winston.transports.Couchdb, options)
+```
+
+The `Couchdb` will place your logs in a remote CouchDB database. It will also create a [Design Document][3], `_design/Logs` for later querying and streaming your logs from CouchDB. The transport takes the following options:
+
+* __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
+* __port:__ (Default: **5984**) Remote port of the HTTP logging endpoint
+* __db:__ (Default: **winston**) Remote URI of the HTTP logging endpoint 
+* __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
+* __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
+
+### Redis Transport
+
+``` js
+  winston.add(winston.transports.Redis, options)
+```
+
+This transport accepts the options accepted by the [node-redis][4] client:
+
+* __host:__ (Default **localhost**) Remote host of the Redis server
+* __port:__ (Default **6379**) Port the Redis server is running on.
+* __auth:__ (Default **None**) Password set on the Redis server
+
+In addition to these, the Redis transport also accepts the following options.
+
+* __length:__ (Default **200**) Number of log messages to store.
+* __container:__ (Default **winston**) Name of the Redis container you wish your logs to be in.
+* __channel:__ (Default **None**) Name of the Redis channel to stream logs from. 
+
+*Metadata:* Logged as JSON literal in Redis
+
+### Loggly Transport
+
+_As of `winston@0.6.0` the Loggly transport has been broken out into a new module: [winston-loggly][5]._
 
 ``` js
   winston.add(winston.transports.Loggly, options);
 ```
 
-The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
+The Loggly transport is based on [Nodejitsu's][6] [node-loggly][7] implementation of the [Loggly][8] API. If you haven't heard of Loggly before, you should probably read their [value proposition][9]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
 
 * __level:__ Level of messages that this transport should log.
 * __subdomain:__ The subdomain of your Loggly account. *[required]*
@@ -49,17 +140,18 @@ The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementatio
 * __inputToken:__ The input token of the input this instance should log to.
 * __json:__ If true, messages will be sent to Loggly as JSON.
 
-*Metadata:* Logged in suggested [Loggly format][2]
+*Metadata:* Logged in suggested [Loggly format][10]
 
-## Riak Transport
-_As of `0.3.0` the Riak transport has been broken out into a new module: [winston-riak][17]._ Using it is just as easy:
+### Riak Transport
+
+_As of `winston@0.3.0` the Riak transport has been broken out into a new module: [winston-riak][11]._ Using it is just as easy:
 
 ``` js
   var Riak = require('winston-riak').Riak;
   winston.add(Riak, options);
 ```
 
-In addition to the options accepted by the [riak-js][3] [client][4], the Riak transport also accepts the following options. It is worth noting that the riak-js debug option is set to *false* by default:
+In addition to the options accepted by the [riak-js][12] [client][13], the Riak transport also accepts the following options. It is worth noting that the riak-js debug option is set to *false* by default:
 
 * __level:__ Level of messages that this transport should log.
 * __bucket:__ The name of the Riak bucket you wish your logs to be in or a function to generate bucket names dynamically.
@@ -79,8 +171,9 @@ In addition to the options accepted by the [riak-js][3] [client][4], the Riak tr
 
 *Metadata:* Logged as JSON literal in Riak
 
-## MongoDB Transport
-As of `0.3.0` the MongoDB transport has been broken out into a new module: [winston-mongodb][16]. Using it is just as easy:
+### MongoDB Transport
+
+As of `winston@0.3.0` the MongoDB transport has been broken out into a new module: [winston-mongodb][14]. Using it is just as easy:
 
 ``` js
   var MongoDB = require('winston-mongodb').MongoDB;
@@ -99,9 +192,19 @@ The MongoDB transport takes the following options. 'db' is required:
 
 *Metadata:* Logged as a native JSON object.
 
-## SimpleDB Transport
+## Additional Transports
 
-The [winston-simpledb][18] transport is just as easy:
+The community has truly embraced `winston`; there are over **23** winston transports and over half of them are maintained by authors external to the winston core team. If you want to check them all out, just search `npm`:
+
+``` bash
+  $ npm search winston
+```
+
+**If you have an issue using one of these modules you should contact the module author directly**
+
+### SimpleDB Transport
+
+The [winston-simpledb][15] transport is just as easy:
 
 ``` js
   var SimpleDB = require('winston-simpledb').SimpleDB;
@@ -119,16 +222,16 @@ The SimpleDB transport takes the following options. All items marked with an ast
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
 
-## Mail Transport
+### Mail Transport
 
-The [winston-mail][19] is an email transport:
+The [winston-mail][16] is an email transport:
 
 ``` js
   var Mail = require('winston-mail').Mail;
   winston.add(Mail, options);
 ```
 
-The Mail transport uses [node-mail][20] behind the scenes.  Options are the following, `to` and `host` are required:
+The Mail transport uses [node-mail][17] behind the scenes.  Options are the following, `to` and `host` are required:
 
 * __to:__ The address(es) you want to send to. *[required]*
 * __from:__ The address you want to send from. (default: `winston@[server-host-name]`)
@@ -142,9 +245,9 @@ The Mail transport uses [node-mail][20] behind the scenes.  Options are the foll
 
 *Metadata:* Stringified as JSON in email.
 
-## Amazon SNS (Simple Notification System) Transport
+### Amazon SNS (Simple Notification System) Transport
 
-The [winston-sns][21] transport uses amazon SNS to send emails, texts, or a bunch of other notifications.
+The [winston-sns][18] transport uses amazon SNS to send emails, texts, or a bunch of other notifications.
 
 ``` js
   require('winston-sns').SNS;
@@ -162,9 +265,9 @@ Options:
 * __message:__ Message of notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Level '%l' Error:\n%e\n\nMetadata:\n%m")
 * __level:__ lowest level this transport will log. (default: `info`)
 
-## Graylog2 Transport
+### Graylog2 Transport
 
-[winston-graylog2][22] is a Graylog2 transport:
+[winston-graylog2][19] is a Graylog2 transport:
 
 ``` js
   var Graylog2 = require('winston-graylog2').Graylog2;
@@ -182,3 +285,24 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 * __graylogFacility:__ The graylog2 facility to send log messages.. (default: nodejs)
 
 *Metadata:* Stringified as JSON in the full message GELF field.
+
+[0]: http://nodejs.org/docs/v0.3.5/api/streams.html#writable_Stream
+[1]: https://github.com/flatiron/winstond
+[2]: https://github.com/indexzero/winston-couchdb
+[3]: http://guide.couchdb.org/draft/design.html
+[4]: https://github.com/mranney/node_redis
+[5]: https://github.com/indexzero/winston-loggly
+[6]: http://nodejitsu.com
+[7]: https://github.com/nodejitsu/node-loggly
+[8]: http://loggly.com
+[9]: http://www.loggly.com/product/
+[10]: http://wiki.loggly.com/loggingfromcode
+[11]: https://github.com/indexzero/winston-riak
+[12]: http://riakjs.org
+[13]: https://github.com/frank06/riak-js/blob/master/src/http_client.coffee#L10
+[14]: http://github.com/indexzero/winston-mongodb
+[15]: http://github.com/appsattic/winston-simpledb
+[16]: http://github.com/wavded/winston-mail
+[17]: https://github.com/weaver/node-mail
+[18]: https://github.com/jesseditson/winston-sns
+[19]: https://github.com/flite/winston-graylog2
