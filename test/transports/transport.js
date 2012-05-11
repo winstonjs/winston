@@ -44,16 +44,10 @@ module.exports = function (transport, options) {
       topic: function (logger) {
         if (!transport.query) return;
         var cb = this.callback;
-        // TODO:
-        // callback execution doesn't work correctly for
-        // some transports.
-        //logger.log('info', 'hello world', {}, function () {
-        //  logger.query({}, cb);
-        //});
-        logger.log('info', 'hello world', {});
-        setTimeout(function () {
+        logger.log('info', 'hello world', {}, function () {
           logger.query({}, cb);
-        }, 1000);
+        });
+        logger.log('info', 'hello world', {});
       },
       'should return matching results': function (err, results) {
         if (!transport.query) return;
