@@ -15,7 +15,6 @@
   "dependencies": {
     "async": "0.1.x",
     "colors": "0.x.x",
-    "cradle": "0.6.x",
     "eyes": "0.1.x",
     "pkginfo": "0.2.x",
     "request": "2.9.x",
