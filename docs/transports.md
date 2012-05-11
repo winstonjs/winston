@@ -13,10 +13,10 @@
   * [Redis](#redis-transport)
   * [Riak](#riak-transport)
   
-* **[Additional Transports]**
+* **[Additional Transports](#additional-transports)**
   * [SimpleDB](#simpledb-transport)
   * [Mail](#mail-transport)
-  * [Amazon SNS](#amazon-sns-transport)
+  * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
   * [Graylog2](#graylog2-transport)
 
 ## Winston Core
@@ -63,7 +63,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 
 *Metadata:* Logged via util.inspect(meta);
 
-## Http Transport
+### Http Transport
 
 ``` js
   winston.add(winston.transports.Http, options)
