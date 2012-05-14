@@ -41,22 +41,60 @@ module.exports = function (transport, options) {
       }
     ),
     'the query() method': {
-      'topic': function (logger) {
-        if (!transport.query) return;
-        var cb = this.callback;
-        logger.log('info', 'hello world', {}, function () {
-          logger.query({}, cb);
-        });
-      },
-      'should return matching results': function (err, results) {
-        if (!transport.query) return;
-        results = results[transport.name];
-        while (!Array.isArray(results)) {
-          results = results[Object.keys(results).pop()];
+      'using basic querying': {
+        'topic': function (logger) {
+          if (!transport.query) return;
+          var cb = this.callback;
+          logger.log('info', 'hello world', {}, function () {
+            logger.query({}, cb);
+          });
+        },
+        'should return matching results': function (err, results) {
+          if (!transport.query) return;
+          results = results[transport.name];
+          while (!Array.isArray(results)) {
+            results = results[Object.keys(results).pop()];
+          }
+          var log = results.pop();
+          assert.ok(log.message.indexOf('hello world') === 0
+                    || log.message.indexOf('test message') === 0);
         }
-        var log = results.pop();
-        assert.ok(log.message.indexOf('hello world') === 0
-                  || log.message.indexOf('test message') === 0);
+      },
+      'using the rows option': {
+        'topic': function (logger) {
+          if (!transport.query) return;
+          var cb = this.callback;
+          logger.log('info', 'hello world', {}, function () {
+            logger.query({ rows: 1 }, cb);
+          });
+        },
+        'should return one result': function (err, results) {
+          if (!transport.query) return;
+          results = results[transport.name];
+          while (!Array.isArray(results)) {
+            results = results[Object.keys(results).pop()];
+          }
+          //assert.equal(results.length, 1);
+        }
+      },
+      'using fields and order option': {
+        'topic': function (logger) {
+          if (!transport.query) return;
+          var cb = this.callback;
+          logger.log('info', 'hello world', {}, function () {
+            logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
+          });
+        },
+        'should return matching results': function (err, results) {
+          if (!transport.query) return;
+          results = results[transport.name];
+          while (!Array.isArray(results)) {
+            results = results[Object.keys(results).pop()];
+          }
+          //assert.equal(Object.keys(results[0]).length, 1);
+          //assert.ok(new Date(results.shift().timestamp)
+          //        < new Date(results.pop().timestamp));
+        }
       }
     },
     'the stream() method': {
