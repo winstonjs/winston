@@ -114,7 +114,7 @@ module.exports = function (transport, options) {
             j = 10,
             i = 10,
             results = [],
-            stream = logger.stream({});
+            stream = logger.stream();
 
         stream.on('log', function (log) {
           results.push(log);
@@ -136,12 +136,6 @@ module.exports = function (transport, options) {
       }
     }
   };
-
-  // TODO: add couch and redis to .travis.yml
-  if (process.env.CI && process.env.TRAVIS) {
-    delete out['the query() method'];
-    delete out['the stream() method'];
-  }
 
   return out;
 };
