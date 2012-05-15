@@ -88,10 +88,6 @@ module.exports = function (transport, options) {
         'topic': function (logger) {
           if (!transport.query) return;
           var cb = this.callback;
-          // wait a second to increase timestamp
-          // some transports may not be logging
-          // a timestamp in smaller units of time
-          // than seconds.
           logger.log('info', 'hello world', {}, function () {
             logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
           });
