@@ -11,6 +11,13 @@ module.exports = function (transport, options) {
         ]
       });
 
+  // hack to fix transports that don't log
+  // any unit of time smaller than seconds
+  var common = require('../../lib/winston/common');
+  common.timestamp = function() {
+    return new Date().toISOString();
+  };
+
   var transport = logger.transports[logger._names[0]];
 
   var out = {
@@ -46,7 +53,7 @@ module.exports = function (transport, options) {
           if (!transport.query) return;
           var cb = this.callback;
           logger.log('info', 'hello world', {}, function () {
-            logger.query({}, cb);
+            logger.query(cb);
           });
         },
         'should return matching results': function (err, results) {
@@ -74,16 +81,22 @@ module.exports = function (transport, options) {
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
           }
-          //assert.equal(results.length, 1);
+          assert.equal(results.length, 1);
         }
       },
       'using fields and order option': {
         'topic': function (logger) {
           if (!transport.query) return;
           var cb = this.callback;
-          logger.log('info', 'hello world', {}, function () {
-            logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
-          });
+          // wait a second to increase timestamp
+          // some transports may not be logging
+          // a timestamp in smaller units of time
+          // than seconds.
+          setTimeout(function () {
+            logger.log('info', 'hello world', {}, function () {
+              logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
+            });
+          }, 2000);
         },
         'should return matching results': function (err, results) {
           if (!transport.query) return;
@@ -91,9 +104,9 @@ module.exports = function (transport, options) {
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
           }
-          //assert.equal(Object.keys(results[0]).length, 1);
-          //assert.ok(new Date(results.shift().timestamp)
-          //        < new Date(results.pop().timestamp));
+          assert.equal(Object.keys(results[0]).length, 1);
+          assert.ok(new Date(results.shift().timestamp)
+                  < new Date(results.pop().timestamp));
         }
       }
     },
