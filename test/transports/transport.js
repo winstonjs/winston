@@ -92,11 +92,9 @@ module.exports = function (transport, options) {
           // some transports may not be logging
           // a timestamp in smaller units of time
           // than seconds.
-          setTimeout(function () {
-            logger.log('info', 'hello world', {}, function () {
-              logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
-            });
-          }, 2000);
+          logger.log('info', 'hello world', {}, function () {
+            logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
+          });
         },
         'should return matching results': function (err, results) {
           if (!transport.query) return;
