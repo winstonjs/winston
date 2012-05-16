@@ -67,7 +67,7 @@ module.exports = function (transport, options) {
                     || log.message.indexOf('test message') === 0);
         }
       },
-      'using the rows option': {
+      'using the `rows` option': {
         'topic': function (logger) {
           if (!transport.query) return;
           var cb = this.callback;
@@ -84,7 +84,7 @@ module.exports = function (transport, options) {
           assert.equal(results.length, 1);
         }
       },
-      'using fields and order option': {
+      'using `fields` and `order` option': {
         'topic': function (logger) {
           if (!transport.query) return;
           var cb = this.callback;
@@ -102,37 +102,81 @@ module.exports = function (transport, options) {
           assert.ok(new Date(results.shift().timestamp)
                   < new Date(results.pop().timestamp));
         }
+      },
+      'using the `from` and `until` option': {
+        'topic': function (logger) {
+          if (!transport.query) return;
+          var cb = this.callback;
+          // setTimeout: hack, throw off
+          // the timestamp by 100.
+          setTimeout(function () {
+            var now = new Date;
+            logger.log('info', 'from and until', {}, function () {
+              logger.query({ from: now, until: now }, cb);
+            });
+          }, 100);
+        },
+        'should return matching results': function (err, results) {
+          if (!transport.query) return;
+          results = results[transport.name];
+          while (!Array.isArray(results)) {
+            results = results[Object.keys(results).pop()];
+          }
+          assert.equal(results.length, 1);
+          assert.equal(results[0].message, 'from and until');
+        }
       }
     },
     'the stream() method': {
-      'topic': function () {
-        if (!transport.stream) return;
+      'using no options': {
+        'topic': function () {
+          if (!transport.stream) return;
 
-        logger.log('info', 'hello world', {});
+          logger.log('info', 'hello world', {});
 
-        var cb = this.callback,
-            j = 10,
-            i = 10,
-            results = [],
-            stream = logger.stream();
+          var cb = this.callback,
+              j = 10,
+              i = 10,
+              results = [],
+              stream = logger.stream();
 
-        stream.on('log', function (log) {
-          results.push(log);
-          results.stream = stream;
-          if (!--j) cb(null, results);
-        });
+          stream.on('log', function (log) {
+            results.push(log);
+            results.stream = stream;
+            if (!--j) cb(null, results);
+          });
 
-        stream.on('error', function () {});
+          stream.on('error', function () {});
 
-        while (i--) logger.log('info', 'hello world ' + i, {});
+          while (i--) logger.log('info', 'hello world ' + i, {});
+        },
+        'should stream logs': function (err, results) {
+          if (!transport.stream) return;
+          results.forEach(function (log) {
+            assert.ok(log.message.indexOf('hello world') === 0
+                      || log.message.indexOf('test message') === 0);
+          });
+          results.stream.destroy();
+        }
       },
-      'should stream logs': function (err, results) {
-        if (!transport.stream) return;
-        results.forEach(function (log) {
-          assert.ok(log.message.indexOf('hello world') === 0
-                    || log.message.indexOf('test message') === 0);
-        });
-        results.stream.destroy();
+      'using the `start` option': {
+        'topic': function () {
+          if (!transport.stream) return;
+
+          var cb = this.callback,
+              stream = logger.stream({ start: 0 });
+
+          stream.on('log', function (log) {
+            log.stream = stream;
+            if (cb) cb(null, log);
+            cb = null;
+          });
+        },
+        'should stream logs': function (err, log) {
+          if (!transport.stream) return;
+          assert.isNotNull(log.message);
+          log.stream.destroy();
+        }
       }
     }
   };
