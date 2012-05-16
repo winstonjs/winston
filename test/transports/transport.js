@@ -107,14 +107,9 @@ module.exports = function (transport, options) {
         'topic': function (logger) {
           if (!transport.query) return;
           var cb = this.callback;
-          // setTimeout: hack, throw off
-          // the timestamp by 100.
-          setTimeout(function () {
-            var now = new Date;
-            logger.log('info', 'from and until', {}, function () {
-              logger.query({ from: now, until: now }, cb);
-            });
-          }, 100);
+          var start = new Date - 100 * 1000;
+          var end = new Date + 100 * 1000;
+          logger.query({ from: start, until: end }, cb);
         },
         'should return matching results': function (err, results) {
           if (!transport.query) return;
@@ -122,8 +117,28 @@ module.exports = function (transport, options) {
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
           }
-          assert.equal(results.length, 1);
-          assert.equal(results[0].message, 'from and until');
+          assert.ok(results.length >= 1);
+        }
+      },
+      'using a bad `from` and `until` option': {
+        'topic': function (logger) {
+          if (!transport.query) return;
+          var cb = this.callback;
+          logger.log('info', 'bad from and until', {}, function () {
+            var now = new Date + 1000000;
+            logger.query({ from: now, until: now }, cb);
+          });
+        },
+        'should return no results': function (err, results) {
+          if (!transport.query) return;
+          results = results[transport.name];
+          while (!Array.isArray(results)) {
+            results = results[Object.keys(results).pop()];
+          }
+          results = [results.filter(function(log) {
+            return log.message === 'bad from and until';
+          }).pop()];
+          assert.isUndefined(results[0]);
         }
       }
     },
