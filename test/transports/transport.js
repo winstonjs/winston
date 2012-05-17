@@ -58,6 +58,7 @@ module.exports = function (transport, options) {
         },
         'should return matching results': function (err, results) {
           if (!transport.query) return;
+          assert.isNull(err);
           results = results[transport.name];
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
@@ -77,6 +78,7 @@ module.exports = function (transport, options) {
         },
         'should return one result': function (err, results) {
           if (!transport.query) return;
+          assert.isNull(err);
           results = results[transport.name];
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
@@ -94,6 +96,7 @@ module.exports = function (transport, options) {
         },
         'should return matching results': function (err, results) {
           if (!transport.query) return;
+          assert.isNull(err);
           results = results[transport.name];
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
@@ -113,6 +116,7 @@ module.exports = function (transport, options) {
         },
         'should return matching results': function (err, results) {
           if (!transport.query) return;
+          assert.isNull(err);
           results = results[transport.name];
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
@@ -131,6 +135,7 @@ module.exports = function (transport, options) {
         },
         'should return no results': function (err, results) {
           if (!transport.query) return;
+          assert.isNull(err);
           results = results[transport.name];
           while (!Array.isArray(results)) {
             results = results[Object.keys(results).pop()];
@@ -167,6 +172,7 @@ module.exports = function (transport, options) {
         },
         'should stream logs': function (err, results) {
           if (!transport.stream) return;
+          assert.isNull(err);
           results.forEach(function (log) {
             assert.ok(log.message.indexOf('hello world') === 0
                       || log.message.indexOf('test message') === 0);
@@ -189,6 +195,7 @@ module.exports = function (transport, options) {
         },
         'should stream logs': function (err, log) {
           if (!transport.stream) return;
+          assert.isNull(err);
           assert.isNotNull(log.message);
           log.stream.destroy();
         }
