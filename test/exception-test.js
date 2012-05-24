@@ -37,6 +37,7 @@ vows.describe('winston/exception').addBatch({
       "should have the appropriate info": function (info) {
         assert.isObject(info);
         assert.isArray(info.stack);
+        helpers.assertDateInfo(info.date);
         helpers.assertProcessInfo(info.process);
         helpers.assertOsInfo(info.os);
         helpers.assertTrace(info.trace);

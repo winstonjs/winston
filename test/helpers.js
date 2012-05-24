@@ -49,6 +49,10 @@ helpers.tryUnlink = function (file) {
   catch (ex) { }
 };
 
+helpers.assertDateInfo = function (info) {
+  assert.isNumber(Date.parse(info));
+};
+
 helpers.assertProcessInfo = function (info) {
   assert.isNumber(info.pid);
   assert.isNumber(info.uid);
