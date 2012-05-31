@@ -13,8 +13,14 @@ var path = require('path'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
 
-var stream = fs.createWriteStream(path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')),
-    fileTransport = new (winston.transports.File)({ filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log') }),
+var transport = require('./transport');
+
+var stream = fs.createWriteStream(
+      path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
+    ),
+    fileTransport = new (winston.transports.File)({
+      filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log')
+    }),
     streamTransport = new (winston.transports.File)({ stream: stream });
 
 vows.describe('winston/transports/file').addBatch({
@@ -47,4 +53,8 @@ vows.describe('winston/transports/file').addBatch({
       assert.isTrue(true);
     }
   }
+}).addBatch({
+  "An instance of the File Transport": transport(winston.transports.File, {
+    filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
+  })
 }).export(module);

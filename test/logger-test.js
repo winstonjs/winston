@@ -10,11 +10,12 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     winston = require('../lib/winston'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    transport = require('./transports/transport');
 
 vows.describe('winton/logger').addBatch({
   "An instance of winston.Logger": {
-    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }), 
+    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
     "should have the correct methods / properties defined": function (logger) {
       helpers.assertLogger(logger);
     },
@@ -43,8 +44,8 @@ vows.describe('winton/logger').addBatch({
       }
     },
     "the add() method with a supported transport": {
-      topic: function (logger) {       
-        return logger.add(winston.transports.Console);  
+      topic: function (logger) {
+        return logger.add(winston.transports.Console);
       },
       "should add the console Transport onto transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
@@ -126,7 +127,7 @@ vows.describe('winton/logger').addBatch({
             assert.isNull(err);
             assert.equal(level, 'info');
             assert.match(meta.duration, /(\d+)ms/);
-            
+
             var duration = parseInt(meta.duration);
             assert.isNumber(duration);
             assert.isTrue(duration > 900 && duration < 1100);
@@ -134,10 +135,10 @@ vows.describe('winton/logger').addBatch({
         }
       },
       "and adding an additional transport": {
-        topic: function (logger) {       
-          return logger.add(winston.transports.File, { 
-            filename: path.join(__dirname, 'fixtures', 'logs', 'testfile2.log') 
-          }); 
+        topic: function (logger) {
+          return logger.add(winston.transports.File, {
+            filename: path.join(__dirname, 'fixtures', 'logs', 'testfile2.log')
+          });
         },
         "should be able to add multiple transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 2);
@@ -149,23 +150,23 @@ vows.describe('winton/logger').addBatch({
   }
 }).addBatch({
   "The winston logger": {
-    topic: new (winston.Logger)({ 
+    topic: new (winston.Logger)({
       transports: [
         new (winston.transports.Console)(),
         new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
-      ] 
+      ]
     }),
     "should return have two transports": function (logger) {
       assert.equal(helpers.size(logger.transports), 2);
     },
     "the remove() with an unadded transport": {
       "should throw an Error": function (logger) {
-        assert.throws(function () { logger.remove(winston.transports.Loggly) }, Error);
+        assert.throws(function () { logger.remove(winston.transports.Webhook) }, Error);
       }
     },
     "the remove() method with an added transport": {
       topic: function (logger) {
-         return logger.remove(winston.transports.Console);  
+         return logger.remove(winston.transports.Console);
       },
       "should remove the Console transport from transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
@@ -173,7 +174,7 @@ vows.describe('winton/logger').addBatch({
       },
       "and removing an additional transport": {
         topic: function (logger) {
-           return logger.remove(winston.transports.File);  
+           return logger.remove(winston.transports.File);
         },
         "should remove File transport from transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 0);

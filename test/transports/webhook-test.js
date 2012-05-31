@@ -15,7 +15,7 @@ var path = require('path'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
 
-var webhookTransport = new (winston.transports.Webhook)({ 
+var webhookTransport = new (winston.transports.Webhook)({
   "host": "localhost",
   "port": 8080,
   "path": "/winston-test"
@@ -103,7 +103,7 @@ vows.describe('winston/transports/webhook').addBatch({
   "When the tests are over": {
     topic: function () {
       //
-      // Delay destruction of the server since the 
+      // Delay destruction of the server since the
       // WebHook transport responds before the request
       // has actually be completed.
       //
@@ -116,4 +116,10 @@ vows.describe('winston/transports/webhook').addBatch({
       assert.ok(requestsAuthenticated);
     }
   }
+}).addBatch({
+  // "An instance of the Webhook Transport": transport(winston.transports.Webhook, {
+  //   "host": "localhost",
+  //   "port": 8080,
+  //   "path": "/winston-test"
+  // })
 }).export(module);
