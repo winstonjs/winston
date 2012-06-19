@@ -233,12 +233,23 @@ Setting the level for your logging message can be accomplished in one of two way
   winston.info("127.0.0.1 - there's no place like home");
 ```
 
-Winston allows you to set a `level` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file:
+Winston allows you to set a `level` or `levels` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file:
 
 ``` js
   var logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({ level: 'error' }),
+      new (winston.transports.File)({ filename: 'somefile.log' })
+    ]
+  });
+```
+
+or
+
+``` js
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)({ levels: [ 'error', 'warn' ]}),
       new (winston.transports.File)({ filename: 'somefile.log' })
     ]
   });
