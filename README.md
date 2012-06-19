@@ -224,13 +224,18 @@ Setting the level for your logging message can be accomplished in one of two way
   // Any logger instance
   //
   logger.log('info', "127.0.0.1 - there's no place like home");
+  logger.log('warn', "127.0.0.1 - there might be no place like home");
+  logger.log('error', "127.0.0.1 - there's no place to go to");
   logger.info("127.0.0.1 - there's no place like home");
+  logger.warn("127.0.0.1 - there might be no place like home");
+  logger.error("127.0.0.1 - there's no place to go to");
 
   //
   // Default logger
   //
   winston.log('info', "127.0.0.1 - there's no place like home");
   winston.info("127.0.0.1 - there's no place like home");
+  // etc.
 ```
 
 Winston allows you to set a `level` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file:
