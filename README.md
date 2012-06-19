@@ -188,6 +188,8 @@ set `exitOnError = false`
 
 When working with custom logger instances, you can pass in separate transports to the `exceptionHandlers` property or set `.handleExceptions` on any transport.
 
+Example 1
+
 ``` js
   var logger = new (winston.Logger)({
     transports: [
@@ -197,6 +199,20 @@ When working with custom logger instances, you can pass in separate transports t
       new winston.transports.File({ filename: 'path/to/exceptions.log' })
     ]
   });
+```
+
+Example 2
+
+```
+var logger = new winston.Logger({
+  transports: [
+    new winston.transports.Console({
+      handleExceptions: true,
+      json: true
+    })
+  ],
+  exitOnError: false
+});
 ```
 
 The `exitOnError` option can also be a function to prevent exit on only certain types of errors:
