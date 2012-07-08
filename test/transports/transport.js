@@ -47,106 +47,6 @@ module.exports = function (transport, options) {
         assert.isNotNull(logged);
       }
     ),
-    'the query() method': {
-      'using basic querying': {
-        'topic': function (logger) {
-          if (!transport.query) return;
-          var cb = this.callback;
-          logger.log('info', 'hello world', {}, function () {
-            logger.query(cb);
-          });
-        },
-        'should return matching results': function (err, results) {
-          if (!transport.query) return;
-          assert.isNull(err);
-          results = results[transport.name];
-          while (!Array.isArray(results)) {
-            results = results[Object.keys(results).pop()];
-          }
-          var log = results.pop();
-          assert.ok(log.message.indexOf('hello world') === 0
-                    || log.message.indexOf('test message') === 0);
-        }
-      },
-      'using the `rows` option': {
-        'topic': function (logger) {
-          if (!transport.query) return;
-          var cb = this.callback;
-          logger.log('info', 'hello world', {}, function () {
-            logger.query({ rows: 1 }, cb);
-          });
-        },
-        'should return one result': function (err, results) {
-          if (!transport.query) return;
-          assert.isNull(err);
-          results = results[transport.name];
-          while (!Array.isArray(results)) {
-            results = results[Object.keys(results).pop()];
-          }
-          assert.equal(results.length, 1);
-        }
-      },
-      'using `fields` and `order` option': {
-        'topic': function (logger) {
-          if (!transport.query) return;
-          var cb = this.callback;
-          logger.log('info', 'hello world', {}, function () {
-            logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
-          });
-        },
-        'should return matching results': function (err, results) {
-          if (!transport.query) return;
-          assert.isNull(err);
-          results = results[transport.name];
-          while (!Array.isArray(results)) {
-            results = results[Object.keys(results).pop()];
-          }
-          assert.equal(Object.keys(results[0]).length, 1);
-          assert.ok(new Date(results.shift().timestamp)
-                  < new Date(results.pop().timestamp));
-        }
-      },
-      'using the `from` and `until` option': {
-        'topic': function (logger) {
-          if (!transport.query) return;
-          var cb = this.callback;
-          var start = new Date - 100 * 1000;
-          var end = new Date + 100 * 1000;
-          logger.query({ from: start, until: end }, cb);
-        },
-        'should return matching results': function (err, results) {
-          if (!transport.query) return;
-          assert.isNull(err);
-          results = results[transport.name];
-          while (!Array.isArray(results)) {
-            results = results[Object.keys(results).pop()];
-          }
-          assert.ok(results.length >= 1);
-        }
-      },
-      'using a bad `from` and `until` option': {
-        'topic': function (logger) {
-          if (!transport.query) return;
-          var cb = this.callback;
-          logger.log('info', 'bad from and until', {}, function () {
-            var now = new Date + 1000000;
-            logger.query({ from: now, until: now }, cb);
-          });
-        },
-        'should return no results': function (err, results) {
-          if (!transport.query) return;
-          assert.isNull(err);
-          results = results[transport.name];
-          while (!Array.isArray(results)) {
-            results = results[Object.keys(results).pop()];
-          }
-          results = [results.filter(function(log) {
-            return log.message === 'bad from and until';
-          }).pop()];
-          assert.isUndefined(results[0]);
-        }
-      }
-    },
     'the stream() method': {
       'using no options': {
         'topic': function () {
@@ -198,6 +98,111 @@ module.exports = function (transport, options) {
           assert.isNull(err);
           assert.isNotNull(log.message);
           log.stream.destroy();
+        }
+      }
+    },
+    'after the logs have flushed': {
+      topic: function () {
+        setTimeout(this.callback, 1000);
+      },
+      'the query() method': {
+        'using basic querying': {
+          'topic': function () {
+            if (!transport.query) return;
+            var cb = this.callback;
+            logger.log('info', 'hello world', {}, function () {
+              logger.query(cb);
+            });
+          },
+          'should return matching results': function (err, results) {
+            if (!transport.query) return;
+            assert.isNull(err);
+            results = results[transport.name];
+            while (!Array.isArray(results)) {
+              results = results[Object.keys(results).pop()];
+            }
+            var log = results.pop();
+            assert.ok(log.message.indexOf('hello world') === 0
+                      || log.message.indexOf('test message') === 0);
+          }
+        },
+        'using the `rows` option': {
+          'topic': function () {
+            if (!transport.query) return;
+            var cb = this.callback;
+            logger.log('info', 'hello world', {}, function () {
+              logger.query({ rows: 1 }, cb);
+            });
+          },
+          'should return one result': function (err, results) {
+            if (!transport.query) return;
+            assert.isNull(err);
+            results = results[transport.name];
+            while (!Array.isArray(results)) {
+              results = results[Object.keys(results).pop()];
+            }
+            assert.equal(results.length, 1);
+          }
+        },
+        'using `fields` and `order` option': {
+          'topic': function () {
+            if (!transport.query) return;
+            var cb = this.callback;
+            logger.log('info', 'hello world', {}, function () {
+              logger.query({ order: 'asc', fields: ['timestamp'] }, cb);
+            });
+          },
+          'should return matching results': function (err, results) {
+            if (!transport.query) return;
+            assert.isNull(err);
+            results = results[transport.name];
+            while (!Array.isArray(results)) {
+              results = results[Object.keys(results).pop()];
+            }
+            assert.equal(Object.keys(results[0]).length, 1);
+            assert.ok(new Date(results.shift().timestamp)
+                    < new Date(results.pop().timestamp));
+          }
+        },
+        'using the `from` and `until` option': {
+          'topic': function () {
+            if (!transport.query) return;
+            var cb = this.callback;
+            var start = new Date - 100 * 1000;
+            var end = new Date + 100 * 1000;
+            logger.query({ from: start, until: end }, cb);
+          },
+          'should return matching results': function (err, results) {
+            if (!transport.query) return;
+            assert.isNull(err);
+            results = results[transport.name];
+            while (!Array.isArray(results)) {
+              results = results[Object.keys(results).pop()];
+            }
+            assert.ok(results.length >= 1);
+          }
+        },
+        'using a bad `from` and `until` option': {
+          'topic': function () {
+            if (!transport.query) return;
+            var cb = this.callback;
+            logger.log('info', 'bad from and until', {}, function () {
+              var now = new Date + 1000000;
+              logger.query({ from: now, until: now }, cb);
+            });
+          },
+          'should return no results': function (err, results) {
+            if (!transport.query) return;
+            assert.isNull(err);
+            results = results[transport.name];
+            while (!Array.isArray(results)) {
+              results = results[Object.keys(results).pop()];
+            }
+            results = [results.filter(function(log) {
+              return log.message === 'bad from and until';
+            }).pop()];
+            assert.isUndefined(results[0]);
+          }
         }
       }
     }
