@@ -46,7 +46,7 @@ vows.describe('winston/transport/timestamp').addBatch({
         timestamp: false 
       }),
       "with value set to true ": assertTimestamp('defaultTimestamp', { 
-        pattern: /^\d\d? \w{3}/,
+        pattern: /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/,
         json: false,
         timestamp: true 
       }),
