@@ -318,6 +318,8 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
   winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha               
   winston-winlog       Windows Event Log logger for Winston                          =jfromaniello         
   winston-zmq          A 0MQ transport for winston                                   =dhendo
+  winston-growl        A growl transport for winston                                 =pgherveou
+
 ```
 
 [0]: http://nodejs.org/docs/v0.3.5/api/streams.html#writable_Stream
@@ -340,3 +342,4 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 [17]: https://github.com/weaver/node-mail
 [18]: https://github.com/jesseditson/winston-sns
 [19]: https://github.com/flite/winston-graylog2
+
