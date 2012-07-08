@@ -18,11 +18,11 @@
   "dependencies": {
     "async": "0.1.x",
     "colors": "0.x.x",
+    "cycle": "1.0.x",
     "eyes": "0.1.x",
     "pkginfo": "0.2.x",
-    "stack-trace": "0.0.x",
-    "cycle": "1.0.x",
-    "request": "2.9.x"
+    "request": "2.9.x",
+    "stack-trace": "0.0.x"
   },
   "devDependencies": {
     "vows": "0.6.x"
