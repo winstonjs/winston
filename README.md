@@ -14,7 +14,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Using the Default Logger](#using-the-default-logger)
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
-* [Transports](https://github.com/flatiron/winston/tree/query_stream/docs/transports.md)
+* [Transports](https://github.com/flatiron/winston/blob/master/docs/transports.md)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
 * [Querying Logs](#querying-logs)  
