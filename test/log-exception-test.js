@@ -8,10 +8,12 @@
 
 var assert = require('assert'),
     path = require('path'),
+    fs = require('fs'),
     spawn = require('child_process').spawn,
     vows = require('vows'),
     winston = require('../lib/winston'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    exists = (fs.exists || path.exists);
 
 vows.describe('winston/logger/exceptions').addBatch({
   "When using winston": {
@@ -46,7 +48,7 @@ vows.describe('winston/logger/exceptions').addBatch({
         
         helpers.tryUnlink(exception);
         child.on('exit', function () {
-          path.exists(exception, that.callback.bind(this, null));
+          exists(exception, that.callback.bind(this, null));
         });
       },
       "should not write to the specified error file": function (err, exists) {
