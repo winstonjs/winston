@@ -29,6 +29,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
   * [Extending another object with Logging](#extending-another-object-with-logging)
+	* [Working with transports](#working-with-transports)
   * [Adding Custom Transports](#adding-custom-transports)
 
 ## Logging
@@ -50,7 +51,7 @@ By default, only the Console transport is set on the default logger. You can add
   winston.remove(winston.transports.Console);
 ```
 
-For more documenation about working with each individual transport supported by Winston see the "Working with Transports" section below.
+For more documenation about working with each individual transport supported by Winston see the [Working with transports](#working-with-transports) section below.
 
 ### Instantiating your own Logger
 If you would prefer to manage the object lifetime of loggers you are free to instantiate them yourself:
@@ -507,7 +508,7 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
 ```
 
 ### Extending another object with Logging
-Often in a given code base with lots of Loggers it is useful to add logging methods a different object so that these methods can be called with less syntax. Winston exposes this functionality via the 'extend' method:
+Often in a given code base with lots of Loggers it is useful to add logging methods to a different object so that these methods can be called with less syntax. Winston exposes this functionality via the 'extend' method:
 
 ``` js
   var myObject = {};
