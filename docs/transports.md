@@ -1,6 +1,6 @@
 # Winston Transports
 
-In `winston` a transport a transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file.
+In `winston` a transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file.
 
 There are several [core transports](#winston-core) included in `winston`, which leverage the built-in networking and file I/O offered by node.js core. In addition, there are [third-party transports which are supported by the winston core team](#winston-more). And last (but not least) there are [additional transports written by members of the community](#additional-transports).
 
