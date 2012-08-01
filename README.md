@@ -29,8 +29,11 @@ There are two different ways to use winston: directly via the default logger, or
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
   * [Extending another object with Logging](#extending-another-object-with-logging)
-	* [Working with transports](#working-with-transports)
-  * [Adding Custom Transports](#adding-custom-transports)
+* [Working with transports](#working-with-transports)
+	* [Adding Custom Transports](#adding-custom-transports)
+* [Installation](#installation)
+* [Run Tests](#run-tests)
+
 
 ## Logging
 
