@@ -13,7 +13,7 @@ var fs = require('fs'),
     assert = require('assert'),
     winston = require('../lib/winston'),
     helpers = require('./helpers');
-  
+
 vows.describe('winston').addBatch({
   "The winston module": {
     topic: function () {
@@ -30,7 +30,7 @@ vows.describe('winston').addBatch({
       assert.isObject(winston.default.transports.console);
       assert.isFalse(winston.emitErrs);
       assert.isObject(winston.config);
-      ['Logger', 'add', 'remove', 'extend']
+      ['Logger', 'add', 'remove', 'extend', 'clear']
         .concat(Object.keys(winston.config.npm.levels))
         .forEach(function (key) {
           assert.isFunction(winston[key]);
@@ -76,15 +76,15 @@ vows.describe('winston').addBatch({
         assert.isObject(winston.default.transports.console);
         assert.isFalse(winston.emitErrs);
         assert.isObject(winston.config);
-        
+
         var newLevels = Object.keys(winston.config.syslog.levels);
-        ['Logger', 'add', 'remove', 'extend']
+        ['Logger', 'add', 'remove', 'extend', 'clear']
           .concat(newLevels)
           .forEach(function (key) {
             assert.isFunction(winston[key]);
           });
-        
-        
+
+
         Object.keys(winston.config.npm.levels)
           .filter(function (key) {
             return newLevels.indexOf(key) === -1;
