@@ -66,7 +66,10 @@ module.exports = function (transport, options) {
             if (!--j) cb(null, results);
           });
 
-          stream.on('error', function () {});
+          stream.on('error', function (err) {
+            j = -1; //don't call the callback again
+            cb(err);
+          });
 
           while (i--) logger.log('info', 'hello world ' + i, {});
         },
