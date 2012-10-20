@@ -14,6 +14,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Using the Default Logger](#using-the-default-logger)
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
+  * [String interpolation ](#string-interpolation)
 * [Transports](https://github.com/flatiron/winston/blob/master/docs/transports.md)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
@@ -117,6 +118,43 @@ In addition to logging messages and metadata, winston also has a simple profilin
 ```
 
 All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
+
+### String interpolation
+The `log` method provides the same string interpolation methods like [`util.format`][10].  
+
+This allows for the following log messages.
+``` js
+logger.log('info', 'test message %s', 'my string');
+// info: test message my string
+
+logger.log('info', 'test message %d', 123);
+// info: test message 123
+
+logger.log('info', 'test message %j', {number: 123}, {});
+// info: test message {"number":123}
+// meta = {}
+
+logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123});
+// info: test message first, second
+// meta = {number: 123}
+
+logger.log('info', 'test message', 'first', 'second', {number: 123});
+// info: test message first second
+// meta = {number: 123}
+
+logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function();
+// info: test message first, second
+// meta = {numer: 123}
+// callback = function(){}
+
+logger.log('info', 'test message', 'first', 'second', {number: 123}, function());
+// info: test message first second
+// meta = {numer: 123}
+// callback = function(){}
+```
+
+
+
 
 
 ## Querying Logs
@@ -792,3 +830,4 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [7]: https://github.com/feisty/BigBrother
 [8]: http://loggly.com
 [9]: http://vowsjs.org
+[10]: http://nodejs.org/api/util.html#util_util_format_format
