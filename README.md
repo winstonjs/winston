@@ -373,7 +373,8 @@ Often in larger, more complex applications it is necessary to have multiple logg
   winston.loggers.add('category1', {
     console: {
       level: 'silly',
-      colorize: 'true'
+      colorize: 'true',
+      label: 'category one'
     },
     file: {
       filename: '/path/to/some/file'
