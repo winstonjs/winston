@@ -79,6 +79,11 @@ helpers.assertConsole = function (transport) {
   assert.isFunction(transport.log);
 };
 
+helpers.assertMemory = function (transport) {
+  assert.instanceOf(transport, winston.transports.Memory);
+  assert.isFunction(transport.log);
+};
+
 helpers.assertFile = function (transport) {
   assert.instanceOf(transport, winston.transports.File);
   assert.isFunction(transport.log);
