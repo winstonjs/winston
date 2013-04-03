@@ -101,7 +101,7 @@ vows.describe('winton/logger').addBatch({
         "when passed a callback": {
           topic: function (logger) {
             var that = this;
-            var timer = logger.startTimer()
+            var timer = logger.startTimer();
             setTimeout(function () {
               timer.done('test', function (err, level, msg, meta) {
                 that.callback(err, level, msg, meta, logger);
