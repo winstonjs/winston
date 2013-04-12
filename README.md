@@ -715,6 +715,26 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 
 *Metadata:* Stringified as JSON in the full message GELF field.
 
+### Papertrail Transport
+
+[winston-papertrail][23] is a Papertrail transport:
+
+``` js
+  var Papertrail = require('winston-papertrail').Papertrail;
+  winston.add(Papertrail, options);
+```
+
+The Papertrail transport connects to a [PapertrailApp log destination](https://papertrailapp.com) over TCP (TLS) using the following options:
+
+* __level:__ Level of messages this transport should log. (default: info)
+* __host:__ FQDN or IP address of the Papertrail endpoint.
+* __port:__ Port for the Papertrail log destination.
+* __hostname:__ The hostname associated with messages. (default: require('os').hostname())
+* __program:__ The facility to send log messages.. (default: default)
+* __logFormat:__ a log formatting function with the signature `function(level, message)`, which allows custom formatting of the level or message prior to delivery
+
+*Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
+
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
@@ -793,3 +813,11 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [7]: https://github.com/feisty/BigBrother
 [8]: http://loggly.com
 [9]: http://vowsjs.org
+[14]: http://nodejs.org/api/stream.html#stream_class_stream_writable
+[16]: https://github.com/indexzero/winston-mongodb
+[17]: https://github.com/indexzero/winston-riak
+[18]: https://github.com/appsattic/winston-simpledb
+[19]: https://github.com/wavded/winston-mail
+[21]: https://github.com/jesseditson/winston-sns
+[22]: https://github.com/flite/winston-graylog2
+[23]: https://github.com/kenperkins/winston-papertrail
