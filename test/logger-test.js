@@ -27,6 +27,31 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
+  "An instance of winston.Logger": {
+    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+    "the log() method": {
+      "when listening for the 'logging' event": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message');
+        },
+        "should emit the 'log' event with the appropriate transport": function (transport, ign) {
+          helpers.assertConsole(transport);
+        }
+      },
+      "when listening for the 'logged' event": {
+        topic: function (logger) {
+          logger.once('logged', this.callback);
+          logger.log('info', 'test message');
+        },
+        "should emit the 'logged' event": function (level, msg, meta) {
+          assert.equal(level, 'info');
+          assert.equal(msg, 'test message');
+        }
+      },
+    }
+  }
+}).addBatch({
   "An instance of winston.Logger with no transports": {
     topic: new (winston.Logger)({ emitErrs: true }),
     "the log() method should throw an error": function (logger) {
@@ -54,27 +79,6 @@ vows.describe('winton/logger').addBatch({
       },
       "should throw an error when the same Transport is added": function (logger) {
         assert.throws(function () { logger.add(winston.transports.Console) }, Error);
-      },
-      "the log() method": {
-        "when listening for the 'logging' event": {
-          topic: function (logger) {
-            logger.once('logging', this.callback);
-            logger.log('info', 'test message');
-          },
-          "should emit the 'log' event with the appropriate transport": function (transport, ign) {
-            helpers.assertConsole(transport);
-          }
-        },
-        "when listening for the 'logged' event": {
-          topic: function (logger) {
-            logger.once('logging', this.callback);
-            logger.log('info', 'test message');
-          },
-          "should emit the 'logged' event": function (level, msg, meta) {
-            assert.equal(level, 'info');
-            assert.equal(msg, 'test message');
-          }
-        },
       },
       "the profile() method": {
         "when passed a callback": {
