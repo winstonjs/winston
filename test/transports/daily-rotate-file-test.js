@@ -24,7 +24,7 @@ var stream = fs.createWriteStream(
     }),
     streamTransport = new (winston.transports.DailyRotateFile)({ stream: stream });
 
-vows.describe('winston/transports/dailyRotateFile').addBatch({
+vows.describe('winston/transports/daily-rotate-file').addBatch({
   "An instance of the Daily Rotate File Transport": {
     "when passed a valid filename": {
       "should have the proper methods defined": function () {
