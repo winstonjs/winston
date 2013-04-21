@@ -57,23 +57,23 @@ vows.describe('winton/logger').addBatch({
       },
       "the log() method": {
         "when listening for the 'logging' event": {
-            topic: function (logger) {
-              logger.once('logging', this.callback);
-              logger.log('info', 'test message');
-            },
-            "should emit the 'log' event with the appropriate transport": function (transport, ign) {
-              helpers.assertConsole(transport);
-            }
+          topic: function (logger) {
+            logger.once('logging', this.callback);
+            logger.log('info', 'test message');
+          },
+          "should emit the 'log' event with the appropriate transport": function (transport, ign) {
+            helpers.assertConsole(transport);
+          }
         },
         "when listening for the 'logged' event": {
-            topic: function (logger) {
-              logger.once('logging', this.callback);
-              logger.log('info', 'test message');
-            },
-            "should emit the 'logged' event": function (level, msg, meta) {
-              assert.equal(level, 'info');
-              assert.equal(msg, 'test message');
-            }
+          topic: function (logger) {
+            logger.once('logging', this.callback);
+            logger.log('info', 'test message');
+          },
+          "should emit the 'logged' event": function (level, msg, meta) {
+            assert.equal(level, 'info');
+            assert.equal(msg, 'test message');
+          }
         },
       },
       "the profile() method": {
