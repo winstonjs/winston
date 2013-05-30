@@ -7,6 +7,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
 * **[Winston Core](#winston-core)**
   * [Console](#console-transport)
   * [File](#file-transport)
+  * [DailyRotateFile](#dailyrotatefile-transport)
   * [Http](#http-transport)
   * [Webhook](#webhook-transport)
 
@@ -29,6 +30,7 @@ There are several core transports included in `winston`, which leverage the buil
 
 * [Console](#console-transport)
 * [File](#file-transport)
+* [DailyRotateFile](#dailyrotatefile-transport)
 * [Http](#http-transport)
 * [Webhook](#webhook-transport)
 
@@ -38,7 +40,7 @@ There are several core transports included in `winston`, which leverage the buil
   winston.add(winston.transports.Console, options)
 ```
 
-The Console transport takes two simple options:
+The Console transport takes four simple options:
 
 * __level:__ Level of messages that this transport should log (default 'debug').
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
@@ -64,6 +66,31 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
+
+*Metadata:* Logged via util.inspect(meta);
+
+### DailyRotateFile Transport
+
+``` js
+  winston.add(winston.transports.DailyRotateFile, options)
+```
+
+The DailyRotateFile transport can rotate files by minute, hour, day, month or year. Its options are identical to the File transport with the lone addition of the 'datePattern' option:
+
+* __datePattern:__ A string representing the pattern to be used when appending the date to the filename (default '.yyyy-MM-dd'). The meta characters used in this string will dictate the frequency of the file rotation. For example if your datePattern is simply '.HH' you will end up with 24 log files that are picked up and appended to every day.
+
+Valid meta characters in the datePattern are:
+
+* __yy:__ Last two digits of the year.
+* __yyyy:__ Full year.
+* __M:__ The month.
+* __MM:__ The zero padded month.
+* __d:__ The day.
+* __dd:__ The zero padded day.
+* __H:__ The hour.
+* __HH:__ The zero padded hour.
+* __m:__ The minute.
+* __mm:__ The zero padded minute.
 
 *Metadata:* Logged via util.inspect(meta);
 
