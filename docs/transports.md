@@ -40,7 +40,7 @@ There are several core transports included in `winston`, which leverage the buil
   winston.add(winston.transports.Console, options)
 ```
 
-The Console transport takes two simple options:
+The Console transport takes four simple options:
 
 * __level:__ Level of messages that this transport should log (default 'debug').
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
