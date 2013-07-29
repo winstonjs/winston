@@ -44,6 +44,7 @@ The Console transport takes two simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __errorList:__ List of levels that should be redirected to stderr instead of stdout (default `['error']`).
 
 *Metadata:* Logged via util.inspect(meta);
 
