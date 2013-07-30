@@ -16,7 +16,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [MongoDB](#mongodb-transport)
   * [Redis](#redis-transport)
   * [Riak](#riak-transport)
-  
+
 * **[Additional Transports](#additional-transports)**
   * [SimpleDB](#simpledb-transport)
   * [Mail](#mail-transport)
@@ -25,7 +25,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
 
 ## Winston Core
 
-There are several core transports included in `winston`, which leverage the built-in networking and file I/O offered by node.js core.  
+There are several core transports included in `winston`, which leverage the built-in networking and file I/O offered by node.js core.
 
 * [Console](#console-transport)
 * [File](#file-transport)
@@ -77,7 +77,7 @@ The `Http` transport is a generic way to log, query, and stream logs from an arb
 
 * __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
 * __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
-* __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint 
+* __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
 * __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
 
@@ -103,7 +103,7 @@ The `Couchdb` will place your logs in a remote CouchDB database. It will also cr
 
 * __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
 * __port:__ (Default: **5984**) Remote port of the HTTP logging endpoint
-* __db:__ (Default: **winston**) Remote URI of the HTTP logging endpoint 
+* __db:__ (Default: **winston**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
 * __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
 
@@ -123,7 +123,7 @@ In addition to these, the Redis transport also accepts the following options.
 
 * __length:__ (Default **200**) Number of log messages to store.
 * __container:__ (Default **winston**) Name of the Redis container you wish your logs to be in.
-* __channel:__ (Default **None**) Name of the Redis channel to stream logs from. 
+* __channel:__ (Default **None**) Name of the Redis channel to stream logs from.
 
 *Metadata:* Logged as JSON literal in Redis
 
@@ -295,28 +295,28 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 ``` bash
   $ npm search winston
   (...)
-  winston-amon         Winston transport for Amon logging                            =zoramite             
-  winston-amqp         An AMQP transport for winston                                 =kr1sp1n              
-  winston-couchdb      a couchdb transport for winston                               =alz               
-  winston-express      Express middleware to let you use winston from the browser.   =regality             
-  winston-graylog2     A graylog2 transport for winston                              =smithclay            
-  winston-hbase        A HBase transport for winston                                 =ddude                
-  winston-loggly       A Loggly transport for winston                                =indexzero            
-  winston-mail         A mail transport for winston                                  =wavded               
-  winston-mail2        A mail transport for winston                                  =ivolo                
-  winston-mongodb      A MongoDB transport for winston                               =indexzero            
-  winston-nodemail     A mail transport for winston                                  =reinpk               
-  winston-nssocket     nssocket transport for winston                                =mmalecki             
-  winston-papertrail   A Papertrail transport for winston                            =kenperkins           
-  winston-redis        A fixed-length Redis transport for winston                    =indexzero            
-  winston-riak         A Riak transport for winston                                  =indexzero            
-  winston-scribe       A scribe transport for winston                                =wnoronha             
-  winston-simpledb     A Winston transport for Amazon SimpleDB                       =chilts               
-  winston-skywriter    A Windows Azure table storage transport for winston           =pofallon             
+  winston-amon         Winston transport for Amon logging                            =zoramite
+  winston-amqp         An AMQP transport for winston                                 =kr1sp1n
+  winston-couchdb      a couchdb transport for winston                               =alz
+  winston-express      Express middleware to let you use winston from the browser.   =regality
+  winston-graylog2     A graylog2 transport for winston                              =smithclay
+  winston-hbase        A HBase transport for winston                                 =ddude
+  winston-loggly       A Loggly transport for winston                                =indexzero
+  winston-mail         A mail transport for winston                                  =wavded
+  winston-mail2        A mail transport for winston                                  =ivolo
+  winston-mongodb      A MongoDB transport for winston                               =indexzero
+  winston-nodemail     A mail transport for winston                                  =reinpk
+  winston-nssocket     nssocket transport for winston                                =mmalecki
+  winston-papertrail   A Papertrail transport for winston                            =kenperkins
+  winston-redis        A fixed-length Redis transport for winston                    =indexzero
+  winston-riak         A Riak transport for winston                                  =indexzero
+  winston-scribe       A scribe transport for winston                                =wnoronha
+  winston-simpledb     A Winston transport for Amazon SimpleDB                       =chilts
+  winston-skywriter    A Windows Azure table storage transport for winston           =pofallon
   winston-sns          A Simple Notification System Transport for winston            =jesseditson
-  winston-syslog       A syslog transport for winston                                =indexzero            
-  winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha               
-  winston-winlog       Windows Event Log logger for Winston                          =jfromaniello         
+  winston-syslog       A syslog transport for winston                                =indexzero
+  winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha
+  winston-winlog       Windows Event Log logger for Winston                          =jfromaniello
   winston-zmq          A 0MQ transport for winston                                   =dhendo
   winston-growl        A growl transport for winston                                 =pgherveou
 
