@@ -560,7 +560,7 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
   //
   // You can now call logger methods on 'myObject'
   //
-  myObject.info('127.0.0.1 - there's no place like home');
+  myObject.info("127.0.0.1 - there's no place like home");
 ```
 
 ## Working with Transports
