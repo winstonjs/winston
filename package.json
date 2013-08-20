@@ -33,5 +33,11 @@
   },
   "engines": {
     "node": ">= 0.6.0"
-  }
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/flatiron/winston/master/LICENSE"
+    }
+  ]
 }
