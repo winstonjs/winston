@@ -852,3 +852,11 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [8]: http://loggly.com
 [9]: http://vowsjs.org
 [10]: http://nodejs.org/api/util.html#util_util_format_format
+[14]: http://nodejs.org/api/stream.html#stream_class_stream_writable
+[16]: https://github.com/indexzero/winston-mongodb
+[17]: https://github.com/indexzero/winston-riak
+[18]: https://github.com/appsattic/winston-simpledb
+[19]: https://github.com/wavded/winston-mail
+[21]: https://github.com/jesseditson/winston-sns
+[22]: https://github.com/flite/winston-graylog2
+[23]: https://github.com/kenperkins/winston-papertrail
