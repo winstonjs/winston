@@ -379,4 +379,16 @@ vows.describe('winton/logger').addBatch({
       }
     }
   }
+}).addBatch({
+  "Building a logger with two file transports": {
+    topic: function() { new (winston.Logger)({
+      transports: [
+        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log' ), level: 'info'}),
+        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log' ), level: 'error'})
+      ]
+    })},
+    "should not throw an exception": function (f) {
+      assert.doesNotThrow(f, Error)
+    },
+  }
 }).export(module);
