@@ -606,6 +606,8 @@ The Console transport takes a few simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false).
+* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -626,6 +628,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
 * __prettyPrint:__ If true, additional JSON metadata objects that are added to logging string messages will be displayed as a JSON string representation.
+* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 * __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
 
 *Metadata:* Logged via util.inspect(meta);
@@ -637,7 +640,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 
 The Daily Rotate File transport lets you rotate log files based on time.
 
-In addition to the options accepted by the File transport, the Daily Rotate File Transport also accepts the following option. 
+In addition to the options accepted by the File transport, the Daily Rotate File Transport also accepts the following option.
 
 * __datePattern:__ Defines rolling time of a log file and suffix appended to the file. Following meta characters can be used: `yy`, `yyyy`, `M`, `MM`, `d`, `dd`, `H`, `HH`, `m`, `mm`. The default pattern is `'.yyyy-MM-dd'`. Rotation time of the log file will be equal to the smallest given time token timespan, so `'.yyyy-MM-ddTHH'` will rotate logfile every hour. You can not rotate files more frequent then every minute.
 
