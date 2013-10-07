@@ -7,6 +7,12 @@ Winston is designed to be a simple and universal logging library with support fo
 
 There also seemed to be a lot of logging libraries out there that coupled their implementation of logging (i.e. how the logs are stored / indexed) to the API that they exposed to the programmer. This library aims to decouple those parts of the process to make it more flexible and extensible.
 
+## Installation
+
+```bash
+npm install winston
+```
+
 ## Usage
 There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger. The former is merely intended to be a convenient shared logger to use throughout your application if you so choose.
 
