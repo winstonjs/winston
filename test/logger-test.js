@@ -100,10 +100,10 @@ vows.describe('winton/logger').addBatch({
           "when passed some metadata": {
             topic: function () {
               var logger = arguments[arguments.length - 1];
-              var that = this;
+              var cb = this.callback.bind(null, null);
               logger.profile('test3');
-              logger.once('logging', that.callback.bind(null, null));
               setTimeout(function () {
+                logger.once('logging', cb);
                 logger.profile('test3', {
                   some: 'data'
                 });
@@ -117,12 +117,12 @@ vows.describe('winton/logger').addBatch({
               assert.equal(meta.some, 'data');
             },
             "when not passed a callback": {
-              topic: function (logger) {
+              topic: function () {
                 var logger = arguments[arguments.length - 1];
-                var that = this;
+                var cb = this.callback.bind(null, null);
                 logger.profile('test2');
-                logger.once('logging', that.callback.bind(null, null));
                 setTimeout(function () {
+                  logger.once('logging', cb);
                   logger.profile('test2');
                 }, 50);
               },
@@ -169,7 +169,7 @@ vows.describe('winton/logger').addBatch({
 
             var duration = parseInt(meta.duration);
             assert.isNumber(duration);
-            assert.isTrue(duration > 900 && duration < 1100);
+            assert.isTrue(duration >= 50 && duration < 100);
           }
         }
       },
