@@ -847,7 +847,7 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 #### Author: [Charlie Robbins](http://twitter.com/indexzero)
 #### Contributors: [Matthew Bergman](http://github.com/fotoverite), [Marak Squires](http://github.com/marak)
 
-[0]: https://github.com/isaacs/npm/blob/master/lib/utils/log.js
+[0]: https://github.com/isaacs/npm/blob/master/doc/misc/npm-config.md#loglevel
 [1]: http://nodejs.org/docs/v0.3.5/api/events.html#events.EventEmitter
 [2]: http://github.com/nodejitsu/require-analyzer
 [3]: http://nodejitsu.com
