@@ -7,6 +7,12 @@ Winston is designed to be a simple and universal logging library with support fo
 
 There also seemed to be a lot of logging libraries out there that coupled their implementation of logging (i.e. how the logs are stored / indexed) to the API that they exposed to the programmer. This library aims to decouple those parts of the process to make it more flexible and extensible.
 
+## Installation
+
+```bash
+npm install winston
+```
+
 ## Usage
 There are two different ways to use winston: directly via the default logger, or by instantiating your own Logger. The former is merely intended to be a convenient shared logger to use throughout your application if you so choose.
 
@@ -560,7 +566,7 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
   //
   // You can now call logger methods on 'myObject'
   //
-  myObject.info('127.0.0.1 - there's no place like home');
+  myObject.info("127.0.0.1 - there's no place like home");
 ```
 
 ## Working with Transports
@@ -852,3 +858,11 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [8]: http://loggly.com
 [9]: http://vowsjs.org
 [10]: http://nodejs.org/api/util.html#util_util_format_format
+[14]: http://nodejs.org/api/stream.html#stream_class_stream_writable
+[16]: https://github.com/indexzero/winston-mongodb
+[17]: https://github.com/indexzero/winston-riak
+[18]: https://github.com/appsattic/winston-simpledb
+[19]: https://github.com/wavded/winston-mail
+[21]: https://github.com/jesseditson/winston-sns
+[22]: https://github.com/flite/winston-graylog2
+[23]: https://github.com/kenperkins/winston-papertrail
