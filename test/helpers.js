@@ -99,6 +99,11 @@ helpers.assertWebhook = function (transport) {
   assert.isFunction(transport.log);
 };
 
+helpers.assertRsyslog = function (transport) {
+  assert.instanceOf(transport, winston.transports.Rsyslog);
+  assert.isFunction(transport.log);
+};
+
 helpers.assertCouchdb = function (transport) {
   assert.instanceOf(transport, winston.transports.Couchdb);
   assert.isFunction(transport.log);
