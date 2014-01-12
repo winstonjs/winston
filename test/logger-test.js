@@ -83,34 +83,56 @@ vows.describe('winton/logger').addBatch({
       "the profile() method": {
         "when passed a callback": {
           topic: function (logger) {
-            var that = this;
+            var cb = this.callback;
             logger.profile('test1');
             setTimeout(function () {
               logger.profile('test1', function (err, level, msg, meta) {
-                that.callback(err, level, msg, meta, logger);
+                cb(err, level, msg, meta, logger);
               });
-            }, 1000);
+            }, 50);
           },
           "should respond with the appropriate profile message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
             assert.equal(level, 'info');
             assert.match(meta.duration, /(\d+)ms/);
             assert.isTrue(typeof logger.profilers['test'] === 'undefined');
-          }
-        },
-        "when not passed a callback": {
-          topic: function (logger) {
-            var that = this;
-            logger.profile('test2');
-            logger.once('logging', that.callback.bind(null, null));
-            setTimeout(function () {
-              logger.profile('test2');
-            }, 1000);
           },
-          "should respond with the appropriate profile message": function (err, transport, level, msg, meta) {
-            assert.isNull(err);
-            assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
+          "when passed some metadata": {
+            topic: function () {
+              var logger = arguments[arguments.length - 1];
+              var cb = this.callback.bind(null, null);
+              logger.profile('test3');
+              setTimeout(function () {
+                logger.once('logging', cb);
+                logger.profile('test3', {
+                  some: 'data'
+                });
+              }, 50);
+            },
+            "should respond with the right metadata": function (err, transport, level, msg, meta) {
+              assert.equal(msg, 'test3');
+              assert.isNull(err);
+              assert.equal(level, 'info');
+              assert.match(meta.duration, /(\d+)ms/);
+              assert.equal(meta.some, 'data');
+            },
+            "when not passed a callback": {
+              topic: function () {
+                var logger = arguments[arguments.length - 1];
+                var cb = this.callback.bind(null, null);
+                logger.profile('test2');
+                setTimeout(function () {
+                  logger.once('logging', cb);
+                  logger.profile('test2');
+                }, 50);
+              },
+              "should respond with the appropriate profile message": function (err, transport, level, msg, meta) {
+                assert.isNull(err);
+                assert.equal(msg, 'test2');
+                assert.equal(level, 'info');
+                assert.match(meta.duration, /(\d+)ms/);
+              }
+            }
           }
         }
       },
@@ -147,7 +169,7 @@ vows.describe('winton/logger').addBatch({
 
             var duration = parseInt(meta.duration);
             assert.isNumber(duration);
-            assert.isTrue(duration > 900 && duration < 1100);
+            assert.isTrue(duration >= 50 && duration < 100);
           }
         }
       },
@@ -272,7 +294,7 @@ vows.describe('winton/logger').addBatch({
         },
         "should not interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, util.format('test message %%'));
-          assert.deepEqual(meta, {number: 123});          
+          assert.deepEqual(meta, {number: 123});
         },
       },
       "when passed interpolation strings and a meta object": {
