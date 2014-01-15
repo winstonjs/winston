@@ -171,8 +171,8 @@ module.exports = function (transport, options) {
           'topic': function () {
             if (!transport.query) return;
             var cb = this.callback;
-            var start = new Date - 100 * 1000;
-            var end = new Date + 100 * 1000;
+            var start = Date.now() - (100 * 1000);
+            var end = Date.now() + (100 * 1000);
             logger.query({ from: start, until: end }, cb);
           },
           'should return matching results': function (err, results) {
@@ -190,7 +190,7 @@ module.exports = function (transport, options) {
             if (!transport.query) return;
             var cb = this.callback;
             logger.log('info', 'bad from and until', {}, function () {
-              var now = new Date + 1000000;
+              var now = Date.now() + 1000000;
               logger.query({ from: now, until: now }, cb);
             });
           },
