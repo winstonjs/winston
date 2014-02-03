@@ -783,6 +783,28 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
 
+### Cassandra Transport
+
+[winston-cassandra][24] is a Cassandra transport:
+
+``` js
+  var Cassandra = require('winston-cassandra').Cassandra;
+  winston.add(Cassandra, options);
+```
+
+The Cassandra transport connects to a cluster using the native protocol with the following options:
+
+* __level:__ Level of messages that this transport should log (default: `'info'`).
+* __table:__ The name of the Cassandra column family you want to store log messages in (default: `'logs'`).
+* __partitionBy:__ How you want the logs to be partitioned. Possible values `'hour'` and `'day'`(Default).
+* __consistency:__ The consistency of the insert query (default: `quorum`).
+
+In addition to the options accepted by the [Node.js Cassandra driver](https://github.com/jorgebay/node-cassandra-cql) Client.
+
+* __hosts:__ Cluster nodes that will handle the write requests:
+Array of strings containing the hosts, for example `['host1', 'host2']` (required).
+* __keyspace:__ The name of the keyspace that will contain the logs table (required). The keyspace should be already created in the cluster.
+
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
@@ -870,3 +892,4 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [21]: https://github.com/jesseditson/winston-sns
 [22]: https://github.com/flite/winston-graylog2
 [23]: https://github.com/kenperkins/winston-papertrail
+[24]: https://github.com/jorgebay/winston-cassandra
