@@ -141,7 +141,7 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   Object.keys(levels).forEach(function (level) {
     var test = {
       topic: function () {
-        transport.log(level, 'test message', {}, this.callback.bind(this, null));
+        transport.log(level, 'test message', {}, {}, this.callback.bind(this, null));
       }
     };
    
@@ -151,7 +151,7 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   
   var metadatatest = {
     topic: function () {
-      transport.log('info', 'test message', { metadata: true }, this.callback.bind(this, null));
+      transport.log('info', 'test message', { metadata: true }, {}, this.callback.bind(this, null));
     }
   };
   
@@ -160,7 +160,7 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
 
   var primmetadatatest = {
     topic: function () {
-      transport.log('info', 'test message', 'metadata', this.callback.bind(this, null));
+      transport.log('info', 'test message', 'metadata', {}, this.callback.bind(this, null));
     }
   };
 
@@ -172,7 +172,7 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
 
   var circmetadatatest = {
     topic: function () {
-      transport.log('info', 'test message', circmetadata, this.callback.bind(this, null));
+      transport.log('info', 'test message', circmetadata, {}, this.callback.bind(this, null));
     }
   };
 
