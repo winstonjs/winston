@@ -574,11 +574,8 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
 ```
 
 ## Working with Transports
-Right now there are four transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
-   
-1. __Console:__ Output to the terminal
-2. __Files:__ Append to a file
-3. __Loggly:__ Log to Logging-as-a-Service platform Loggly
+There are many transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
+
 
 ### Console Transport
 ``` js
