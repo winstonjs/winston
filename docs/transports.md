@@ -290,33 +290,57 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 
 *Metadata:* Stringified as JSON in the full message GELF field.
 
+### Cassandra Transport
+
+[winston-cassandra][20] is a Cassandra transport:
+
+``` js
+  var Cassandra = require('winston-cassandra').Cassandra;
+  winston.add(Cassandra, options);
+```
+
+The Cassandra transport connects to a cluster using the native protocol with the following options:
+
+* __level:__ Level of messages that this transport should log (default: `'info'`).
+* __table:__ The name of the Cassandra column family you want to store log messages in (default: `'logs'`).
+* __partitionBy:__ How you want the logs to be partitioned. Possible values `'hour'` and `'day'`(Default).
+* __consistency:__ The consistency of the insert query (default: `quorum`).
+
+In addition to the options accepted by the [Node.js Cassandra driver](https://github.com/jorgebay/node-cassandra-cql) Client.
+
+* __hosts:__ Cluster nodes that will handle the write requests:
+Array of strings containing the hosts, for example `['host1', 'host2']` (required).
+* __keyspace:__ The name of the keyspace that will contain the logs table (required). The keyspace should be already created in the cluster.
+
+
 ## Find more Transports
 
 ``` bash
   $ npm search winston
   (...)
-  winston-amon         Winston transport for Amon logging                            =zoramite             
-  winston-amqp         An AMQP transport for winston                                 =kr1sp1n              
-  winston-couchdb      a couchdb transport for winston                               =alz               
-  winston-express      Express middleware to let you use winston from the browser.   =regality             
-  winston-graylog2     A graylog2 transport for winston                              =smithclay            
-  winston-hbase        A HBase transport for winston                                 =ddude                
-  winston-loggly       A Loggly transport for winston                                =indexzero            
-  winston-mail         A mail transport for winston                                  =wavded               
-  winston-mail2        A mail transport for winston                                  =ivolo                
-  winston-mongodb      A MongoDB transport for winston                               =indexzero            
-  winston-nodemail     A mail transport for winston                                  =reinpk               
-  winston-nssocket     nssocket transport for winston                                =mmalecki             
-  winston-papertrail   A Papertrail transport for winston                            =kenperkins           
-  winston-redis        A fixed-length Redis transport for winston                    =indexzero            
-  winston-riak         A Riak transport for winston                                  =indexzero            
-  winston-scribe       A scribe transport for winston                                =wnoronha             
-  winston-simpledb     A Winston transport for Amazon SimpleDB                       =chilts               
-  winston-skywriter    A Windows Azure table storage transport for winston           =pofallon             
+  winston-amon         Winston transport for Amon logging                            =zoramite    
+  winston-amqp         An AMQP transport for winston                                 =kr1sp1n     
+  winston-cassandra    A Cassandra transport for winston                             =jorgebay    
+  winston-couchdb      a couchdb transport for winston                               =alz         
+  winston-express      Express middleware to let you use winston from the browser.   =regality    
+  winston-graylog2     A graylog2 transport for winston                              =smithclay   
+  winston-hbase        A HBase transport for winston                                 =ddude       
+  winston-loggly       A Loggly transport for winston                                =indexzero   
+  winston-mail         A mail transport for winston                                  =wavded      
+  winston-mail2        A mail transport for winston                                  =ivolo       
+  winston-mongodb      A MongoDB transport for winston                               =indexzero   
+  winston-nodemail     A mail transport for winston                                  =reinpk      
+  winston-nssocket     nssocket transport for winston                                =mmalecki    
+  winston-papertrail   A Papertrail transport for winston                            =kenperkins  
+  winston-redis        A fixed-length Redis transport for winston                    =indexzero   
+  winston-riak         A Riak transport for winston                                  =indexzero   
+  winston-scribe       A scribe transport for winston                                =wnoronha    
+  winston-simpledb     A Winston transport for Amazon SimpleDB                       =chilts      
+  winston-skywriter    A Windows Azure table storage transport for winston           =pofallon    
   winston-sns          A Simple Notification System Transport for winston            =jesseditson
-  winston-syslog       A syslog transport for winston                                =indexzero            
-  winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha               
-  winston-winlog       Windows Event Log logger for Winston                          =jfromaniello         
+  winston-syslog       A syslog transport for winston                                =indexzero   
+  winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha      
+  winston-winlog       Windows Event Log logger for Winston                          =jfromaniello
   winston-zmq          A 0MQ transport for winston                                   =dhendo
   winston-growl        A growl transport for winston                                 =pgherveou
 
@@ -342,4 +366,4 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 [17]: https://github.com/weaver/node-mail
 [18]: https://github.com/jesseditson/winston-sns
 [19]: https://github.com/flite/winston-graylog2
-
+[20]: https://github.com/jorgebay/winston-cassandra
