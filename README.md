@@ -585,7 +585,7 @@ Right now there are four transports supported by winston core. If you have a tra
   winston.add(winston.transports.Console, options)
 ```
 
-The Console transport takes two simple options:
+The Console transport takes a few simple options:
 
 * __level:__ Level of messages that this transport should log (default 'info').
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
