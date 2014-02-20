@@ -619,7 +619,7 @@ The File transport should really be the 'Stream' transport since it will accept 
   winston.add(Loggly, options);
 ```
 
-The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
+The Loggly transport is based on [Nodejitsu's][3] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
 
 * __level:__ Level of messages that this transport should log. 
 * __subdomain:__ The subdomain of your Loggly account. *[required]*
