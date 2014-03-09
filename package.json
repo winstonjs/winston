@@ -1,12 +1,14 @@
 {
-  "name": "turret",
+  "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
   "version": "0.7.2",
   "author": "Nodejitsu Inc. <info@nodejitsu.com>",
-  "maintainers": [],
+  "maintainers": [
+    "indexzero <charlie@nodejitsu.com>"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/aperturescience/turret.git"
+    "url": "https://github.com/flatiron/winston.git"
   },
   "keywords": [
     "logging",
