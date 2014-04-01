@@ -94,7 +94,6 @@ vows.describe('winton/logger').addBatch({
           "should respond with the appropriate profile message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
             assert.isTrue(typeof logger.profilers['test'] === 'undefined');
           },
           "when passed some metadata": {
@@ -113,7 +112,6 @@ vows.describe('winton/logger').addBatch({
               assert.equal(msg, 'test3');
               assert.isNull(err);
               assert.equal(level, 'info');
-              assert.match(meta.duration, /(\d+)ms/);
               assert.equal(meta.some, 'data');
             },
             "when not passed a callback": {
@@ -130,7 +128,6 @@ vows.describe('winton/logger').addBatch({
                 assert.isNull(err);
                 assert.equal(msg, 'test2');
                 assert.equal(level, 'info');
-                assert.match(meta.duration, /(\d+)ms/);
               }
             }
           }
@@ -150,7 +147,6 @@ vows.describe('winton/logger').addBatch({
           "should respond with the appropriate message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
           }
         },
         "when not passed a callback": {
@@ -165,11 +161,9 @@ vows.describe('winton/logger').addBatch({
           "should respond with the appropriate message": function (err, transport, level, msg, meta) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
 
-            var duration = parseInt(meta.duration);
-            assert.isNumber(duration);
-            assert.isTrue(duration >= 50 && duration < 100);
+            assert.isNumber(meta.durationMs);
+            assert.isTrue(meta.durationMs >= 50 && meta.durationMs < 100);
           }
         }
       },
