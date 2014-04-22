@@ -346,7 +346,6 @@ As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0
   // Change levels on an instance of a logger
   //
   logger.setLevels(winston.config.syslog.levels);
-  
 ```
 
 Calling `.setLevels` on a logger will remove all of the previous helper methods for the old levels and define helper methods for the new levels. Thus, you should be careful about the logging statements you use when changing levels. For example, if you ran this code after changing to the syslog levels:
