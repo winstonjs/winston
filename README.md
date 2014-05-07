@@ -99,7 +99,7 @@ In addition to logging string messages, winston will also optionally log additio
   winston.log('info', 'Test Log Message', { anything: 'This is metadata' });
 ```
 
-The way these objects is stored varies from transport to transport (to best support the storage mechanisms offered). Here's a quick summary of how each transports handles metadata:
+The way these objects are stored varies from transport to transport (to best support the storage mechanisms offered). Here's a quick summary of how each transports handles metadata:
 
 1. __Console:__ Logged via util.inspect(meta)
 2. __File:__ Logged via util.inspect(meta)
