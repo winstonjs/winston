@@ -148,7 +148,7 @@ logger.log('info', 'test message', 'first', 'second', {number: 123});
 // info: test message first second
 // meta = {number: 123}
 
-logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function();
+logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function());
 // info: test message first, second
 // meta = {numer: 123}
 // callback = function(){}
