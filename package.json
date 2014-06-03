@@ -18,7 +18,6 @@
   "dependencies": {
     "async": "0.2.x",
     "chalk": "^0.4.0",
-    "colors": "^0.6.2",
     "cycle": "1.0.x",
     "eyes": "0.1.x",
     "pkginfo": "0.3.x",
