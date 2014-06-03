@@ -319,6 +319,21 @@ Winston allows you to set a `level` on each transport that specifies the level o
   });
 ```
 
+You may also dynamically change the log level of a transport:
+
+``` js
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)({ level: 'warn' }),
+      new (winston.transports.File)({ filename: 'somefile.log', level: 'error' })
+    ]
+  });   
+  logger.debug("Will not be logged in either transport!");
+  logger.transports.console.level = 'debug';
+  logger.transports.file.level = 'verbose';
+  logger.verbose("Will be logged in both transports!");
+```
+
 As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0] style logging levels. Changing logging levels is easy:
 
 ``` js
