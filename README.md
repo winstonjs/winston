@@ -148,12 +148,12 @@ logger.log('info', 'test message', 'first', 'second', {number: 123});
 // info: test message first second
 // meta = {number: 123}
 
-logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function());
+logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function(){});
 // info: test message first, second
 // meta = {numer: 123}
 // callback = function(){}
 
-logger.log('info', 'test message', 'first', 'second', {number: 123}, function());
+logger.log('info', 'test message', 'first', 'second', {number: 123}, function(){});
 // info: test message first second
 // meta = {numer: 123}
 // callback = function(){}
@@ -172,7 +172,7 @@ Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
     from: new Date - 24 * 60 * 60 * 1000,
     until: new Date,
     limit: 10,
-    start: 0
+    start: 0,
     order: 'desc',
     fields: ['message']
   };
@@ -226,7 +226,7 @@ If you want to use this feature with the default logger simply call `.handleExce
 
 ### To Exit or Not to Exit
 
-by default, winston will exit after logging an uncaughtException. if this is not the behavior you want,
+By default, winston will exit after logging an uncaughtException. if this is not the behavior you want,
 set `exitOnError = false`
 
 ``` js
