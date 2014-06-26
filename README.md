@@ -606,6 +606,7 @@ The Console transport takes a few simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -625,6 +626,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
+* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
 
 *Metadata:* Logged via util.inspect(meta);
 
