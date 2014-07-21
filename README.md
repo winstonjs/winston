@@ -24,7 +24,7 @@ There are two different ways to use winston: directly via the default logger, or
 * [Transports](https://github.com/flatiron/winston/blob/master/docs/transports.md)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
-* [Querying Logs](#querying-logs)  
+* [Querying Logs](#querying-logs)
 * [Exceptions](#exceptions)
   * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
   * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
@@ -37,7 +37,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
   * [Extending another object with Logging](#extending-another-object-with-logging)
 * [Working with transports](#working-with-transports)
-	* [Adding Custom Transports](#adding-custom-transports)
+    * [Adding Custom Transports](#adding-custom-transports)
 * [Installation](#installation)
 * [Run Tests](#run-tests)
 
@@ -126,7 +126,7 @@ In addition to logging messages and metadata, winston also has a simple profilin
 All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
 ### String interpolation
-The `log` method provides the same string interpolation methods like [`util.format`][10].  
+The `log` method provides the same string interpolation methods like [`util.format`][10].
 
 This allows for the following log messages.
 ``` js
@@ -184,7 +184,7 @@ Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
     if (err) {
       throw err;
     }
-    
+
     console.log(results);
   });
 ```
@@ -327,7 +327,7 @@ You may also dynamically change the log level of a transport:
       new (winston.transports.Console)({ level: 'warn' }),
       new (winston.transports.File)({ filename: 'somefile.log', level: 'error' })
     ]
-  });   
+  });
   logger.debug("Will not be logged in either transport!");
   logger.transports.console.level = 'debug';
   logger.transports.file.level = 'verbose';
@@ -606,6 +606,7 @@ The Console transport takes a few simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -625,6 +626,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
+* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -636,7 +638,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 
 The Loggly transport is based on [Nodejitsu's][3] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
 
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __subdomain:__ The subdomain of your Loggly account. *[required]*
 * __auth__: The authentication information for your Loggly account. *[required with inputName]*
 * __inputName:__ The name of the input this instance should log to.
@@ -683,7 +685,7 @@ As of `0.3.0` the MongoDB transport has been broken out into a new module: [wins
 
 The MongoDB transport takes the following options. 'db' is required:
 
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __db:__ The name of the database you want to log to. *[required]*
 * __collection__: The name of the collection you want to store log messages in, defaults to 'log'.
@@ -732,7 +734,7 @@ The Mail transport uses [emailjs](https://github.com/eleith/emailjs) behind the 
 * __password__ Password for server auth
 * __ssl:__ Use SSL (boolean or object { key, ca, cert })
 * __tls:__ Boolean (if true, use starttls)
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 
 *Metadata:* Stringified as JSON in email.
@@ -858,6 +860,28 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
   };
 ```
 
+### Custom Log Format
+To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Memory.
+Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
+
+``` js
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      timestamp: function() {
+        return Date.now();
+      },
+      formatter: function(options) {
+        // Return string will be passed to logger.
+        return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
+          (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+      }
+    })
+  ]
+});
+logger.info('Data to log.');
+```
+
 ### Inspirations
 1. [npm][0]
 2. [log.js][4]
@@ -879,7 +903,7 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
 ```
 
 ## Run Tests
-All of the winston tests are written in [vows][9], and designed to be run with npm. 
+All of the winston tests are written in [vows][9], and designed to be run with npm.
 
 ``` bash
   $ npm test
