@@ -38,7 +38,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
   * [Extending another object with Logging](#extending-another-object-with-logging)
 * [Working with transports](#working-with-transports)
-	* [Adding Custom Transports](#adding-custom-transports)
+    * [Adding Custom Transports](#adding-custom-transports)
 * [Installation](#installation)
 * [Run Tests](#run-tests)
 
@@ -645,6 +645,7 @@ The Console transport takes a few simple options:
 * __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
+* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -668,6 +669,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 * __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
+* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -736,6 +738,17 @@ As of `0.3.0` the MongoDB transport has been broken out into a new module: [wins
 ```
 
 For more information about its arguments, check [winston-mongodb's README][16].
+
+* __level:__ Level of messages that this transport should log.
+* __silent:__ Boolean flag indicating whether to suppress output.
+* __db:__ The name of the database you want to log to. *[required]*
+* __collection__: The name of the collection you want to store log messages in, defaults to 'log'.
+* __safe:__ Boolean indicating if you want eventual consistency on your log messages, if set to true it requires an extra round trip to the server to ensure the write was committed, defaults to true.
+* __host:__ The host running MongoDB, defaults to localhost.
+* __port:__ The port on the host that MongoDB is running on, defaults to MongoDB's default port.
+
+*Metadata:* Logged as a native JSON object.
+>>>>>>> 3b57730... Custom log formatter functionality were added.
 
 ### SimpleDB Transport
 
@@ -900,6 +913,28 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
     //
     callback(null, true);
   };
+```
+
+### Custom Log Format
+To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Memory.
+Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
+
+``` js
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      timestamp: function() {
+        return Date.now();
+      },
+      formatter: function(options) {
+        // Return string will be passed to logger.
+        return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
+          (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+      }
+    })
+  ]
+});
+logger.info('Data to log.');
 ```
 
 ### Inspirations
