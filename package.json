@@ -21,7 +21,7 @@
     "cycle": "1.0.x",
     "eyes": "0.1.x",
     "pkginfo": "0.3.x",
-    "request": "2.16.x",
+    "request": "2.40.x",
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
