@@ -343,4 +343,24 @@ vows.describe('winton/logger').addBatch({
       }
     }
   }
+}).addBatch({
+  "The winston Memory Transport": {
+    topic: new (winston.Logger)({
+      transports: [
+        new (winston.transports.Memory)()
+      ]
+    }),
+    "the formatter option": {
+      "should override default formatting": function (logger) {
+        logger.transports.memory.formatter = function(level, msg, meta) {
+          return "format override";
+        }
+
+        logger.info('original message');
+
+        var message = logger.transports.memory.writeOutput[0];
+        assert.strictEqual(message, 'format override');
+      }
+    }
+  }
 }).export(module);

@@ -104,6 +104,35 @@ The way these objects are stored varies from transport to transport (to best sup
 1. __Console:__ Logged via util.inspect(meta)
 2. __File:__ Logged via util.inspect(meta)
 
+
+### Customizing Log Format
+
+If you want to customize the format of your log entries, you can set a custom
+formatter on a per-transport basis:
+
+``` js
+new winston.transports.Console({
+
+  formatter: function(level, msg, meta) {
+    return "Custom " + level + ": " + msg + " " + JSON.stringify(meta);
+  }
+
+})
+```
+
+If necessary, you can also override a transport's formatter _after_ creation:
+
+``` js
+var logger = new winston.Logger({
+  transports: [new winston.transports.Console()]
+});
+
+logger.transports.console.formatMessage = function(level, msg, meta) {
+  return "#{level}: #{msg} #{JSON.stringify meta}" + msg
+}
+```
+
+
 ## Profiling
 In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
 
