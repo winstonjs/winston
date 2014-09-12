@@ -13,7 +13,7 @@
         'A stressed instance of the File Transport': {
             topic: function () {
                 var callback = this.callback.bind(this),
-                    logPath = path.resolve(process.cwd(), '../fixtures/logs/file-stress-test.log');
+                    logPath = path.resolve(__dirname, '../fixtures/logs/file-stress-test.log');
 
                 try {
                     fs.unlinkSync(logPath);
