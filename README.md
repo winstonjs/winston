@@ -625,6 +625,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
+* __logstash:__ If true, messages will be logged using the logstash JSON format.
 
 *Metadata:* Logged via util.inspect(meta);
 
