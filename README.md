@@ -670,6 +670,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
 * __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
+* __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.
 
 *Metadata:* Logged via util.inspect(meta);
 
