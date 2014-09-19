@@ -340,6 +340,59 @@ vows.describe('winton/logger').addBatch({
           assert.strictEqual(msg, 'test message first second');
           assert.deepEqual(meta, {number: 123});
         },
+      },
+      "when passed only Error object": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.error(new Error("this is an error"))
+        },
+        "should have an error object, and msg should be error.message": function (transport, level, msg, meta, error) {
+          assert.strictEqual(msg, "this is an error");
+          assert.equal(error instanceof Error, true);
+        },
+      },
+      "when passed message and an Error object": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.error("this is a test message", new Error("this is an error"))
+        },
+        "should have an error object, and msg should be as given": function (transport, level, msg, meta, error) {
+          assert.strictEqual(msg, "this is a test message");
+          assert.equal(error instanceof Error, true);
+        },
+      },
+      "when passed message, Error object, and meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.error("this is a test message", new Error("this is an error"), {foo: "bar"})
+        },
+        "should have an error object, msg and meta object as given": function (transport, level, msg, meta, error) {
+          assert.strictEqual(msg, "this is a test message");
+          assert.deepEqual(meta, {foo: "bar"});
+          assert.equal(error instanceof Error, true);
+        },
+      },
+      "when passed Error object and meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.error(new Error("this is an error"), {foo: "bar"})
+        },
+        "should have an error object, msg should be error.message, and meta object as given": function (transport, level, msg, meta, error) {
+          assert.strictEqual(msg, "this is an error");
+          assert.deepEqual(meta, {foo: "bar"});
+          assert.equal(error instanceof Error, true);
+        },
+      },
+      "when passed interpolation strings, Error object and meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.error('test message %s, %s', 'first', 'second' , new Error("this is an error"), {foo: "bar"});
+        },
+        "shoud interpolate, have Error object and meta": function (transport, level, msg, meta, error) {
+          assert.strictEqual(msg, "test message first, second");
+          assert.deepEqual(meta, {foo: "bar"});
+          assert.equal(error instanceof Error, true);
+        },
       }
     }
   }
