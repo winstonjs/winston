@@ -65,7 +65,7 @@ vows.describe('winston/logger/levels').addBatch({
         },
         "should not interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, util.format('test message %%'));
-          assert.deepEqual(meta, {number: 123});          
+          assert.deepEqual(meta, {number: 123});
         },
       },
       "when passed interpolation strings and a meta object": {
@@ -110,7 +110,52 @@ vows.describe('winston/logger/levels').addBatch({
         "should join and have a meta object": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message first second');
           assert.deepEqual(meta, {number: 123});
-        }    
+        }
       }
     }
+}).addBatch({
+  "An instance of winston.Logger": {
+    topic: function () {
+      return new (winston.Logger)({ transports: [ new (winston.transports.Memory)() ] });
+    },
+
+    "with logging level higher": {
+      topic: function (logger) {
+        logger.level = 'info';
+        return logger;
+      },
+
+      "than logging level of incoming message": {
+        topic: function (logger) {
+          var that = this;
+          logger.debug('hello world', function () {
+            that.callback(null, logger.transports.memory);
+          });
+        },
+
+        "should not log such message": function (memory) {
+          assert.equal(memory.writeOutput.length, 0);
+        }
+      }
+    },
+
+    "with transport with logging level higher": {
+      topic: function (logger) {
+        logger.transports.memory.level = 'info';
+        return logger;
+      },
+
+      "than logging level of incoming message": {
+        topic: function (logger) {
+          var that = this;
+          logger.debug('hello world', function () {
+            that.callback(null, logger.transports.memory);
+          });
+        },
+        "should not log such message": function (memory) {
+          assert.equal(memory.writeOutput.length, 0);
+        }
+      }
+    }
+  }
 }).export(module);
