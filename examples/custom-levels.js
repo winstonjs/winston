@@ -24,7 +24,7 @@ var config = {
     silly: 'magenta',
     verbose: 'cyan',
     info: 'green',
-    data: 'grey',
+    data: 'gray',
     warn: 'yellow',
     debug: 'blue',
     error: 'red'
