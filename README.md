@@ -246,7 +246,7 @@ Example 1
   var logger = new (winston.Logger)({
     transports: [
       new winston.transports.File({ filename: 'path/to/all-logs.log' })
-    ]
+    ],
     exceptionHandlers: [
       new winston.transports.File({ filename: 'path/to/exceptions.log' })
     ]
