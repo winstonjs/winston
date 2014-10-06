@@ -16,13 +16,21 @@ var path = require('path'),
 
 vows.describe('winton/logger').addBatch({
   "An instance of winston.Logger": {
-    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
-    "should have the correct methods / properties defined": function (logger) {
-      helpers.assertLogger(logger);
+    "with transports": {
+      topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+      "should have the correct methods / properties defined": function (logger) {
+        helpers.assertLogger(logger);
+      },
+      "the add() with an unsupported transport": {
+        "should throw an error": function () {
+          assert.throws(function () { logger.add('unsupported') }, Error);
+        }
+      }
     },
-    "the add() with an unsupported transport": {
-      "should throw an error": function () {
-        assert.throws(function () { logger.add('unsupported') }, Error);
+    "with no transports": {
+      topic: winston,
+      "should throw an appropriate error": function () {
+        assert.throws(function () { return new winston.Logger(); }, Error);
       }
     }
   }
