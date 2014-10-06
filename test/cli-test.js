@@ -13,6 +13,18 @@ var path = require('path'),
     helpers = require('./helpers');
 
 vows.describe('winston/logger/cli').addBatch({
+  "When an instance of winston.transports.Console()": {
+    "has colorize true": {
+      topic: function () {
+        var transport = new winston.transports.Console({ colorize: true });
+        transport.log('prompt', 'This had better work.', { test: true }, this.callback);
+      },
+      "should function without error": function (err, ok) {
+        assert.isNull(err);
+        assert.isTrue(ok);
+      }
+    }
+  },
   "When an instance of winston.Logger": {
     topic: function () {
       return new winston.Logger({
@@ -30,7 +42,7 @@ vows.describe('winston/logger/cli').addBatch({
         Object.keys(winston.config.cli.levels).forEach(function (level) {
           assert.isNumber(logger.levels[level]);
         });
-        
+
         Object.keys(winston.config.cli.colors).forEach(function (color) {
           assert.isString(winston.config.allColors[color]);
         });
