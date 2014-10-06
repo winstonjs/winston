@@ -26,11 +26,16 @@ vows.describe('winston/logger/exceptions').addBatch({
         script: path.join(__dirname, 'fixtures', 'scripts', 'default-exceptions.js'),
         logfile: path.join(__dirname, 'fixtures', 'logs', 'default-exception.log')
       }),
+      "when strings are thrown as errors": helpers.assertHandleExceptions({
+        script: path.join(__dirname, 'fixtures', 'scripts', 'log-string-exception.js'),
+        logfile: path.join(__dirname, 'fixtures', 'logs', 'string-exception.log'),
+        message: 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL'
+      }),
       "when a custom exitOnError function is set": {
         topic: function () {
           var that = this,
               scriptDir = path.join(__dirname, 'fixtures', 'scripts');
-          
+
           that.child = spawn('node', [path.join(scriptDir, 'exit-on-error.js')]);
           setTimeout(this.callback.bind(this), 1500);
         },
@@ -45,7 +50,7 @@ vows.describe('winston/logger/exceptions').addBatch({
         var that = this,
             child = spawn('node', [path.join(__dirname, 'fixtures', 'scripts', 'unhandle-exceptions.js')]),
             exception = path.join(__dirname, 'fixtures', 'logs', 'unhandle-exception.log');
-        
+
         helpers.tryUnlink(exception);
         child.on('exit', function () {
           exists(exception, that.callback.bind(this, null));

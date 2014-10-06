@@ -12,8 +12,8 @@ var assert = require('assert'),
     spawn = require('child_process').spawn,
     util = require('util'),
     vows = require('vows'),
-    winston = require('../lib/winston');    
-    
+    winston = require('../lib/winston');
+
 var helpers = exports;
 
 helpers.size = function (obj) {
@@ -23,7 +23,7 @@ helpers.size = function (obj) {
       size++;
     }
   }
-  
+
   return size;
 };
 
@@ -123,6 +123,9 @@ helpers.assertHandleExceptions = function (options) {
       helpers.assertProcessInfo(data.process);
       helpers.assertOsInfo(data.os);
       helpers.assertTrace(data.trace);
+      if (options.message) {
+        assert.equal('uncaughtException: ' + options.message, data.message);
+      }
     }
   }
 }
@@ -137,24 +140,24 @@ helpers.testSyslogLevels = function (transport, assertMsg, assertFn) {
 
 helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   var tests = {};
-  
+
   Object.keys(levels).forEach(function (level) {
     var test = {
       topic: function () {
         transport.log(level, 'test message', {}, this.callback.bind(this, null));
       }
     };
-   
+
     test[assertMsg] = assertFn;
     tests['with the ' + level + ' level'] = test;
   });
-  
+
   var metadatatest = {
     topic: function () {
       transport.log('info', 'test message', { metadata: true }, this.callback.bind(this, null));
     }
   };
-  
+
   metadatatest[assertMsg] = assertFn;
   tests['when passed metadata'] = metadatatest;
 
@@ -167,7 +170,7 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   primmetadatatest[assertMsg] = assertFn;
   tests['when passed primitive metadata'] = primmetadatatest;
 
-  var circmetadata = { }; 
+  var circmetadata = { };
   circmetadata['metadata'] = circmetadata;
 
   var circmetadatatest = {
