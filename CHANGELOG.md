@@ -1,4 +1,18 @@
+## 0.8.1 / 2014-10-06
 
+* [Add label option for DailyRotateFile transport (`francoisTemasys`)](https://github.com/flatiron/winston/pull/459)
+* [fix Logger#transports length check upon Logger#log (`adriano-di-giovanni`, `indexzero`)](https://github.com/flatiron/winston/pull/404)
+* [err can be a string. (`gdw2`, `indexzero`)](https://github.com/flatiron/winston/pull/396)
+* [Added color for pre-defined cli set. (`danilo1105`, `indexzero`)](https://github.com/flatiron/winston/pull/365)
+* [Fix dates on transport test (`revington`)](https://github.com/flatiron/winston/pull/346)
+* [Included the label from options to the output in JSON mode. (`arxony`)](https://github.com/flatiron/winston/pull/326)
+* [Allow using logstash option with the File transport (`gmajoulet`)](https://github.com/flatiron/winston/pull/299)
+* [Be more defensive when working with `query` methods from Transports. Fixes #356. (indexzero)](https://github.com/flatiron/winston/commit/b80638974057f74b521dbe6f43fef2105110afa2)
+* [Catch exceptions for file transport unlinkSync (`calvinfo`)](https://github.com/flatiron/winston/pull/266)
+* [Adding the 'addRewriter' to winston (`machadogj`)](https://github.com/flatiron/winston/pull/258)
+* [Updates to transport documentation (`pose`)](https://github.com/flatiron/winston/pull/262)
+* [fix typo in "Extending another object with Logging" section.](https://github.com/flatiron/winston/pull/281)
+* [Updated README.md - Replaced properties with those listed in winston-mongodb module](https://github.com/flatiron/winston/pull/264)
 
 ## 0.8.0 / 2014-09-15
   * [Fixes for HTTP Transport](https://github.com/flatiron/winston/commit/a876a012641f8eba1a976eada15b6687d4a03f82)
