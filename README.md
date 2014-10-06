@@ -606,6 +606,7 @@ The Console transport takes a few simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __logstash:__ If true, messages will be logged using the logstash JSON format.
 
 *Metadata:* Logged via util.inspect(meta);
 
