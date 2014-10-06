@@ -28,9 +28,17 @@ vows.describe('winton/logger').addBatch({
       }
     },
     "with no transports": {
-      topic: winston,
-      "should throw an appropriate error": function () {
-        assert.throws(function () { return new winston.Logger(); }, Error);
+      topic: new winston.Logger(),
+      "the log method": {
+        topic: function (logger) {
+          var that = this;
+          logger.log('error', 'This should be an error', function (err) {
+            that.callback(null, err);
+          });
+        },
+        "should respond with the appropriate error": function (err) {
+          assert.instanceOf(err, Error);
+        }
       }
     }
   }
