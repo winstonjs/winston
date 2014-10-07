@@ -276,6 +276,15 @@ vows.describe('winton/logger').addBatch({
       ]
     }),
     "the log() method": {
+      "when passed an Error object as meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'An error happened: ', new Error('I am something bad'));
+        },
+        "should respond with a proper error output": function (transport, level, msg, meta) {
+          assert.instanceOf(meta, Error);
+        }
+      },
       "when passed a string placeholder": {
         topic: function (logger) {
           logger.once('logging', this.callback);
