@@ -16,7 +16,7 @@ var maxfilesTransport = new winston.transports.File({
 
 process.on('uncaughtException', function (err) {
   console.log('caught exception');
-  console.log(err);
+  console.error(err);
 });
 
 vows.describe('winston/transports/file/tailrolling').addBatch({
