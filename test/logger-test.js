@@ -161,7 +161,7 @@ vows.describe('winton/logger').addBatch({
               timer.done('test', function (err, level, msg, meta) {
                 that.callback(err, level, msg, meta, logger);
               });
-            }, 1000);
+            }, 500);
           },
           "should respond with the appropriate message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
@@ -176,7 +176,7 @@ vows.describe('winton/logger').addBatch({
             logger.once('logging', that.callback.bind(null, null));
             setTimeout(function () {
               timer.done();
-            }, 1000);
+            }, 500);
           },
           "should respond with the appropriate message": function (err, transport, level, msg, meta) {
             assert.isNull(err);
