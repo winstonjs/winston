@@ -301,21 +301,24 @@ Options:
 [winston-graylog2][19] is a Graylog2 transport:
 
 ``` js
-  var Graylog2 = require('winston-graylog2').Graylog2;
-  winston.add(Graylog2, options);
+  var winston = require('winston');
+  winston.add(require('winston-graylog2'), options);
 ```
 
 The Graylog2 transport connects to a Graylog2 server over UDP using the following options:
 
-* __level:__ Level of messages this transport should log. (default: info)
-* __silent:__ Boolean flag indicating whether to suppress output. (default: false)
-
-* __graylogHost:__ IP address or hostname of the graylog2 server. (default: localhost)
-* __graylogPort:__ Port to send messages to on the graylog2 server. (default: 12201)
-* __graylogHostname:__ The hostname associated with graylog2 messages. (default: require('os').hostname())
-* __graylogFacility:__ The graylog2 facility to send log messages.. (default: nodejs)
-
-*Metadata:* Stringified as JSON in the full message GELF field.
+* __name__:  Transport name
+* __level__: Level of messages this transport should log. (default: info)
+* __silent__: Boolean flag indicating whether to suppress output. (default: false)
+* __handleExceptions__: Boolean flag, whenever to handle uncaught exceptions. (default: false)
+* __graylog__:
+  - __servers__; list of graylog2 servers
+    * __host__: your server address (default: localhost)
+    * __port__: your server port (default: 12201)
+  - __hostname__: the name of this host (default: os.hostname())
+  - __facility__: the facility for these log messages (default: "Node.js")
+  - __bufferSize__: max UDP packet size, should never exceed the MTU of your system (default: 1400)
+  
 
 ### Cassandra Transport
 
@@ -392,5 +395,5 @@ Array of strings containing the hosts, for example `['host1', 'host2']` (require
 [16]: http://github.com/wavded/winston-mail
 [17]: https://github.com/weaver/node-mail
 [18]: https://github.com/jesseditson/winston-sns
-[19]: https://github.com/flite/winston-graylog2
+[19]: https://github.com/namshi/winston-graylog2
 [20]: https://github.com/jorgebay/winston-cassandra
