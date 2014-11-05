@@ -1,3 +1,7 @@
+## 0.8.3 / 2014-11-04
+
+* [fix lowercase issue (`jcrugzz`)](https://github.com/flatiron/winston/commit/b3ffaa10b5fe9d2a510af5348cf4fb3870534123)
+
 ## 0.8.2 / 2014-11-04
 
 * [Full fix for #296 with proper streams2 detection with `isstream` for file transport (`jcrugzz`)](https://github.com/flatiron/winston/commit/5c4bd4191468570e46805ed399cad63cfb1856cc)
