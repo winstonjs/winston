@@ -24,38 +24,13 @@ var port = 1337;
 
 
 vows.describe('winston/transports/http').addBatch({
-  "A valid instance of the HTTP Transport": {
-    topic: new (winston.transports.Http)({
-      host: host,
-      port: port,
-      path: 'log'
-    }),
-    "log method": {
-      // "when called with (undefined)": {
-      //   topic: function (httpTransport) {
-      //     var self = this;
-      //     var scope = hock('http://foo')
-      //     .post('log', {
-      //       "method":"collect",
-      //       "params":{
-      //         "level":"info",
-      //         "message":"hello",
-      //         "meta":{}
-      //       }
-      //     })
-      //     .reply(200);
+  "When the HTTP endpoint": {
+    topic: function () {
+      var mock = this.mock = hock.createHock(),
+          self = this;
 
-      //     httpTr
-      //   }
-      // },
-      "when logging in 'info' the string 'hello'": {
-        topic: function (httpTransport) {
-          var self = this;
-
-          var mock = hock.createHock();
-
-          mock
-          .post('log', {
+        mock
+          .post('/log', {
             "method":"collect",
             "params":{
               "level":"info",
@@ -63,23 +38,36 @@ vows.describe('winston/transports/http').addBatch({
               "meta":{}
             }
           })
+          .min(1)
+          .max(1)
           .reply(200);
 
-          var server = http.createServer(mock.handler);
-
-          server.listen(port, function (err) {
-            assert.ifError(err);
-            httpTransport.log('info', 'hello', function (err) {
-              assert.ifError(err);
-              self.callback(null, mock);
+      var server = this.server = http.createServer(mock.handler);
+      server.listen(port, '0.0.0.0', this.callback);
+    },
+    "is running": function (err) {
+      assert.ifError(err);
+    },
+    "an instance of the Http transport": {
+      topic: function () {
+        var self = this,
+            httpTransport = new (winston.transports.Http)({
+              host: host,
+              port: port,
+              path: 'log'
             });
-          });
-        },
-        "should log to the specified URL": function (err, scope) {
-          assert.ifError(err);
-          scope.done();
-          hock.cleanAll();
-        }
+
+        httpTransport.log('info', 'hello', function (logErr, logged) {
+          self.mock.done(function (doneErr) {
+            self.callback(null, logErr, logged, doneErr);
+          })
+        });
+      },
+      "should log to the specified URL": function (_, err, logged, requested) {
+        assert.ifError(err);
+        assert.isTrue(logged);
+        assert.ifError(requested);
+        this.server.close();
       }
     }
   }
