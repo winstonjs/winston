@@ -20,12 +20,12 @@
     "colors": "0.6.x",
     "cycle": "1.0.x",
     "eyes": "0.1.x",
-    "hock": "^1.0.0",
     "isstream": "0.1.x",
     "pkginfo": "0.3.x",
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
+    "hock": "^1.0.0",
     "vows": "0.7.x"
   },
   "main": "./lib/winston",
