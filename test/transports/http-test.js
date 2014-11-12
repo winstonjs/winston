@@ -16,8 +16,6 @@ var path = require('path'),
 var transport = require('./transport');
 
 var host = '127.0.0.1';
-var port = 1337;
-
 
 vows.describe('winston/transports/http').addBatch({
   "When the HTTP endpoint": {
@@ -39,13 +37,15 @@ vows.describe('winston/transports/http').addBatch({
           .reply(200);
 
       var server = this.server = http.createServer(mock.handler);
-      server.listen(port, '0.0.0.0', this.callback);
+      server.listen(0, '0.0.0.0', this.callback);
     },
     "is running": function (err) {
       assert.ifError(err);
     },
     "an instance of the Http transport": {
       topic: function () {
+
+      var port = this.server.address().port;
         var self = this,
             httpTransport = new (winston.transports.Http)({
               host: host,
@@ -56,7 +56,7 @@ vows.describe('winston/transports/http').addBatch({
         httpTransport.log('info', 'hello', function (logErr, logged) {
           self.mock.done(function (doneErr) {
             self.callback(null, logErr, logged, doneErr);
-          })
+          });
         });
       },
       "should log to the specified URL": function (_, err, logged, requested) {
