@@ -15,10 +15,6 @@ var path = require('path'),
 
 var transport = require('./transport');
 
-// TODO way of doing describe.only in vows?
-// TODO How to debug a test?
-// TODO Coverage tool
-
 var host = '127.0.0.1';
 var port = 1337;
 
