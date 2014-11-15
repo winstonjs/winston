@@ -110,7 +110,57 @@ vows.describe('winston/logger/levels').addBatch({
         "should join and have a meta object": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message first second');
           assert.deepEqual(meta, {number: 123});
-        }    
+        }
+      },
+      "when custom levels are set": {
+        "should not fail with 'RangeError: Maximum call stack size exceeded": function (logger) {
+          var that = this;
+
+          // Logging levels
+          var customLevels = {
+            levels: {
+              none: 0,
+              log: 1,
+            }
+          };
+
+          var logger = winston.loggers.add('hello243', { });
+          try {
+            logger.setLevels(customLevels.levels);
+          } catch (e) {
+            assert.equal('Error', e.name);
+          }
+          try {
+            logger.log('none', 'hi', function (err) {
+              assert.ifError(err);
+            });
+          } catch (e)  {
+            assert.ifError(e);
+          }
+        },
+        "should warn if logging level overrides a method": function (logger) {
+          var that = this;
+
+          // Logging levels
+          var customLevels = {
+            levels: {
+              none: 0,
+              extend: 1,
+            }
+          };
+
+          // TODO Find a better way to do this
+          var oldWarn = console.warn;
+          console.warn = function (x) {
+            assert.equal('Logging method "extend" overrides ' +
+                         'an existing property. Consider level renaming.', x);
+            console.warn = oldWarn;
+          };
+
+          var logger = winston.loggers.add('hello243', { });
+          logger.setLevels(customLevels.levels);
+
+        }
       }
     }
 }).export(module);
