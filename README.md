@@ -626,6 +626,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
 * __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
+* __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.
 
 *Metadata:* Logged via util.inspect(meta);
 
