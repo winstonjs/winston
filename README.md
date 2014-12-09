@@ -621,13 +621,23 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __colorize:__ Boolean flag indicating if we should colorize output.
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default true). If function is specified, its return value will be used instead of timestamps.
 * __filename:__ The filename of the logfile to write output to.
-* __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created.
+* __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file (f.eks filename.1).
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
+* __prettyPrint:__ If true, additional JSON metadata objects that are added to logging string messages will be displayed as a JSON string representation.
 * __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
 
-*Metadata:* Logged via util.inspect(meta);
+### Daily Rotate File Transport
+``` js
+  winston.add(winston.transports.DailyRotateFile, options)
+```
+
+The Daily Rotate File transport lets you rotate log files based on time.
+
+In addition to the options accepted by the File transport, the Daily Rotate File Transport also accepts the following option. 
+
+* __datePattern:__ Defines rolling time of log file and suffix appended to the log file. Following meta characters can be used: `yy`, `yyyy`, `M`, `MM`, `d`, `dd`, `H`, `HH`, `m`, `mm`. The default pattern is `'.yyyy-MM-dd'`. Rolling time is the smallest given time token, so `'.yyyy-MM-ddTHH'` will rotate logfile every hour. You can not rotate files more frequent then every minute.
 
 ### Loggly Transport
 ``` js
