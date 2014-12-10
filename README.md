@@ -628,6 +628,8 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __prettyPrint:__ If true, additional JSON metadata objects that are added to logging string messages will be displayed as a JSON string representation.
 * __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
 
+*Metadata:* Logged via util.inspect(meta);
+
 ### Daily Rotate File Transport
 ``` js
   winston.add(winston.transports.DailyRotateFile, options)
