@@ -356,6 +356,17 @@ vows.describe('winton/logger').addBatch({
           assert.strictEqual(msg, 'test message first second');
           assert.deepEqual(meta, {number: 123});
         },
+      },
+      "when passed a regular expression": {
+        topic: function (logger) {
+          var that = this;
+          logger.log('info', new RegExp('a'), function(transport, level, msg, meta){
+            that.callback(transport, level, msg, meta)
+          });
+        },
+        "should return a string representing the regular expression": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, '/a/');
+        },
       }
     }
   }
