@@ -46,6 +46,8 @@ The Console transport takes four simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __json:__ Boolean flag indicating whether or not the output should be JSON. If true, will log out multi-line JSON objects. (default false)
+* __stringify:__ Boolean flag indiciating if the output should be passed through JSON.stringify, resulting in single-line output. Most useful when used in conjunction with the json flag. (default false)
 
 *Metadata:* Logged via util.inspect(meta);
 
