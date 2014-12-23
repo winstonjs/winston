@@ -137,29 +137,6 @@ vows.describe('winston/logger/levels').addBatch({
           } catch (e)  {
             assert.ifError(e);
           }
-        },
-        "should warn if logging level overrides a method": function (logger) {
-          var that = this;
-
-          // Logging levels
-          var customLevels = {
-            levels: {
-              none: 0,
-              extend: 1,
-            }
-          };
-
-          // TODO Find a better way to do this
-          var oldWarn = console.warn;
-          console.warn = function (x) {
-            assert.equal('Logging method "extend" overrides ' +
-                         'an existing property. Consider level renaming.', x);
-            console.warn = oldWarn;
-          };
-
-          var logger = winston.loggers.add('hello243', { });
-          logger.setLevels(customLevels.levels);
-
         }
       }
     }
