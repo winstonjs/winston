@@ -20,8 +20,9 @@ There are two different ways to use winston: directly via the default logger, or
   * [Using the Default Logger](#using-the-default-logger)
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
-  * [String interpolation ](#string-interpolation)
+  * [String interpolation](#string-interpolation)
 * [Transports](https://github.com/flatiron/winston/blob/master/docs/transports.md)
+  * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
 * [Querying Logs](#querying-logs)
@@ -103,6 +104,41 @@ The way these objects are stored varies from transport to transport (to best sup
 
 1. __Console:__ Logged via util.inspect(meta)
 2. __File:__ Logged via util.inspect(meta)
+
+## Multiple transports of the same type
+
+It is possible to use multiple transports of the same type e.g. `winston.transports.File` by passing in a custom `name` when you construct the transport.
+
+``` js
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.File)({
+      name: 'info-file',
+      filename: 'filelog-info.log',
+      level: 'info'
+    }),
+    new (winston.transports.File)({
+      name: 'error-file',
+      filename: 'filelog-error.log',
+      level: 'error'
+    })
+  ]
+});
+```
+
+If you later want to remove one of these transports you can do so by using the string name. e.g.:
+
+``` js
+logger.remove('info-file');
+```
+
+In this example one could also remove by passing in the instance of the Transport itself. e.g. this is equivalent to the string example above;
+
+```
+// Notice it was first in the Array above
+var infoFile = logger.transports[0];
+logger.remove(infoFile);
+```
 
 ## Profiling
 In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:

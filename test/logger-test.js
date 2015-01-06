@@ -381,14 +381,34 @@ vows.describe('winton/logger').addBatch({
   }
 }).addBatch({
   "Building a logger with two file transports": {
-    topic: function() { new (winston.Logger)({
+    topic: new (winston.Logger)({
       transports: [
-        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log' ), level: 'info'}),
-        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log' ), level: 'error'})
+        new (winston.transports.File)({
+          name: 'filelog-info.log',
+          filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
+          level: 'info'
+        }),
+        new (winston.transports.File)({
+          name: 'filelog-error.log',
+          filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
+          level: 'error'
+        })
       ]
-    })},
-    "should not throw an exception": function (f) {
-      assert.doesNotThrow(f, Error)
+    }),
+    "should respond with a proper logger": function (logger) {
+      assert.include(logger._names, 'filelog-info.log');
+      assert.include(logger._names, 'filelog-error.log');
+      assert.lengthOf(logger.transports, 2);
     },
+    "when one is removed": {
+      topic: function (logger) {
+        logger.remove('filelog-error.log');
+        return logger;
+      },
+      "should only have one transport": function (logger) {
+        assert.include(logger._names, 'filelog-info.log');
+        assert.lengthOf(logger.transports, 1);
+      }
+    }
   }
 }).export(module);
