@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "hock": "1.x.x",
+    "std-mocks": "~1.0.0",
     "vows": "0.7.x"
   },
   "main": "./lib/winston",

@@ -6,10 +6,11 @@
  *
  */
 
-var path = require('path'),
-    vows = require('vows'),
-    assert = require('assert'),
+var assert = require('assert'),
+    path = require('path'),
     util = require('util'),
+    stdMocks = require('std-mocks'),
+    vows = require('vows'),
     winston = require('../lib/winston'),
     helpers = require('./helpers'),
     transport = require('./transports/transport');
@@ -311,6 +312,24 @@ vows.describe('winton/logger').addBatch({
         "should interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message {"number":123}');
         },
+      },
+      "when passed just JSON meta and no message": {
+        topic: function (logger) {
+          stdMocks.use();
+          logger.once('logging', this.callback);
+          logger.log('info', { message: 'in JSON object', ok: true });
+        },
+        "should output the message": function (transport, level, msg, meta) {
+          stdMocks.restore();
+
+          //
+          // TODO: Come up with a cleaner way to test this.
+          //
+          var output = stdMocks.flush(),
+              line   = output.stdout[0];
+
+          assert.match(line, /message\=in/);
+        }
       },
       "when passed a escaped percent sign": {
         topic: function (logger) {
