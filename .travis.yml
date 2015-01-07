@@ -5,7 +5,8 @@ node_js:
   - "0.11"
   
 before_install:
-  - travis_retry npm install
+  - travis_retry "npm install -g npm"
+  - travis_retry "npm install"
 
 script:
   - npm test
