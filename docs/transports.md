@@ -48,7 +48,7 @@ The Console transport takes four simple options:
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
 * __json:__ Boolean flag indicating whether or not the output should be JSON. If true, will log out multi-line JSON objects. (default false)
 * __stringify:__ Boolean flag indiciating if the output should be passed through JSON.stringify, resulting in single-line output. Most useful when used in conjunction with the json flag. (default false)
-* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false).
+* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 
 *Metadata:* Logged via util.inspect(meta);
@@ -71,7 +71,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
 * __eol:__ string indicating the end-of-live characters to use (default to `\n`).
-* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false).
+* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 
 *Metadata:* Logged via util.inspect(meta);
