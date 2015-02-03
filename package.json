@@ -16,8 +16,8 @@
     "tools"
   ],
   "dependencies": {
-    "async": "0.2.x",
-    "colors": "0.6.x",
+    "async": "0.9.x",
+    "colors": "1.0.x",
     "cycle": "1.0.x",
     "eyes": "0.1.x",
     "isstream": "0.1.x",
