@@ -1,3 +1,34 @@
+v0.9.0 / 2015-02-03
+========================
+  * [#496](https://github.com/flatiron/winston/pull/496) Updated default option handling for CLI (`oojacoboo`).
+  * [f37634b](https://github.com/flatiron/winston/commit/f37634b) [dist] Only support `node >= 0.8.0`. (`indexzero`)
+  * [91a1e90](https://github.com/flatiron/winston/commit/91a1e90), [50163a0](https://github.com/flatiron/winston/commit/50163a0) Fix #84 [Enable a better unhandled exception experience](https://github.com/flatiron/winston/issues/84) (`samz`)
+  * [8b5fbcd](https://github.com/flatiron/winston/commit/8b5fbcd) #448 Added tailable option to file transport which rolls files backwards instead of creating incrementing appends. Implements #268 (`neouser99`)
+  * [a34f7d2](https://github.com/flatiron/winston/commit/a34f7d2) Custom log formatter functionality were added. (`Melnyk Andii`)
+  * [4c08191](https://github.com/flatiron/winston/commit/4c08191) Added showLevel flag to common.js, file*, memory and console transports. (`Tony Germaneri`)
+  * [64ed8e0](https://github.com/flatiron/winston/commit/64ed8e0) Adding custom pretty print function test. (`Alberto Pose`)
+  * [3872dfb](https://github.com/flatiron/winston/commit/3872dfb) Adding prettyPrint parameter as function example. (`Alberto Pose`)
+  * [2b96eee](https://github.com/flatiron/winston/commit/2b96eee) implemented filters #526 (`Chris Oloff`)
+  * [72273b1](https://github.com/flatiron/winston/commit/72273b1) Added the options to colorize only the level, only the message or all. Default behavior is kept. Using true will only colorize the level and false will not colorize anything. (`Michiel De Mey`)
+  * [178e8a6](https://github.com/flatiron/winston/commit/178e8a6) Prevent message from meta input being overwritten (`Leonard Martin`)
+  * [270be86](https://github.com/flatiron/winston/commit/270be86) [api] Allow for transports to be removed by their string name [test fix] Add test coverage for multiple transports of the same type added in #187. [doc] Document using multiple transports of the same type (`indexzero`)
+  * [0a848fa](https://github.com/flatiron/winston/commit/0a848fa) Add depth options for meta pretty print (`Loïc Mahieu`)
+  * [106b670](https://github.com/flatiron/winston/commit/106b670) Allow debug messages to be sent to stdout (`John Frizelle`)
+  * [ad2d5e1](https://github.com/flatiron/winston/commit/ad2d5e1) [fix] Handle Error instances in a sane way since their properties are non-enumerable __by default.__ Fixes #280. (`indexzero`)
+  * [5109dd0](https://github.com/flatiron/winston/commit/5109dd0) [fix] Have a default `until` before a default `from`. Fixes #478. (`indexzero`)
+  * [d761960](https://github.com/flatiron/winston/commit/d761960) Fix logging regular expression objects (`Chasen Le Hara`)
+  * [2632eb8](https://github.com/flatiron/winston/commit/2632eb8) Add option for EOL chars on FileTransport (`José F. Romaniello`)
+  * [bdecce7](https://github.com/flatiron/winston/commit/bdecce7) Remove duplicate logstash option (`José F. Romaniello`)
+  * [7a01f9a](https://github.com/flatiron/winston/commit/7a01f9a) Update declaration block according to project's style guide (`Ricardo Torres`)
+  * [ae27a19](https://github.com/flatiron/winston/commit/ae27a19) Fixes #306: Can't set customlevels to my loggers (RangeError: Maximum call stack size exceeded) (`Alberto Pose`)
+  * [1ba4f51](https://github.com/flatiron/winston/commit/1ba4f51) [fix] Call `res.resume()` in HttpTransport to get around known issues in streams2. (`indexzero`)
+  * [39e0258](https://github.com/flatiron/winston/commit/39e0258) Updated default option handling for CLI (`Jacob Thomason`)
+  * [8252801](https://github.com/flatiron/winston/commit/8252801) Added logstash support to console transport (`Ramon Snir`)
+  * [18aa301](https://github.com/flatiron/winston/commit/18aa301) Module isStream should be isstream (`Michael Neil`)
+  * [2f5f296](https://github.com/flatiron/winston/commit/2f5f296) options.prettyPrint can now be a function (`Matt Zukowski`)
+  * [a87a876](https://github.com/flatiron/winston/commit/a87a876) Adding rotationFormat prop to file.js (`orcaman`)
+  * [ff187f4](https://github.com/flatiron/winston/commit/ff187f4) Allow custom exception level (`jupiter`)
+
 ## 0.8.3 / 2014-11-04
 
 * [fix lowercase issue (`jcrugzz`)](https://github.com/flatiron/winston/commit/b3ffaa10b5fe9d2a510af5348cf4fb3870534123)
