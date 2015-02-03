@@ -1,7 +1,7 @@
 /*
- * custom-pretty-print-test.js: Test function as pretty print option.
+ * humanReadableUnhandledException-test.js: Test that stack trace is printed in human readable form when option is true.
  *
- * (C) 2015 Alberto Pose
+ * (C) 2015 Sam Zilverberg
  * MIT LICENSE
  *
  */
