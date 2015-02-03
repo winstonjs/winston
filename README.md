@@ -37,6 +37,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
   * [Extending another object with Logging](#extending-another-object-with-logging)
+  * [Filters](#filters)
 * [Working with transports](#working-with-transports)
     * [Adding Custom Transports](#adding-custom-transports)
 * [Installation](#installation)
@@ -626,6 +627,26 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
   //
   myObject.info("127.0.0.1 - there's no place like home");
 ```
+
+### Filters
+Filters allow modifying the contents of log messages, e.g. to mask data that
+should not appear in logs.
+
+``` js
+logger.addFilter(function(msg) {
+  return maskCardNumbers(msg);
+});
+logger.info('transaction with card number 123456789012345 successful.');
+```
+
+This may result in this output:
+
+```
+info: transaction with card number 123456****2345 successful.
+```
+
+See [log-filter-test.js](./test/log-filter-test.js), where card number masking
+is implemented as an example.
 
 ## Working with Transports
 There are many transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
