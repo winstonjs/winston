@@ -895,8 +895,8 @@ The Cassandra transport connects to a cluster using the native protocol with the
 
 In addition to the options accepted by the [Node.js Cassandra driver](https://github.com/jorgebay/node-cassandra-cql) Client.
 
-* __hosts:__ Cluster nodes that will handle the write requests:
-Array of strings containing the hosts, for example `['host1', 'host2']` (required).
+* __contactPoints:__ Cluster nodes that will handle the write requests:
+Array of strings containing the contact points, for example `['host1', 'host2']` (required).
 * __keyspace:__ The name of the keyspace that will contain the logs table (required). The keyspace should be already created in the cluster.
 
 ### Adding Custom Transports
