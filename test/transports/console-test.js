@@ -32,7 +32,7 @@ vows.describe('winston/transports/console').addBatch({
         assert.equal(line, 'info: \n');
       }
     },
-    "with showLevel on": {
+    "with showLevel off": {
       topic : function() {
         npmTransport.showLevel = false;
         stdMocks.use();
@@ -43,7 +43,7 @@ vows.describe('winston/transports/console').addBatch({
         var output = stdMocks.flush(),
             line   = output.stdout[0];
 
-        assert.equal(line, '\n');
+        assert.equal(line, undefined);
       }
     },
     "with npm levels": {
