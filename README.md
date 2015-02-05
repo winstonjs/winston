@@ -476,7 +476,7 @@ Often in larger, more complex applications it is necessary to have multiple logg
   winston.loggers.add('category1', {
     console: {
       level: 'silly',
-      colorize: 'true',
+      colorize: true,
       label: 'category one'
     },
     file: {
@@ -517,7 +517,7 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
   container.add('category1', {
     console: {
       level: 'silly',
-      colorize: 'true'
+      colorize: true
     },
     file: {
       filename: '/path/to/some/file'
