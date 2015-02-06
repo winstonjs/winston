@@ -893,7 +893,7 @@ The Cassandra transport connects to a cluster using the native protocol with the
 * __partitionBy:__ How you want the logs to be partitioned. Possible values `'hour'` and `'day'`(Default).
 * __consistency:__ The consistency of the insert query (default: `quorum`).
 
-In addition to the options accepted by the [Node.js Cassandra driver](https://github.com/jorgebay/node-cassandra-cql) Client.
+In addition to the options accepted by the [Node.js Cassandra driver](https://github.com/datastax/nodejs-driver) Client.
 
 * __contactPoints:__ Cluster nodes that will handle the write requests:
 Array of strings containing the contact points, for example `['host1', 'host2']` (required).
