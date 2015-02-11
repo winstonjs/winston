@@ -21,19 +21,37 @@ function maskCardNumbers(s) {
   return s;
 }
 
+function maskSecrets(msg, meta) {
+  var match;
+  while (match = msg.match(/(secret|SECRET|Secret)/)) {
+    var toBeMasked = match[1];
+    msg = msg.replace(toBeMasked, '******');
+  }
+  meta = Object.keys(meta).reduce(function (maskedMeta, key) {
+    if (key !== 'SECRET' && key !== 'Secret' && key !== 'secret') {
+      maskedMeta[key] = meta[key];
+    } else {
+      maskedMeta[key] = '<REDACTED>';
+    }
+    return maskedMeta;
+  }, {});
+
+  return [msg, meta];
+}
+
 vows.describe('winston/logger/filter').addBatch({
   "An instance of winston.Logger": {
     topic: new (winston.Logger)({transports: [
       new (winston.transports.Console)({ level: 'info' })
     ]}),
-    "the addFilter() method": {
+    "the addFilter() method filtering only a message": {
       topic: function (logger) {
         logger.addFilter(function (msg) {
           return maskCardNumbers(msg);
         });
         return logger;
       },
-      "should add the filter": function(logger) {
+      "should add the filter": function (logger) {
         assert.equal(helpers.size(logger.filters), 1);
       },
       "the log() method": {
@@ -45,7 +63,40 @@ vows.describe('winston/logger/filter').addBatch({
           assert.equal(msg, 'card number 123456****2345 for testing');
         }
       }
+    },
+  }
+}).addBatch({
+  "A fresh instance of winston.Logger": {
+    topic: new (winston.Logger)({transports: [
+      new (winston.transports.Console)({ level: 'info' })
+    ]}),
+    "the addFilter() method filtering a message and metadata": {
+      topic: function (logger) {
+        logger.addFilter(function (msg, meta) {
+          return maskSecrets(msg, meta);
+        });
+        return logger;
+      },
+      "the log() method": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info',
+                     'We should make sure the secret stays SECRET.',
+                     { 'SECRET': "You shouldn't see this.",
+                       'public': 'But you can look at this.',
+                       'secret': "We'll have to take you to Area-51 now.",
+                       'not-secret': 'No worries about this one.',
+                       'Secret': "It's confidential!" });
+        },
+        "should filter out secrets": function (transport, level, msg, meta) {
+          assert.equal(msg, 'We should make sure the ****** stays ******.');
+          assert.equal(meta.SECRET, '<REDACTED>');
+          assert.equal(meta.public, 'But you can look at this.');
+          assert.equal(meta.secret, '<REDACTED>');
+          assert.equal(meta['not-secret'], 'No worries about this one.');
+          assert.equal(meta.Secret, '<REDACTED>');
+        }
+      }
     }
   }
 }).export(module);
-
