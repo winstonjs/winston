@@ -44,7 +44,7 @@ vows.describe('winston/logger/filter').addBatch({
     topic: new (winston.Logger)({transports: [
       new (winston.transports.Console)({ level: 'info' })
     ]}),
-    "the addFilter() method filtering only a message": {
+    "the addFilter() method, adding a filter only for the message": {
       topic: function (logger) {
         logger.addFilter(function (msg) {
           return maskCardNumbers(msg);
@@ -54,7 +54,7 @@ vows.describe('winston/logger/filter').addBatch({
       "should add the filter": function (logger) {
         assert.equal(helpers.size(logger.filters), 1);
       },
-      "the log() method": {
+      "the log() method with a filtered message": {
         topic: function (logger) {
           logger.once('logging', this.callback);
           logger.log('info', 'card number 123456789012345 for testing');
@@ -70,14 +70,14 @@ vows.describe('winston/logger/filter').addBatch({
     topic: new (winston.Logger)({transports: [
       new (winston.transports.Console)({ level: 'info' })
     ]}),
-    "the addFilter() method filtering a message and metadata": {
+    "the addFilter() method adding a filter for the message and metadata": {
       topic: function (logger) {
         logger.addFilter(function (msg, meta) {
           return maskSecrets(msg, meta);
         });
         return logger;
       },
-      "the log() method": {
+      "the log() method with a filtered message and filtered metadata": {
         topic: function (logger) {
           logger.once('logging', this.callback);
           logger.log('info',
