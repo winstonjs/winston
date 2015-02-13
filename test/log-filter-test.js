@@ -36,7 +36,10 @@ function maskSecrets(msg, meta) {
     return maskedMeta;
   }, {});
 
-  return [msg, meta];
+  return {
+      msg: msg,
+      meta: meta
+  };
 }
 
 vows.describe('winston/logger/filter').addBatch({
