@@ -54,6 +54,9 @@ The default logger is accessible through the winston module directly. Any method
 
   winston.log('info', 'Hello distributed log files!');
   winston.info('Hello again distributed logs');
+
+  winston.level = 'debug';
+  winston.log('debug', 'Now my debug messages are written to console!');
 ```
 
 By default, only the Console transport is set on the default logger. You can add or remove transports via the add() and remove() methods:
