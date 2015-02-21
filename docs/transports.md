@@ -23,6 +23,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Mail](#mail-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
   * [Graylog2](#graylog2-transport)
+  * [Azure Table](#azure-table)
 
 ## Winston Core
 
@@ -349,6 +350,24 @@ In addition to the options accepted by the [Node.js Cassandra driver](https://gi
 Array of strings containing the hosts, for example `['host1', 'host2']` (required).
 * __keyspace:__ The name of the keyspace that will contain the logs table (required). The keyspace should be already created in the cluster.
 
+### Azure Table
+
+[winston-azuretable][21] is a Azure Table transport:
+
+``` js
+  var azureLogger = require('winston-azuretable').AzureLogger
+  winston.add(azureLogger, options);
+```
+
+The Azure Table transport connects to an Azure Storage Account using the following options:
+
+* __useDevStorage__: Boolean flag denoting whether to use the Azure Storage Emulator (default: `false`)
+* __account__: Azure Storage Account Name. In lieu of this setting, you can set the environment variable: `AZURE_STORAGE_ACCOUNT`
+* __key__: Azure Storage Account Key. In lieu of this setting, you can set the environment variable: `AZURE_STORAGE_ACCESS_KEY`
+* __level__: lowest logging level transport to be logged (default: `info`)
+* __tableName__: name of the table to log messages (default: `log`)
+* __partitionKey__: table partition key to use (default: `process.env.NODE_ENV`)
+* __silent__: Boolean flag indicating whether to suppress output (default: `false`)
 
 ## Find more Transports
 
@@ -404,3 +423,4 @@ Array of strings containing the hosts, for example `['host1', 'host2']` (require
 [18]: https://github.com/jesseditson/winston-sns
 [19]: https://github.com/namshi/winston-graylog2
 [20]: https://github.com/jorgebay/winston-cassandra
+[21]: https://github.com/jpoon/winston-azuretable
