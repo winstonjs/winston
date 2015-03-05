@@ -938,9 +938,11 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
 ```
 
 ### Custom Log Format
-To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Memory.
-Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
+To specify custom log format you can set a formatter function or a string
+containing a [lodash template](https://lodash.com/docs#template) for the
+transport. Currently supported transports are: Console, File, Memory. An options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
 
+#### Formatter Function
 ``` js
 var logger = new (winston.Logger)({
   transports: [
@@ -953,6 +955,18 @@ var logger = new (winston.Logger)({
         return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
           (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
       }
+    })
+  ]
+});
+logger.info('Data to log.');
+```
+
+#### Formatter [Lodash Template](https://lodash.com/docs#template)
+``` js
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      formatter: "<%-new Date().getTime()%> <%-level.toUpperCase()%> <%-_.isString(message)?message+' ':''%><%-!_.isEmpty(meta)?'\\n'+JSON.stringify(meta):''%>"
     })
   ]
 });
