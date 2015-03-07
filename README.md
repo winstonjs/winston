@@ -1,4 +1,4 @@
-# winston [![Build Status](https://secure.travis-ci.org/winstonjs/winston.svg?branch=master)](http://travis-ci.org/flatiron/winston)
+# winston [![Build Status](https://secure.travis-ci.org/winstonjs/winston.svg?branch=master)](http://travis-ci.org/winstonjs/winston)
 
 A multi-transport async logging library for node.js. <span style="font-size:28px; font-weight:bold;">&quot;CHILL WINSTON! ... I put it in the logs.&quot;</span>
 
@@ -21,7 +21,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
   * [String interpolation](#string-interpolation)
-* [Transports](https://github.com/flatiron/winston/blob/master/docs/transports.md)
+* [Transports](https://github.com/winstonjs/winston/blob/master/docs/transports.md)
   * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
