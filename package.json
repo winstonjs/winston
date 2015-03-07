@@ -8,7 +8,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/flatiron/winston.git"
+    "url": "https://github.com/winstonjs/winston.git"
   },
   "keywords": [
     "logging",
@@ -39,7 +39,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/flatiron/winston/master/LICENSE"
+      "url": "https://raw.github.com/winstonjs/winston/master/LICENSE"
     }
   ]
 }
