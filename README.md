@@ -667,6 +667,7 @@ The Console transport takes a few simple options:
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
 * __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
+* __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. (default false)
 
 *Metadata:* Logged via util.inspect(meta);
 
