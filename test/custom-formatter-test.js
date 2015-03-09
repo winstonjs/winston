@@ -28,14 +28,18 @@ function assertFileFormatter (basename, options) {
       // We must wait until transport file has emitted the 'flush'
       // event to be sure the file has been created and written
       transport.once('flush', this.callback.bind(this, null, filename));
-      transport.log('info', 'What does the fox say?', null, function () {});
+      transport.log('info', 'What does the fox say?', options.meta, function () {});
     },
     "should log with the appropriate format": function (_, filename) {
       var data = fs.readFileSync(filename, 'utf8');
-      assert.isNotNull(data.match(options.pattern));
+      assert.isNotNull(data.match(options.pattern),
+        "Expected file to match: '" + options.pattern +"', but it contained: '" + data + "'");
     }
-  }
+  };
 }
+
+var objectWithCircularReference = { a: 1 };
+objectWithCircularReference.self = objectWithCircularReference;
 
 vows.describe('winston/transport/formatter').addBatch({
   "Without formatter": {
@@ -67,7 +71,18 @@ vows.describe('winston/transport/formatter').addBatch({
           return params.timestamp() +' '+ params.level.toUpperCase() +' '+ (undefined !== params.message ? params.message : '') +
             ( params.meta && Object.keys(params.meta).length ? '\n'+ JSON.stringify(params.meta) : '' );
         }
-      })
+      }),
+      "and function value with custom format when a meta object has a circular reference": assertFileFormatter('customFormatterWithCircularReference', {
+        pattern: /^info:/,
+        json: false,
+        meta: objectWithCircularReference,
+        timestamp: function() {
+          return Date.now();
+        },
+        formatter: function(params) {
+          return 'info:' + params.message + params.meta;
+        }
+      }),
     }
   }
 }).export(module);
