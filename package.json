@@ -1,6 +1,6 @@
 {
-  "name": "winston",
-  "description": "A multi-transport async logging library for Node.js",
+  "name": "noobaa-fixes-winston",
+  "description": "A multi-transport async logging library for Node.js, a wrapper with bug fixes by NooBaa",
   "version": "0.9.0",
   "author": "Nodejitsu Inc. <info@nodejitsu.com>",
   "maintainers": [
@@ -8,7 +8,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/winstonjs/winston.git"
+    "url": "https://github.com/noobaa/winston"
   },
   "keywords": [
     "logging",
