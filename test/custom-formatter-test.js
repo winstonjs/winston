@@ -73,14 +73,14 @@ vows.describe('winston/transport/formatter').addBatch({
         }
       }),
       "and function value with custom format when a meta object has a circular reference": assertFileFormatter('customFormatterWithCircularReference', {
-        pattern: /^info:/,
+        pattern: /^I did not throw/,
         json: false,
         meta: objectWithCircularReference,
         timestamp: function() {
           return Date.now();
         },
         formatter: function(params) {
-          return 'info:' + params.message + params.meta;
+          return 'I did not throw' + params.message + params.meta;
         }
       }),
     }
