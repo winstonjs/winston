@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "async": "0.9.x",
+    "clone": "^1.0.1",
     "colors": "1.0.x",
     "cycle": "1.0.x",
     "eyes": "0.1.x",
