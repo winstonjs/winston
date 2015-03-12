@@ -82,7 +82,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
             } else {
               // The other files should be exist
               assert.doesNotThrow(function () {
-                  fs.statSync(fullpath);
+                fs.statSync(fullpath);
               }, Error);
             }
           }
