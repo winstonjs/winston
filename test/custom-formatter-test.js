@@ -57,6 +57,16 @@ vows.describe('winston/transport/formatter').addBatch({
         json: false,
         formatter: {}
       }),
+      "with value set to string lodash template": assertFileFormatter('customFormatterStringTemplate', {
+        pattern: /^\d{13,} INFO What does the fox say\?/,
+        json: false,
+        formatter: "<%-new Date().getTime()%> <%-level.toUpperCase()%> <%-_.isString(message)?message+' ':''%><%-_.isObject(meta)?'\\n'+JSON.stringify(params.meta):''%>"
+      }),
+      "with value set to string": assertFileFormatter('customFormatterStringPlain', {
+        pattern: /info\:/,
+        json: false,
+        formatter: "My boring string should be ignored"
+      }),
       "and function value with custom format": assertFileFormatter('customFormatter', {
         pattern: /^\d{13,} INFO What does the fox say\?/,
         json: false,
