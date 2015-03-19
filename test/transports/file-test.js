@@ -22,6 +22,9 @@ var stream = fs.createWriteStream(
     fileTransport = new (winston.transports.File)({
       filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log')
     }),
+    failedFileTransport = new (winston.transports.File)({
+      filename: path.join(__dirname, '..', 'fixtures', 'logs', 'dir404', 'testfile.log')
+    }),
     streamTransport = new (winston.transports.File)({ stream: stream });
 
 vows.describe('winston/transports/file').addBatch({
@@ -34,6 +37,14 @@ vows.describe('winston/transports/file').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    },
+    "when passed an invalid filename": {
+      "should have proper methods defined": function () {
+        helpers.assertFile(failedFileTransport);
+      },
+      "should enter noop failed state": function () {
+        helpers.assertFailedTransport(failedFileTransport);
+      }
     },
     "when passed a valid file stream": {
       "should have the proper methods defined": function () {

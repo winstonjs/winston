@@ -127,8 +127,30 @@ helpers.assertHandleExceptions = function (options) {
         assert.equal('uncaughtException: ' + options.message, data.message);
       }
     }
-  }
-}
+  };
+};
+
+helpers.assertFailedTransport = function (transport) {
+  return {
+    topic: function () {
+      var self = this;
+      transport.on('error', function(emitErr){
+        transport.log('error', 'test message 2', {}, function(logErr, logged){
+          self.callback(emitErr, logErr);
+        });
+      });
+      transport.log('error', 'test message');
+    },
+    "should emit an error": function (emitErr, logErr) {
+      assert.instanceOf(emitErr, Error);
+      assert.equal(emitErr.code, 'ENOENT');
+    },
+    "should enter noop failed state": function (emitErr, logErr) {
+      assert.instanceOf(logErr, Error);
+      assert.equal(transport._failures, transport.maxRetries);
+    }
+  };
+};
 
 helpers.testNpmLevels = function (transport, assertMsg, assertFn) {
   return helpers.testLevels(winston.config.npm.levels, transport, assertMsg, assertFn);
