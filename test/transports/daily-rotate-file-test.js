@@ -22,6 +22,9 @@ var stream = fs.createWriteStream(
       filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log'),
       datePattern: '.yyyy-MM-dd'
     }),
+    failedDailyRotateFileTransport = new (winston.transports.DailyRotateFile)({
+      filename: path.join(__dirname, '..', 'fixtures', 'logs', 'dir404', 'testfile.log')
+    }),
     streamTransport = new (winston.transports.DailyRotateFile)({ stream: stream });
 
 vows.describe('winston/transports/daily-rotate-file').addBatch({
@@ -34,6 +37,14 @@ vows.describe('winston/transports/daily-rotate-file').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    },
+    "when passed an invalid filename": {
+      "should have proper methods defined": function () {
+        helpers.assertDailyRotateFile(failedDailyRotateFileTransport);
+      },
+      "should enter noop failed state": function () {
+        helpers.assertFailedTransport(failedDailyRotateFileTransport);
+      }
     },
     "when passed a valid file stream": {
       "should have the proper methods defined": function () {
