@@ -706,9 +706,10 @@ The File transport should really be the 'Stream' transport since it will accept 
 
 The Daily Rotate File transport lets you rotate log files based on time.
 
-In addition to the options accepted by the File transport, the Daily Rotate File Transport also accepts the following option.
+In addition to the options accepted by the File transport, the Daily Rotate File Transport also accepts the following options:
 
-* __datePattern:__ Defines rolling time of a log file and suffix appended to the file. Following meta characters can be used: `yy`, `yyyy`, `M`, `MM`, `d`, `dd`, `H`, `HH`, `m`, `mm`. The default pattern is `'.yyyy-MM-dd'`. Rotation time of the log file will be equal to the smallest given time token timespan, so `'.yyyy-MM-ddTHH'` will rotate logfile every hour. You can not rotate files more frequent then every minute.
+* __datePattern:__ Defines rolling time of a log file and suffix appended/prepended to the file. Following meta characters can be used: `yy`, `yyyy`, `M`, `MM`, `d`, `dd`, `H`, `HH`, `m`, `mm`. The default pattern is `'.yyyy-MM-dd'`. Rotation time of the log file will be equal to the smallest given time token timespan, so `'.yyyy-MM-ddTHH'` will rotate logfile every hour. You can not rotate files more frequent then every minute.
+* __prepend:__ Defines if the rolling time of the log file should be prepended at the begging of the filename (default `false`)
 
 ### Loggly Transport
 ``` js
