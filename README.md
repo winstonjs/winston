@@ -138,7 +138,7 @@ logger.remove('info-file');
 
 In this example one could also remove by passing in the instance of the Transport itself. e.g. this is equivalent to the string example above;
 
-```
+``` js
 // Notice it was first in the Array above
 var infoFile = logger.transports[0];
 logger.remove(infoFile);
@@ -295,7 +295,7 @@ Example 1
 
 Example 2
 
-```
+``` js
 var logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
