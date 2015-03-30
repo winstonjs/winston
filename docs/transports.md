@@ -53,6 +53,7 @@ The Console transport takes four simple options:
 * __stringify:__ Boolean flag indiciating if the output should be passed through JSON.stringify, resulting in single-line output. Most useful when used in conjunction with the json flag. (default false)
 * __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
+* __humanReadableUnhandledException__ Boolean flag indicating if uncaught exception should be output as human readable, instead of a single line
 
 *Metadata:* Logged via util.inspect(meta);
 
