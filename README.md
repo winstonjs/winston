@@ -774,7 +774,6 @@ For more information about its arguments, check [winston-mongodb's README][16].
 * __port:__ The port on the host that MongoDB is running on, defaults to MongoDB's default port.
 
 *Metadata:* Logged as a native JSON object.
->>>>>>> 3b57730... Custom log formatter functionality were added.
 
 ### SimpleDB Transport
 
