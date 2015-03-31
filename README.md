@@ -913,7 +913,7 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
   var util = require('util'),
       winston = require('winston');
 
-  var CustomLogger = winston.transports.CustomerLogger = function (options) {
+  var CustomLogger = winston.transports.CustomLogger = function (options) {
     //
     // Name this logger
     //
