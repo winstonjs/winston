@@ -24,6 +24,16 @@ var stream = fs.createWriteStream(
     }),
     streamTransport = new (winston.transports.DailyRotateFile)({ stream: stream });
 
+var streamPrepended = fs.createWriteStream(
+      path.join(__dirname, '..', 'fixtures', 'logs', '2015-03-21_testfile.log')
+    ), 
+    dailyRotateFileTransportPrepended = new (winston.transports.DailyRotateFile)({
+      filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log'), 
+      datePattern: 'yyyy-MM-dd_', 
+      prepend: true
+    }), 
+    streamTransportPrepended = new (winston.transports.DailyRotateFile)({ stream: streamPrepended });
+
 vows.describe('winston/transports/daily-rotate-file').addBatch({
   "An instance of the Daily Rotate File Transport": {
     "when passed a valid filename": {
@@ -44,6 +54,20 @@ vows.describe('winston/transports/daily-rotate-file').addBatch({
         assert.isTrue(logged);
       })
     }
+  }, 
+  "An instance of the Daily Rotate File Transport with 'prepend' option": {
+    "when passed a valid filename": {
+      "the log() method": helpers.testNpmLevels(dailyRotateFileTransportPrepended, "should respond with true", function (ign, err, logged) {
+        assert.isNull(err);
+        assert.isTrue(logged);
+      })
+    }, 
+    "when passed a valid file stream": {
+      "the log() method": helpers.testNpmLevels(streamTransportPrepended, "should respond with true", function (ign, err, logged) {
+        assert.isNull(err);
+        assert.isTrue(logged);
+      })
+    }
   }
 }).addBatch({
   "These tests have a non-deterministic end": {
@@ -58,5 +82,10 @@ vows.describe('winston/transports/daily-rotate-file').addBatch({
   "An instance of the Daily Rotate File Transport": transport(winston.transports.DailyRotateFile, {
     filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log'),
     datePattern: '.2012-12-18'
+  }), 
+  "An instance of the Daily Rotate File Transport with 'prepend' option": transport(winston.transports.DailyRotateFile, {
+    filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log'), 
+    datePattern: '2015-03-21_', 
+    prepend: true
   })
 }).export(module);
