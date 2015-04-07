@@ -2,6 +2,7 @@
 
 ### Breaking Changes
   * [#587](https://github.com/winstonjs/winston/pull/587) Do not extend `String` prototypes as a side effect of using `colors`.
+  * [#583](https://github.com/winstonjs/winston/pull/583) Use `os.EOL` for all file writing by default.
   * [#380](https://github.com/winstonjs/winston/pull/380) Rename `duration` to `durationMs`, which is now a number a not a string ending in `ms`.
 
 ## v0.9.0 / 2015-02-03
