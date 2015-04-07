@@ -1,3 +1,9 @@
+## v1.0.0 / 2015-04-07
+
+### Breaking Changes
+  * [#587](https://github.com/winstonjs/winston/pull/587) Do not extend `String` prototypes as a side effect of using `colors`.
+  * [#380](https://github.com/winstonjs/winston/pull/380) Rename `duration` to `durationMs`, which is now a number a not a string ending in `ms`.
+
 ## v0.9.0 / 2015-02-03
 
   * [#496](https://github.com/flatiron/winston/pull/496) Updated default option handling for CLI (`oojacoboo`).
