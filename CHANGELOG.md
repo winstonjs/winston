@@ -8,6 +8,15 @@
   * [#380](https://github.com/winstonjs/winston/pull/380) Rename `duration` to `durationMs`, which is now a number a not a string ending in `ms`. (`neoziro`)
   * [#253](https://github.com/winstonjs/winston/pull/253) Do not set a default level. When `level` is falsey on any `Transport` instance, any `Logger` instance uses the configured level (instead of the Transport level) (`jstamerj`).
 
+### Other changes
+
+  * [b83de62](https://github.com/winstonjs/winston/commit/b83de62) Fix rendering of stack traces.
+  * [c899cc](https://github.com/winstonjs/winston/commit/c899cc1f0719e49b26ec933e0fa263578168ea3b) Update documentation (Fixes [#549](https://github.com/winstonjs/winston/issues/549))
+  * [#551](https://github.com/winstonjs/winston/pull/551) Filter metadata along with messages
+  * [#578](https://github.com/winstonjs/winston/pull/578) Fixes minor issue with `maxFiles` in `File` transport (Fixes [#556](https://github.com/winstonjs/winston/issues/556)).
+  * [#560](https://github.com/winstonjs/winston/pull/560) Added `showLevel` support to `File` transport.
+  * [#558](https://github.com/winstonjs/winston/pull/558) Added `showLevel` support to `Console` transport.
+
 ## v0.9.0 / 2015-02-03
 
   * [#496](https://github.com/flatiron/winston/pull/496) Updated default option handling for CLI (`oojacoboo`).
