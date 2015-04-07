@@ -1,9 +1,12 @@
 ## v1.0.0 / 2015-04-07
 
 ### Breaking Changes
-  * [#587](https://github.com/winstonjs/winston/pull/587) Do not extend `String` prototypes as a side effect of using `colors`.
-  * [#583](https://github.com/winstonjs/winston/pull/583) Use `os.EOL` for all file writing by default.
-  * [#380](https://github.com/winstonjs/winston/pull/380) Rename `duration` to `durationMs`, which is now a number a not a string ending in `ms`.
+  * [#587](https://github.com/winstonjs/winston/pull/587) Do not extend `String` prototypes as a side effect of using `colors`. (`kenperkins`)
+  * [#581](https://github.com/winstonjs/winston/pull/581) File transports now emit `error` on error of the underlying streams after `maxRetries` attempts. (`ambbell`).
+  * [#583](https://github.com/winstonjs/winston/pull/583), [92729a](https://github.com/winstonjs/winston/commit/92729a68d71d07715501c35d94d2ac06ac03ca08) Use `os.EOL` for all file writing by default. (`Mik13`, `indexzero`)
+  * [#532](https://github.com/winstonjs/winston/pull/532) Delete logger instance from `Container` when `close` event is emitted. (`snater`)
+  * [#380](https://github.com/winstonjs/winston/pull/380) Rename `duration` to `durationMs`, which is now a number a not a string ending in `ms`. (`neoziro`)
+  * [#253](https://github.com/winstonjs/winston/pull/253) Do not set a default level. When `level` is falsey on any `Transport` instance, any `Logger` instance uses the configured level (instead of the Transport level) (`jstamerj`).
 
 ## v0.9.0 / 2015-02-03
 
