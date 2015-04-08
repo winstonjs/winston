@@ -8,7 +8,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Console](#console-transport)
   * [File](#file-transport)
   * [DailyRotateFile](#dailyrotatefile-transport)
-  * [Http](#http-transport)li
+  * [Http](#http-transport)
   * [Webhook](#webhook-transport)
 
 * **[Winston More](#winston-more)**
