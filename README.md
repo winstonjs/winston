@@ -693,6 +693,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
 * __formatter:__ If function is specified and `json` is set to `false`, its return value will be used instead of default output. (default undefined)
 * __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.
+* __zippedArchive:__ If true, all log files but the current one will be zipped.
 
 *Metadata:* Logged via util.inspect(meta);
 
