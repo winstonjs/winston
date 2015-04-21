@@ -1,14 +1,14 @@
 {
   "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
-  "version": "0.7.2",
+  "version": "1.0.0",
   "author": "Nodejitsu Inc. <info@nodejitsu.com>",
   "maintainers": [
     "indexzero <charlie@nodejitsu.com>"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/flatiron/winston.git"
+    "url": "https://github.com/winstonjs/winston.git"
   },
   "keywords": [
     "logging",
@@ -16,15 +16,17 @@
     "tools"
   ],
   "dependencies": {
-    "async": "0.2.x",
-    "colors": "0.6.x",
+    "async": "0.9.x",
+    "colors": "1.0.x",
     "cycle": "1.0.x",
     "eyes": "0.1.x",
+    "isstream": "0.1.x",
     "pkginfo": "0.3.x",
-    "request": "2.16.x",
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
+    "hock": "1.x.x",
+    "std-mocks": "~1.0.0",
     "vows": "0.7.x"
   },
   "main": "./lib/winston",
@@ -32,12 +34,12 @@
     "test": "vows --spec --isolate"
   },
   "engines": {
-    "node": ">= 0.6.0"
+    "node": ">= 0.8.0"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/flatiron/winston/master/LICENSE"
+      "url": "https://raw.github.com/winstonjs/winston/master/LICENSE"
     }
   ]
 }

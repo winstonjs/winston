@@ -110,7 +110,34 @@ vows.describe('winston/logger/levels').addBatch({
         "should join and have a meta object": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message first second');
           assert.deepEqual(meta, {number: 123});
-        }    
+        }
+      },
+      "when custom levels are set": {
+        "should not fail with 'RangeError: Maximum call stack size exceeded": function (logger) {
+          var that = this;
+
+          // Logging levels
+          var customLevels = {
+            levels: {
+              none: 0,
+              log: 1,
+            }
+          };
+
+          var logger = winston.loggers.add('hello243', { });
+          try {
+            logger.setLevels(customLevels.levels);
+          } catch (e) {
+            assert.equal('Error', e.name);
+          }
+          try {
+            logger.log('none', 'hi', function (err) {
+              assert.ifError(err);
+            });
+          } catch (e)  {
+            assert.ifError(e);
+          }
+        }
       }
     }
 }).export(module);

@@ -1,4 +1,4 @@
-# winston [![Build Status](https://secure.travis-ci.org/flatiron/winston.png?branch=master)](http://travis-ci.org/flatiron/winston)
+# winston [![Build Status](https://secure.travis-ci.org/winstonjs/winston.svg?branch=master)](http://travis-ci.org/winstonjs/winston)
 
 A multi-transport async logging library for node.js. <span style="font-size:28px; font-weight:bold;">&quot;CHILL WINSTON! ... I put it in the logs.&quot;</span>
 
@@ -9,7 +9,7 @@ There also seemed to be a lot of logging libraries out there that coupled their 
 
 ## Installation
 
-```bash
+```bashp
 npm install winston
 ```
 
@@ -20,11 +20,12 @@ There are two different ways to use winston: directly via the default logger, or
   * [Using the Default Logger](#using-the-default-logger)
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
-  * [String interpolation ](#string-interpolation)
-* [Transports](https://github.com/flatiron/winston/blob/master/docs/transports.md)
+  * [String interpolation](#string-interpolation)
+* [Transports](https://github.com/winstonjs/winston/blob/master/docs/transports.md)
+  * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
-* [Querying Logs](#querying-logs)  
+* [Querying Logs](#querying-logs)
 * [Exceptions](#exceptions)
   * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
   * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
@@ -36,8 +37,9 @@ There are two different ways to use winston: directly via the default logger, or
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
   * [Extending another object with Logging](#extending-another-object-with-logging)
+  * [Filters](#filters)
 * [Working with transports](#working-with-transports)
-	* [Adding Custom Transports](#adding-custom-transports)
+    * [Adding Custom Transports](#adding-custom-transports)
 * [Installation](#installation)
 * [Run Tests](#run-tests)
 
@@ -52,6 +54,9 @@ The default logger is accessible through the winston module directly. Any method
 
   winston.log('info', 'Hello distributed log files!');
   winston.info('Hello again distributed logs');
+
+  winston.level = 'debug';
+  winston.log('debug', 'Now my debug messages are written to console!');
 ```
 
 By default, only the Console transport is set on the default logger. You can add or remove transports via the add() and remove() methods:
@@ -99,10 +104,45 @@ In addition to logging string messages, winston will also optionally log additio
   winston.log('info', 'Test Log Message', { anything: 'This is metadata' });
 ```
 
-The way these objects is stored varies from transport to transport (to best support the storage mechanisms offered). Here's a quick summary of how each transports handles metadata:
+The way these objects are stored varies from transport to transport (to best support the storage mechanisms offered). Here's a quick summary of how each transports handles metadata:
 
 1. __Console:__ Logged via util.inspect(meta)
 2. __File:__ Logged via util.inspect(meta)
+
+## Multiple transports of the same type
+
+It is possible to use multiple transports of the same type e.g. `winston.transports.File` by passing in a custom `name` when you construct the transport.
+
+``` js
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.File)({
+      name: 'info-file',
+      filename: 'filelog-info.log',
+      level: 'info'
+    }),
+    new (winston.transports.File)({
+      name: 'error-file',
+      filename: 'filelog-error.log',
+      level: 'error'
+    })
+  ]
+});
+```
+
+If you later want to remove one of these transports you can do so by using the string name. e.g.:
+
+``` js
+logger.remove('info-file');
+```
+
+In this example one could also remove by passing in the instance of the Transport itself. e.g. this is equivalent to the string example above;
+
+``` js
+// Notice it was first in the Array above
+var infoFile = logger.transports[0];
+logger.remove(infoFile);
+```
 
 ## Profiling
 In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
@@ -126,7 +166,7 @@ In addition to logging messages and metadata, winston also has a simple profilin
 All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
 ### String interpolation
-The `log` method provides the same string interpolation methods like [`util.format`][10].  
+The `log` method provides the same string interpolation methods like [`util.format`][10].
 
 This allows for the following log messages.
 ``` js
@@ -148,12 +188,12 @@ logger.log('info', 'test message', 'first', 'second', {number: 123});
 // info: test message first second
 // meta = {number: 123}
 
-logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function();
+logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function(){});
 // info: test message first, second
 // meta = {numer: 123}
 // callback = function(){}
 
-logger.log('info', 'test message', 'first', 'second', {number: 123}, function());
+logger.log('info', 'test message', 'first', 'second', {number: 123}, function(){});
 // info: test message first second
 // meta = {numer: 123}
 // callback = function(){}
@@ -164,13 +204,17 @@ logger.log('info', 'test message', 'first', 'second', {number: 123}, function())
 
 
 ## Querying Logs
-Winston supports querying of logs with Loggly-like options.
+Winston supports querying of logs with Loggly-like options. [See Loggly Search API](http://wiki.loggly.com/retrieve_events#optional).
 Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
 
 ``` js
   var options = {
     from: new Date - 24 * 60 * 60 * 1000,
-    until: new Date
+    until: new Date,
+    limit: 10,
+    start: 0,
+    order: 'desc',
+    fields: ['message']
   };
 
   //
@@ -180,7 +224,7 @@ Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
     if (err) {
       throw err;
     }
-    
+
     console.log(results);
   });
 ```
@@ -222,7 +266,7 @@ If you want to use this feature with the default logger simply call `.handleExce
 
 ### To Exit or Not to Exit
 
-by default, winston will exit after logging an uncaughtException. if this is not the behavior you want,
+By default, winston will exit after logging an uncaughtException. if this is not the behavior you want,
 set `exitOnError = false`
 
 ``` js
@@ -242,7 +286,7 @@ Example 1
   var logger = new (winston.Logger)({
     transports: [
       new winston.transports.File({ filename: 'path/to/all-logs.log' })
-    ]
+    ],
     exceptionHandlers: [
       new winston.transports.File({ filename: 'path/to/exceptions.log' })
     ]
@@ -251,7 +295,7 @@ Example 1
 
 Example 2
 
-```
+``` js
 var logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
@@ -287,6 +331,9 @@ Setting the level for your logging message can be accomplished in one of two way
   //
   // Any logger instance
   //
+  logger.log('silly', "127.0.0.1 - there's no place like home");
+  logger.log('debug', "127.0.0.1 - there's no place like home");
+  logger.log('verbose', "127.0.0.1 - there's no place like home");
   logger.log('info', "127.0.0.1 - there's no place like home");
   logger.log('warn', "127.0.0.1 - there's no place like home");
   logger.log('error', "127.0.0.1 - there's no place like home");
@@ -301,7 +348,7 @@ Setting the level for your logging message can be accomplished in one of two way
   winston.info("127.0.0.1 - there's no place like home");
 ```
 
-Winston allows you to set a `level` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file:
+Winston allows you to set a `level` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file (note that the default level of a transport is `info`):
 
 ``` js
   var logger = new (winston.Logger)({
@@ -310,6 +357,21 @@ Winston allows you to set a `level` on each transport that specifies the level o
       new (winston.transports.File)({ filename: 'somefile.log' })
     ]
   });
+```
+
+You may also dynamically change the log level of a transport:
+
+``` js
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)({ level: 'warn' }),
+      new (winston.transports.File)({ filename: 'somefile.log', level: 'error' })
+    ]
+  });
+  logger.debug("Will not be logged in either transport!");
+  logger.transports.console.level = 'debug';
+  logger.transports.file.level = 'verbose';
+  logger.verbose("Will be logged in both transports!");
 ```
 
 As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0] style logging levels. Changing logging levels is easy:
@@ -417,7 +479,7 @@ Often in larger, more complex applications it is necessary to have multiple logg
   winston.loggers.add('category1', {
     console: {
       level: 'silly',
-      colorize: 'true',
+      colorize: true,
       label: 'category one'
     },
     file: {
@@ -458,7 +520,7 @@ If you prefer to manage the `Container` yourself you can simply instantiate one:
   container.add('category1', {
     console: {
       level: 'silly',
-      colorize: 'true'
+      colorize: true
     },
     file: {
       filename: '/path/to/some/file'
@@ -569,24 +631,46 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
   myObject.info("127.0.0.1 - there's no place like home");
 ```
 
+### Filters
+Filters allow modifying the contents of log messages, e.g. to mask data that
+should not appear in logs.
+
+``` js
+logger.addFilter(function(msg) {
+  return maskCardNumbers(msg);
+});
+logger.info('transaction with card number 123456789012345 successful.');
+```
+
+This may result in this output:
+
+```
+info: transaction with card number 123456****2345 successful.
+```
+
+See [log-filter-test.js](./test/log-filter-test.js), where card number masking
+is implemented as an example.
+
 ## Working with Transports
-Right now there are four transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
-   
-1. __Console:__ Output to the terminal
-2. __Files:__ Append to a file
-3. __Loggly:__ Log to Logging-as-a-Service platform Loggly
+There are many transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
+
 
 ### Console Transport
 ``` js
   winston.add(winston.transports.Console, options)
 ```
 
-The Console transport takes two simple options:
+The Console transport takes a few simple options:
 
 * __level:__ Level of messages that this transport should log (default 'info').
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
+* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
+* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
+* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
+* __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. (default false)
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -602,12 +686,30 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __colorize:__ Boolean flag indicating if we should colorize output.
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default true). If function is specified, its return value will be used instead of timestamps.
 * __filename:__ The filename of the logfile to write output to.
-* __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created.
+* __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
+* __prettyPrint:__ If true, additional JSON metadata objects that are added to logging string messages will be displayed as a JSON string representation. If function is specified, its return value will be the string representing the meta.
+* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
+* __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
+* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
+* __formatter:__ If function is specified and `json` is set to `false`, its return value will be used instead of default output. (default undefined)
+* __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.
+* __maxRetries:__ The number of stream creation retry attempts before entering a failed state. In a failed state the transport stays active but performs a NOOP on it's log function. (default 2)
 
 *Metadata:* Logged via util.inspect(meta);
+
+### Daily Rotate File Transport
+``` js
+  winston.add(winston.transports.DailyRotateFile, options)
+```
+
+The Daily Rotate File transport lets you rotate log files based on time.
+
+In addition to the options accepted by the File transport, the Daily Rotate File Transport also accepts the following option.
+
+* __datePattern:__ Defines rolling time of a log file and suffix appended to the file. Following meta characters can be used: `yy`, `yyyy`, `M`, `MM`, `d`, `dd`, `H`, `HH`, `m`, `mm`. The default pattern is `'.yyyy-MM-dd'`. Rotation time of the log file will be equal to the smallest given time token timespan, so `'.yyyy-MM-ddTHH'` will rotate logfile every hour. You can not rotate files more frequent then every minute.
 
 ### Loggly Transport
 ``` js
@@ -615,9 +717,9 @@ The File transport should really be the 'Stream' transport since it will accept 
   winston.add(Loggly, options);
 ```
 
-The Loggly transport is based on [Nodejitsu's][5] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
+The Loggly transport is based on [Nodejitsu's][3] [node-loggly][6] implementation of the [Loggly][7] API. If you haven't heard of Loggly before, you should probably read their [value proposition][8]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
 
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __subdomain:__ The subdomain of your Loggly account. *[required]*
 * __auth__: The authentication information for your Loggly account. *[required with inputName]*
 * __inputName:__ The name of the input this instance should log to.
@@ -642,7 +744,7 @@ In addition to the options accepted by the [riak-js][3] [client][4], the Riak tr
 ``` js
   // Use a single bucket for all your logs
   var singleBucketTransport = new (Riak)({ bucket: 'some-logs-go-here' });
-  
+
   // Generate a dynamic bucket based on the date and level
   var dynamicBucketTransport = new (Riak)({
     bucket: function (level, msg, meta, now) {
@@ -662,9 +764,9 @@ As of `0.3.0` the MongoDB transport has been broken out into a new module: [wins
   winston.add(MongoDB, options);
 ```
 
-The MongoDB transport takes the following options. 'db' is required:
+For more information about its arguments, check [winston-mongodb's README][16].
 
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __db:__ The name of the database you want to log to. *[required]*
 * __collection__: The name of the collection you want to store log messages in, defaults to 'log'.
@@ -713,30 +815,34 @@ The Mail transport uses [emailjs](https://github.com/eleith/emailjs) behind the 
 * __password__ Password for server auth
 * __ssl:__ Use SSL (boolean or object { key, ca, cert })
 * __tls:__ Boolean (if true, use starttls)
-* __level:__ Level of messages that this transport should log. 
+* __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 
 *Metadata:* Stringified as JSON in email.
 
 ### Amazon SNS (Simple Notification System) Transport
 
-The [winston-sns][21] transport uses amazon SNS to send emails, texts, or a bunch of other notifications.
+The [winston-sns][18] transport uses amazon SNS to send emails, texts, or a bunch of other notifications. Since this transport uses the Amazon AWS SDK for JavaScript, you can take advantage of the various methods of authentication found in Amazon's [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) document.
 
 ``` js
-  require('winston-sns').SNS;
-  winston.add(winston.transports.SNS, options);
+  var winston = require('winston'),
+      winstonSNS = require('winston-sns');
+
+  winston.add(winstonSNS, options);
 ```
 
 Options:
 
-* __aws_key:__ Your Amazon Web Services Key. *[required]*
-* __aws_secret:__ Your Amazon Web Services Secret. *[required]*
 * __subscriber:__ Subscriber number - found in your SNS AWS Console, after clicking on a topic. Same as AWS Account ID. *[required]*
 * __topic_arn:__ Also found in SNS AWS Console - listed under a topic as Topic ARN. *[required]*
+* __aws_key:__ Your Amazon Web Services Key.
+* __aws_secret:__ Your Amazon Web Services Secret.
 * __region:__ AWS Region to use. Can be one of: `us-east-1`,`us-west-1`,`eu-west-1`,`ap-southeast-1`,`ap-northeast-1`,`us-gov-west-1`,`sa-east-1`. (default: `us-east-1`)
-* __subject:__ Subject for notifications. (default: "Winston Error Report")
+* __subject:__ Subject for notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Winston Error Report")
 * __message:__ Message of notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Level '%l' Error:\n%e\n\nMetadata:\n%m")
 * __level:__ lowest level this transport will log. (default: `info`)
+* __json:__ use json instead of a prettier (human friendly) string for meta information in the notification. (default: `false`)
+* __handleExceptions:__ set to true to have this transport handle exceptions. (default: `false`)
 
 ### Graylog2 Transport
 
@@ -779,6 +885,28 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
 
+### Cassandra Transport
+
+[winston-cassandra][24] is a Cassandra transport:
+
+``` js
+  var Cassandra = require('winston-cassandra').Cassandra;
+  winston.add(Cassandra, options);
+```
+
+The Cassandra transport connects to a cluster using the native protocol with the following options:
+
+* __level:__ Level of messages that this transport should log (default: `'info'`).
+* __table:__ The name of the Cassandra column family you want to store log messages in (default: `'logs'`).
+* __partitionBy:__ How you want the logs to be partitioned. Possible values `'hour'` and `'day'`(Default).
+* __consistency:__ The consistency of the insert query (default: `quorum`).
+
+In addition to the options accepted by the [Node.js Cassandra driver](https://github.com/datastax/nodejs-driver) Client.
+
+* __contactPoints:__ Cluster nodes that will handle the write requests:
+Array of strings containing the contact points, for example `['host1', 'host2']` (required).
+* __keyspace:__ The name of the keyspace that will contain the logs table (required). The keyspace should be already created in the cluster.
+
 ### Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
@@ -786,7 +914,7 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
   var util = require('util'),
       winston = require('winston');
 
-  var CustomLogger = winston.transports.CustomerLogger = function (options) {
+  var CustomLogger = winston.transports.CustomLogger = function (options) {
     //
     // Name this logger
     //
@@ -817,6 +945,28 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
   };
 ```
 
+### Custom Log Format
+To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Memory.
+Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
+
+``` js
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      timestamp: function() {
+        return Date.now();
+      },
+      formatter: function(options) {
+        // Return string will be passed to logger.
+        return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
+          (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+      }
+    })
+  ]
+});
+logger.info('Data to log.');
+```
+
 ### Inspirations
 1. [npm][0]
 2. [log.js][4]
@@ -838,7 +988,7 @@ Adding a custom transport (say for one of the datastore on the Roadmap) is actua
 ```
 
 ## Run Tests
-All of the winston tests are written in [vows][9], and designed to be run with npm. 
+All of the winston tests are written in [vows][9], and designed to be run with npm.
 
 ``` bash
   $ npm test
@@ -847,7 +997,7 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 #### Author: [Charlie Robbins](http://twitter.com/indexzero)
 #### Contributors: [Matthew Bergman](http://github.com/fotoverite), [Marak Squires](http://github.com/marak)
 
-[0]: https://github.com/isaacs/npm/blob/master/lib/utils/log.js
+[0]: https://github.com/npm/npmlog/blob/master/log.js
 [1]: http://nodejs.org/docs/v0.3.5/api/events.html#events.EventEmitter
 [2]: http://github.com/nodejitsu/require-analyzer
 [3]: http://nodejitsu.com
@@ -866,3 +1016,4 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [21]: https://github.com/jesseditson/winston-sns
 [22]: https://github.com/flite/winston-graylog2
 [23]: https://github.com/kenperkins/winston-papertrail
+[24]: https://github.com/jorgebay/winston-cassandra

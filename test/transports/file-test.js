@@ -11,6 +11,7 @@ var path = require('path'),
     fs = require('fs'),
     assert = require('assert'),
     winston = require('../../lib/winston'),
+    stdMocks = require('std-mocks'),
     helpers = require('../helpers');
 
 var transport = require('./transport');
@@ -20,6 +21,9 @@ var stream = fs.createWriteStream(
     ),
     fileTransport = new (winston.transports.File)({
       filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log')
+    }),
+    failedFileTransport = new (winston.transports.File)({
+      filename: path.join(__dirname, '..', 'fixtures', 'logs', 'dir404', 'testfile.log')
     }),
     streamTransport = new (winston.transports.File)({ stream: stream });
 
@@ -34,6 +38,14 @@ vows.describe('winston/transports/file').addBatch({
         assert.isTrue(logged);
       })
     },
+    "when passed an invalid filename": {
+      "should have proper methods defined": function () {
+        helpers.assertFile(failedFileTransport);
+      },
+      "should enter noop failed state": function () {
+        helpers.assertFailedTransport(failedFileTransport);
+      }
+    },
     "when passed a valid file stream": {
       "should have the proper methods defined": function () {
         helpers.assertFile(streamTransport);
@@ -42,6 +54,32 @@ vows.describe('winston/transports/file').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    },
+    "streaming to stdout": {
+      topic: function () {
+        var transport = new (winston.transports.File)({
+          stream: process.stdout, timestamp: false, json: false
+        });
+        stdMocks.use();
+        return transport;
+      },
+      "with showLevel off": {
+        topic: function (stdoutStreamTransport) {
+          stdoutStreamTransport.showLevel = false;
+          stdoutStreamTransport.log('info', '', undefined, this.callback);
+        },
+        "should not have level prepended": function () {
+          var output = stdMocks.flush(),
+            line = output.stdout[0];
+
+          assert.equal(line, '\n');
+        }
+      },
+      // there would be a "with showLevel on" here but I think it's a bug in
+      // this version of vows.  ugprading causes even more problems
+      teardown: function() {
+        stdMocks.restore();
+      }
     }
   }
 }).addBatch({

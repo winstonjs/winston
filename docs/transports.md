@@ -7,6 +7,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
 * **[Winston Core](#winston-core)**
   * [Console](#console-transport)
   * [File](#file-transport)
+  * [DailyRotateFile](#dailyrotatefile-transport)
   * [Http](#http-transport)
   * [Webhook](#webhook-transport)
 
@@ -16,19 +17,23 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [MongoDB](#mongodb-transport)
   * [Redis](#redis-transport)
   * [Riak](#riak-transport)
-  
+
 * **[Additional Transports](#additional-transports)**
   * [SimpleDB](#simpledb-transport)
   * [Mail](#mail-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
   * [Graylog2](#graylog2-transport)
+  * [Cassandra](#cassandra-transport)
+  * [Azure Table](#azure-table)
+  * [Airbrake](#airbrake-transport)
 
 ## Winston Core
 
-There are several core transports included in `winston`, which leverage the built-in networking and file I/O offered by node.js core.  
+There are several core transports included in `winston`, which leverage the built-in networking and file I/O offered by node.js core.
 
 * [Console](#console-transport)
 * [File](#file-transport)
+* [DailyRotateFile](#dailyrotatefile-transport)
 * [Http](#http-transport)
 * [Webhook](#webhook-transport)
 
@@ -38,12 +43,17 @@ There are several core transports included in `winston`, which leverage the buil
   winston.add(winston.transports.Console, options)
 ```
 
-The Console transport takes two simple options:
+The Console transport takes four simple options:
 
 * __level:__ Level of messages that this transport should log (default 'debug').
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __json:__ Boolean flag indicating whether or not the output should be JSON. If true, will log out multi-line JSON objects. (default false)
+* __stringify:__ Boolean flag indiciating if the output should be passed through JSON.stringify, resulting in single-line output. Most useful when used in conjunction with the json flag. (default false)
+* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
+* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
+* __humanReadableUnhandledException__ Boolean flag indicating if uncaught exception should be output as human readable, instead of a single line
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -64,6 +74,34 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
+* __eol:__ string indicating the end-of-live characters to use (default to `\n`).
+* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
+* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
+
+*Metadata:* Logged via util.inspect(meta);
+
+### DailyRotateFile Transport
+
+``` js
+  winston.add(winston.transports.DailyRotateFile, options)
+```
+
+The DailyRotateFile transport can rotate files by minute, hour, day, month or year. Its options are identical to the File transport with the lone addition of the 'datePattern' option:
+
+* __datePattern:__ A string representing the pattern to be used when appending the date to the filename (default '.yyyy-MM-dd'). The meta characters used in this string will dictate the frequency of the file rotation. For example if your datePattern is simply '.HH' you will end up with 24 log files that are picked up and appended to every day.
+
+Valid meta characters in the datePattern are:
+
+* __yy:__ Last two digits of the year.
+* __yyyy:__ Full year.
+* __M:__ The month.
+* __MM:__ The zero padded month.
+* __d:__ The day.
+* __dd:__ The zero padded day.
+* __H:__ The hour.
+* __HH:__ The zero padded hour.
+* __m:__ The minute.
+* __mm:__ The zero padded minute.
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -77,7 +115,7 @@ The `Http` transport is a generic way to log, query, and stream logs from an arb
 
 * __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
 * __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
-* __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint 
+* __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
 * __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
 
@@ -103,7 +141,7 @@ The `Couchdb` will place your logs in a remote CouchDB database. It will also cr
 
 * __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
 * __port:__ (Default: **5984**) Remote port of the HTTP logging endpoint
-* __db:__ (Default: **winston**) Remote URI of the HTTP logging endpoint 
+* __db:__ (Default: **winston**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
 * __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
 
@@ -123,7 +161,7 @@ In addition to these, the Redis transport also accepts the following options.
 
 * __length:__ (Default **200**) Number of log messages to store.
 * __container:__ (Default **winston**) Name of the Redis container you wish your logs to be in.
-* __channel:__ (Default **None**) Name of the Redis channel to stream logs from. 
+* __channel:__ (Default **None**) Name of the Redis channel to stream logs from.
 
 *Metadata:* Logged as JSON literal in Redis
 
@@ -251,72 +289,143 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 
 ### Amazon SNS (Simple Notification System) Transport
 
-The [winston-sns][18] transport uses amazon SNS to send emails, texts, or a bunch of other notifications.
+The [winston-sns][18] transport uses amazon SNS to send emails, texts, or a bunch of other notifications. Since this transport uses the Amazon AWS SDK for JavaScript, you can take advantage of the various methods of authentication found in Amazon's [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) document.
 
 ``` js
-  require('winston-sns').SNS;
-  winston.add(winston.transports.SNS, options);
+  var winston = require('winston'),
+      winstonSNS = require('winston-sns');
+
+  winston.add(winstonSNS, options);
 ```
 
 Options:
 
-* __aws_key:__ Your Amazon Web Services Key. *[required]*
-* __aws_secret:__ Your Amazon Web Services Secret. *[required]*
 * __subscriber:__ Subscriber number - found in your SNS AWS Console, after clicking on a topic. Same as AWS Account ID. *[required]*
 * __topic_arn:__ Also found in SNS AWS Console - listed under a topic as Topic ARN. *[required]*
+* __aws_key:__ Your Amazon Web Services Key.
+* __aws_secret:__ Your Amazon Web Services Secret.
 * __region:__ AWS Region to use. Can be one of: `us-east-1`,`us-west-1`,`eu-west-1`,`ap-southeast-1`,`ap-northeast-1`,`us-gov-west-1`,`sa-east-1`. (default: `us-east-1`)
-* __subject:__ Subject for notifications. (default: "Winston Error Report")
+* __subject:__ Subject for notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Winston Error Report")
 * __message:__ Message of notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Level '%l' Error:\n%e\n\nMetadata:\n%m")
 * __level:__ lowest level this transport will log. (default: `info`)
+* __json:__ use json instead of a prettier (human friendly) string for meta information in the notification. (default: `false`)
+* __handleExceptions:__ set to true to have this transport handle exceptions. (default: `false`)
 
 ### Graylog2 Transport
 
 [winston-graylog2][19] is a Graylog2 transport:
 
 ``` js
-  var Graylog2 = require('winston-graylog2').Graylog2;
-  winston.add(Graylog2, options);
+  var winston = require('winston');
+  winston.add(require('winston-graylog2'), options);
 ```
 
 The Graylog2 transport connects to a Graylog2 server over UDP using the following options:
 
-* __level:__ Level of messages this transport should log. (default: info)
-* __silent:__ Boolean flag indicating whether to suppress output. (default: false)
+* __name__:  Transport name
+* __level__: Level of messages this transport should log. (default: info)
+* __silent__: Boolean flag indicating whether to suppress output. (default: false)
+* __handleExceptions__: Boolean flag, whenever to handle uncaught exceptions. (default: false)
+* __graylog__:
+  - __servers__; list of graylog2 servers
+    * __host__: your server address (default: localhost)
+    * __port__: your server port (default: 12201)
+  - __hostname__: the name of this host (default: os.hostname())
+  - __facility__: the facility for these log messages (default: "Node.js")
+  - __bufferSize__: max UDP packet size, should never exceed the MTU of your system (default: 1400)
 
-* __graylogHost:__ IP address or hostname of the graylog2 server. (default: localhost)
-* __graylogPort:__ Port to send messages to on the graylog2 server. (default: 12201)
-* __graylogHostname:__ The hostname associated with graylog2 messages. (default: require('os').hostname())
-* __graylogFacility:__ The graylog2 facility to send log messages.. (default: nodejs)
 
-*Metadata:* Stringified as JSON in the full message GELF field.
+### Cassandra Transport
+
+[winston-cassandra][20] is a Cassandra transport:
+
+``` js
+  var Cassandra = require('winston-cassandra').Cassandra;
+  winston.add(Cassandra, options);
+```
+
+The Cassandra transport connects to a cluster using the native protocol with the following options:
+
+* __level:__ Level of messages that this transport should log (default: `'info'`).
+* __table:__ The name of the Cassandra column family you want to store log messages in (default: `'logs'`).
+* __partitionBy:__ How you want the logs to be partitioned. Possible values `'hour'` and `'day'`(Default).
+* __consistency:__ The consistency of the insert query (default: `quorum`).
+
+In addition to the options accepted by the [Node.js Cassandra driver](https://github.com/jorgebay/node-cassandra-cql) Client.
+
+* __hosts:__ Cluster nodes that will handle the write requests:
+Array of strings containing the hosts, for example `['host1', 'host2']` (required).
+* __keyspace:__ The name of the keyspace that will contain the logs table (required). The keyspace should be already created in the cluster.
+
+### Azure Table
+
+[winston-azuretable][21] is a Azure Table transport:
+
+``` js
+  var azureLogger = require('winston-azuretable').AzureLogger
+  winston.add(azureLogger, options);
+```
+
+The Azure Table transport connects to an Azure Storage Account using the following options:
+
+* __useDevStorage__: Boolean flag denoting whether to use the Azure Storage Emulator (default: `false`)
+* __account__: Azure Storage Account Name. In lieu of this setting, you can set the environment variable: `AZURE_STORAGE_ACCOUNT`
+* __key__: Azure Storage Account Key. In lieu of this setting, you can set the environment variable: `AZURE_STORAGE_ACCESS_KEY`
+* __level__: lowest logging level transport to be logged (default: `info`)
+* __tableName__: name of the table to log messages (default: `log`)
+* __partitionKey__: table partition key to use (default: `process.env.NODE_ENV`)
+* __silent__: Boolean flag indicating whether to suppress output (default: `false`)
+
+### Airbrake Transport
+
+[winston-airbrake2][22] is a transport for winston that sends your logs to Airbrake.io.
+
+``` js
+  var winston = require('winston');
+  winston.add(require('winston-airbrake2').Airbrake, options);
+```
+
+The Airbrake transport utilises the node-airbrake module to send logs to the Airbrake.io API. You can set the following options:
+
+* __apiKey__: The project API Key. (required, default: null)
+* __name__: Transport name. (optional, default: 'airbrake')
+* __level__: The level of message that will be sent to Airbrake (optional, default: 'error')
+* __host__: The information that is displayed within the URL of the Airbrake interface. (optional, default: 'http://' + os.hostname())
+* __env__: The environment will dictate what happens with your message. If your environment is currently one of the 'developmentEnvironments', the error will not be sent to Airbrake. (optional, default: process.env.NODE_ENV)
+* __timeout__: The maximum time allowed to send to Airbrake in milliseconds. (optional, default: 30000)
+* __developmentEnvironments__: The environments that will **not** send errors to Airbrake. (optional, default: ['development', 'test'])
+* __projectRoot__: Extra string sent to Airbrake. (optional, default: null)
+* __appVersion__: Extra string or number sent to Airbrake. (optional, default: null)
+* __consoleLogError__: Toggle the logging of errors to console when the current environment is in the developmentEnvironments array. (optional, default: false)
 
 ## Find more Transports
 
 ``` bash
   $ npm search winston
   (...)
-  winston-amon         Winston transport for Amon logging                            =zoramite             
-  winston-amqp         An AMQP transport for winston                                 =kr1sp1n              
-  winston-couchdb      a couchdb transport for winston                               =alz               
-  winston-express      Express middleware to let you use winston from the browser.   =regality             
-  winston-graylog2     A graylog2 transport for winston                              =smithclay            
-  winston-hbase        A HBase transport for winston                                 =ddude                
-  winston-loggly       A Loggly transport for winston                                =indexzero            
-  winston-mail         A mail transport for winston                                  =wavded               
-  winston-mail2        A mail transport for winston                                  =ivolo                
-  winston-mongodb      A MongoDB transport for winston                               =indexzero            
-  winston-nodemail     A mail transport for winston                                  =reinpk               
-  winston-nssocket     nssocket transport for winston                                =mmalecki             
-  winston-papertrail   A Papertrail transport for winston                            =kenperkins           
-  winston-redis        A fixed-length Redis transport for winston                    =indexzero            
-  winston-riak         A Riak transport for winston                                  =indexzero            
-  winston-scribe       A scribe transport for winston                                =wnoronha             
-  winston-simpledb     A Winston transport for Amazon SimpleDB                       =chilts               
-  winston-skywriter    A Windows Azure table storage transport for winston           =pofallon             
+  winston-amon         Winston transport for Amon logging                            =zoramite
+  winston-amqp         An AMQP transport for winston                                 =kr1sp1n
+  winston-cassandra    A Cassandra transport for winston                             =jorgebay
+  winston-couchdb      a couchdb transport for winston                               =alz
+  winston-express      Express middleware to let you use winston from the browser.   =regality
+  winston-graylog2     A graylog2 transport for winston                              =smithclay
+  winston-hbase        A HBase transport for winston                                 =ddude
+  winston-loggly       A Loggly transport for winston                                =indexzero
+  winston-mail         A mail transport for winston                                  =wavded
+  winston-mail2        A mail transport for winston                                  =ivolo
+  winston-mongodb      A MongoDB transport for winston                               =indexzero
+  winston-nodemail     A mail transport for winston                                  =reinpk
+  winston-nssocket     nssocket transport for winston                                =mmalecki
+  winston-papertrail   A Papertrail transport for winston                            =kenperkins
+  winston-redis        A fixed-length Redis transport for winston                    =indexzero
+  winston-riak         A Riak transport for winston                                  =indexzero
+  winston-scribe       A scribe transport for winston                                =wnoronha
+  winston-simpledb     A Winston transport for Amazon SimpleDB                       =chilts
+  winston-skywriter    A Windows Azure table storage transport for winston           =pofallon
   winston-sns          A Simple Notification System Transport for winston            =jesseditson
-  winston-syslog       A syslog transport for winston                                =indexzero            
-  winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha               
-  winston-winlog       Windows Event Log logger for Winston                          =jfromaniello         
+  winston-syslog       A syslog transport for winston                                =indexzero
+  winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha
+  winston-winlog       Windows Event Log logger for Winston                          =jfromaniello
   winston-zmq          A 0MQ transport for winston                                   =dhendo
   winston-growl        A growl transport for winston                                 =pgherveou
 
@@ -341,5 +450,7 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 [16]: http://github.com/wavded/winston-mail
 [17]: https://github.com/weaver/node-mail
 [18]: https://github.com/jesseditson/winston-sns
-[19]: https://github.com/flite/winston-graylog2
-
+[19]: https://github.com/namshi/winston-graylog2
+[20]: https://github.com/jorgebay/winston-cassandra
+[21]: https://github.com/jpoon/winston-azuretable
+[22]: https://github.com/rickcraig/winston-airbrake2

@@ -23,7 +23,7 @@ var maxfilesTransport = new winston.transports.File({
   maxsize: 4096,
   maxFiles: 3
 });
-    
+
 vows.describe('winston/transports/file/maxfiles').addBatch({
   "An instance of the File Transport": {
     "when passed a valid filename": {
@@ -43,48 +43,48 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
         topic: function () {
           var that = this,
               created = 0;
-              
+
           function data(ch) {
             return new Array(1018).join(String.fromCharCode(65 + ch));
           };
-      
+
           function logKbytes(kbytes, txt) {
             //
             // With no timestamp and at the info level,
-            // winston adds exactly 7 characters: 
+            // winston adds exactly 7 characters:
             // [info](4)[ :](2)[\n](1)
             //
             for (var i = 0; i < kbytes; i++) {
               maxfilesTransport.log('info', data(txt), null, function () { });
             }
           }
-          
+
           maxfilesTransport.on('logged', function () {
             if (++created === 6) {
               return that.callback();
             }
-            
+
             logKbytes(4, created);
           });
-         
+
           logKbytes(4, created);
         },
         "should be only 3 files called 5.log, 4.log and 3.log": function () {
           for (var num = 0; num < 6; num++) {
             var file = !num ? 'testmaxfiles.log' : 'testmaxfiles' + num + '.log',
                 fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
-            
+
             // There should be no files with that name
             if (num >= 0 && num < 3) {
-              return assert.throws(function () {
-                fs.statSync(file);
+              assert.throws(function () {
+                fs.statSync(fullpath);
               }, Error);
-            } 
-
-            // The other files should be exist
-            assert.doesNotThrow(function () {
-              fs.statSync(file);
-            }, Error);
+            } else {
+              // The other files should be exist
+              assert.doesNotThrow(function () {
+                fs.statSync(fullpath);
+              }, Error);
+            }
           }
         },
         "should have the correct content": function () {

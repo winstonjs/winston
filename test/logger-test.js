@@ -6,23 +6,40 @@
  *
  */
 
-var path = require('path'),
-    vows = require('vows'),
-    assert = require('assert'),
+var assert = require('assert'),
+    path = require('path'),
     util = require('util'),
+    stdMocks = require('std-mocks'),
+    vows = require('vows'),
     winston = require('../lib/winston'),
     helpers = require('./helpers'),
     transport = require('./transports/transport');
 
 vows.describe('winton/logger').addBatch({
   "An instance of winston.Logger": {
-    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
-    "should have the correct methods / properties defined": function (logger) {
-      helpers.assertLogger(logger);
+    "with transports": {
+      topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+      "should have the correct methods / properties defined": function (logger) {
+        helpers.assertLogger(logger);
+      },
+      "the add() with an unsupported transport": {
+        "should throw an error": function () {
+          assert.throws(function () { logger.add('unsupported') }, Error);
+        }
+      }
     },
-    "the add() with an unsupported transport": {
-      "should throw an error": function () {
-        assert.throws(function () { logger.add('unsupported') }, Error);
+    "with no transports": {
+      topic: new winston.Logger(),
+      "the log method": {
+        topic: function (logger) {
+          var that = this;
+          logger.log('error', 'This should be an error', function (err) {
+            that.callback(null, err);
+          });
+        },
+        "should respond with the appropriate error": function (err) {
+          assert.instanceOf(err, Error);
+        }
       }
     }
   }
@@ -83,34 +100,53 @@ vows.describe('winton/logger').addBatch({
       "the profile() method": {
         "when passed a callback": {
           topic: function (logger) {
-            var that = this;
+            var cb = this.callback;
             logger.profile('test1');
             setTimeout(function () {
               logger.profile('test1', function (err, level, msg, meta) {
-                that.callback(err, level, msg, meta, logger);
+                cb(err, level, msg, meta, logger);
               });
-            }, 1000);
+            }, 50);
           },
           "should respond with the appropriate profile message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
             assert.isTrue(typeof logger.profilers['test'] === 'undefined');
-          }
-        },
-        "when not passed a callback": {
-          topic: function (logger) {
-            var that = this;
-            logger.profile('test2');
-            logger.once('logging', that.callback.bind(null, null));
-            setTimeout(function () {
-              logger.profile('test2');
-            }, 1000);
           },
-          "should respond with the appropriate profile message": function (err, transport, level, msg, meta) {
-            assert.isNull(err);
-            assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
+          "when passed some metadata": {
+            topic: function () {
+              var logger = arguments[arguments.length - 1];
+              var cb = this.callback.bind(null, null);
+              logger.profile('test3');
+              setTimeout(function () {
+                logger.once('logging', cb);
+                logger.profile('test3', {
+                  some: 'data'
+                });
+              }, 50);
+            },
+            "should respond with the right metadata": function (err, transport, level, msg, meta) {
+              assert.equal(msg, 'test3');
+              assert.isNull(err);
+              assert.equal(level, 'info');
+              assert.equal(meta.some, 'data');
+            },
+            "when not passed a callback": {
+              topic: function () {
+                var logger = arguments[arguments.length - 1];
+                var cb = this.callback.bind(null, null);
+                logger.profile('test2');
+                setTimeout(function () {
+                  logger.once('logging', cb);
+                  logger.profile('test2');
+                }, 50);
+              },
+              "should respond with the appropriate profile message": function (err, transport, level, msg, meta) {
+                assert.isNull(err);
+                assert.equal(msg, 'test2');
+                assert.equal(level, 'info');
+              }
+            }
           }
         }
       },
@@ -123,12 +159,11 @@ vows.describe('winton/logger').addBatch({
               timer.done('test', function (err, level, msg, meta) {
                 that.callback(err, level, msg, meta, logger);
               });
-            }, 1000);
+            }, 500);
           },
           "should respond with the appropriate message": function (err, level, msg, meta, logger) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
           }
         },
         "when not passed a callback": {
@@ -138,16 +173,14 @@ vows.describe('winton/logger').addBatch({
             logger.once('logging', that.callback.bind(null, null));
             setTimeout(function () {
               timer.done();
-            }, 1000);
+            }, 500);
           },
           "should respond with the appropriate message": function (err, transport, level, msg, meta) {
             assert.isNull(err);
             assert.equal(level, 'info');
-            assert.match(meta.duration, /(\d+)ms/);
 
-            var duration = parseInt(meta.duration);
-            assert.isNumber(duration);
-            assert.isTrue(duration > 900 && duration < 1100);
+            assert.isNumber(meta.durationMs);
+            assert.isTrue(meta.durationMs >= 50 && meta.durationMs < 100);
           }
         }
       },
@@ -238,6 +271,15 @@ vows.describe('winton/logger').addBatch({
       ]
     }),
     "the log() method": {
+      "when passed an Error object as meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'An error happened: ', new Error('I am something bad'));
+        },
+        "should respond with a proper error output": function (transport, level, msg, meta) {
+          assert.instanceOf(meta, Error);
+        }
+      },
       "when passed a string placeholder": {
         topic: function (logger) {
           logger.once('logging', this.callback);
@@ -265,6 +307,24 @@ vows.describe('winton/logger').addBatch({
           assert.strictEqual(msg, 'test message {"number":123}');
         },
       },
+      "when passed just JSON meta and no message": {
+        topic: function (logger) {
+          stdMocks.use();
+          logger.once('logging', this.callback);
+          logger.log('info', { message: 'in JSON object', ok: true });
+        },
+        "should output the message": function (transport, level, msg, meta) {
+          stdMocks.restore();
+
+          //
+          // TODO: Come up with a cleaner way to test this.
+          //
+          var output = stdMocks.flush(),
+              line   = output.stdout[0];
+
+          assert.match(line, /message\=in/);
+        }
+      },
       "when passed a escaped percent sign": {
         topic: function (logger) {
           logger.once('logging', this.callback);
@@ -272,7 +332,7 @@ vows.describe('winton/logger').addBatch({
         },
         "should not interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, util.format('test message %%'));
-          assert.deepEqual(meta, {number: 123});          
+          assert.deepEqual(meta, {number: 123});
         },
       },
       "when passed interpolation strings and a meta object": {
@@ -318,6 +378,49 @@ vows.describe('winton/logger').addBatch({
           assert.strictEqual(msg, 'test message first second');
           assert.deepEqual(meta, {number: 123});
         },
+      },
+      "when passed a regular expression": {
+        topic: function (logger) {
+          var that = this;
+          logger.log('info', new RegExp('a'), function(transport, level, msg, meta){
+            that.callback(transport, level, msg, meta)
+          });
+        },
+        "should return a string representing the regular expression": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, '/a/');
+        },
+      }
+    }
+  }
+}).addBatch({
+  "Building a logger with two file transports": {
+    topic: new (winston.Logger)({
+      transports: [
+        new (winston.transports.File)({
+          name: 'filelog-info.log',
+          filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
+          level: 'info'
+        }),
+        new (winston.transports.File)({
+          name: 'filelog-error.log',
+          filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
+          level: 'error'
+        })
+      ]
+    }),
+    "should respond with a proper logger": function (logger) {
+      assert.include(logger._names, 'filelog-info.log');
+      assert.include(logger._names, 'filelog-error.log');
+      assert.lengthOf(logger.transports, 2);
+    },
+    "when one is removed": {
+      topic: function (logger) {
+        logger.remove('filelog-error.log');
+        return logger;
+      },
+      "should only have one transport": function (logger) {
+        assert.include(logger._names, 'filelog-info.log');
+        assert.lengthOf(logger.transports, 1);
       }
     }
   }
