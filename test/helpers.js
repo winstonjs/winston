@@ -206,3 +206,61 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
 
   return tests;
 };
+
+helpers.assertOptionsThrow = function (options, errMsg) {
+  return function () {
+    assert.throws(
+      function () {
+        try {
+          new (winston.transports.Console)(options);
+        } catch (err) {
+          throw(err);
+        }
+      },
+      new RegExp('^' + errMsg.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '$')
+    );
+  }
+};
+
+helpers.assertStderrLevels = function (transport, stderrLevels) {
+  return function () {
+    assert.equal(
+        JSON.stringify(Object.keys(transport.stderrLevels).sort()),
+        JSON.stringify(stderrLevels.sort())
+    );
+  }
+};
+
+helpers.testLoggingToStreams = function (levels, transport, stderrLevels, stdMocks) {
+  return {
+    topic: function () {
+      stdMocks.use();
+      transport.showLevel = true;
+      Object.keys(levels).forEach(function (level) {
+        transport.log(
+            level,
+            level + ' should go to ' + (stderrLevels.indexOf(level) > -1 ? 'stderr' : 'stdout'),
+            {},
+            function () {}
+        );
+      });
+      var output = stdMocks.flush();
+      stdMocks.restore();
+      this.callback(null, output, levels);
+    },
+    "output should go to the appropriate streams": function (ign, output, levels) {
+      var outCount = 0,
+          errCount = 0;
+      Object.keys(levels).forEach(function (level) {
+        var line;
+        if (stderrLevels.indexOf(level) > -1) {
+          line = output.stderr[errCount++];
+          assert.equal(line, level + ': ' + level + ' should go to stderr\n');
+        } else {
+          line = output.stdout[outCount++];
+          assert.equal(line, level + ': ' + level + ' should go to stdout\n');
+        }
+      });
+    }
+  }
+};
