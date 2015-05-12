@@ -4,7 +4,7 @@ THis is a fork of the original winston package.
 The fork is at https://github.com/damianof/winston
 This version adds a levelOnly option to make winston log only the specified level.
 I needed this functionality for my current projects.
-There is also a pending pull request I created on the author branch (https://github.com/winstonjs/winston/pull/627).
+There is also a pending pull request I created on the author branch (https://github.com/winstonjs/winston/pull/628).
 If the pull request is accepted, then I will remove this package from npm as soon as the original winston package will be updated with this feature.
 
 
