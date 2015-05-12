@@ -119,12 +119,14 @@ var logger = new (winston.Logger)({
     new (winston.transports.File)({
       name: 'info-file',
       filename: 'filelog-info.log',
-      level: 'info'
+      level: 'info',
+	  levelOnly: false // if true, will only log the specified level, if false will log from the specified level and above
     }),
     new (winston.transports.File)({
       name: 'error-file',
       filename: 'filelog-error.log',
-      level: 'error'
+      level: 'error',
+	  levelOnly: false // if true, will only log the specified level, if false will log from the specified level and above
     })
   ]
 });
