@@ -1,7 +1,7 @@
 {
-  "name": "winston",
+  "name": "winston-levelonly",
   "description": "A multi-transport async logging library for Node.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Nodejitsu Inc. <info@nodejitsu.com>",
   "maintainers": [
     "indexzero <charlie@nodejitsu.com>"
