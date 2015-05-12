@@ -3,10 +3,20 @@
 */
 'use strict';
 var winston = require('../lib/winston');
-winston.default.transports.console.colorize = true;
 
-winston.default.transports.console.levelOnly = false;
-winston.default.transports.console.level = 'info';//should log only warn and error
+//winston.default.transports.console.colorize = true;
+//winston.default.transports.console.levelOnly = false;
+//winston.default.transports.console.level = 'info';//should log only warn and error
+
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+	level: 'info',
+	levelOnly: false,
+	colorize: true,
+	'timestamp': function() {
+		return (new Date());
+	}
+});
 
 var refErr = new ReferenceError('This is bad');
 var fn = function(){
@@ -24,8 +34,19 @@ console.log('_____ First Test _____');
 fn();
 
 
-winston.default.transports.console.levelOnly = true;
-winston.default.transports.console.level = 'debug';//should log only debug
+// winston.default.transports.console.levelOnly = true;
+// winston.default.transports.console.level = 'debug';//should log only debug
+
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+	level: 'debug',
+	levelOnly: true,
+	colorize: true,
+	'timestamp': function() {
+		return (new Date());
+	}
+});
+
 var refErr = new ReferenceError('This is bad');
 var fn = function(){
 	try{
