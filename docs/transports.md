@@ -57,7 +57,8 @@ The Console transport takes a few simple options:
 * __humanReadableUnhandledException__ Boolean flag indicating if uncaught exception should be output as human readable, instead of a single line
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
 * __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
-* __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. (default false)
+* __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `['error', 'debug']`)
+* (Deprecated: Use __stderrLevels__ instead) __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. Cannot be used with __stderrLevels__. (default false)
 
 *Metadata:* Logged via util.inspect(meta);
 
