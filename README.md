@@ -823,7 +823,7 @@ The Mail transport uses [emailjs](https://github.com/eleith/emailjs) behind the 
 
 ### Amazon SNS (Simple Notification System) Transport
 
-The [winston-sns][18] transport uses amazon SNS to send emails, texts, or a bunch of other notifications. Since this transport uses the Amazon AWS SDK for JavaScript, you can take advantage of the various methods of authentication found in Amazon's [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) document.
+The [winston-sns][25] transport uses amazon SNS to send emails, texts, or a bunch of other notifications. Since this transport uses the Amazon AWS SDK for JavaScript, you can take advantage of the various methods of authentication found in Amazon's [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) document.
 
 ``` js
   var winston = require('winston'),
@@ -1018,3 +1018,4 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [22]: https://github.com/flite/winston-graylog2
 [23]: https://github.com/kenperkins/winston-papertrail
 [24]: https://github.com/jorgebay/winston-cassandra
+[25]: https://github.com/jesseditson/winston-sns
