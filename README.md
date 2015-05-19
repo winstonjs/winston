@@ -1,4 +1,12 @@
-# winston [![Build Status](https://secure.travis-ci.org/winstonjs/winston.svg?branch=master)](http://travis-ci.org/winstonjs/winston)
+
+IMPORTANT: 
+THis is a fork of the original winston package.
+The fork is at https://github.com/damianof/winston
+This version adds a levelOnly option to make winston log only the specified level.
+I needed this functionality for my current projects.
+There is also a pending pull request I created on the author branch (https://github.com/winstonjs/winston/pull/628).
+If the pull request is accepted, then I will remove this package from npm as soon as the original winston package will be updated with this feature.
+
 
 A multi-transport async logging library for node.js. <span style="font-size:28px; font-weight:bold;">&quot;CHILL WINSTON! ... I put it in the logs.&quot;</span>
 
@@ -119,12 +127,14 @@ var logger = new (winston.Logger)({
     new (winston.transports.File)({
       name: 'info-file',
       filename: 'filelog-info.log',
-      level: 'info'
+      level: 'info',
+	  levelOnly: false // if true, will only log the specified level, if false will log from the specified level and above
     }),
     new (winston.transports.File)({
       name: 'error-file',
       filename: 'filelog-error.log',
-      level: 'error'
+      level: 'error',
+	  levelOnly: false // if true, will only log the specified level, if false will log from the specified level and above
     })
   ]
 });
