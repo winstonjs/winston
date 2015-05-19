@@ -63,6 +63,34 @@ vows.describe('winston/transports/console').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    },
+    "with align on": {
+      topic : function() {
+        npmTransport.align = true;
+        stdMocks.use();
+        npmTransport.log('info', '');
+      },
+      "should have logs aligned": function () {
+        stdMocks.restore();
+        var output = stdMocks.flush(),
+            line   = output.stdout[0];
+
+        assert.equal(line, 'info\011: \n');
+      }
+    },
+    "with align off": {
+      topic : function() {
+        npmTransport.align = false;
+        stdMocks.use();
+        npmTransport.log('info', '');
+      },
+      "should not have logs aligned": function () {
+        stdMocks.restore();
+        var output = stdMocks.flush(),
+            line   = output.stdout[0];
+
+        assert.equal(line, 'info: \n');
+      }
     }
   }
 }).export(module);
