@@ -14,7 +14,8 @@ var path = require('path'),
     stdMocks = require('std-mocks');
 
 var npmTransport = new (winston.transports.Console)(),
-    syslogTransport = new (winston.transports.Console)({ levels: winston.config.syslog.levels });
+    syslogTransport = new (winston.transports.Console)({ levels: winston.config.syslog.levels }),
+    alignTransport = new (winston.transports.Console)({ showLevel: true, align: true });
 
 vows.describe('winston/transports/console').addBatch({
   "An instance of the Console Transport": {
@@ -63,34 +64,35 @@ vows.describe('winston/transports/console').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    }
+  }
+}).addBatch({
+  "An instance of the Console Transport with the align option on": {
+    topic : function() {
+      stdMocks.use();
+      alignTransport.log('info', '');
     },
-    "with align on": {
-      topic : function() {
-        npmTransport.align = true;
-        stdMocks.use();
-        npmTransport.log('info', '');
-      },
-      "should have logs aligned": function () {
-        stdMocks.restore();
-        var output = stdMocks.flush(),
-            line   = output.stdout[0];
+    "should have logs aligned": function () {
+      stdMocks.restore();
+      var output = stdMocks.flush(),
+          line   = output.stdout[0];
 
-        assert.equal(line, 'info\011: \n');
-      }
+      assert.equal(line, 'info\011: \n');
+    }
+  }
+}).addBatch({
+  "with align off": {
+    topic : function() {
+      alignTransport.align = false;
+      stdMocks.use();
+      alignTransport.log('info', '');
     },
-    "with align off": {
-      topic : function() {
-        npmTransport.align = false;
-        stdMocks.use();
-        npmTransport.log('info', '');
-      },
-      "should not have logs aligned": function () {
-        stdMocks.restore();
-        var output = stdMocks.flush(),
-            line   = output.stdout[0];
+    "should not have logs aligned": function () {
+      stdMocks.restore();
+      var output = stdMocks.flush(),
+          line   = output.stdout[0];
 
-        assert.equal(line, 'info: \n');
-      }
+      assert.equal(line, 'info: \n');
     }
   }
 }).export(module);
