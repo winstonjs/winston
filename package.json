@@ -36,10 +36,5 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/winstonjs/winston/master/LICENSE"
-    }
-  ]
+  "license": "MIT"
 }
