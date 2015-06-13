@@ -461,7 +461,7 @@ It is also worth mentioning that the logger also emits an 'error' event which yo
 Every logging method described in the previous section also takes an optional callback which will be called only when all of the transports have logged the specified message.
 
 ``` js
-  logger.info('CHILL WINSTON!', { seriously: true }, function (err, level, msg, meta) {
+  logger.info('CHILL WINSTON!', { seriously: true }, function (err, data) {
     // [msg] and [meta] have now been logged at [level] to **every** transport.
   });
 ```
