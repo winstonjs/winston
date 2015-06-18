@@ -426,6 +426,7 @@ The Airbrake transport utilises the node-airbrake module to send logs to the Air
   winston-syslog       A syslog transport for winston                                =indexzero
   winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha
   winston-winlog       Windows Event Log logger for Winston                          =jfromaniello
+  winston-winlog2      Windows Event Log logger for Winston (no node-gyp)            =peteward44
   winston-zmq          A 0MQ transport for winston                                   =dhendo
   winston-growl        A growl transport for winston                                 =pgherveou
 
