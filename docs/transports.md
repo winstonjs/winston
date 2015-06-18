@@ -398,6 +398,22 @@ The Airbrake transport utilises the node-airbrake module to send logs to the Air
 * __appVersion__: Extra string or number sent to Airbrake. (optional, default: null)
 * __consoleLogError__: Toggle the logging of errors to console when the current environment is in the developmentEnvironments array. (optional, default: false)
 
+### Winlog2 Transport
+
+[winston-winlog2][19] is a Windows Event log transport:
+
+``` js
+  var winston = require('winston');
+  winston.add(require('winston-winlog2'), options);
+```
+
+The winlog2 transport uses the following options:
+
+* __name__:  Transport name
+* __eventLog__: Log type (default: 'APPLICATION')
+* __source__: Name of application which will appear in event log (default: 'node')
+
+
 ## Find more Transports
 
 ``` bash
