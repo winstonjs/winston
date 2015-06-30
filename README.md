@@ -672,7 +672,7 @@ info: transaction ok creditCard=123456****2345
 See [log-filter-test.js](./test/log-filter-test.js), where card number masking is implemented as an example along with [log-rewriter-test.js](./test/log-rewriter-test.js)
 
 ## Adding Custom Transports
-Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
+Adding a custom transport is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
 ``` js
   var util = require('util'),
