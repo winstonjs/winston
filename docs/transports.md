@@ -43,9 +43,9 @@ There are several core transports included in `winston`, which leverage the buil
   winston.add(winston.transports.Console, options)
 ```
 
-The Console transport takes four simple options:
+The Console transport takes a few simple options:
 
-* __level:__ Level of messages that this transport should log (default 'debug').
+* __level:__ Level of messages that this transport should log (default 'info').
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
@@ -54,31 +54,40 @@ The Console transport takes four simple options:
 * __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 * __humanReadableUnhandledException__ Boolean flag indicating if uncaught exception should be output as human readable, instead of a single line
+* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
+* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
+* __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. (default false)
 
 *Metadata:* Logged via util.inspect(meta);
 
 ### File Transport
-
 ``` js
   winston.add(winston.transports.File, options)
 ```
 
-The File transport should really be the 'Stream' transport since it will accept any [WritableStream][0]. It is named such because it will also accept filenames via the 'filename' option:
+The File transport should really be the 'Stream' transport since it will accept any [WritableStream][14]. It is named such because it will also accept filenames via the 'filename' option:
 
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __colorize:__ Boolean flag indicating if we should colorize output.
-* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
+* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default true). If function is specified, its return value will be used instead of timestamps.
 * __filename:__ The filename of the logfile to write output to.
-* __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created.
+* __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __stream:__ The WriteableStream to write output to.
 * __json:__ If true, messages will be logged as JSON (default true).
 * __eol:__ string indicating the end-of-line characters to use (default to `\n`).
-* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
+* __prettyPrint:__ If true, additional JSON metadata objects that are added to logging string messages will be displayed as a JSON string representation. If function is specified, its return value will be the string representing the meta.
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
+* __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
+* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
+* __formatter:__ If function is specified and `json` is set to `false`, its return value will be used instead of default output. (default undefined)
+* __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.
+* __maxRetries:__ The number of stream creation retry attempts before entering a failed state. In a failed state the transport stays active but performs a NOOP on it's log function. (default 2)
+* __zippedArchive:__ If true, all log files but the current one will be zipped.
 
 *Metadata:* Logged via util.inspect(meta);
+
 
 ### DailyRotateFile Transport
 

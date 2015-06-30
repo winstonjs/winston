@@ -38,8 +38,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
   * [Extending another object with Logging](#extending-another-object-with-logging)
   * [Filters and Rewriters](#filters-and-rewriters)
-* [Working with transports](#working-with-transports)
-    * [Adding Custom Transports](#adding-custom-transports)
+  * [Adding Custom Transports](#adding-custom-transports)
 * [Installation](#installation)
 * [Run Tests](#run-tests)
 
@@ -672,68 +671,7 @@ info: transaction ok creditCard=123456****2345
 
 See [log-filter-test.js](./test/log-filter-test.js), where card number masking is implemented as an example along with [log-rewriter-test.js](./test/log-rewriter-test.js)
 
-## Working with Transports
-There are many transports supported by winston core. If you have a transport you would like to add either open an issue or fork and submit a pull request. Commits are welcome, but I'll give you extra street cred if you __add tests too :D__
-
-
-### Console Transport
-``` js
-  winston.add(winston.transports.Console, options)
-```
-
-The Console transport takes a few simple options:
-
-* __level:__ Level of messages that this transport should log (default 'info').
-* __silent:__ Boolean flag indicating whether to suppress output (default false).
-* __colorize:__ Boolean flag indicating if we should colorize output (default false).
-* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
-* __prettyPrint:__ Boolean flag indicating if we should `util.inspect` the meta (default false). If function is specified, its return value will be the string representing the meta.
-* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
-* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
-* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
-* __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. (default false)
-
-*Metadata:* Logged via util.inspect(meta);
-
-### File Transport
-``` js
-  winston.add(winston.transports.File, options)
-```
-
-The File transport should really be the 'Stream' transport since it will accept any [WritableStream][14]. It is named such because it will also accept filenames via the 'filename' option:
-
-* __level:__ Level of messages that this transport should log.
-* __silent:__ Boolean flag indicating whether to suppress output.
-* __colorize:__ Boolean flag indicating if we should colorize output.
-* __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default true). If function is specified, its return value will be used instead of timestamps.
-* __filename:__ The filename of the logfile to write output to.
-* __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file.
-* __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
-* __stream:__ The WriteableStream to write output to.
-* __json:__ If true, messages will be logged as JSON (default true).
-* __prettyPrint:__ If true, additional JSON metadata objects that are added to logging string messages will be displayed as a JSON string representation. If function is specified, its return value will be the string representing the meta.
-* __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
-* __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
-* __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
-* __formatter:__ If function is specified and `json` is set to `false`, its return value will be used instead of default output. (default undefined)
-* __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.
-* __maxRetries:__ The number of stream creation retry attempts before entering a failed state. In a failed state the transport stays active but performs a NOOP on it's log function. (default 2)
-* __zippedArchive:__ If true, all log files but the current one will be zipped.
-
-*Metadata:* Logged via util.inspect(meta);
-
-### Daily Rotate File Transport
-``` js
-  winston.add(winston.transports.DailyRotateFile, options)
-```
-
-The Daily Rotate File transport lets you rotate log files based on time.
-
-In addition to the options accepted by the File transport, the Daily Rotate File Transport also accepts the following option.
-
-* __datePattern:__ Defines rolling time of a log file and suffix appended to the file. Following meta characters can be used: `yy`, `yyyy`, `M`, `MM`, `d`, `dd`, `H`, `HH`, `m`, `mm`. The default pattern is `'.yyyy-MM-dd'`. Rotation time of the log file will be equal to the smallest given time token timespan, so `'.yyyy-MM-ddTHH'` will rotate logfile every hour. You can not rotate files more frequent then every minute.
-
-### Adding Custom Transports
+## Adding Custom Transports
 Adding a custom transport (say for one of the datastore on the Roadmap) is actually pretty easy. All you need to do is accept a couple of options, set a name, implement a log() method, and add it to the set of transports exposed by winston.
 
 ``` js
