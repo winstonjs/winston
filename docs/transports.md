@@ -311,6 +311,55 @@ Options:
 * __json:__ use json instead of a prettier (human friendly) string for meta information in the notification. (default: `false`)
 * __handleExceptions:__ set to true to have this transport handle exceptions. (default: `false`)
 
+### Amazon DynamoDB Transport
+The [winston-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
+
+``` js
+  var winston = require('winston'),
+      winstonDynamo = require("winston-dynamodb");
+
+  winstonDynamo.DynamoDB;
+  winston.add(winston.transports.DynamoDB, options)
+```
+
+Options:
+* __accessKeyId:__ your AWS access key id
+* __secretAccessKey:__ your AWS secret access key
+* __region:__ the region where the domain is hosted
+* __useEnvironment:__ use process.env values for AWS access, secret, & region.
+* __tableName:__ DynamoDB table name
+
+To Configure using environment authentication:
+``` js
+  var options = {
+    useEnvironment: true,
+    tableName: 'log'
+  };
+  winston.add(winston.transports.DynamoDB, options);
+```
+
+Also supports callbacks for completion when the DynamoDB putItem has been compelted.
+
+### Papertrail Transport
+
+[winston-papertrail][23] is a Papertrail transport:
+
+``` js
+  var Papertrail = require('winston-papertrail').Papertrail;
+  winston.add(Papertrail, options);
+```
+
+The Papertrail transport connects to a [PapertrailApp log destination](https://papertrailapp.com) over TCP (TLS) using the following options:
+
+* __level:__ Level of messages this transport should log. (default: info)
+* __host:__ FQDN or IP address of the Papertrail endpoint.
+* __port:__ Port for the Papertrail log destination.
+* __hostname:__ The hostname associated with messages. (default: require('os').hostname())
+* __program:__ The facility to send log messages.. (default: default)
+* __logFormat:__ a log formatting function with the signature `function(level, message)`, which allows custom formatting of the level or message prior to delivery
+
+*Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
+
 ### Graylog2 Transport
 
 [winston-graylog2][19] is a Graylog2 transport:
@@ -333,7 +382,6 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
   - __hostname__: the name of this host (default: os.hostname())
   - __facility__: the facility for these log messages (default: "Node.js")
   - __bufferSize__: max UDP packet size, should never exceed the MTU of your system (default: 1400)
-
 
 ### Cassandra Transport
 
