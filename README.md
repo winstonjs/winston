@@ -461,7 +461,7 @@ It is also worth mentioning that the logger also emits an 'error' event which yo
 Every logging method described in the previous section also takes an optional callback which will be called only when all of the transports have logged the specified message.
 
 ``` js
-  logger.info('CHILL WINSTON!', { seriously: true }, function (err, level, msg, meta) {
+  logger.info('CHILL WINSTON!', { seriously: true }, function (err, data) {
     // [msg] and [meta] have now been logged at [level] to **every** transport.
   });
 ```
@@ -842,6 +842,35 @@ The Mail transport uses [emailjs](https://github.com/eleith/emailjs) behind the 
 
 *Metadata:* Stringified as JSON in email.
 
+### Amazon DynamoDB Transport
+The [winston-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
+
+``` js
+  var winston = require('winston'),
+      winstonDynamo = require("winston-dynamodb");
+
+  winstonDynamo.DynamoDB;
+  winston.add(winston.transports.DynamoDB, options)
+``` 
+
+Options:
+* __accessKeyId:__ your AWS access key id
+* __secretAccessKey:__ your AWS secret access key
+* __region:__ the region where the domain is hosted
+* __useEnvironment:__ use process.env values for AWS access, secret, & region. 
+* __tableName:__ DynamoDB table name
+
+To Configure using environment authentication:
+``` js
+  var options = {
+    useEnvironment: true,
+    tableName: 'log'
+  };
+  winston.add(winston.transports.DynamoDB, options); 
+```
+
+Also supports callbacks for completion when the DynamoDB putItem has been compelted. 
+
 ### Amazon SNS (Simple Notification System) Transport
 
 The [winston-sns][25] transport uses amazon SNS to send emails, texts, or a bunch of other notifications. Since this transport uses the Amazon AWS SDK for JavaScript, you can take advantage of the various methods of authentication found in Amazon's [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) document.
@@ -1040,3 +1069,4 @@ All of the winston tests are written in [vows][9], and designed to be run with n
 [23]: https://github.com/kenperkins/winston-papertrail
 [24]: https://github.com/jorgebay/winston-cassandra
 [25]: https://github.com/jesseditson/winston-sns
+[26]: https://github.com/inspiredjw/winston-dynamodb/
