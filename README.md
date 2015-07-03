@@ -65,7 +65,7 @@ By default, only the Console transport is set on the default logger. You can add
   winston.remove(winston.transports.Console);
 ```
 
-For more documentation about working with each individual transport supported by Winston see the [Working with transports](#working-with-transports) section below.
+For more documentation about working with each individual transport supported by Winston see the [Winston Transports](docs/transports.md) document.
 
 ### Instantiating your own Logger
 If you would prefer to manage the object lifetime of loggers you are free to instantiate them yourself:
