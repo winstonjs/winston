@@ -9,7 +9,6 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [File](#file-transport)
   * [DailyRotateFile](#dailyrotatefile-transport)
   * [Http](#http-transport)
-  * [Webhook](#webhook-transport)
 
 * **[Winston More](#winston-more)**
   * [CouchDB](#couchdb-transport)
@@ -35,7 +34,6 @@ There are several core transports included in `winston`, which leverage the buil
 * [File](#file-transport)
 * [DailyRotateFile](#dailyrotatefile-transport)
 * [Http](#http-transport)
-* [Webhook](#webhook-transport)
 
 ### Console Transport
 
