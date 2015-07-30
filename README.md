@@ -419,7 +419,7 @@ In addition to the predefined `npm` and `syslog` levels available in Winston, yo
   customLevelLogger.foobar('some foobar level-ed message');
 ```
 
-Although there is slight repetition in this data structure, it enables simple encapsulation if you not to have colors. If you do wish to have colors, in addition to passing the levels to the Logger itself, you must make winston aware of them:
+Although there is slight repetition in this data structure, it enables simple encapsulation if you do not want to have colors. If you do wish to have colors, in addition to passing the levels to the Logger itself, you must make winston aware of them:
 
 ``` js
   //
