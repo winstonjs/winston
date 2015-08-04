@@ -25,6 +25,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Cassandra](#cassandra-transport)
   * [Azure Table](#azure-table)
   * [Airbrake](#airbrake-transport)
+  * [Newrelic](#newrelic-transport) (errors only)
 
 ## Winston Core
 
@@ -468,6 +469,21 @@ The winlog2 transport uses the following options:
 * __eventLog__: Log type (default: 'APPLICATION')
 * __source__: Name of application which will appear in event log (default: 'node')
 
+### Newrelic Transport
+
+[newrelic-winston][23] is a Newrelic transport:
+
+``` js
+  var winston = require('winston');
+  winston.add(require('newrelic-winston'), options);
+```
+
+The Newrelic transport will send your errors to newrelic and accepts the follwing optins:
+
+* __env__:  the current evironment. Defatuls to `process.env.NODE_ENV`
+
+If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic module saving devs from anoying errors ;)
+
 
 ## Find more Transports
 
@@ -526,3 +542,4 @@ The winlog2 transport uses the following options:
 [20]: https://github.com/jorgebay/winston-cassandra
 [21]: https://github.com/jpoon/winston-azuretable
 [22]: https://github.com/rickcraig/winston-airbrake2
+[23]: https://github.com/namshi/winston-newrelic
