@@ -1,0 +1,1383 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for lib/winston/common.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">lib/winston/common.js</span></h1>
+    <h2>
+        Statements: <span class="metric">9.19% <small>(17 / 185)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">2.75% <small>(5 / 182)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">11.11% <small>(2 / 18)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">9.34% <small>(17 / 182)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">lib/winston/</a> &#187; common.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">75</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">75</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+ * common.js: Internal helper and utility functions for winston
+ *
+ * (C) 2010 Charlie Robbins
+ * MIT LICENCE
+ *
+ */
+&nbsp;
+var util = require('util'),
+    crypto = require('crypto'),
+    cycle = require('cycle'),
+    fs = require('fs'),
+    StringDecoder = require('string_decoder').StringDecoder,
+    Stream = require('stream').Stream,
+    config = require('./config');
+&nbsp;
+//
+// ### function setLevels (target, past, current)
+// #### @target {Object} Object on which to set levels.
+// #### @past {Object} Previous levels set on target.
+// #### @current {Object} Current levels to set on target.
+// Create functions on the target objects for each level
+// in current.levels. If past is defined, remove functions
+// for each of those levels.
+//
+exports.setLevels = function (target, past, current, isDefault) {
+  var self = this;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (past) {
+<span class="cstat-no" title="statement not covered" >    Object.keys(past).forEach(<span class="fstat-no" title="function not covered" >function (level) {</span></span>
+<span class="cstat-no" title="statement not covered" >      delete target[level];</span>
+    });
+  }
+&nbsp;
+  target.levels = current || config.npm.levels;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (target.padLevels) {
+<span class="cstat-no" title="statement not covered" >    target.levelLength = exports.longestElement(Object.keys(target.levels));</span>
+  }
+&nbsp;
+  //
+  //  Define prototype methods for each log level
+  //  e.g. target.log('info', msg) &lt;=&gt; target.info(msg)
+  //
+  Object.keys(target.levels).forEach(function (level) {
+&nbsp;
+    // TODO Refactor logging methods into a different object to avoid name clashes
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (level === 'log') {
+<span class="cstat-no" title="statement not covered" >      console.warn('Log level named "log" will clash with the method "log". Consider using a different name.');</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+&nbsp;
+    target[level] = <span class="fstat-no" title="function not covered" >function (msg) {</span>
+      // build argument list (level, msg, ... [string interpolate], [{metadata}], [callback])
+<span class="cstat-no" title="statement not covered" >      var args = [level].concat(Array.prototype.slice.call(arguments));</span>
+<span class="cstat-no" title="statement not covered" >      target.log.apply(target, args);</span>
+    };
+  });
+&nbsp;
+  return target;
+};
+&nbsp;
+//
+// ### function longestElement
+// #### @xs {Array} Array to calculate against
+// Returns the longest element in the `xs` array.
+//
+exports.longestElement = <span class="fstat-no" title="function not covered" >function (xs) {</span>
+<span class="cstat-no" title="statement not covered" >  return Math.max.apply(</span>
+    null,
+    xs.map(<span class="fstat-no" title="function not covered" >function (x) {</span> <span class="cstat-no" title="statement not covered" >return x.length; </span>})
+  );
+};
+&nbsp;
+//
+// ### function clone (obj)
+// #### @obj {Object} Object to clone.
+// Helper method for deep cloning pure JSON objects
+// i.e. JSON objects that are either literals or objects (no Arrays, etc)
+//
+exports.clone = <span class="fstat-no" title="function not covered" >function (obj) {</span>
+  //
+  // We only need to clone reference types (Object)
+  //
+<span class="cstat-no" title="statement not covered" >  var copy = {};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (obj instanceof Error) {</span>
+    // With potential custom Error objects, this might not be exactly correct,
+    // but probably close-enough for purposes of this lib.
+<span class="cstat-no" title="statement not covered" >    copy = new Error(obj.message);</span>
+<span class="cstat-no" title="statement not covered" >    Object.getOwnPropertyNames(obj).forEach(<span class="fstat-no" title="function not covered" >function (key) {</span></span>
+<span class="cstat-no" title="statement not covered" >      copy[key] = obj[key];</span>
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return copy;</span>
+  }
+  else <span class="cstat-no" title="statement not covered" >if (!(obj instanceof Object)) {</span>
+<span class="cstat-no" title="statement not covered" >    return obj;</span>
+  }
+  else <span class="cstat-no" title="statement not covered" >if (obj instanceof Date) {</span>
+<span class="cstat-no" title="statement not covered" >    return new Date(obj.getTime());</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  for (var i in obj) {</span>
+<span class="cstat-no" title="statement not covered" >    if (Array.isArray(obj[i])) {</span>
+<span class="cstat-no" title="statement not covered" >      copy[i] = obj[i].slice(0);</span>
+    }
+    else <span class="cstat-no" title="statement not covered" >if (obj[i] instanceof Buffer) {</span>
+<span class="cstat-no" title="statement not covered" >        copy[i] = obj[i].slice(0);</span>
+    }
+    else <span class="cstat-no" title="statement not covered" >if (typeof obj[i] != 'function') {</span>
+<span class="cstat-no" title="statement not covered" >      copy[i] = obj[i] instanceof Object ? exports.clone(obj[i]) : obj[i];</span>
+    }
+    else <span class="cstat-no" title="statement not covered" >if (typeof obj[i] === 'function') {</span>
+<span class="cstat-no" title="statement not covered" >      copy[i] = obj[i];</span>
+    }
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return copy;</span>
+};
+&nbsp;
+//
+// ### function log (options)
+// #### @options {Object} All information about the log serialization.
+// Generic logging function for returning timestamped strings
+// with the following options:
+//
+//    {
+//      level:     'level to add to serialized message',
+//      message:   'message to serialize',
+//      meta:      'additional logging metadata to serialize',
+//      colorize:  false, // Colorizes output (only if `.json` is false)
+//      align:     false  // Align message level.
+//      timestamp: true   // Adds a timestamp to the serialized message
+//      label:     'label to prepend the message'
+//    }
+//
+exports.log = <span class="fstat-no" title="function not covered" >function (options) {</span>
+<span class="cstat-no" title="statement not covered" >  var timestampFn = typeof options.timestamp === 'function'</span>
+        ? options.timestamp
+        : exports.timestamp,
+      timestamp   = options.timestamp ? timestampFn() : null,
+      showLevel   = options.showLevel === undefined ? true : options.showLevel,
+      meta        = options.meta !== null &amp;&amp; options.meta !== undefined &amp;&amp; !(options.meta instanceof Error)
+        ? exports.clone(cycle.decycle(options.meta))
+        : options.meta || null,
+      output;
+&nbsp;
+  //
+  // raw mode is intended for outputing winston as streaming JSON to STDOUT
+  //
+<span class="cstat-no" title="statement not covered" >  if (options.raw) {</span>
+<span class="cstat-no" title="statement not covered" >    if (typeof meta !== 'object' &amp;&amp; meta != null) {</span>
+<span class="cstat-no" title="statement not covered" >      meta = { meta: meta };</span>
+    }
+<span class="cstat-no" title="statement not covered" >    output         = exports.clone(meta) || {};</span>
+<span class="cstat-no" title="statement not covered" >    output.level   = options.level;</span>
+    //
+    // Remark (jcrugzz): This used to be output.message = options.message.stripColors.
+    // I do not know why this is, it does not make sense but im handling that
+    // case here as well as handling the case that does make sense which is to
+    // make the `output.message = options.message`
+    //
+<span class="cstat-no" title="statement not covered" >    output.message = options.message.stripColors</span>
+      ? options.message.stripColors
+      : options.message;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return JSON.stringify(output);</span>
+  }
+&nbsp;
+  //
+  // json mode is intended for pretty printing multi-line json to the terminal
+  //
+<span class="cstat-no" title="statement not covered" >  if (options.json || true === options.logstash) {</span>
+<span class="cstat-no" title="statement not covered" >    if (typeof meta !== 'object' &amp;&amp; meta != null) {</span>
+<span class="cstat-no" title="statement not covered" >      meta = { meta: meta };</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    output         = exports.clone(meta) || {};</span>
+<span class="cstat-no" title="statement not covered" >    output.level   = options.level;</span>
+<span class="cstat-no" title="statement not covered" >    output.message = output.message || '';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (options.label) { <span class="cstat-no" title="statement not covered" >output.label = options.label; </span>}</span>
+<span class="cstat-no" title="statement not covered" >    if (options.message) { <span class="cstat-no" title="statement not covered" >output.message = options.message; </span>}</span>
+<span class="cstat-no" title="statement not covered" >    if (timestamp) { <span class="cstat-no" title="statement not covered" >output.timestamp = timestamp; </span>}</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (options.logstash === true) {</span>
+      // use logstash format
+<span class="cstat-no" title="statement not covered" >      var logstashOutput = {};</span>
+<span class="cstat-no" title="statement not covered" >      if (output.message !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        logstashOutput['@message'] = output.message;</span>
+<span class="cstat-no" title="statement not covered" >        delete output.message;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (output.timestamp !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        logstashOutput['@timestamp'] = output.timestamp;</span>
+<span class="cstat-no" title="statement not covered" >        delete output.timestamp;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      logstashOutput['@fields'] = exports.clone(output);</span>
+<span class="cstat-no" title="statement not covered" >      output = logstashOutput;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (typeof options.stringify === 'function') {</span>
+<span class="cstat-no" title="statement not covered" >      return options.stringify(output);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return JSON.stringify(output, <span class="fstat-no" title="function not covered" >function (key, value) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return value instanceof Buffer</span>
+        ? value.toString('base64')
+        : value;
+    });
+  }
+&nbsp;
+  //
+  // Remark: this should really be a call to `util.format`.
+  //
+<span class="cstat-no" title="statement not covered" >  if (typeof options.formatter == 'function') {</span>
+<span class="cstat-no" title="statement not covered" >    return String(options.formatter(exports.clone(options)));</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  output = timestamp ? timestamp + ' - ' : '';</span>
+<span class="cstat-no" title="statement not covered" >  if (showLevel) {</span>
+<span class="cstat-no" title="statement not covered" >    output += options.colorize === 'all' || options.colorize === 'level' || options.colorize === true</span>
+      ? config.colorize(options.level)
+      : options.level;
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  output += (options.align) ? '\t' : '';</span>
+<span class="cstat-no" title="statement not covered" >  output += (timestamp || showLevel) ? ': ' : '';</span>
+<span class="cstat-no" title="statement not covered" >  output += options.label ? ('[' + options.label + '] ') : '';</span>
+<span class="cstat-no" title="statement not covered" >  output += options.colorize === 'all' || options.colorize === 'message'</span>
+    ? config.colorize(options.level, options.message)
+    : options.message;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (meta !== null &amp;&amp; meta !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    if (meta &amp;&amp; meta instanceof Error &amp;&amp; meta.stack) {</span>
+<span class="cstat-no" title="statement not covered" >      meta = meta.stack;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (typeof meta !== 'object') {</span>
+<span class="cstat-no" title="statement not covered" >      output += ' ' + meta;</span>
+    }
+    else <span class="cstat-no" title="statement not covered" >if (Object.keys(meta).length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      if (typeof options.prettyPrint === 'function') {</span>
+<span class="cstat-no" title="statement not covered" >        output += ' ' + options.prettyPrint(meta);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (options.prettyPrint) {</span>
+<span class="cstat-no" title="statement not covered" >        output += ' ' + '\n' + util.inspect(meta, false, options.depth || null, options.colorize);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (</span>
+        options.humanReadableUnhandledException
+          &amp;&amp; Object.keys(meta).length === 5
+          &amp;&amp; meta.hasOwnProperty('date')
+          &amp;&amp; meta.hasOwnProperty('process')
+          &amp;&amp; meta.hasOwnProperty('os')
+          &amp;&amp; meta.hasOwnProperty('trace')
+          &amp;&amp; meta.hasOwnProperty('stack')) {
+&nbsp;
+        //
+        // If meta carries unhandled exception data serialize the stack nicely
+        //
+<span class="cstat-no" title="statement not covered" >        var stack = meta.stack;</span>
+<span class="cstat-no" title="statement not covered" >        delete meta.stack;</span>
+<span class="cstat-no" title="statement not covered" >        delete meta.trace;</span>
+<span class="cstat-no" title="statement not covered" >        output += ' ' + exports.serialize(meta);</span>
+<span class="cstat-no" title="statement not covered" >        output += '\n' + stack.join('\n');</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        output += ' ' + exports.serialize(meta);</span>
+      }
+    }
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return output;</span>
+};
+&nbsp;
+exports.capitalize = <span class="fstat-no" title="function not covered" >function (str) {</span>
+<span class="cstat-no" title="statement not covered" >  return str &amp;&amp; str[0].toUpperCase() + str.slice(1);</span>
+};
+&nbsp;
+//
+// ### function timestamp ()
+// Returns a timestamp string for the current time.
+//
+exports.timestamp = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >  return new Date().toISOString();</span>
+};
+&nbsp;
+//
+// ### function serialize (obj, key)
+// #### @obj {Object|literal} Object to serialize
+// #### @key {string} **Optional** Optional key represented by obj in a larger object
+// Performs simple comma-separated, `key=value` serialization for Loggly when
+// logging to non-JSON inputs.
+//
+exports.serialize = <span class="fstat-no" title="function not covered" >function (obj, key) {</span>
+<span class="cstat-no" title="statement not covered" >  if (obj === null) {</span>
+<span class="cstat-no" title="statement not covered" >    obj = 'null';</span>
+  }
+  else <span class="cstat-no" title="statement not covered" >if (obj === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    obj = 'undefined';</span>
+  }
+  else <span class="cstat-no" title="statement not covered" >if (obj === false) {</span>
+<span class="cstat-no" title="statement not covered" >    obj = 'false';</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (typeof obj !== 'object') {</span>
+<span class="cstat-no" title="statement not covered" >    return key ? key + '=' + obj : obj;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (obj instanceof Buffer) {</span>
+<span class="cstat-no" title="statement not covered" >    return key ? key + '=' + obj.toString('base64') : obj.toString('base64');</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  var msg = '',</span>
+      keys = Object.keys(obj),
+      length = keys.length;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  for (var i = 0; i &lt; length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >    if (Array.isArray(obj[keys[i]])) {</span>
+<span class="cstat-no" title="statement not covered" >      msg += keys[i] + '=[';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      for (var j = 0, l = obj[keys[i]].length; j &lt; l; j++) {</span>
+<span class="cstat-no" title="statement not covered" >        msg += exports.serialize(obj[keys[i]][j]);</span>
+<span class="cstat-no" title="statement not covered" >        if (j &lt; l - 1) {</span>
+<span class="cstat-no" title="statement not covered" >          msg += ', ';</span>
+        }
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      msg += ']';</span>
+    }
+    else <span class="cstat-no" title="statement not covered" >if (obj[keys[i]] instanceof Date) {</span>
+<span class="cstat-no" title="statement not covered" >      msg += keys[i] + '=' + obj[keys[i]];</span>
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >      msg += exports.serialize(obj[keys[i]], keys[i]);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (i &lt; length - 1) {</span>
+<span class="cstat-no" title="statement not covered" >      msg += ', ';</span>
+    }
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return msg;</span>
+};
+&nbsp;
+//
+// ### function tailFile (options, callback)
+// #### @options {Object} Options for tail.
+// #### @callback {function} Callback to execute on every line.
+// `tail -f` a file. Options must include file.
+//
+exports.tailFile = <span class="fstat-no" title="function not covered" >function(options, callback) {</span>
+<span class="cstat-no" title="statement not covered" >  var buffer = new Buffer(64 * 1024)</span>
+    , decode = new StringDecoder('utf8')
+    , stream = new Stream
+    , buff = ''
+    , pos = 0
+    , row = 0;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (options.start === -1) {</span>
+<span class="cstat-no" title="statement not covered" >    delete options.start;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  stream.readable = true;</span>
+<span class="cstat-no" title="statement not covered" >  stream.destroy = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >    stream.destroyed = true;</span>
+<span class="cstat-no" title="statement not covered" >    stream.emit('end');</span>
+<span class="cstat-no" title="statement not covered" >    stream.emit('close');</span>
+  };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  fs.open(options.file, 'a+', '0644', <span class="fstat-no" title="function not covered" >function(err, fd) {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (err) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!callback) {</span>
+<span class="cstat-no" title="statement not covered" >        stream.emit('error', err);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        callback(err);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      stream.destroy();</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    (<span class="fstat-no" title="function not covered" >function read() {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (stream.destroyed) {</span>
+<span class="cstat-no" title="statement not covered" >        fs.close(fd);</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return fs.read(fd, buffer, 0, buffer.length, pos, <span class="fstat-no" title="function not covered" >function(err, bytes) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (err) {</span>
+<span class="cstat-no" title="statement not covered" >          if (!callback) {</span>
+<span class="cstat-no" title="statement not covered" >            stream.emit('error', err);</span>
+          } else {
+<span class="cstat-no" title="statement not covered" >            callback(err);</span>
+          }
+<span class="cstat-no" title="statement not covered" >          stream.destroy();</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!bytes) {</span>
+<span class="cstat-no" title="statement not covered" >          if (buff) {</span>
+<span class="cstat-no" title="statement not covered" >            if (options.start == null || row &gt; options.start) {</span>
+<span class="cstat-no" title="statement not covered" >              if (!callback) {</span>
+<span class="cstat-no" title="statement not covered" >                stream.emit('line', buff);</span>
+              } else {
+<span class="cstat-no" title="statement not covered" >                callback(null, buff);</span>
+              }
+            }
+<span class="cstat-no" title="statement not covered" >            row++;</span>
+<span class="cstat-no" title="statement not covered" >            buff = '';</span>
+          }
+<span class="cstat-no" title="statement not covered" >          return setTimeout(read, 1000);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var data = decode.write(buffer.slice(0, bytes));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!callback) {</span>
+<span class="cstat-no" title="statement not covered" >          stream.emit('data', data);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var data = (buff + data).split(/\n+/)</span>
+          , l = data.length - 1
+          , i = 0;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        for (; i &lt; l; i++) {</span>
+<span class="cstat-no" title="statement not covered" >          if (options.start == null || row &gt; options.start) {</span>
+<span class="cstat-no" title="statement not covered" >            if (!callback) {</span>
+<span class="cstat-no" title="statement not covered" >              stream.emit('line', data[i]);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >              callback(null, data[i]);</span>
+            }
+          }
+<span class="cstat-no" title="statement not covered" >          row++;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        buff = data[l];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        pos += bytes;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return read();</span>
+      });
+    })();
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!callback) {</span>
+<span class="cstat-no" title="statement not covered" >    return stream;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return stream.destroy;</span>
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Nov 04 2015 01:42:15 GMT-0800 (PST)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

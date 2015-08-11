@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for lib/winston/transports/transport.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../prettify.css">
+    <link rel="stylesheet" href="../../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">lib/winston/transports/transport.js</span></h1>
+    <h2>
+        Statements: <span class="metric">41.86% <small>(18 / 43)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">37.14% <small>(13 / 35)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">14.29% <small>(1 / 7)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">41.86% <small>(18 / 43)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../../index.html">All files</a> &#187; <a href="index.html">lib/winston/transports/</a> &#187; transport.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+ * transport.js: Base Transport object for all Winston transports.
+ *
+ * (C) 2010 Charlie Robbins
+ * MIT LICENCE
+ *
+ */
+&nbsp;
+var events = require('events'),
+    util = require('util');
+&nbsp;
+//
+// ### function Transport (options)
+// #### @options {Object} Options for this instance.
+// Constructor function for the Tranport object responsible
+// base functionality for all winston transports.
+//
+var Transport = module.exports = function (options) {
+  events.EventEmitter.call(this);
+&nbsp;
+  options        = options        || <span class="branch-1 cbranch-no" title="branch not covered" >{};</span>
+  this.silent    = options.silent || false;
+  this.raw       = options.raw    || false;
+  this.name      = options.name   || this.name;
+  this.formatter = options.formatter;
+&nbsp;
+  //
+  // Do not set a default level. When `level` is falsey on any
+  // `Transport` instance, any `Logger` instance uses the
+  // configured level (instead of the Transport level)
+  //
+  this.level = options.level;
+&nbsp;
+  this.handleExceptions = options.handleExceptions || false;
+  this.exceptionsLevel  = options.exceptionsLevel || 'error';
+  this.humanReadableUnhandledException = options.humanReadableUnhandledException || false;
+};
+&nbsp;
+//
+// Inherit from `events.EventEmitter`.
+//
+util.inherits(Transport, events.EventEmitter);
+&nbsp;
+//
+// ### function formatQuery (query)
+// #### @query {string|Object} Query to format
+// Formats the specified `query` Object (or string) to conform
+// with the underlying implementation of this transport.
+//
+Transport.prototype.formatQuery = <span class="fstat-no" title="function not covered" >function (query) {</span>
+<span class="cstat-no" title="statement not covered" >  return query;</span>
+};
+&nbsp;
+//
+// ### function normalizeQuery (query)
+// #### @options {string|Object} Query to normalize
+// Normalize options for query
+//
+Transport.prototype.normalizeQuery = <span class="fstat-no" title="function not covered" >function (options) {</span>
+  //
+  // Use options similar to loggly.
+  // [See Loggly Search API](http://wiki.loggly.com/retrieve_events#optional)
+  //
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  options = options || {};</span>
+&nbsp;
+  // limit
+<span class="cstat-no" title="statement not covered" >  options.rows = options.rows || options.limit || 10;</span>
+&nbsp;
+  // starting row offset
+<span class="cstat-no" title="statement not covered" >  options.start = options.start || 0;</span>
+&nbsp;
+  // now
+<span class="cstat-no" title="statement not covered" >  options.until = options.until || new Date;</span>
+<span class="cstat-no" title="statement not covered" >  if (typeof options.until !== 'object') {</span>
+<span class="cstat-no" title="statement not covered" >    options.until = new Date(options.until);</span>
+  }
+&nbsp;
+  // now - 24
+<span class="cstat-no" title="statement not covered" >  options.from = options.from || (options.until - (24 * 60 * 60 * 1000));</span>
+<span class="cstat-no" title="statement not covered" >  if (typeof options.from !== 'object') {</span>
+<span class="cstat-no" title="statement not covered" >    options.from = new Date(options.from);</span>
+  }
+&nbsp;
+&nbsp;
+  // 'asc' or 'desc'
+<span class="cstat-no" title="statement not covered" >  options.order = options.order || 'desc';</span>
+&nbsp;
+  // which fields to select
+<span class="cstat-no" title="statement not covered" >  options.fields = options.fields;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return options;</span>
+};
+&nbsp;
+//
+// ### function formatResults (results, options)
+// #### @results {Object|Array} Results returned from `.query`.
+// #### @options {Object} **Optional** Formatting options
+// Formats the specified `results` with the given `options` accordinging
+// to the implementation of this transport.
+//
+Transport.prototype.formatResults = <span class="fstat-no" title="function not covered" >function (results, options) {</span>
+<span class="cstat-no" title="statement not covered" >  return results;</span>
+};
+&nbsp;
+//
+// ### function logException (msg, meta, callback)
+// #### @msg {string} Message to log
+// #### @meta {Object} **Optional** Additional metadata to attach
+// #### @callback {function} Continuation to respond to when complete.
+// Logs the specified `msg`, `meta` and responds to the callback once the log
+// operation is complete to ensure that the event loop will not exit before
+// all logging has completed.
+//
+Transport.prototype.logException = <span class="fstat-no" title="function not covered" >function (msg, meta, callback) {</span>
+<span class="cstat-no" title="statement not covered" >  var self = this,</span>
+      called;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (this.silent) {</span>
+<span class="cstat-no" title="statement not covered" >    return callback();</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function onComplete () {</span>
+<span class="cstat-no" title="statement not covered" >    if (!called) {</span>
+<span class="cstat-no" title="statement not covered" >      called = true;</span>
+<span class="cstat-no" title="statement not covered" >      self.removeListener('logged', onComplete);</span>
+<span class="cstat-no" title="statement not covered" >      self.removeListener('error', onComplete);</span>
+<span class="cstat-no" title="statement not covered" >      callback();</span>
+    }
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  this.once('logged', onComplete);</span>
+<span class="cstat-no" title="statement not covered" >  this.once('error', onComplete);</span>
+<span class="cstat-no" title="statement not covered" >  this.log(self.exceptionsLevel, msg, meta, <span class="fstat-no" title="function not covered" >function () {</span> });</span>
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Nov 04 2015 01:42:15 GMT-0800 (PST)</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>
