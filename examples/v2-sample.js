@@ -4,7 +4,7 @@ var LogStream = winston.LogStream;
 //
 // Writing a custom sanitizer to remove `creditCard`
 //
-var format = winston.format(function (info, opts) {
+var sanitize = winston.format(function (info, opts) {
   //
   // Right now this is impossible. Potentially very bad.
   //
@@ -12,7 +12,9 @@ var format = winston.format(function (info, opts) {
 
   if (opts.env === 'production') { delete info.creditCard; }
   return info;
-}).pipe(winston.format.json());
+})
+
+var format = sanitize().pipe(winston.format.json());
 
 //
 // TODO: make functions like `winston.logger` that return
