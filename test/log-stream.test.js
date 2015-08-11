@@ -8,16 +8,33 @@
 
 'use strict';
 
-var assert = require('assert'),
+var assume = require('assume'),
     path = require('path'),
     util = require('util'),
+    isStream = require('isstream'),
     stdMocks = require('std-mocks'),
-    winston = require('../lib/winston'),
-    transport = require('./transports/transport');
+    winston = require('../lib/winston');
 
 describe('LogStream', function () {
   it('should be instantiated', function () {
     var logger = new winston.LogStream();
+    assume(logger).is.an('object');
+    assume(isStream(logger.format));
+    assume(logger.level).equals('info');
+    assume(logger.exitOnError).equals(true);
+  });
+
+  it('should add a LegacyTransportStream', function () {
+    stdMocks.use();
+    var logger = new winston.LogStream();
+    var transport = new winston.transports.Console();
+    logger.add(transport);
+    stdMocks.restore();
+    var output = stdMocks.flush();
+
+    assume(logger._readableState.pipesCount).equals(1);
+    assume(logger._readableState.pipes).equals(transport);
+    assume(output.stderr).deep.equals(['console is a Legacy winston transport. Consider upgrading\n']);
   });
 });
 

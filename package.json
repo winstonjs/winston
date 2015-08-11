@@ -25,6 +25,7 @@
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
+    "assume": "^1.2.5",
     "hock": "1.x.x",
     "mocha": "^2.2.5",
     "std-mocks": "~1.0.0",
