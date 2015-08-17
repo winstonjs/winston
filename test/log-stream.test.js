@@ -13,7 +13,9 @@ var assume = require('assume'),
     util = require('util'),
     isStream = require('isstream'),
     stdMocks = require('std-mocks'),
-    winston = require('../lib/winston');
+    winston = require('../lib/winston'),
+    TransportStream = require('../lib/winston/transport-stream'),
+    format = require('../lib/winston/formats/format');
 
 describe('LogStream', function () {
   it('should be instantiated', function () {
@@ -22,6 +24,23 @@ describe('LogStream', function () {
     assume(isStream(logger.format));
     assume(logger.level).equals('info');
     assume(logger.exitOnError).equals(true);
+  });
+
+  it('should be instantiated with parameters', function () {
+    var myFormat = format(function (info, opts) {
+      return info;
+    })();
+    var logger = new winston.LogStream({
+      format: myFormat,
+      level: 'error',
+      exitOnError: false,
+      transports: []
+    });
+
+    // TODO is there a way of verifying that there are no transports?
+    assume(logger.format).equals(myFormat);
+    assume(logger.level).equals('error');
+    assume(logger.exitOnError).equals(false);
   });
 
   it('should add a LegacyTransportStream', function () {
@@ -35,6 +54,35 @@ describe('LogStream', function () {
     assume(logger._readableState.pipesCount).equals(1);
     assume(logger._readableState.pipes).equals(transport);
     assume(output.stderr).deep.equals(['console is a Legacy winston transport. Consider upgrading\n']);
+  });
+  it('should add many instances of LegacyTransportStream', function () {
+    stdMocks.use();
+    var logger = new winston.LogStream({
+      transports: [
+        new winston.transports.Console(),
+        new winston.transports.Console(),
+        new winston.transports.Console()
+      ]
+    });
+    stdMocks.restore();
+    var output = stdMocks.flush();
+
+    assume(logger._readableState.pipesCount).equals(3);
+    var errorMsg = 'console is a Legacy winston transport. Consider upgrading\n';
+    assume(output.stderr).deep.equals([errorMsg, errorMsg, errorMsg]);
+  });
+  // TODO Should we validate transports?
+  it.skip('should not add invalid transports', function () {
+    var logger = new winston.LogStream();
+    logger.add(5);
+  });
+  // TODO Make me work
+  it.skip('should work with a TransportStream instance', function () {
+      var logger = new winston.LogStream();
+      var transport = new TransportStream({});
+      logger.add(transport);
+      console.log(logger.log);
+      logger.log({msg: 'foo', level: 'info'});
   });
 });
 
