@@ -37,10 +37,10 @@ describe('LogStream', function () {
       transports: []
     });
 
-    // TODO is there a way of verifying that there are no transports?
     assume(logger.format).equals(myFormat);
     assume(logger.level).equals('error');
     assume(logger.exitOnError).equals(false);
+    assume(logger._readableState.pipesCount).equals(0);
   });
 
   it('should add a LegacyTransportStream', function () {
@@ -71,18 +71,28 @@ describe('LogStream', function () {
     var errorMsg = 'console is a Legacy winston transport. Consider upgrading\n';
     assume(output.stderr).deep.equals([errorMsg, errorMsg, errorMsg]);
   });
-  // TODO Should we validate transports?
-  it.skip('should not add invalid transports', function () {
+  it('should not add invalid transports', function () {
     var logger = new winston.LogStream();
-    logger.add(5);
+    assume(function () {
+      logger.add(5);
+    }).throws(/invalid transport/i);
   });
   // TODO Make me work
-  it.skip('should work with a TransportStream instance', function () {
+  it('should work with a TransportStream instance', function (done) {
       var logger = new winston.LogStream();
       var transport = new TransportStream({});
+      var expected = {msg: 'foo', level: 'info'};
+
+      transport.log = function (info) {
+        assume(info.msg).equals('foo');
+        assume(info.level).equals('info');
+        assume(info.raw).equals(JSON.stringify({msg: 'foo', level: 'info'}));
+        done();
+      };
+
       logger.add(transport);
-      console.log(logger.log);
-      logger.log({msg: 'foo', level: 'info'});
+      logger.log(expected);
+
   });
 });
 
