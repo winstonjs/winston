@@ -27,7 +27,9 @@
   "devDependencies": {
     "assume": "^1.2.5",
     "hock": "1.x.x",
+    "istanbul": "^0.3.18",
     "mocha": "^2.2.5",
+    "mocha-istanbul": "^0.2.0",
     "std-mocks": "~1.0.0",
     "vows": "0.7.x"
   },
