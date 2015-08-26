@@ -63,6 +63,20 @@ vows.describe('winston/transports/console').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    },
+    "with end-of-line": {
+      topic : function() {
+        npmTransport.endOfLine = 'X';
+        stdMocks.use();
+        npmTransport.log('info', '');
+      },
+      "should have end-of-line character appended": function () {
+        stdMocks.restore();
+        var output = stdMocks.flush(),
+            line   = output.stdout[0];
+
+        assert.equal(line, 'info: X');
+      }
     }
   }
 }).export(module);
