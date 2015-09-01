@@ -93,6 +93,36 @@ vows.describe('winston').addBatch({
             assert.isTrue(typeof winston[key] === 'undefined');
           });
       }
+    },
+    "the clone() method": {
+      "with Error object": {
+        topic: function () {
+          var original = new Error("foo");
+          original.name = "bar";
+
+          var copy = winston.clone(original);
+
+          return { original: original, copy: copy };
+        },
+        "should clone the value": function (result) {
+          assert.notEqual(result.original, result.copy);
+          assert.equal(result.original.message, result.copy.message);
+          assert.equal(result.original.name, result.copy.name);
+        }
+      },
+      "with Date object": {
+        topic: function () {
+          var original = new Date(1000);
+
+          var copy = winston.clone(original);
+
+          return { original: original, copy: copy };
+        },
+        "should clone the value": function (result) {
+          assert.notEqual(result.original, result.copy);
+          assert.equal(result.original.getTime(), result.copy.getTime());
+        }
+      }
     }
   }
 }).export(module);
