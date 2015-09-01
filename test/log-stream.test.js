@@ -79,15 +79,15 @@ describe('LogStream', function () {
   });
   it('should work with a TransportStream instance', function (done) {
       var logger = new winston.LogStream();
-      var transport = new TransportStream({});
       var expected = {msg: 'foo', level: 'info'};
-
-      transport.log = function (info) {
-        assume(info.msg).equals('foo');
-        assume(info.level).equals('info');
-        assume(info.raw).equals(JSON.stringify({msg: 'foo', level: 'info'}));
-        done();
-      };
+      var transport = new TransportStream({
+        log: function (info) {
+          assume(info.msg).equals('foo');
+          assume(info.level).equals('info');
+          assume(info.raw).equals(JSON.stringify({msg: 'foo', level: 'info'}));
+          done();
+        }
+      });
 
       logger.add(transport);
       logger.log(expected);
@@ -104,62 +104,71 @@ describe('LogStream', function () {
 
     assume(output.stderr).deep.equals(['Unknown logger level: bar\n']);
   });
-  it.skip('should handle default levels correctly', function (done) {
+
+  it('should handle default levels correctly', function (done) {
     var logger = new winston.LogStream();
     var expected = {msg: 'foo', level: 'info'};
 
     function logLevelTransport(level) {
-      var transport = new TransportStream({level: level});
-      transport.log = function (obj) {
-        // XXX Not ideal, but fortunately mocha handles this right
-        // by reporting done() called multiple times.
-        if (level === 'error') {
-          return done('transport on level error should never be called');
+      return new TransportStream({
+        level: level,
+        log: function (obj) {
+          if (level === 'debug') {
+            assume(obj).equals(undefined, 'Transport on level debug should never be called');
+          }
+
+          assume(obj.msg).equals('foo');
+          assume(obj.level).equals('info');
+          assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'info'}));
+          done();
         }
-        assume(obj.msg).equals('foo');
-        assume(obj.level).equals('info');
-        assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'info'}));
-        done();
-      };
-      return transport;
+      });
     }
 
-    var infoTransport = logLevelTransport('info');
-    var errorTransport = logLevelTransport('error');
 
-    logger.add(infoTransport);
-    logger.add(errorTransport);
+    assume(logger.info).is.a('function');
+    assume(logger.debug).is.a('function');
 
-    logger.log(expected);
+    logger
+      .add(logLevelTransport('info'))
+      .add(logLevelTransport('debug'))
+      .log(expected);
   });
-  it.skip('should handle custom levels correctly', function (done) {
+
+  it('should handle custom levels correctly', function (done) {
     var logger = new winston.LogStream({
       levels: {
-        silly:   0,
-        error:   1
+        missing: 0,
+        bad:     1,
+        test:    2
       }
     });
-    var expected = {msg: 'foo', level: 'silly'};
+
+    var expected = {msg: 'foo', level: 'missing'};
     function logLevelTransport(level) {
-      var transport = new TransportStream({level: level});
-      transport.log = function (obj) {
-        if (level === 'error') {
-          return done('transport on level error should never be called');
+      return new TransportStream({
+        level: level,
+        log: function (obj) {
+          if (level === 'test') {
+            assume(obj).equals(undefined, 'transport on level test should never be called');
+          }
+
+          assume(obj.msg).equals('foo');
+          assume(obj.level).equals('missing');
+          assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'missing'}));
+          done();
         }
-        assume(obj.msg).equals('foo');
-        assume(obj.level).equals('silly');
-        assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'silly'}));
-        done();
-      };
-      return transport;
+      });
     }
-    var sillyTransport = logLevelTransport('silly');
-    var errorTransport = logLevelTransport('error');
 
-    logger.add(sillyTransport);
-    logger.add(errorTransport);
+    assume(logger.missing).is.a('function');
+    assume(logger.bad).is.a('function');
+    assume(logger.test).is.a('function');
 
-    logger.log(expected);
+    logger
+      .add(logLevelTransport('test'))
+      .add(logLevelTransport('missing'))
+      .log(expected);
   });
 });
 
@@ -214,7 +223,29 @@ vows.describe('winton/logger').addBatch({
           assert.equal(level, 'info');
           assert.equal(msg, 'test message');
         }
+      }
+    }
+  }
+}).addBatch({
+  "An instance of winston.Logger": {
+    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+    "the configure() method": {
+      "with no options": function (logger) {
+        assert.equal(Object.keys(logger.transports).length, 1);
+        assert.deepEqual(logger._names, ['console']);
+        logger.configure();
+        assert.equal(Object.keys(logger.transports).length, 0);
+        assert.deepEqual(logger._names, []);
       },
+      "with options { transports }": function (logger) {
+        assert.equal(Object.keys(logger.transports).length, 0);
+        assert.deepEqual(logger._names, []);
+        logger.configure({
+          transports: [new winston.transports.Console({ level: 'verbose' })]
+        });
+        assert.equal(Object.keys(logger.transports).length, 1);
+        assert.deepEqual(logger._names, ['console']);
+      }
     }
   }
 }).addBatch({
@@ -222,18 +253,6 @@ vows.describe('winton/logger').addBatch({
     topic: new (winston.Logger)({ emitErrs: true }),
     "the log() method should throw an error": function (logger) {
       assert.throws(function () { logger.log('anything') }, Error);
-    },
-    "the extend() method called on an empty object": {
-      topic: function (logger) {
-        var empty = {};
-        logger.extend(empty);
-        return empty;
-      },
-      "should define the appropriate methods": function (extended) {
-        ['log', 'profile', 'startTimer'].concat(Object.keys(winston.config.npm.levels)).forEach(function (method) {
-          assert.isFunction(extended[method]);
-        });
-      }
     },
     "the add() method with a supported transport": {
       topic: function (logger) {
@@ -318,7 +337,7 @@ vows.describe('winton/logger').addBatch({
         "when not passed a callback": {
           topic: function (logger) {
             var that = this;
-            var timer = logger.startTimer()
+            var timer = logger.startTimer();
             logger.once('logging', that.callback.bind(null, null));
             setTimeout(function () {
               timer.done();
@@ -360,7 +379,7 @@ vows.describe('winton/logger').addBatch({
     },
     "the remove() with an unadded transport": {
       "should throw an Error": function (logger) {
-        assert.throws(function () { logger.remove(winston.transports.Webhook) }, Error);
+        assert.throws(function () { logger.remove(winston.transports.Http) }, Error);
       }
     },
     "the remove() method with an added transport": {
@@ -420,6 +439,9 @@ vows.describe('winton/logger').addBatch({
       ]
     }),
     "the log() method": {
+      "when passed undefined should not throw": function (logger) {
+        assert.doesNotThrow(function () { logger.log('info', undefined) });
+      },
       "when passed an Error object as meta": {
         topic: function (logger) {
           logger.once('logging', this.callback);

@@ -383,6 +383,8 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
 
 ## Logging Levels
 
+Logging levels in `winston` conform to the severity ordering specified by [RFC524](https://tools.ietf.org/html/rfc5424): _severity of all levels is assumed to be numerically **ascending** from most important to least important._
+
 Each `level` is given a specific integer priority. The higher the priority the more important the message is considered to be, and the lower the corresponding integer priority.  For example, `npm` logging levels are prioritized from 0 to 5 (highest to lowest):
 
 ``` js
