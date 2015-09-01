@@ -179,7 +179,7 @@ vows.describe('winton/logger').addBatch({
         "when not passed a callback": {
           topic: function (logger) {
             var that = this;
-            var timer = logger.startTimer()
+            var timer = logger.startTimer();
             logger.once('logging', that.callback.bind(null, null));
             setTimeout(function () {
               timer.done();

@@ -77,7 +77,6 @@ describe('LogStream', function () {
       logger.add(5);
     }).throws(/invalid transport/i);
   });
-  // TODO Make me work
   it('should work with a TransportStream instance', function (done) {
       var logger = new winston.LogStream();
       var transport = new TransportStream({});
@@ -92,7 +91,75 @@ describe('LogStream', function () {
 
       logger.add(transport);
       logger.log(expected);
+  });
 
+  it('should report unknown logger levels', function () {
+    stdMocks.use();
+    var logger = new winston.LogStream();
+    var expected = {msg: 'foo', level: 'bar'};
+    logger.log(expected);
+
+    stdMocks.restore();
+    var output = stdMocks.flush();
+
+    assume(output.stderr).deep.equals(['Unknown logger level: bar\n']);
+  });
+  it.skip('should handle default levels correctly', function (done) {
+    var logger = new winston.LogStream();
+    var expected = {msg: 'foo', level: 'info'};
+
+    function logLevelTransport(level) {
+      var transport = new TransportStream({level: level});
+      transport.log = function (obj) {
+        // XXX Not ideal, but fortunately mocha handles this right
+        // by reporting done() called multiple times.
+        if (level === 'error') {
+          return done('transport on level error should never be called');
+        }
+        assume(obj.msg).equals('foo');
+        assume(obj.level).equals('info');
+        assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'info'}));
+        done();
+      };
+      return transport;
+    }
+
+    var infoTransport = logLevelTransport('info');
+    var errorTransport = logLevelTransport('error');
+
+    logger.add(infoTransport);
+    logger.add(errorTransport);
+
+    logger.log(expected);
+  });
+  it.skip('should handle custom levels correctly', function (done) {
+    var logger = new winston.LogStream({
+      levels: {
+        silly:   0,
+        error:   1
+      }
+    });
+    var expected = {msg: 'foo', level: 'silly'};
+    function logLevelTransport(level) {
+      var transport = new TransportStream({level: level});
+      transport.log = function (obj) {
+        if (level === 'error') {
+          return done('transport on level error should never be called');
+        }
+        assume(obj.msg).equals('foo');
+        assume(obj.level).equals('silly');
+        assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'silly'}));
+        done();
+      };
+      return transport;
+    }
+    var sillyTransport = logLevelTransport('silly');
+    var errorTransport = logLevelTransport('error');
+
+    logger.add(sillyTransport);
+    logger.add(errorTransport);
+
+    logger.log(expected);
   });
 });
 
