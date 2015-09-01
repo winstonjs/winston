@@ -55,6 +55,7 @@ describe('LogStream', function () {
     assume(logger._readableState.pipes).equals(transport);
     assume(output.stderr).deep.equals(['console is a Legacy winston transport. Consider upgrading\n']);
   });
+
   it('should add many instances of LegacyTransportStream', function () {
     stdMocks.use();
     var logger = new winston.LogStream({
@@ -71,12 +72,14 @@ describe('LogStream', function () {
     var errorMsg = 'console is a Legacy winston transport. Consider upgrading\n';
     assume(output.stderr).deep.equals([errorMsg, errorMsg, errorMsg]);
   });
+
   it('should not add invalid transports', function () {
     var logger = new winston.LogStream();
     assume(function () {
       logger.add(5);
     }).throws(/invalid transport/i);
   });
+
   it('should work with a TransportStream instance', function (done) {
       var logger = new winston.LogStream();
       var expected = {msg: 'foo', level: 'info'};
@@ -175,17 +178,6 @@ describe('LogStream', function () {
 /*
 vows.describe('winton/logger').addBatch({
   "An instance of winston.Logger": {
-    "with transports": {
-      topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
-      "should have the correct methods / properties defined": function (logger) {
-        helpers.assertLogger(logger);
-      },
-      "the add() with an unsupported transport": {
-        "should throw an error": function () {
-          assert.throws(function () { logger.add('unsupported') }, Error);
-        }
-      }
-    },
     "with no transports": {
       topic: new winston.Logger(),
       "the log method": {
