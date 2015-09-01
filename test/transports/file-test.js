@@ -92,6 +92,42 @@ vows.describe('winston/transports/file').addBatch({
     }
   }
 }).addBatch({
+  "Error object in metadata #610": {
+    topic: function () {
+      var myErr = new Error("foo");
+
+      fileTransport.log('info', 'test message', myErr, this.callback.bind(this, null, myErr));
+    },
+    "should not be modified": function (err, myErr) {
+      assert.equal(myErr.message, "foo");
+      // Not sure if this is the best possible way to check if additional props appeared
+      assert.deepEqual(Object.getOwnPropertyNames(myErr), Object.getOwnPropertyNames(new Error("foo")));
+    }
+  }
+}).addBatch({
+  "Date object in metadata": {
+    topic: function () {
+      var obj = new Date(1000);
+
+      fileTransport.log('info', 'test message', obj, this.callback.bind(this, null, obj));
+    },
+    "should not be modified": function (err, obj) {
+      // Not sure if this is the best possible way to check if additional props appeared
+      assert.deepEqual(Object.getOwnPropertyNames(obj), Object.getOwnPropertyNames(new Date()));
+    }
+  }
+}).addBatch({
+  "Plain object in metadata": {
+    topic: function () {
+      var obj = { message: "foo" };
+
+      fileTransport.log('info', 'test message', obj, this.callback.bind(this, null, obj));
+    },
+    "should not be modified": function (err, obj) {
+      assert.deepEqual(obj, { message: "foo" });
+    }
+  }
+}).addBatch({
   "An instance of the File Transport": transport(winston.transports.File, {
     filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
   })
