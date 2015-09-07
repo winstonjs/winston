@@ -21,6 +21,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [SimpleDB](#simpledb-transport)
   * [Mail](#mail-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
+  * [Amazon CloudWatch](#amazon-cloudwatch-transport)
   * [Graylog2](#graylog2-transport)
   * [Cassandra](#cassandra-transport)
   * [Azure Table](#azure-table)
@@ -319,6 +320,25 @@ Options:
 * __json:__ use json instead of a prettier (human friendly) string for meta information in the notification. (default: `false`)
 * __handleExceptions:__ set to true to have this transport handle exceptions. (default: `false`)
 
+### Amazon CloudWatch Transport
+
+The [winston-aws-cloudwatch][24] transport relays your log messages to Amazon CloudWatch.
+
+```js
+  var winston = require('winston'),
+      winstonAwsCloudWatch = require('winston-aws-cloudwatch');
+
+  winston.add(winstonAwsCloudWatch, options);
+```
+
+Options:
+
+* __logGroupName:__ The name of the CloudWatch log group to which to log. *[required]*
+* __logStreamName:__ The name of the CloudWatch log stream to which to log. *[required]*
+* __awsConfig:__ An object containing your `accessKeyId`, `secretAccessKey`, `region`, etc.
+
+Alternatively, you may be interested in [winston-cloudwatch][25].
+
 ### Amazon DynamoDB Transport
 The [winston-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
 
@@ -543,3 +563,5 @@ If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic
 [21]: https://github.com/jpoon/winston-azuretable
 [22]: https://github.com/rickcraig/winston-airbrake2
 [23]: https://github.com/namshi/winston-newrelic
+[24]: https://github.com/timdp/winston-aws-cloudwatch
+[25]: https://github.com/lazywithclass/winston-cloudwatch
