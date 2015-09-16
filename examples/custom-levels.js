@@ -12,13 +12,13 @@ var winston = require('../lib/winston');
 //
 var config = {
   levels: {
-    silly: 0,
-    verbose: 1,
-    info: 2,
+    error: 0,
+    debug: 1,
+    warn: 2,
     data: 3,
-    warn: 4,
-    debug: 5,
-    error: 6
+    info: 4,
+    verbose: 5,
+    silly: 6
   },
   colors: {
     silly: 'magenta',
