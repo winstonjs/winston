@@ -255,11 +255,13 @@ If you want to use this feature with the default logger simply call `.handleExce
   winston.handleExceptions(new winston.transports.File({ filename: 'path/to/exceptions.log' }))
 
   //
-  // Alternatively you can set `.handleExceptions` to true when adding transports to winston
+  // Alternatively you can set `.handleExceptions` to true when adding transports to winston.
+  // You can use the `.humanReadableUnhandledException` option to get more readable exceptions.
   //
   winston.add(winston.transports.File, {
     filename: 'path/to/all-logs.log',
-    handleExceptions: true
+    handleExceptions: true,
+    humanReadableUnhandledException: true
   });
 ```
 
