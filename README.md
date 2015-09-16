@@ -349,7 +349,25 @@ Setting the level for your logging message can be accomplished in one of two way
   winston.info("127.0.0.1 - there's no place like home");
 ```
 
-Winston allows you to set a `level` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file (note that the default level of a transport is `info`):
+Each `level` is given a specific integer priority.  The higher the priority, the more important the message is considered to be.  For example, `npm` logging levels are prioritized from 0 to 5:
+
+``` js
+{  silly: 0,  debug: 1,  verbose: 2,  info: 3,  warn: 4,  error: 5  };
+```
+
+Similarly, `syslog` levels are prioritized from 0 to 7:
+
+``` js
+{  debug: 0,  info: 1,  notice: 2,  warning: 3,  error: 4,  crit: 5,  alert: 6,  emerg: 7  };
+```
+
+If you do not explicitly define the levels that Winston should use (more on how to do that can be found below), then Winston will use a default set of priorities (named `cli`) that roughly combine the two:
+
+``` js
+{  silly: 0,  input: 1,  verbose: 2,  prompt: 3,  debug: 4,  info: 5,  data: 6,  help: 7,  warn: 8,  error: 9 };
+```
+
+Winston allows you to define a `level` property on each transport which specifies the *minimum* level of messages that a transport should log. For example, you could log only errors (and above) to the console:
 
 ``` js
   var logger = new (winston.Logger)({
@@ -359,6 +377,10 @@ Winston allows you to set a `level` on each transport that specifies the level o
     ]
   });
 ```
+
+In the example above, and depending on your levels configuration, errors and any level higher would be output to the console.  Anything lower than an `error` would skip the console.
+
+Also, since a level was not specified for the `File` transport, it would default to `info`, which is the default level for transports. 
 
 You may also dynamically change the log level of a transport:
 
