@@ -59,15 +59,15 @@ vows.describe('winston/container').addBatch({
     topic: function () {
       this.port = 9412;
       this.transports = [
-        new winston.transports.Webhook({
+        new winston.transports.Http({
           port: this.port
         })
       ];
-      
+
       this.container = new winston.Container({
         transports: this.transports
       });
-      
+
       return null;
     },
     "the get() method": {
@@ -81,17 +81,17 @@ vows.describe('winston/container').addBatch({
       "should add the logger correctly": function () {
         this.someLogger = this.container.get('some-logger');
         assert.isObject(this.someLogger.transports);
-        assert.instanceOf(this.someLogger.transports['webhook'], winston.transports.Webhook);
-        assert.strictEqual(this.someLogger.transports['webhook'], this.transports[0]);
+        assert.instanceOf(this.someLogger.transports['http'], winston.transports.Http);
+        assert.strictEqual(this.someLogger.transports['http'], this.transports[0]);
       },
       "a second call to get()": {
         "should respond with the same transport object": function () {
           this.someOtherLogger = this.container.get('some-other-logger');
 
           assert.isObject(this.someOtherLogger.transports);
-          assert.instanceOf(this.someOtherLogger.transports['webhook'], winston.transports.Webhook);
-          assert.strictEqual(this.someOtherLogger.transports['webhook'], this.transports[0]);
-          assert.strictEqual(this.someOtherLogger.transports['webhook'], this.someLogger.transports['webhook']);
+          assert.instanceOf(this.someOtherLogger.transports['http'], winston.transports.Http);
+          assert.strictEqual(this.someOtherLogger.transports['http'], this.transports[0]);
+          assert.strictEqual(this.someOtherLogger.transports['http'], this.someLogger.transports['http']);
         }
       }
     }

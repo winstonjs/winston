@@ -26,7 +26,6 @@ vows.describe('winston').addBatch({
       assert.isTrue(!winston.transports.Transport);
       assert.isFunction(winston.transports.Console);
       assert.isFunction(winston.transports.File);
-      assert.isFunction(winston.transports.Webhook);
       assert.isObject(winston.default.transports.console);
       assert.isFalse(winston.emitErrs);
       assert.isObject(winston.config);
@@ -72,7 +71,6 @@ vows.describe('winston').addBatch({
       "should have the proper methods defined": function () {
         assert.isObject(winston.transports);
         assert.isFunction(winston.transports.Console);
-        assert.isFunction(winston.transports.Webhook);
         assert.isObject(winston.default.transports.console);
         assert.isFalse(winston.emitErrs);
         assert.isObject(winston.config);
