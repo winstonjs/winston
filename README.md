@@ -47,6 +47,8 @@ There are two different ways to use winston: directly via the default logger, or
 
 ## Logging
 
+Logging levels in `winston` conform to the severity ordering specified by [RFC524](https://tools.ietf.org/html/rfc5424): _severity of all levels is assumed to be numerically **ascending** from most important to least important._
+
 ### Using the Default Logger
 The default logger is accessible through the winston module directly. Any method that you could call on an instance of a logger is available on the default logger:
 
@@ -327,6 +329,20 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
 
 ## Logging Levels
 
+Each `level` is given a specific integer priority. The higher the priority the more important the message is considered to be, and the lower the corresponding integer priority.  For example, `npm` logging levels are prioritized from 0 to 5 (highest to lowest):
+
+``` js
+{ error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
+```
+
+Similarly, as specified exactly in RFC524 the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
+
+```js
+{ emerg: 0, alert: 1, crit: 2, error: 3, warning: 4, notice: 5, info: 6, debug: 7 }
+```
+
+If you do not explicitly define the levels that `winston` should use the `npm` levels above will be used.
+
 ### Using Logging Levels
 Setting the level for your logging message can be accomplished in one of two ways. You can pass a string representing the logging level to the log() method or use the level specified methods defined on every winston Logger.
 
@@ -351,13 +367,16 @@ Setting the level for your logging message can be accomplished in one of two way
   winston.info("127.0.0.1 - there's no place like home");
 ```
 
-Winston allows you to set a `level` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file (note that the default level of a transport is `info`):
+`winston` allows you to define a `level` property on each transport which specifies the **maximum** level of messages that a transport should log. For example, using the `npm` levels you could log only `error` messages to the console and everything `info` and below to a file (which includes `error` messages):
 
 ``` js
   var logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({ level: 'error' }),
-      new (winston.transports.File)({ filename: 'somefile.log' })
+      new (winston.transports.File)({
+        filename: 'somefile.log',
+        level: 'info'
+      })
     ]
   });
 ```
