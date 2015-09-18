@@ -7,7 +7,6 @@ There are several [core transports](#winston-core) included in `winston`, which 
 * **[Winston Core](#winston-core)**
   * [Console](#console-transport)
   * [File](#file-transport)
-  * [DailyRotateFile](#dailyrotatefile-transport)
   * [Http](#http-transport)
 
 * **[Winston More](#winston-more)**
@@ -35,7 +34,6 @@ There are several core transports included in `winston`, which leverage the buil
 
 * [Console](#console-transport)
 * [File](#file-transport)
-* [DailyRotateFile](#dailyrotatefile-transport)
 * [Http](#http-transport)
 
 ### Console Transport
@@ -87,32 +85,6 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.
 * __maxRetries:__ The number of stream creation retry attempts before entering a failed state. In a failed state the transport stays active but performs a NOOP on it's log function. (default 2)
 * __zippedArchive:__ If true, all log files but the current one will be zipped.
-
-*Metadata:* Logged via util.inspect(meta);
-
-
-### DailyRotateFile Transport
-
-``` js
-  winston.add(winston.transports.DailyRotateFile, options)
-```
-
-The DailyRotateFile transport can rotate files by minute, hour, day, month or year. Its options are identical to the File transport with the lone addition of the 'datePattern' option:
-
-* __datePattern:__ A string representing the pattern to be used when appending the date to the filename (default '.yyyy-MM-dd'). The meta characters used in this string will dictate the frequency of the file rotation. For example if your datePattern is simply '.HH' you will end up with 24 log files that are picked up and appended to every day.
-
-Valid meta characters in the datePattern are:
-
-* __yy:__ Last two digits of the year.
-* __yyyy:__ Full year.
-* __M:__ The month.
-* __MM:__ The zero padded month.
-* __d:__ The day.
-* __dd:__ The zero padded day.
-* __H:__ The hour.
-* __HH:__ The zero padded hour.
-* __m:__ The minute.
-* __mm:__ The zero padded minute.
 
 *Metadata:* Logged via util.inspect(meta);
 
