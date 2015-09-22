@@ -496,11 +496,15 @@ If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic
   logger.add (Logsene, {token: process.env.LOGSENE_TOKEN})
   logger.info ("Info message no. %d logged to %s",1,'Logsene', {metadata: "test-log", count:1 , tags: ['test', 'info', 'winston'], memoryUsage: process.memoryUsage()})
 ```
-Logsene [Logsene](http://www.sematext.com/logsene/) provides:
+Options: 
+* __token__: Logsene Application Token 
+* __source__: Source of the logs (defaults to main module)
+
+[Logsene](http://www.sematext.com/logsene/) features:
 - Fulltext search 
 - Anomaly detection and alerts 
-- Kibana4 Dashboards 
-- Integration with [SPM performance monitoring](http://www.sematext.com/spm/integrations/nodejs-monitoring.html)
+- Kibana4 integration
+- Integration with [SPM Performance Monitoring for Node.js](http://www.sematext.com/spm/integrations/nodejs-monitoring.html)
 
 ## Find more Transports
 
