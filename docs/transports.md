@@ -26,6 +26,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Azure Table](#azure-table)
   * [Airbrake](#airbrake-transport)
   * [Newrelic](#newrelic-transport) (errors only)
+  * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
 
 ## Winston Core
 
@@ -484,6 +485,26 @@ The Newrelic transport will send your errors to newrelic and accepts the follwin
 
 If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic module saving devs from anoying errors ;)
 
+### Logsene Transport
+
+[winston-logsene][24] transport for Elasticsearch bulk indexing via HTTPS to Logsene:
+
+``` js
+  var winston = require('winston')
+  var Logsene = require('winston-logsene') 
+  var logger = new winston.Logger()
+  logger.add (Logsene, {token: process.env.LOGSENE_TOKEN})
+  logger.info ("Info message no. %d logged to %s",1,'Logsene', {metadata: "test-log", count:1 , tags: ['test', 'info', 'winston'], memoryUsage: process.memoryUsage()})
+```
+Options: 
+* __token__: Logsene Application Token 
+* __source__: Source of the logs (defaults to main module)
+
+[Logsene](http://www.sematext.com/logsene/) features:
+- Fulltext search 
+- Anomaly detection and alerts 
+- Kibana4 integration
+- Integration with [SPM Performance Monitoring for Node.js](http://www.sematext.com/spm/integrations/nodejs-monitoring.html)
 
 ## Find more Transports
 
@@ -543,3 +564,4 @@ If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic
 [21]: https://github.com/jpoon/winston-azuretable
 [22]: https://github.com/rickcraig/winston-airbrake2
 [23]: https://github.com/namshi/winston-newrelic
+[24]: https://github.com/sematext/winston-logsene
