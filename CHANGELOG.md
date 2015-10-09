@@ -1,6 +1,39 @@
-## v1.0.0 / 2015-04-07
+## v1.1.0 / 2015-10-09
+### GREETINGS FROM CARTAGENA EDITION
 
-### Breaking Changes
+#### Notable Changes
+  * [#721](https://github.com/winstonjs/winston/pull/721) Fixed octal literal to work with node 4 strict mode (`wesleyeff`)
+  * [#630](https://github.com/winstonjs/winston/pull/630) Add stderrLevels option to Console Transport and update docs (`paulhroth`)
+  * [#626](https://github.com/winstonjs/winston/pull/626) Add the logger (this) in the fourth argument in the rewriters and filters functions (`christophehurpeau `)
+  * [#623](https://github.com/winstonjs/winston/pull/623) Fix Console Transport's align option tests (`paulhroth`, `kikobeats`)
+  * [#692](https://github.com/winstonjs/winston/pull/692) Adding winston-aws-cloudwatch to transport docs (`timdp`)
+
+## v1.0.2 2015-09-25
+### LET'S TALK ON GITTER EDITION
+
+#### Notable Changes
+  * [de80160](https://github.com/winstonjs/winston/commit/de80160) Add Gitter badge (`The Gitter Badger`)
+  * [44564de](https://github.com/winstonjs/winston/commit/44564de) [fix] Correct listeners in `logException`. Fixes [#218](https://github.com/winstonjs/winston/issues/218) [#213](https://github.com/winstonjs/winston/issues/213) [#327](https://github.com/winstonjs/winston/issues/327). (`indexzero`)
+  * [45b1eeb](https://github.com/winstonjs/winston/commit/45b1eeb) [fix] Get `tailFile` function working on latest/all node versions (`Christopher Jeffrey`)
+  * [c6d45f9](https://github.com/winstonjs/winston/commit/c6d45f9) Fixed event subscription on close (`Roman Stetsyshin`)
+
+#### Other changes
+  * TravisCI updates & best practices [87b97cc](https://github.com/winstonjs/winston/commit/87b97cc) [91a5bc4](https://github.com/winstonjs/winston/commit/91a5bc4), [cf24e6a](https://github.com/winstonjs/winston/commit/cf24e6a) (`indexzero`)
+  * [d5397e7](https://github.com/winstonjs/winston/commit/d5397e7) Bump async version (`Roderick Hsiao`)
+  * Documentation updates & fixes [86d7527](https://github.com/winstonjs/winston/commit/86d7527), [38254c1](https://github.com/winstonjs/winston/commit/38254c1), [04e2928](https://github.com/winstonjs/winston/commit/04e2928), [61c8a89](https://github.com/winstonjs/winston/commit/61c8a89), [c42a783](https://github.com/winstonjs/winston/commit/c42a783), [0688a22](https://github.com/winstonjs/winston/commit/0688a22), [eabc113](https://github.com/winstonjs/winston/commit/eabc113) [c9506b7](https://github.com/winstonjs/winston/commit/c9506b7), [17534d2](https://github.com/winstonjs/winston/commit/17534d2), [b575e7b](https://github.com/winstonjs/winston/commit/b575e7b) (`Stefan Thies`, `charukiewicz`, `unLucio`, `Adam Cohen`, `Denis Gorbachev`, `Frederik Ring`, `Luigi Pinca`, `jeffreypriebe`)
+  * Documentation refactor & cleanup [a19607e](https://github.com/winstonjs/winston/commit/a19607e), [d1932b4](https://github.com/winstonjs/winston/commit/d1932b4), [7a13132](https://github.com/winstonjs/winston/commit/7a13132) (`indexzero`)
+
+
+## v1.0.1 / 2015-06-26
+### YAY DOCS EDITION
+
+  * [#639](https://github.com/winstonjs/winston/pull/639) Fix for [#213](https://github.com/winstonjs/winston/issues/213): More than 10 containers triggers EventEmitter memory leak warning (`marcus`)
+  * Documentation and `package.json` updates [cec892c](https://github.com/winstonjs/winston/commit/cec892c), [2f13b4f](https://github.com/winstonjs/winston/commit/2f13b4f), [b246efd](https://github.com/winstonjs/winston/commit/b246efd), [22a5f5a](https://github.com/winstonjs/winston/commit/22a5f5a), [5868b78](https://github.com/winstonjs/winston/commit/5868b78), [99b6b44](https://github.com/winstonjs/winston/commit/99b6b44), [447a813](https://github.com/winstonjs/winston/commit/447a813), [7f75b48](https://github.com/winstonjs/winston/commit/7f75b48) (`peteward44`, `Gilad Peleg`, `Anton Ian Sipos`, `nimrod-becker`, `LarsTi`, `indexzero`)
+
+## v1.0.0 / 2015-04-07
+### OMG 1.0.0 FINALLY EDITION
+
+#### Breaking Changes
   * [#587](https://github.com/winstonjs/winston/pull/587) Do not extend `String` prototypes as a side effect of using `colors`. (`kenperkins`)
   * [#581](https://github.com/winstonjs/winston/pull/581) File transports now emit `error` on error of the underlying streams after `maxRetries` attempts. (`ambbell`).
   * [#583](https://github.com/winstonjs/winston/pull/583), [92729a](https://github.com/winstonjs/winston/commit/92729a68d71d07715501c35d94d2ac06ac03ca08) Use `os.EOL` for all file writing by default. (`Mik13`, `indexzero`)
@@ -8,7 +41,7 @@
   * [#380](https://github.com/winstonjs/winston/pull/380) Rename `duration` to `durationMs`, which is now a number a not a string ending in `ms`. (`neoziro`)
   * [#253](https://github.com/winstonjs/winston/pull/253) Do not set a default level. When `level` is falsey on any `Transport` instance, any `Logger` instance uses the configured level (instead of the Transport level) (`jstamerj`).
 
-### Other changes
+#### Other changes
 
   * [b83de62](https://github.com/winstonjs/winston/commit/b83de62) Fix rendering of stack traces.
   * [c899cc](https://github.com/winstonjs/winston/commit/c899cc1f0719e49b26ec933e0fa263578168ea3b) Update documentation (Fixes [#549](https://github.com/winstonjs/winston/issues/549))
