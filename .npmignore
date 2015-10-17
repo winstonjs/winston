@@ -1,8 +1,11 @@
-test/*.log
-test/fixtures/*.json
-test/fixtures/logs/*.log*
-test/fixtures/keys/
-test/transports/webhook-test.js
+.*
+*.log
+test
+test/*
 node_modules/
 node_modules/*
-npm-debug.log
+*.md
+examples
+examples/*
+docs
+docs/*
