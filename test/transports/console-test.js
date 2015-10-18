@@ -17,6 +17,7 @@ var npmTransport = new (winston.transports.Console)(),
     syslogTransport = new (winston.transports.Console)({ levels: winston.config.syslog.levels }),
     alignTransport = new (winston.transports.Console)({ showLevel: true, align: true }),
     defaultTransport = new (winston.transports.Console)(),
+    rawTransport = new (winston.transports.Console)({ level: 'verbose', raw: true }),
     debugStdoutTransport = new (winston.transports.Console)({ debugStdout: true }),
     stderrLevelsTransport = new (winston.transports.Console)({ stderrLevels: ['info', 'warn'] }),
     customLevels = {
@@ -34,6 +35,7 @@ var npmTransport = new (winston.transports.Console)(),
 
 vows.describe('winston/transports/console').addBatch({
   "An instance of the Console Transport": {
+
     "with showLevel on": {
       topic : function() {
         npmTransport.showLevel = true;
@@ -108,6 +110,19 @@ vows.describe('winston/transports/console').addBatch({
           line   = output.stdout[0];
 
       assert.equal(line, 'info: \n');
+    }
+  }
+}).addBatch({
+  'An instance of a raw Console transport': {
+    'logging to stdout': {
+      topic: function () {
+        stdMocks.use();
+        rawTransport.log('verbose', 'hello there');
+      }, 'should output json with message property': function () {
+        stdMocks.restore();
+        var output = stdMocks.flush();
+        assert.ok(output.stdout[0].indexOf('"message":"hello there"') > -1);
+      }
     }
   }
 }).addBatch({
