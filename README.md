@@ -38,7 +38,6 @@ There are two different ways to use winston: directly via the default logger, or
   * [Events and Callbacks in Winston](#events-and-callbacks-in-winston)
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
-  * [Extending another object with Logging](#extending-another-object-with-logging)
   * [Filters and Rewriters](#filters-and-rewriters)
   * [Adding Custom Transports](#adding-custom-transports)
 * [Installation](#installation)
@@ -637,20 +636,6 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
   });
 
   logger.cli();
-```
-
-### Extending another object with Logging
-Often in a given code base with lots of Loggers it is useful to add logging methods to a different object so that these methods can be called with less syntax. Winston exposes this functionality via the 'extend' method:
-
-``` js
-  var myObject = {};
-
-  logger.extend(myObject);
-
-  //
-  // You can now call logger methods on 'myObject'
-  //
-  myObject.info("127.0.0.1 - there's no place like home");
 ```
 
 ### Filters and Rewriters
