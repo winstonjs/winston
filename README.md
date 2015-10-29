@@ -657,7 +657,7 @@ Often in a given code base with lots of Loggers it is useful to add logging meth
 Filters allow modifying the contents of **log messages**, and Rewriters allow modifying the contents of **log meta** e.g. to mask data that should not appear in logs.
 
 ``` js
-logger.addFilter(function(msg, meta, level) {
+logger.filters.push(function(msg, meta, level) {
   return meta.production
     ? maskCardNumbers(msg)
     : msg;
@@ -675,7 +675,7 @@ info: transaction with card number 123456****2345 successful.
 Where as for rewriters, if you wanted to sanitize the `creditCard` field of your `meta` you could:
 
 ``` js
-logger.addRewriter(function(level, msg, meta) {
+logger.rewriters.push(function(level, msg, meta) {
   if (meta.creditCard) {
     meta.creditCard = maskCardNumbers(meta.creditCard)
   }
