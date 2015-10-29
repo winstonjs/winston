@@ -1,3 +1,10 @@
+## v1.1.1 - v1.1.2 / 2015-10
+### MINOR FIXES EDITION
+
+#### Notable changes
+  * [727](https://github.com/winstonjs/winston/pull/727) Fix "raw" mode (`jcrugzz`)
+  * [703](https://github.com/winstonjs/winston/pull/703) Do not modify Error or Date objects when logging. Fixes #610 (`harriha`).
+
 ## v1.1.0 / 2015-10-09
 ### GREETINGS FROM CARTAGENA EDITION
 
