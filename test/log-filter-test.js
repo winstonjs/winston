@@ -49,7 +49,7 @@ vows.describe('winston/logger/filter').addBatch({
     ]}),
     "the filters.push() method, adding a filter only for the message": {
       topic: function (logger) {
-        logger.filters.push(function (msg) {
+        logger.filters.push(function (level, msg) {
           return maskCardNumbers(msg);
         });
 
@@ -76,7 +76,7 @@ vows.describe('winston/logger/filter').addBatch({
     }),
     "the filters.push() method adding a filter for the message and metadata": {
       topic: function (logger) {
-        logger.filters.push(function (msg, meta) {
+        logger.filters.push(function (level, msg, meta) {
           return maskSecrets(msg, meta);
         });
 

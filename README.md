@@ -671,14 +671,14 @@ Both filters and rewriters are simple Arrays of functions which can be provided 
 ``` js
 var logger = new winston.Logger({
   rewriters: [function (level, msg, meta) { /* etc etc */ }]
-  filters:   [function (msg, meta, level) { /* etc etc */ }]
+  filters:   [function (level, msg, meta) { /* etc etc */ }]
 })
 ```
 
 Like any Array they can also be modified at runtime with no adverse side-effects to the `winston` internals.
 
 ``` js
-logger.filters.push(function(msg, meta, level) {
+logger.filters.push(function(level, msg, meta) {
   return meta.production
     ? maskCardNumbers(msg)
     : msg;
