@@ -65,7 +65,29 @@ vows.describe('winton/logger').addBatch({
           assert.equal(level, 'info');
           assert.equal(msg, 'test message');
         }
+      }
+    }
+  }
+}).addBatch({
+  "An instance of winston.Logger": {
+    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+    "the configure() method": {
+      "with no options": function (logger) {
+        assert.equal(Object.keys(logger.transports).length, 1);
+        assert.deepEqual(logger._names, ['console']);
+        logger.configure();
+        assert.equal(Object.keys(logger.transports).length, 0);
+        assert.deepEqual(logger._names, []);
       },
+      "with options { transports }": function (logger) {
+        assert.equal(Object.keys(logger.transports).length, 0);
+        assert.deepEqual(logger._names, []);
+        logger.configure({
+          transports: [new winston.transports.Console({ level: 'verbose' })]
+        });
+        assert.equal(Object.keys(logger.transports).length, 1);
+        assert.deepEqual(logger._names, ['console']);
+      }
     }
   }
 }).addBatch({

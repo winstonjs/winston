@@ -95,9 +95,34 @@ You can work with this logger in the same way that you work with the default log
   // Adding / Removing Transports
   //   (Yes It's chainable)
   //
-  logger.add(winston.transports.File)
-        .remove(winston.transports.Console);
+  logger
+    .add(winston.transports.File)
+    .remove(winston.transports.Console);
 ```
+
+You can also wholesale reconfigure a `winston.Logger` instance using the `configure` method:
+
+``` js
+  var logger = new winston.Logger({
+    level: 'info',
+    transports: [
+      new (winston.transports.Console)(),
+      new (winston.transports.File)({ filename: 'somefile.log' })
+    ]
+  });
+
+  //
+  // Replaces the previous transports with those in the
+  // new configuration wholesale.
+  //
+  logger.configure({
+    level: 'verbose',
+    transports: [
+      new require('winston-daily-rotate-file')(opts)
+    ]
+  });
+```
+
 
 ### Logging with Metadata
 In addition to logging string messages, winston will also optionally log additional JSON metadata objects. Adding metadata is simple:
@@ -640,6 +665,17 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
 
 ### Filters and Rewriters
 Filters allow modifying the contents of **log messages**, and Rewriters allow modifying the contents of **log meta** e.g. to mask data that should not appear in logs.
+
+Both filters and rewriters are simple Arrays of functions which can be provided when creating a `new winston.Logger(options)`. e.g.:
+
+``` js
+var logger = new winston.Logger({
+  rewriters: [function (level, msg, meta) { /* etc etc */ }]
+  filters:   [function (msg, meta, level) { /* etc etc */ }]
+})
+```
+
+Like any Array they can also be modified at runtime with no adverse side-effects to the `winston` internals.
 
 ``` js
 logger.filters.push(function(msg, meta, level) {
