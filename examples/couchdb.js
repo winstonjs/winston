@@ -5,7 +5,7 @@ var winston = require('../lib/winston');
 //
 //
 // The Console transport will simply output to the console screen
-// The Couchdb tranport will perform an HTTP POST request to the specified CouchDB instance
+// The CouchDB tranport will perform an HTTP POST request to the specified CouchDB instance
 //
 var logger = new (winston.Logger)({
   transports: [
@@ -15,4 +15,4 @@ var logger = new (winston.Logger)({
   ]
 });
 
-logger.log('info', 'Hello webhook log files!', { 'foo': 'bar' });
+logger.log('info', 'Hello log files!', { 'foo': 'bar' });

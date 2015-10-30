@@ -65,7 +65,29 @@ vows.describe('winton/logger').addBatch({
           assert.equal(level, 'info');
           assert.equal(msg, 'test message');
         }
+      }
+    }
+  }
+}).addBatch({
+  "An instance of winston.Logger": {
+    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+    "the configure() method": {
+      "with no options": function (logger) {
+        assert.equal(Object.keys(logger.transports).length, 1);
+        assert.deepEqual(logger._names, ['console']);
+        logger.configure();
+        assert.equal(Object.keys(logger.transports).length, 0);
+        assert.deepEqual(logger._names, []);
       },
+      "with options { transports }": function (logger) {
+        assert.equal(Object.keys(logger.transports).length, 0);
+        assert.deepEqual(logger._names, []);
+        logger.configure({
+          transports: [new winston.transports.Console({ level: 'verbose' })]
+        });
+        assert.equal(Object.keys(logger.transports).length, 1);
+        assert.deepEqual(logger._names, ['console']);
+      }
     }
   }
 }).addBatch({
@@ -73,18 +95,6 @@ vows.describe('winton/logger').addBatch({
     topic: new (winston.Logger)({ emitErrs: true }),
     "the log() method should throw an error": function (logger) {
       assert.throws(function () { logger.log('anything') }, Error);
-    },
-    "the extend() method called on an empty object": {
-      topic: function (logger) {
-        var empty = {};
-        logger.extend(empty);
-        return empty;
-      },
-      "should define the appropriate methods": function (extended) {
-        ['log', 'profile', 'startTimer'].concat(Object.keys(winston.config.npm.levels)).forEach(function (method) {
-          assert.isFunction(extended[method]);
-        });
-      }
     },
     "the add() method with a supported transport": {
       topic: function (logger) {
@@ -211,7 +221,7 @@ vows.describe('winton/logger').addBatch({
     },
     "the remove() with an unadded transport": {
       "should throw an Error": function (logger) {
-        assert.throws(function () { logger.remove(winston.transports.Webhook) }, Error);
+        assert.throws(function () { logger.remove(winston.transports.Http) }, Error);
       }
     },
     "the remove() method with an added transport": {

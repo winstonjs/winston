@@ -1,3 +1,35 @@
+## v2.0.0 / 2015-10-29
+### OMG IT'S MY SISTER'S BIRTHDAY EDITION
+
+#### Breaking changes
+
+**Most important**
+- **[0f82204](https://github.com/winstonjs/winston/commit/0f82204) Move `winston.transports.DailyRotateFile` [into a separate module](https://github.com/winstonjs/winston-daily-rotate-file)**: `require('winston-daily-rotate-file');`
+- **[fb9eec0](https://github.com/winstonjs/winston/commit/fb9eec0) Reverse log levels in `npm` and `cli` configs to conform to [RFC524](https://tools.ietf.org/html/rfc5424). Fixes [#424](https://github.com/winstonjs/winston/pull/424) [#406](https://github.com/winstonjs/winston/pull/406) [#290](https://github.com/winstonjs/winston/pull/290)**
+- **[8cd8368](https://github.com/winstonjs/winston/commit/8cd8368) Change the method signature to a `filter` function to be consistent with `rewriter` and log functions:**
+``` js
+function filter (level, msg, meta, inst) {
+  // Filter logic goes here...
+}
+```
+
+**Other breaking changes**
+- [e0c9dde](https://github.com/winstonjs/winston/commit/e0c9dde) Remove `winston.transports.Webhook`. Use `winston.transports.Http` instead.
+- [f71e638](https://github.com/winstonjs/winston/commit/f71e638) Remove `Logger.prototype.addRewriter` and `Logger.prototype.addFilter` since they just push to an Array of functions. Use `logger.filters.push` or `logger.rewriters.push` explicitly instead.
+- [a470ab5](https://github.com/winstonjs/winston/commit/a470ab5) No longer respect the `handleExceptions` option to `new winston.Logger`. Instead just pass in the `exceptionHandlers` option itself.
+- [8cb7048](https://github.com/winstonjs/winston/commit/8cb7048) Removed `Logger.prototype.extend` functionality
+
+#### New features
+- [3aa990c](https://github.com/winstonjs/winston/commit/3aa990c) Added `Logger.prototype.configure` which now contains all logic previously in the `winston.Logger` constructor function. (`indexzero`)
+- [#726](https://github.com/winstonjs/winston/pull/726) Update .npmignore (`coreybutler`)
+- [#700](https://github.com/winstonjs/winston/pull/700) Add an `eol` option to the `Console` transport. (`aquavitae`)
+- [#731](https://github.com/winstonjs/winston/pull/731) Update `lib/transports.js` for better static analysis. (`indexzero`)
+
+#### Fixes, refactoring, and optimizations. OH MY!
+- [#632](https://github.com/winstonjs/winston/pull/632) Allow `File` transport to be an `objectMode` writable stream. (`stambata`)
+- [#527](https://github.com/winstonjs/winston/issues/527), [163f4f9](https://github.com/winstonjs/winston/commit/163f4f9), [3747ccf](https://github.com/winstonjs/winston/commit/3747ccf) Performance optimizations and string interpolation edge cases (`indexzero`)
+- [f0edafd](https://github.com/winstonjs/winston/commit/f0edafd) Code cleanup for reability, ad-hoc styleguide enforcement (`indexzero`)
+
 ## v1.1.1 - v1.1.2 / 2015-10
 ### MINOR FIXES EDITION
 

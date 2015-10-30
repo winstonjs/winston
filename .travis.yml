@@ -14,6 +14,8 @@ script:
 
 matrix:
   allow_failures:
+    - node_js: "0.8"
+    - node_js: "0.10"
     - node_js: "0.12"
 
 notifications:

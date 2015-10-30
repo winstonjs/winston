@@ -35,7 +35,23 @@ var npmTransport = new (winston.transports.Console)(),
 
 vows.describe('winston/transports/console').addBatch({
   "An instance of the Console Transport": {
+    "with showLevel off": {
+      topic : function() {
+        npmTransport.showLevel = false;
+        stdMocks.use();
+        npmTransport.log('info', 'Le message', { meta: true }, this.callback);
+      },
+      "should not have level prepended": function () {
+        stdMocks.restore();
+        var output = stdMocks.flush(),
+            line   = output.stdout[0];
 
+        assert.equal(line, 'Le message meta=true\n');
+      }
+    }
+  }
+}).addBatch({
+  "An instance of the Console Transport": {
     "with showLevel on": {
       topic : function() {
         npmTransport.showLevel = true;
@@ -50,20 +66,9 @@ vows.describe('winston/transports/console').addBatch({
         assert.equal(line, 'info: \n');
       }
     },
-    "with showLevel off": {
-      topic : function() {
-        npmTransport.showLevel = false;
-        stdMocks.use();
-        npmTransport.log('info', '');
-      },
-      "should not have level prepended": function () {
-        stdMocks.restore();
-        var output = stdMocks.flush(),
-            line   = output.stdout[0];
-
-        assert.equal(line, undefined);
-      }
-    },
+  }
+}).addBatch({
+  "An instance of the Console Transport": {
     "with npm levels": {
       "should have the proper methods defined": function () {
         helpers.assertConsole(npmTransport);
@@ -81,6 +86,21 @@ vows.describe('winston/transports/console').addBatch({
         assert.isNull(err);
         assert.isTrue(logged);
       })
+    },
+    "with end-of-line": {
+      topic : function() {
+        npmTransport.eol = 'X';
+        stdMocks.use();
+        npmTransport.log('info', 'Le message', { meta: true }, this.callback);
+      },
+      "should have end-of-line character appended": function () {
+        stdMocks.restore();
+        var output = stdMocks.flush(),
+            line   = output.stdout[0];
+        console.dir(line);
+
+        assert.equal(line, 'info: Le message meta=trueX');
+      }
     }
   }
 }).addBatch({

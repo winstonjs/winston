@@ -31,9 +31,6 @@ module.exports = function (transport, options) {
           case 'file':
             helpers.assertFile(transport);
             break;
-          case 'webhook':
-            helpers.assertWebhook(transport);
-            break;
           case 'couchdb':
             helpers.assertCouchdb(transport);
             break;

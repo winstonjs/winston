@@ -38,7 +38,6 @@ There are two different ways to use winston: directly via the default logger, or
   * [Events and Callbacks in Winston](#events-and-callbacks-in-winston)
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
   * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
-  * [Extending another object with Logging](#extending-another-object-with-logging)
   * [Filters and Rewriters](#filters-and-rewriters)
   * [Adding Custom Transports](#adding-custom-transports)
 * [Installation](#installation)
@@ -46,6 +45,8 @@ There are two different ways to use winston: directly via the default logger, or
 
 
 ## Logging
+
+Logging levels in `winston` conform to the severity ordering specified by [RFC524](https://tools.ietf.org/html/rfc5424): _severity of all levels is assumed to be numerically **ascending** from most important to least important._
 
 ### Using the Default Logger
 The default logger is accessible through the winston module directly. Any method that you could call on an instance of a logger is available on the default logger:
@@ -94,9 +95,34 @@ You can work with this logger in the same way that you work with the default log
   // Adding / Removing Transports
   //   (Yes It's chainable)
   //
-  logger.add(winston.transports.File)
-        .remove(winston.transports.Console);
+  logger
+    .add(winston.transports.File)
+    .remove(winston.transports.Console);
 ```
+
+You can also wholesale reconfigure a `winston.Logger` instance using the `configure` method:
+
+``` js
+  var logger = new winston.Logger({
+    level: 'info',
+    transports: [
+      new (winston.transports.Console)(),
+      new (winston.transports.File)({ filename: 'somefile.log' })
+    ]
+  });
+
+  //
+  // Replaces the previous transports with those in the
+  // new configuration wholesale.
+  //
+  logger.configure({
+    level: 'verbose',
+    transports: [
+      new require('winston-daily-rotate-file')(opts)
+    ]
+  });
+```
+
 
 ### Logging with Metadata
 In addition to logging string messages, winston will also optionally log additional JSON metadata objects. Adding metadata is simple:
@@ -327,6 +353,20 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
 
 ## Logging Levels
 
+Each `level` is given a specific integer priority. The higher the priority the more important the message is considered to be, and the lower the corresponding integer priority.  For example, `npm` logging levels are prioritized from 0 to 5 (highest to lowest):
+
+``` js
+{ error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
+```
+
+Similarly, as specified exactly in RFC524 the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
+
+```js
+{ emerg: 0, alert: 1, crit: 2, error: 3, warning: 4, notice: 5, info: 6, debug: 7 }
+```
+
+If you do not explicitly define the levels that `winston` should use the `npm` levels above will be used.
+
 ### Using Logging Levels
 Setting the level for your logging message can be accomplished in one of two ways. You can pass a string representing the logging level to the log() method or use the level specified methods defined on every winston Logger.
 
@@ -351,13 +391,16 @@ Setting the level for your logging message can be accomplished in one of two way
   winston.info("127.0.0.1 - there's no place like home");
 ```
 
-Winston allows you to set a `level` on each transport that specifies the level of messages this transport should log. For example, you could log only errors to the console, with the full logs in a file (note that the default level of a transport is `info`):
+`winston` allows you to define a `level` property on each transport which specifies the **maximum** level of messages that a transport should log. For example, using the `npm` levels you could log only `error` messages to the console and everything `info` and below to a file (which includes `error` messages):
 
 ``` js
   var logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({ level: 'error' }),
-      new (winston.transports.File)({ filename: 'somefile.log' })
+      new (winston.transports.File)({
+        filename: 'somefile.log',
+        level: 'info'
+      })
     ]
   });
 ```
@@ -620,25 +663,22 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
   logger.cli();
 ```
 
-### Extending another object with Logging
-Often in a given code base with lots of Loggers it is useful to add logging methods to a different object so that these methods can be called with less syntax. Winston exposes this functionality via the 'extend' method:
-
-``` js
-  var myObject = {};
-
-  logger.extend(myObject);
-
-  //
-  // You can now call logger methods on 'myObject'
-  //
-  myObject.info("127.0.0.1 - there's no place like home");
-```
-
 ### Filters and Rewriters
 Filters allow modifying the contents of **log messages**, and Rewriters allow modifying the contents of **log meta** e.g. to mask data that should not appear in logs.
 
+Both filters and rewriters are simple Arrays of functions which can be provided when creating a `new winston.Logger(options)`. e.g.:
+
 ``` js
-logger.addFilter(function(msg, meta, level) {
+var logger = new winston.Logger({
+  rewriters: [function (level, msg, meta) { /* etc etc */ }]
+  filters:   [function (level, msg, meta) { /* etc etc */ }]
+})
+```
+
+Like any Array they can also be modified at runtime with no adverse side-effects to the `winston` internals.
+
+``` js
+logger.filters.push(function(level, msg, meta) {
   return meta.production
     ? maskCardNumbers(msg)
     : msg;
@@ -656,7 +696,7 @@ info: transaction with card number 123456****2345 successful.
 Where as for rewriters, if you wanted to sanitize the `creditCard` field of your `meta` you could:
 
 ``` js
-logger.addRewriter(function(level, msg, meta) {
+logger.rewriters.push(function(level, msg, meta) {
   if (meta.creditCard) {
     meta.creditCard = maskCardNumbers(meta.creditCard)
   }

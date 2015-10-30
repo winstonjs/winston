@@ -87,16 +87,6 @@ helpers.assertMemory = function (transport) {
 helpers.assertFile = function (transport) {
   assert.instanceOf(transport, winston.transports.File);
   assert.isFunction(transport.log);
-}
-
-helpers.assertDailyRotateFile = function (transport) {
-  assert.instanceOf(transport, winston.transports.DailyRotateFile);
-  assert.isFunction(transport.log);
-}
-
-helpers.assertWebhook = function (transport) {
-  assert.instanceOf(transport, winston.transports.Webhook);
-  assert.isFunction(transport.log);
 };
 
 helpers.assertCouchdb = function (transport) {
