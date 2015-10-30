@@ -4,13 +4,15 @@
   "version": "1.1.2",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
-    "indexzero <charlie@nodejitsu.com>"
+    "Jarrett Cruger <jcrugzz@gmail.com>",
+    "Alberto Pose <albertopose@gmail.com>"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/winstonjs/winston.git"
   },
   "keywords": [
+    "winston",
     "logging",
     "sysadmin",
     "tools"
