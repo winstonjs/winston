@@ -1,3 +1,8 @@
+## v2.0.1 / 2015-10-29
+### BUGS ALWAYS HAPPEN OK EDITION
+
+- [#739](https://github.com/winstonjs/winston/issues/739), [1f16861](https://github.com/winstonjs/winston/commit/1f16861) Ensure that `logger.log("info", undefined)` does not throw.
+
 ## v2.0.0 / 2015-10-29
 ### OMG IT'S MY SISTER'S BIRTHDAY EDITION
 
