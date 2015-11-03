@@ -2,6 +2,7 @@
 *.log
 test
 test/*
+!test/helpers.js
 node_modules/
 node_modules/*
 *.md
