@@ -281,6 +281,9 @@ vows.describe('winton/logger').addBatch({
       ]
     }),
     "the log() method": {
+      "when passed undefined should not throw": function (logger) {
+        assert.doesNotThrow(function () { logger.log('info', undefined) });
+      },
       "when passed an Error object as meta": {
         topic: function (logger) {
           logger.once('logging', this.callback);
