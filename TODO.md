@@ -1,4 +1,9 @@
 
+## Core logging
+
+- `.level` **MUST** be a getter / setter
+- `.levels` **MUST** be a getter only.
+
 ## Formats
 
 - [ ] String interpolation format
@@ -14,7 +19,7 @@
 
 ## Transports
 
-- [ ]
+- [ ] Refactor all built-in transports to be TransportStream instances.
 
 ### Console
 
@@ -24,9 +29,10 @@
 
 ### Memory
 
-## 2.0 API changes
+## Other Miscellaneous API changes
 
-- [ ] LogStream.prototype.configure
+- [ ] Add LogStream.prototype.configure from `winston@2.0.0`
+- [ ] `winston.Container` instances no longer add any transports by default.
 
 ## Benchmarking
 
