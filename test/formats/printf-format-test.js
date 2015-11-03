@@ -19,22 +19,23 @@ vows.describe('winston/logger/levels').addBatch({
         new (winston.transports.Console)()
       ]
     }),
-    "the info() method": {
-      "when passed metadata": {
+    "the log() method": {
+      "when passed undefined should not throw": function (logger) {
+        assert.doesNotThrow(function () { logger.log('info', undefined) });
+      },
+      "when passed an Error object as meta": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.info('test message', {foo: 'bar'});
+          logger.log('info', 'An error happened: ', new Error('I am something bad'));
         },
-        "should have metadata object": function (transport, level, msg, meta) {
-          assert.strictEqual(msg, 'test message');
-          assert.deepEqual(meta, {foo: 'bar'});
+        "should respond with a proper error output": function (transport, level, msg, meta) {
+          assert.instanceOf(meta, Error);
         }
-         }
-        },
+      },
       "when passed a string placeholder": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.info('test message %s', 'my string');
+          logger.log('info', 'test message %s', 'my string');
         },
         "should interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message my string');
@@ -43,7 +44,7 @@ vows.describe('winston/logger/levels').addBatch({
       "when passed a number placeholder": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.info('test message %d', 123);
+          logger.log('info', 'test message %d', 123);
         },
         "should interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message 123');
@@ -52,26 +53,44 @@ vows.describe('winston/logger/levels').addBatch({
       "when passed a json placholder and an empty object": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.info('test message %j', {number: 123}, {});
+          logger.log('info', 'test message %j', {number: 123}, {});
         },
         "should interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message {"number":123}');
         },
       },
+      "when passed just JSON meta and no message": {
+        topic: function (logger) {
+          stdMocks.use();
+          logger.once('logging', this.callback);
+          logger.log('info', { message: 'in JSON object', ok: true });
+        },
+        "should output the message": function (transport, level, msg, meta) {
+          stdMocks.restore();
+
+          //
+          // TODO: Come up with a cleaner way to test this.
+          //
+          var output = stdMocks.flush(),
+              line   = output.stdout[0];
+
+          assert.match(line, /message\=in/);
+        }
+      },
       "when passed a escaped percent sign": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.info('test message %%', {number: 123});
+          logger.log('info', 'test message %%', {number: 123});
         },
         "should not interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, util.format('test message %%'));
-          assert.deepEqual(meta, {number: 123});          
+          assert.deepEqual(meta, {number: 123});
         },
       },
       "when passed interpolation strings and a meta object": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.info('test message %s, %s', 'first', 'second' ,{number: 123});
+          logger.log('info', 'test message %s, %s', 'first', 'second' ,{number: 123});
         },
         "should interpolate and have a meta object": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message first, second');
@@ -81,7 +100,7 @@ vows.describe('winston/logger/levels').addBatch({
       "when passed multiple strings and a meta object": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.info('test message', 'first', 'second' , {number: 123});
+          logger.log('info', 'test message', 'first', 'second' , {number: 123});
         },
         "should join and have a meta object": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message first second');
@@ -91,7 +110,7 @@ vows.describe('winston/logger/levels').addBatch({
       "when passed interpolations strings, meta object and a callback": {
         topic: function (logger) {
           var that = this;
-          logger.info('test message %s, %s', 'first', 'second' , {number: 123}, function(transport, level, msg, meta){
+          logger.log('info', 'test message %s, %s', 'first', 'second' , {number: 123}, function(transport, level, msg, meta){
             that.callback(transport, level, msg, meta)
           });
         },
@@ -103,41 +122,26 @@ vows.describe('winston/logger/levels').addBatch({
       "when passed multiple strings, a meta object and a callback": {
         topic: function (logger) {
           var that = this;
-          logger.info('test message', 'first', 'second' , {number: 123}, function(transport, level, msg, meta){
+          logger.log('info', 'test message', 'first', 'second' , {number: 123}, function(transport, level, msg, meta){
             that.callback(transport, level, msg, meta)
           });
         },
         "should join and have a meta object": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message first second');
           assert.deepEqual(meta, {number: 123});
-        }
+        },
       },
-      "when custom levels are set": {
-        "should not fail with 'RangeError: Maximum call stack size exceeded": function (logger) {
+      "when passed a regular expression": {
+        topic: function (logger) {
           var that = this;
-
-          // Logging levels
-          var customLevels = {
-            levels: {
-              none: 0,
-              log: 1,
-            }
-          };
-
-          var logger = winston.loggers.add('hello243', { });
-          try {
-            logger.setLevels(customLevels.levels);
-          } catch (e) {
-            assert.equal('Error', e.name);
-          }
-          try {
-            logger.log('none', 'hi', function (err) {
-              assert.ifError(err);
-            });
-          } catch (e)  {
-            assert.ifError(e);
-          }
-        }
+          logger.log('info', new RegExp('a'), function(transport, level, msg, meta){
+            that.callback(transport, level, msg, meta)
+          });
+        },
+        "should return a string representing the regular expression": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, '/a/');
+        },
       }
     }
+  }
 }).export(module);

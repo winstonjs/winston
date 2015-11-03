@@ -62,4 +62,20 @@ vows.describe('winston/logger/exceptions').addBatch({
       }
     }
   }
+}).addBatch({
+  "The winston logger": {
+    topic: new (winston.Logger)({
+      exceptionHandlers: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      ]
+    }),
+    "the unhandleExceptions() method": {
+      "should remove all transports": function (logger) {
+        assert.equal(helpers.size(logger.exceptionHandlers), 2);
+        logger.unhandleExceptions();
+        assert.equal(helpers.size(logger.exceptionHandlers), 0);
+      }
+    }
+  }
 }).export(module);
