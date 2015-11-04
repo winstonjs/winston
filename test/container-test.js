@@ -6,94 +6,54 @@
  *
  */
 
-var assert = require('assert'),
-    fs = require('fs'),
-    http = require('http'),
-    path = require('path'),
-    vows = require('vows'),
-    winston = require('../lib/winston'),
-    helpers = require('./helpers');
+var assume = require('assume'),
+    winston = require('../lib/winston');
 
-vows.describe('winston/container').addBatch({
-  "An instance of winston.Container": {
-    topic: new winston.Container(),
-    "the add() method": {
-      topic: function (container) {
-        return container.add('default-test');
-      },
-      "should correctly instantiate a Logger": function (logger) {
-        assert.instanceOf(logger, winston.Logger);
-      },
-      "the get() method": {
-        topic: function (logger, container) {
-          this.callback.apply(this, arguments);
-        },
-        "should respond with the logger previously created": function (existing, container) {
-          var logger = container.get('default-test');
-          assert.isTrue(existing === logger);
-        }
-      },
-      "the has() method": {
-        topic: function (logger, container) {
-          this.callback.apply(this, arguments);
-        },
-        "should indicate `default-test` logger exists": function (existing, container) {
-          assert.isTrue(container.has('default-test'));
-        },
-        "should indicate `not-has` logger doesnt exists": function (existing, container) {
-          assert.isFalse(container.has('not-has'));
-        }
-      },
-      "the close() method": {
-        topic: function (logger, container) {
-          this.callback.apply(this, arguments);
-        },
-        "should remove the specified logger": function (logger, container) {
-          container.close('default-test');
-          assert.isTrue(!container.loggers['default-test']);
-        }
-      }
-    }
-  },
-  "An instance of winston.Container with explicit transports": {
-    topic: function () {
-      this.port = 9412;
-      this.transports = [
-        new winston.transports.Http({
-          port: this.port
-        })
-      ];
+describe('Container', function () {
+  describe('no transports', function () {
+    var container = new winston.Container();
+    var defaultTest;
 
-      this.container = new winston.Container({
-        transports: this.transports
-      });
+    it('.add(default-test)', function () {
+      defaultTest = container.add('default-test');
+      assume(defaultTest).instanceOf(winston.LogStream);
+    });
 
-      return null;
-    },
-    "the get() method": {
-      topic: function (container) {
-        var server = http.createServer(function (req, res) {
-          res.end();
-        });
+    it('.get(default-test)', function () {
+      assume(container.get('default-test')).equals(defaultTest);
+    });
 
-        server.listen(this.port, this.callback.bind(this, null));
-      },
-      "should add the logger correctly": function () {
-        this.someLogger = this.container.get('some-logger');
-        assert.isObject(this.someLogger.transports);
-        assert.instanceOf(this.someLogger.transports['http'], winston.transports.Http);
-        assert.strictEqual(this.someLogger.transports['http'], this.transports[0]);
-      },
-      "a second call to get()": {
-        "should respond with the same transport object": function () {
-          this.someOtherLogger = this.container.get('some-other-logger');
+    it('.has(default-test)', function () {
+      assume(container.has('default-test')).true();
+    });
 
-          assert.isObject(this.someOtherLogger.transports);
-          assert.instanceOf(this.someOtherLogger.transports['http'], winston.transports.Http);
-          assert.strictEqual(this.someOtherLogger.transports['http'], this.transports[0]);
-          assert.strictEqual(this.someOtherLogger.transports['http'], this.someLogger.transports['http']);
-        }
-      }
-    }
-  }
-}).export(module);
+    it('.has(not-has)', function () {
+      assume(container.has('not-has')).false();
+    });
+
+    it('.close(default-test)', function () {
+      container.close('default-test');
+      assume(container.loggers['default-test']).falsy();
+    });
+  });
+
+  describe('explicit transports', function () {
+    var transports = [new winston.transports.Http({ port: 9412 })];
+    var container = new winston.Container({ transports: transports });
+    var all = {};
+
+    it('.get(some-logger)', function () {
+      all.someLogger = container.get('some-logger');
+      assume(all.someLogger._readableState.pipes).instanceOf(winston.transports.Http);
+      assume(all.someLogger._readableState.pipes).equals(transports[0]);
+    });
+
+    it('.get(some-other-logger)', function () {
+      all.someOtherLogger = container.get('some-other-logger');
+
+      assume(all.someOtherLogger._readableState.pipes).instanceOf(winston.transports.Http);
+      assume(all.someOtherLogger._readableState.pipes).equals(transports[0]);
+      assume(all.someOtherLogger._readableState.pipes).equals(all.someLogger._readableState.pipes);
+    });
+  });
+});
