@@ -786,8 +786,9 @@ Adding a custom transport is actually pretty easy. All you need to do is accept 
 ```
 
 ### Custom Log Format
-To specify a custom log format for a transport, you should set a formatter function. Currently supported transports are: Console, File, Memory.
-An options object will be passed to the formatter function. Its general properties are: timestamp, level, message, meta. Depending on the transport type, there may be additional properties.
+To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Http.
+
+Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
 
 ``` js
 var logger = new (winston.Logger)({
