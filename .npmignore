@@ -3,6 +3,7 @@
 test
 test/*
 !test/helpers.js
+!test/transports/transport.js
 node_modules/
 node_modules/*
 *.md
