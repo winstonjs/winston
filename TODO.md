@@ -20,14 +20,9 @@
 ## Transports
 
 - [ ] Refactor all built-in transports to be TransportStream instances.
-
-### Console
-
-### File
-
-### Http
-
-### Memory
+  - [] Console
+  - [] File
+  - [] Http
 
 ## Other Miscellaneous API changes
 

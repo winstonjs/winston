@@ -775,7 +775,8 @@ Adding a custom transport is actually pretty easy. All you need to do is accept 
 ```
 
 ### Custom Log Format
-To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Memory.
+To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Http.
+
 Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
 
 ``` js
