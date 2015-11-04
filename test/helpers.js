@@ -6,12 +6,11 @@
  *
  */
 
-var assert = require('assert'),
+var assume = require('assume'),
     fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn,
     util = require('util'),
-    vows = require('vows'),
     winston = require('../lib/winston');
 
 var helpers = exports;
@@ -33,44 +32,44 @@ helpers.tryUnlink = function (file) {
 };
 
 helpers.assertDateInfo = function (info) {
-  assert.isNumber(Date.parse(info));
+  assume(Date.parse(info)).is.a('number');
 };
 
 helpers.assertProcessInfo = function (info) {
-  assert.isNumber(info.pid);
-  assert.isNumber(info.uid);
-  assert.isNumber(info.gid);
-  assert.isString(info.cwd);
-  assert.isString(info.execPath);
-  assert.isString(info.version);
-  assert.isArray(info.argv);
-  assert.isObject(info.memoryUsage);
+  assume(info.pid).is.a('number');
+  assume(info.uid).is.a('number');
+  assume(info.gid).is.a('number');
+  assume(info.cwd).is.a('string');
+  assume(info.execPath).is.a('string');
+  assume(info.version).is.a('string');
+  assume(info.argv).is.an('array');
+  assume(info.memoryUsage).is.an('object');
 };
 
 helpers.assertOsInfo = function (info) {
-  assert.isArray(info.loadavg);
-  assert.isNumber(info.uptime);
+  assume(info.loadavg).is.an('array');
+  assume(info.uptime).is.a('number');
 };
 
 helpers.assertTrace = function (trace) {
   trace.forEach(function (site) {
-    assert.isTrue(!site.column || typeof site.column === 'number');
-    assert.isTrue(!site.line || typeof site.line === 'number');
-    assert.isTrue(!site.file || typeof site.file === 'string');
-    assert.isTrue(!site.method || typeof site.method === 'string');
-    assert.isTrue(!site.function || typeof site.function === 'string');
-    assert.isTrue(typeof site.native === 'boolean');
+    assume(!site.column || typeof site.column === 'number').true();
+    assume(!site.line || typeof site.line === 'number').true();
+    assume(!site.file || typeof site.file === 'string').true();
+    assume(!site.method || typeof site.method === 'string').true();
+    assume(!site.function || typeof site.function === 'string').true();
+    assume(typeof site.native === 'boolean').true();
   });
 };
 
 helpers.assertLogger = function (logger, level) {
-  assert.instanceOf(logger, winston.Logger);
-  assert.isFunction(logger.log);
-  assert.isFunction(logger.add);
-  assert.isFunction(logger.remove);
-  assert.equal(logger.level, level || "info");
+  assume(logger).instanceOf(winston.Logger);
+  assume(logger.log).is.a('function');
+  assume(logger.add).is.a('function');
+  assume(logger.remove).is.a('function');
+  assume(logger.level).equals(level || 'info');
   Object.keys(logger.levels).forEach(function (method) {
-    assert.isFunction(logger[method]);
+    assume(logger[method]).is.a('function');
   });
 };
 
@@ -86,11 +85,6 @@ helpers.assertMemory = function (transport) {
 
 helpers.assertFile = function (transport) {
   assert.instanceOf(transport, winston.transports.File);
-  assert.isFunction(transport.log);
-};
-
-helpers.assertCouchdb = function (transport) {
-  assert.instanceOf(transport, winston.transports.Couchdb);
   assert.isFunction(transport.log);
 };
 
@@ -214,10 +208,8 @@ helpers.assertOptionsThrow = function (options, errMsg) {
 
 helpers.assertStderrLevels = function (transport, stderrLevels) {
   return function () {
-    assert.equal(
-        JSON.stringify(Object.keys(transport.stderrLevels).sort()),
-        JSON.stringify(stderrLevels.sort())
-    );
+    assume(JSON.stringify(Object.keys(transport.stderrLevels).sort()))
+      .equals(JSON.stringify(stderrLevels.sort()));
   }
 };
 
