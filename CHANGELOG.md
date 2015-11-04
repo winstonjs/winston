@@ -1,4 +1,9 @@
-## v2.0.1 / 2015-10-29
+## v2.1.0 / 2015-11-03
+### TEST ALL THE ECOSYSTEM EDITION
+
+- [#742](https://github.com/winstonjs/winston/pull/742), [32d52b7](https://github.com/winstonjs/winston/commit/32d52b7) Distribute common test files used by transports in the `winston` ecosystem.
+
+## v2.0.1 / 2015-11-02
 ### BUGS ALWAYS HAPPEN OK EDITION
 
 - [#739](https://github.com/winstonjs/winston/issues/739), [1f16861](https://github.com/winstonjs/winston/commit/1f16861) Ensure that `logger.log("info", undefined)` does not throw.
