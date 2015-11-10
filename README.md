@@ -50,7 +50,7 @@ There are two different ways to use winston: directly via the default logger, or
 
 ## Logging
 
-Logging levels in `winston` conform to the severity ordering specified by [RFC524](https://tools.ietf.org/html/rfc5424): _severity of all levels is assumed to be numerically **ascending** from most important to least important._
+Logging levels in `winston` conform to the severity ordering specified by [RFC5424](https://tools.ietf.org/html/rfc5424): _severity of all levels is assumed to be numerically **ascending** from most important to least important._
 
 ### Using the Default Logger
 The default logger is accessible through the winston module directly. Any method that you could call on an instance of a logger is available on the default logger:
@@ -363,7 +363,7 @@ Each `level` is given a specific integer priority. The higher the priority the m
 { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 ```
 
-Similarly, as specified exactly in RFC524 the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
+Similarly, as specified exactly in RFC5424 the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
 
 ```js
 { emerg: 0, alert: 1, crit: 2, error: 3, warning: 4, notice: 5, info: 6, debug: 7 }
