@@ -47,30 +47,31 @@ describe('LogStream', function () {
   it('.add(LegacyTransportStream)', function () {
     stdMocks.use();
     var logger = new winston.LogStream();
-    var transport = new winston.transports.Console();
+    var transport = new winston.transports.File({ filename: 'test.wat' });
     logger.add(transport);
     stdMocks.restore();
     var output = stdMocks.flush();
 
     assume(logger._readableState.pipesCount).equals(1);
-    assume(logger._readableState.pipes).equals(transport);
-    assume(output.stderr).deep.equals(['console is a Legacy winston transport. Consider upgrading\n']);
+    assume(logger._readableState.pipes.transport).is.an('object');
+    assume(logger._readableState.pipes.transport).equals(transport);
+    assume(output.stderr).deep.equals(['file is a Legacy winston transport. Consider upgrading\n']);
   });
 
   it('.add(LegacyTransportStream) multiple', function () {
     stdMocks.use();
     var logger = new winston.LogStream({
       transports: [
-        new winston.transports.Console(),
-        new winston.transports.Console(),
-        new winston.transports.Console()
+        new winston.transports.File({ filename: 'test.wat' }),
+        new winston.transports.File({ filename: 'test.wat' }),
+        new winston.transports.File({ filename: 'test.wat' })
       ]
     });
     stdMocks.restore();
     var output = stdMocks.flush();
 
     assume(logger._readableState.pipesCount).equals(3);
-    var errorMsg = 'console is a Legacy winston transport. Consider upgrading\n';
+    var errorMsg = 'file is a Legacy winston transport. Consider upgrading\n';
     assume(output.stderr).deep.equals([errorMsg, errorMsg, errorMsg]);
   });
 
