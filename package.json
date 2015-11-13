@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "assume": "^1.2.5",
+    "common-style": "^3.1.0",
     "cross-spawn-async": "^2.0.0",
     "hock": "1.x.x",
     "istanbul": "^0.3.18",
