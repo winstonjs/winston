@@ -1,3 +1,9 @@
+## v2.1.1 / 2015-11-18
+### COLOR ME IMPRESSED EDITION
+
+- [#751](https://github.com/winstonjs/winston/pull/751), Fix colors not appearing in non-tty environments. Fixes [#609](https://github.com/winstonjs/winston/issues/609), [#616](https://github.com/winstonjs/winston/issues/616), [#669](https://github.com/winstonjs/winston/issues/669), [#648](https://github.com/winstonjs/winston/issues/648) (`fiznool`).
+- [#752](https://github.com/winstonjs/winston/pull/752)     Correct syslog RFC number. 5424 instead of 524. (`jbenoit2011`)
+
 ## v2.1.0 / 2015-11-03
 ### TEST ALL THE ECOSYSTEM EDITION
 
