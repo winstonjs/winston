@@ -345,7 +345,7 @@ Also supports callbacks for completion when the DynamoDB putItem has been compel
 
 ### Papertrail Transport
 
-[winston-papertrail][23] is a Papertrail transport:
+[winston-papertrail][27] is a Papertrail transport:
 
 ``` js
   var Papertrail = require('winston-papertrail').Papertrail;
@@ -561,3 +561,4 @@ Options:
 [24]: https://github.com/sematext/winston-logsene
 [25]: https://github.com/timdp/winston-aws-cloudwatch
 [26]: https://github.com/lazywithclass/winston-cloudwatch
+[27]: https://github.com/kenperkins/winston-papertrail
