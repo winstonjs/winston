@@ -11,18 +11,21 @@ var assume = require('assume'),
 
 describe('winston', function () {
 
-  it('has expected methods', function () {
+  it('has expected Prototypes', function () {
     assume(winston.transports).is.an('object');
     assume(winston.Transport).is.a('function');
     assume(!winston.transports.Transport).true();
     assume(winston.transports.Console).is.a('function');
     assume(winston.transports.File).is.a('function');
+  });
+
+  it('has expected methods', function () {
     assume(winston.default.transports[0]).is.an('object');
     assume(winston.config).is.an('object');
     ['Logger', 'add', 'remove', 'extend', 'clear']
       .concat(Object.keys(winston.config.npm.levels))
       .forEach(function (key) {
-        assume(winston[key]).is.a('function');
+        assume(winston[key]).is.a('function', 'winston.' + key);
       });
   });
 
