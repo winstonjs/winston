@@ -23,6 +23,7 @@
     "cycle": "1.0.x",
     "eyes": "0.1.x",
     "isstream": "0.1.x",
+    "one-time": "0.0.4",
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
