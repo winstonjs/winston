@@ -1,10 +1,10 @@
 
 ## Core logging
 
-- `.level` **MUST** be a getter / setter
-- `.levels` **MUST** be a getter only.
-- **DEPRECATE** `winston.config.*` and move to `winston.levels`.
-- **DEPRECATE** `winston.clone`
+- [ ] `.level` **MUST** be a getter / setter
+- [ ] `.levels` **MUST** be a getter only.
+- [ ] **DEPRECATE** `winston.config.*` and move to `winston.levels`.
+- [ ] **DEPRECATE** `winston.clone`
 
 ## Formats
 
