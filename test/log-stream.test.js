@@ -98,30 +98,53 @@ describe('LogStream', function () {
     logger.log(expected);
   });
 
-  //
-  // TODO: Reimplement .configure() tests below in mocha
-  //
-  // "An instance of winston.Logger": {
-  //   topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
-  //   "the configure() method": {
-  //     "with no options": function (logger) {
-  //       assert.equal(Object.keys(logger.transports).length, 1);
-  //       assert.deepEqual(logger._names, ['console']);
-  //       logger.configure();
-  //       assert.equal(Object.keys(logger.transports).length, 0);
-  //       assert.deepEqual(logger._names, []);
-  //     },
-  //     "with options { transports }": function (logger) {
-  //       assert.equal(Object.keys(logger.transports).length, 0);
-  //       assert.deepEqual(logger._names, []);
-  //       logger.configure({
-  //         transports: [new winston.transports.Console({ level: 'verbose' })]
-  //       });
-  //       assert.equal(Object.keys(logger.transports).length, 1);
-  //       assert.deepEqual(logger._names, ['console']);
-  //     }
-  //   }
-  // }
+  it('.configure()', function () {
+    var logger = new winston.LogStream({
+      transports: [new winston.transports.Console()]
+    });
+
+    assume(logger.transports.length).equals(1);
+    assume(logger.transports[0].name).equals('console');
+
+    logger.configure();
+
+    assume(logger.transports.length).equals(0);
+  });
+
+
+  it('.configure({ transports })', function () {
+    var logger = new winston.LogStream();
+
+    assume(logger.transports.length).equals(0);
+
+    logger.configure({
+      transports: [new winston.transports.Console()]
+    });
+
+    assume(logger.transports.length).equals(1);
+    assume(logger.transports[0].name).equals('console');
+  });
+
+  it('.configure({ transports, format })', function () {
+    var logger = new winston.LogStream(),
+        readable = logger._onReadableFormat,
+        format = logger.format;
+
+    assume(logger.transports.length).equals(0);
+
+    logger.configure({
+      transports: [new winston.transports.Console()],
+      format: winston.format.json()
+    });
+
+    var listeners = logger.format.listeners('readable');
+
+    assume(logger.transports.length).equals(1);
+    assume(logger.transports[0].name).equals('console');
+    assume(logger.format).not.equals(format);
+    assume(listeners.length).equals(1);
+    assume(listeners).not.includes(readable);
+  });
 
   //
   // TODO: Reimplement the .remove() tests below in mocha
