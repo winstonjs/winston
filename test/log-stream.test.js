@@ -10,10 +10,12 @@
 
 var assume = require('assume'),
     path = require('path'),
+    stream = require('stream'),
     util = require('util'),
     isStream = require('isstream'),
     stdMocks = require('std-mocks'),
     winston = require('../lib/winston'),
+    LegacyTransport = require('./mocks/legacy-transport'),
     TransportStream = require('../lib/winston/transport-stream'),
     format = require('../lib/winston/formats/format');
 
@@ -44,10 +46,10 @@ describe('LogStream', function () {
     assume(logger._readableState.pipesCount).equals(0);
   });
 
-  it('.add(LegacyTransportStream)', function () {
+  it('.add(LegacyTransport)', function () {
     stdMocks.use();
     var logger = new winston.LogStream();
-    var transport = new winston.transports.File({ filename: 'test.wat' });
+    var transport = new LegacyTransport();
     logger.add(transport);
     stdMocks.restore();
     var output = stdMocks.flush();
@@ -55,23 +57,24 @@ describe('LogStream', function () {
     assume(logger._readableState.pipesCount).equals(1);
     assume(logger._readableState.pipes.transport).is.an('object');
     assume(logger._readableState.pipes.transport).equals(transport);
-    assume(output.stderr).deep.equals(['file is a Legacy winston transport. Consider upgrading\n']);
+    assume(output.stderr).deep.equals(['legacy-test is a Legacy winston transport. Consider upgrading\n']);
   });
 
-  it('.add(LegacyTransportStream) multiple', function () {
+  it('.add(LegacyTransport) multiple', function () {
     stdMocks.use();
     var logger = new winston.LogStream({
       transports: [
-        new winston.transports.File({ filename: 'test.wat' }),
-        new winston.transports.File({ filename: 'test.wat' }),
-        new winston.transports.File({ filename: 'test.wat' })
+        new LegacyTransport(),
+        new LegacyTransport(),
+        new LegacyTransport()
       ]
     });
+
     stdMocks.restore();
     var output = stdMocks.flush();
 
     assume(logger._readableState.pipesCount).equals(3);
-    var errorMsg = 'file is a Legacy winston transport. Consider upgrading\n';
+    var errorMsg = 'legacy-test is a Legacy winston transport. Consider upgrading\n';
     assume(output.stderr).deep.equals([errorMsg, errorMsg, errorMsg]);
   });
 
@@ -110,7 +113,6 @@ describe('LogStream', function () {
 
     assume(logger.transports.length).equals(0);
   });
-
 
   it('.configure({ transports })', function () {
     var logger = new winston.LogStream();
@@ -174,13 +176,13 @@ describe('LogStream', function () {
     assume(logger.transports.length).equals(2);
     logger.remove(transports[0]);
     assume(logger.transports.length).equals(1);
-    assume(logger.transports[0].transport).equals(transports[1]);
+    assume(logger.transports[0]).equals(transports[1]);
   });
 
   it('.remove() [LegacyTransportStream]', function () {
     var transports = [
       new (winston.transports.Console)(),
-      new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      new (LegacyTransport)()
     ];
 
     var logger = new (winston.LogStream)({ transports: transports });
@@ -191,89 +193,58 @@ describe('LogStream', function () {
     assume(logger.transports[0]).equals(transports[0]);
   });
 
-  //
-  // TODO: Reimplement the .remove() tests below in mocha
-  //
-  // "The winston logger": {
-  //   "should return have two transports": function (logger) {
-  //     assert.equal(helpers.size(logger.transports), 2);
-  //   },
-  //   "the remove() with an unadded transport": {
-  //     "should throw an Error": function (logger) {
-  //       assert.throws(function () { logger.remove(winston.transports.Http) }, Error);
-  //     }
-  //   },
-  //   "the remove() method with an added transport": {
-  //     topic: function (logger) {
-  //        return logger.remove(winston.transports.Console);
-  //     },
-  //     "should remove the Console transport from transports": function (logger) {
-  //       assert.equal(helpers.size(logger.transports), 1);
-  //       helpers.assertFile(logger.transports.file);
-  //     },
-  //     "and removing an additional transport": {
-  //       topic: function (logger) {
-  //          return logger.remove(winston.transports.File);
-  //       },
-  //       "should remove File transport from transports": function (logger) {
-  //         assert.equal(helpers.size(logger.transports), 0);
-  //       }
-  //     }
-  //   }
-  // }
+  it('.clear() [no transports]', function () {
+    var logger = new (winston.LogStream)();
+    assume(logger.transports.length).equals(0);
+    logger.clear();
+    assume(logger.transports.length).equals(0);
+  });
 
-  //
-  // TODO: Reimplement .clear() tests below in mocha
-  //
-  // "The winston logger": {
-  //   topic: new (winston.Logger)({
-  //     transports: [
-  //       new (winston.transports.Console)(),
-  //       new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
-  //     ]
-  //   }),
-  //   "the clear() method": {
-  //     "should remove all transports": function (logger) {
-  //       logger.clear();
-  //       assert.equal(helpers.size(logger.transports), 0);
-  //     }
-  //   }
-  // }
+  it ('.clear() [transports]', function () {
+    var logger = new (winston.LogStream)({
+      transports: [new (winston.transports.Console)()]
+    });
 
-  //
-  // TODO: Reimplement multiple file transport tests below in mocha.
-  //
-  // "Building a logger with two file transports": {
-  //   topic: new (winston.Logger)({
-  //     transports: [
-  //       new (winston.transports.File)({
-  //         name: 'filelog-info.log',
-  //         filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
-  //         level: 'info'
-  //       }),
-  //       new (winston.transports.File)({
-  //         name: 'filelog-error.log',
-  //         filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
-  //         level: 'error'
-  //       })
-  //     ]
-  //   }),
-  //   "should respond with a proper logger": function (logger) {
-  //     assert.include(logger._names, 'filelog-info.log');
-  //     assert.include(logger._names, 'filelog-error.log');
-  //     assert.lengthOf(logger.transports, 2);
-  //   },
-  //   "when one is removed": {
-  //     topic: function (logger) {
-  //       logger.remove('filelog-error.log');
-  //       return logger;
-  //     },
-  //     "should only have one transport": function (logger) {
-  //       assert.include(logger._names, 'filelog-info.log');
-  //       assert.lengthOf(logger.transports, 1);
-  //     }
-  //   }
-  // }
+    assume(logger.transports.length).equals(1);
+    logger.clear();
+    assume(logger.transports.length).equals(0);
+  });
+});
+
+describe('LogStream (multiple transports of the same type)', function () {
+  var logger, transports;
+
+  before(function () {
+    transports = [
+      new (winston.transports.File)({
+        name: 'filelog-info.log',
+        filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
+        level: 'info'
+      }),
+      new (winston.transports.File)({
+        name: 'filelog-error.log',
+        filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
+        level: 'error'
+      })
+    ];
+
+    logger = new (winston.LogStream)({
+      transports: transports
+    });
+  });
+
+  it('should have both transports', function () {
+    assume(logger.transports.length).equals(2);
+    assume(logger.transports.map(function (wrap) {
+      return wrap.transport || wrap;
+    })).deep.equals(transports);
+  });
+
+  it('.remove() of one transport', function () {
+    logger.remove(transports[0]);
+    assume(logger.transports.length).equals(1);
+    assume(logger.transports[0]).equals(transports[1]);
+  });
 });
 
 describe('LogStream (levels)', function () {
@@ -355,101 +326,59 @@ describe('LogStream (levels)', function () {
   });
 });
 
-describe('LogStream (profile, startTimer)', function () {
-  it('profile()');
-  it('profile(callback)');
-  it('startTimer()');
-  it('startTimer(callback)');
-  //
-  // TODO: Reimplement the .profile() and .startTimer() tests below in mocha
-  //
-  // "An instance of winston.Logger with no transports": {
-  //   "the profile() method": {
-  //     "when passed a callback": {
-  //       topic: function (logger) {
-  //         var cb = this.callback;
-  //         logger.profile('test1');
-  //         setTimeout(function () {
-  //           logger.profile('test1', function (err, level, msg, meta) {
-  //             cb(err, level, msg, meta, logger);
-  //           });
-  //         }, 50);
-  //       },
-  //       "should respond with the appropriate profile message": function (err, level, msg, meta, logger) {
-  //         assert.isNull(err);
-  //         assert.equal(level, 'info');
-  //         assert.isTrue(typeof logger.profilers['test'] === 'undefined');
-  //       },
-  //       "when passed some metadata": {
-  //         topic: function () {
-  //           var logger = arguments[arguments.length - 1];
-  //           var cb = this.callback.bind(null, null);
-  //           logger.profile('test3');
-  //           setTimeout(function () {
-  //             logger.once('logging', cb);
-  //             logger.profile('test3', {
-  //               some: 'data'
-  //             });
-  //           }, 50);
-  //         },
-  //         "should respond with the right metadata": function (err, transport, level, msg, meta) {
-  //           assert.equal(msg, 'test3');
-  //           assert.isNull(err);
-  //           assert.equal(level, 'info');
-  //           assert.equal(meta.some, 'data');
-  //         },
-  //         "when not passed a callback": {
-  //           topic: function () {
-  //             var logger = arguments[arguments.length - 1];
-  //             var cb = this.callback.bind(null, null);
-  //             logger.profile('test2');
-  //             setTimeout(function () {
-  //               logger.once('logging', cb);
-  //               logger.profile('test2');
-  //             }, 50);
-  //           },
-  //           "should respond with the appropriate profile message": function (err, transport, level, msg, meta) {
-  //             assert.isNull(err);
-  //             assert.equal(msg, 'test2');
-  //             assert.equal(level, 'info');
-  //           }
-  //         }
-  //       }
-  //     },
-  //     "the startTimer() method": {
-  //       "when passed a callback": {
-  //         topic: function (logger) {
-  //           var that = this;
-  //           var timer = logger.startTimer()
-  //           setTimeout(function () {
-  //             timer.done('test', function (err, level, msg, meta) {
-  //               that.callback(err, level, msg, meta, logger);
-  //             });
-  //           }, 500);
-  //         },
-  //         "should respond with the appropriate message": function (err, level, msg, meta, logger) {
-  //           assert.isNull(err);
-  //           assert.equal(level, 'info');
-  //         }
-  //       },
-  //       "when not passed a callback": {
-  //         topic: function (logger) {
-  //           var that = this;
-  //           var timer = logger.startTimer();
-  //           logger.once('logging', that.callback.bind(null, null));
-  //           setTimeout(function () {
-  //             timer.done();
-  //           }, 500);
-  //         },
-  //         "should respond with the appropriate message": function (err, transport, level, msg, meta) {
-  //           assert.isNull(err);
-  //           assert.equal(level, 'info');
-  //
-  //           assert.isNumber(meta.durationMs);
-  //           assert.isTrue(meta.durationMs >= 50 && meta.durationMs < 100);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+describe('LogStream (profile, startTimer)', function (done) {
+  it('profile(id, info)', function (done) {
+    var writeable = new stream.Writable({
+      objectMode: true,
+      write: function (info) {
+        assume(info).is.an('object'),
+        assume(info.something).equals('ok');
+        assume(info.level).equals('info');
+        assume(info.durationMs).is.a('number');
+        assume(info.message).equals('testing1');
+        assume(info.raw).is.a('string');
+        done();
+      }
+    });
+
+    var logger = new winston.LogStream({
+      transports: [new winston.transports.Stream({ stream: writeable })]
+    });
+
+    logger.profile('testing1');
+    setTimeout(function () {
+      logger.profile('testing1', {
+        something: 'ok',
+        level: 'info'
+      })
+    }, 100);
+  });
+
+  it('startTimer()', function (done) {
+    var writeable = new stream.Writable({
+      objectMode: true,
+      write: function (info) {
+        assume(info).is.an('object'),
+        assume(info.something).equals('ok');
+        assume(info.level).equals('info');
+        assume(info.durationMs).is.a('number');
+        assume(info.message).equals('testing1');
+        assume(info.raw).is.a('string');
+        done();
+      }
+    });
+
+    var logger = new winston.LogStream({
+      transports: [new winston.transports.Stream({ stream: writeable })]
+    });
+
+    var timer = logger.startTimer();
+    setTimeout(function () {
+      timer.done({
+        message: 'testing1',
+        something: 'ok',
+        level: 'info'
+      });
+    }, 100);
+  });
 });
