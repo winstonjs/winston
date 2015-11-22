@@ -146,16 +146,55 @@ describe('LogStream', function () {
     assume(listeners).not.includes(readable);
   });
 
+
+  it('.remove() [transport not added]', function () {
+    var transports = [
+      new (winston.transports.Console)(),
+      new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+    ];
+
+    var logger = new (winston.LogStream)({ transports: transports })
+      .remove(new winston.transports.Console());
+
+    assume(logger.transports.length).equals(2);
+    assume(logger.transports.map(function (wrap) {
+      // Unwrap LegacyTransportStream instances
+      return wrap.transport || wrap;
+    })).deep.equals(transports);
+  });
+
+  it('.remove() [TransportStream]', function () {
+    var transports = [
+      new (winston.transports.Console)(),
+      new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+    ];
+
+    var logger = new (winston.LogStream)({ transports: transports });
+
+    assume(logger.transports.length).equals(2);
+    logger.remove(transports[0]);
+    assume(logger.transports.length).equals(1);
+    assume(logger.transports[0].transport).equals(transports[1]);
+  });
+
+  it('.remove() [LegacyTransportStream]', function () {
+    var transports = [
+      new (winston.transports.Console)(),
+      new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+    ];
+
+    var logger = new (winston.LogStream)({ transports: transports });
+
+    assume(logger.transports.length).equals(2);
+    logger.remove(transports[1]);
+    assume(logger.transports.length).equals(1);
+    assume(logger.transports[0]).equals(transports[0]);
+  });
+
   //
   // TODO: Reimplement the .remove() tests below in mocha
   //
   // "The winston logger": {
-  //   topic: new (winston.Logger)({
-  //     transports: [
-  //       new (winston.transports.Console)(),
-  //       new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
-  //     ]
-  //   }),
   //   "should return have two transports": function (logger) {
   //     assert.equal(helpers.size(logger.transports), 2);
   //   },
