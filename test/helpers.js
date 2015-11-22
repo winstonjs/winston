@@ -15,17 +15,6 @@ var assume = require('assume'),
 
 var helpers = exports;
 
-helpers.size = function (obj) {
-  var size = 0, key;
-  for (key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      size++;
-    }
-  }
-
-  return size;
-};
-
 helpers.tryUnlink = function (file) {
   try { fs.unlinkSync(file) }
   catch (ex) { }
@@ -241,3 +230,4 @@ helpers.testLoggingToStreams = function (levels, transport, stderrLevels, stdMoc
     }
   }
 };
+

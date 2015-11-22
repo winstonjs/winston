@@ -41,25 +41,4 @@ describe('winston/common', function () {
   after(function () {
     winston.setLevels(winston.config.npm.levels);
   });
-
-  describe('clone()', function () {
-    it('clone(Error)', function () {
-      var original = new Error("foo"),
-          copy;
-
-      original.name = "bar";
-      copy = winston.clone(original);
-      assume(original).not.equals(copy);
-      assume(original.message).equals(copy.message);
-      assume(original.name).equals(copy.name);
-    });
-
-    it('clone(Date)', function () {
-      var original = new Date(1000);
-      var copy = winston.clone(original);
-
-      assume(original).not.equals(copy);
-      assume(original.getTime()).equals(copy.getTime());
-    });
-  });
 });

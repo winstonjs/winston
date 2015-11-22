@@ -9,8 +9,9 @@
 var winston = require('../lib/winston'),
     helpers = require('./helpers');
 
-describe('winston/exception-handler', function () {
-  var handler = new winston.ExceptionHandler();
+describe('ExceptionHandler', function () {
+  var logger = new winston.LogStream();
+  var handler = new winston.ExceptionHandler(logger);
 
   it('.getProcessInfo()', function () {
     helpers.assertProcessInfo(

@@ -50,7 +50,7 @@ describe('winston', function () {
 
   describe('deprecates winston < 3.0.0 properties', function () {
     var deprecated = {
-      functions: ['addRewriter', 'addFilter', 'cli', 'extend'],
+      functions: ['addRewriter', 'addFilter', 'cli', 'clone', 'extend'],
       properties: ['emitErrs', 'levelLength', 'padLevels', 'stripColors']
     };
 
