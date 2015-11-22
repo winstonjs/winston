@@ -6,7 +6,8 @@
  *
  */
 
-var assume = require('assume'),
+var format = require('util').format,
+    assume = require('assume'),
     winston = require('../lib/winston');
 
 describe('winston', function () {
@@ -46,4 +47,25 @@ describe('winston', function () {
   // "the log() method": helpers.testNpmLevels(winston, "should respond without an error", function (err) {
   //   assert.isNull(err);
   // })
+
+  describe('deprecates winston < 3.0.0 properties', function () {
+    var deprecated = {
+      functions: ['addRewriter', 'addFilter', 'cli', 'extend'],
+      properties: ['emitErrs', 'levelLength', 'padLevels', 'stripColors']
+    };
+
+    deprecated.functions.forEach(function (prop) {
+      it(format('.%s()', prop), function () {
+        assume(winston[prop]).throws();
+      });
+    });
+
+    deprecated.properties.forEach(function (prop) {
+      it(format('.%s', prop), function () {
+        assume(function () {
+          var value = winston[prop];
+        }).throws();
+      });
+    });
+  });
 });
