@@ -9,22 +9,24 @@
 var winston = require('../lib/winston'),
     helpers = require('./helpers');
 
-describe('Exception context', function () {
-  it('getProcessInfo()', function () {
+describe('winston/exception-handler', function () {
+  var handler = new winston.ExceptionHandler();
+
+  it('.getProcessInfo()', function () {
     helpers.assertProcessInfo(
-      winston.exception.getProcessInfo()
+      handler.getProcessInfo()
     );
   });
 
-  it('getOsInfo()', function () {
+  it('.getOsInfo()', function () {
     helpers.assertOsInfo(
-      winston.exception.getOsInfo()
+      handler.getOsInfo()
     );
   });
 
-  it('getTrace()', function () {
+  it('.getTrace()', function () {
     helpers.assertTrace(
-      winston.exception.getTrace(new Error())
+      handler.getTrace(new Error())
     );
   });
 });
