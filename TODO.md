@@ -6,7 +6,6 @@
 - **DEPRECATE** `winston.config.*` and move to `winston.levels`.
 - **DEPRECATE** `winston.clone`
 
-
 ## Formats
 
 - [ ] String interpolation format
@@ -23,14 +22,14 @@
 ## Transports
 
 - [ ] Refactor all built-in transports to be TransportStream instances.
-  - [] Console
-  - [] File
-  - [] Http
+  - [x] Console
+  - [ ] File
+  - [ ] Http
 
 ## Other Miscellaneous API changes
 
 - [ ] Add LogStream.prototype.configure from `winston@2.0.0`
-- [ ] `winston.Container` instances no longer add any transports by default.
+- [x] `winston.Container` instances no longer add any transports by default.
 
 ## Benchmarking
 
