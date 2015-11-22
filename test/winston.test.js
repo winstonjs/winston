@@ -11,7 +11,7 @@ var assume = require('assume'),
 
 describe('winston', function () {
 
-  it('has expected Prototypes', function () {
+  it('winston.transports', function () {
     assume(winston.transports).is.an('object');
     assume(winston.Transport).is.a('function');
     assume(!winston.transports.Transport).true();
@@ -19,10 +19,14 @@ describe('winston', function () {
     assume(winston.transports.File).is.a('function');
   });
 
-  it('has expected methods', function () {
+  it('has expected initial state', function () {
     assume(winston.default.transports[0]).is.an('object');
+    assume(winston.level).equals('info');
+  });
+
+  it('has expected methods', function () {
     assume(winston.config).is.an('object');
-    ['Logger', 'add', 'remove', 'extend', 'clear']
+    ['Logger', 'add', 'remove', 'clear']
       .concat(Object.keys(winston.config.npm.levels))
       .forEach(function (key) {
         assume(winston[key]).is.a('function', 'winston.' + key);

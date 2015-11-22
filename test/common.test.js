@@ -21,11 +21,9 @@ describe('winston/common', function () {
     assume(winston.config).is.an('object');
 
     var newLevels = Object.keys(winston.config.syslog.levels);
-    ['Logger', 'add', 'remove', 'extend', 'clear']
-      .concat(newLevels)
-      .forEach(function (key) {
-        assume(winston[key]).is.a('function');
-      });
+    newLevels.forEach(function (key) {
+      assume(winston[key]).is.a('function');
+    });
 
     Object.keys(winston.config.npm.levels)
       .filter(function (key) {
