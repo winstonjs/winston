@@ -122,7 +122,7 @@ You can also wholesale reconfigure a `winston.Logger` instance using the `config
   logger.configure({
     level: 'verbose',
     transports: [
-      new require('winston-daily-rotate-file')(opts)
+      new (require('winston-daily-rotate-file'))(opts)
     ]
   });
 ```
