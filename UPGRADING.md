@@ -11,6 +11,11 @@
 - `.unhandleExceptions()` will no longer modify transports state, merely just add / remove the `process.on('uncaughtException')` handler.
   - call close on any explicit `exceptionHandlers`
   - set handleExceptions = false on all transports
+- Logger.prototype.stream
+  - options.transport is removed. Use the transport instance on the logger directly.
+- Logger.prototype.query
+  - options.transport is removed. Use the transport instance on the logger directly.
+
 
 - winston.exceptions has been removed. Use:
 ```
