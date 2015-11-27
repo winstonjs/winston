@@ -3,15 +3,16 @@
 
 - [ ] README.md / tests for `winston-transport`
 - [ ] README.md / tests for `winston-compat`
-
+- [ ] Move core tests into `winston-compat`
 
 ## Core logging
 
 - [x] Move `TransportStream` and `LegacyTransportStream` into `winston-transport`.
 - [ ] `.level` **MUST** be a getter / setter
 - [ ] `.levels` **MUST** be a getter only.
-- [ ] **DEPRECATE** `winston.config.*` and move to `winston.levels`.
+- [x] **DEPRECATE** `winston.config.*` and move to `winston.levels`.
 - [x] **DEPRECATE** `winston.clone`
+- [ ] Add convenience methods from `winston-logger`
 - [ ] Code coverage tests above 80%
 
 ## Formats
