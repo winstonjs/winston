@@ -2,7 +2,7 @@
 
 var events = require('events'),
     util = require('util'),
-    Transport = require('../../lib/winston/transports/transport');
+    Transport = require('winston-compat').Transport;
 
 //
 // ### function Legacy (options)

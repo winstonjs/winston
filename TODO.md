@@ -1,6 +1,7 @@
 
 ## Core logging
 
+- [ ] Move `TransportStream` and `LegacyTransportStream` into `winston-transport`.
 - [ ] `.level` **MUST** be a getter / setter
 - [ ] `.levels` **MUST** be a getter only.
 - [ ] **DEPRECATE** `winston.config.*` and move to `winston.levels`.
@@ -17,7 +18,7 @@
 ## Compatibility
 
 - [x] Add friendly(ish) deprecation notices for common changes.
-- [-] winston-compat
+- [x] winston-compat
 
 ## Querying, Streaming, Uncaught Exceptions
 
@@ -27,10 +28,10 @@
 
 ## Transports
 
-- [ ] Refactor all built-in transports to be TransportStream instances.
+- [-] Refactor all built-in transports to be TransportStream instances.
   - [x] Console
   - [-] File
-  - [ ] Http
+  - [x] Http
 
 ## Other Miscellaneous API changes
 

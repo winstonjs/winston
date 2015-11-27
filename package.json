@@ -24,7 +24,8 @@
     "eyes": "0.1.x",
     "isstream": "0.1.x",
     "one-time": "0.0.4",
-    "stack-trace": "0.0.x"
+    "stack-trace": "0.0.x",
+    "winston-transport": "~1.0.1"
   },
   "devDependencies": {
     "assume": "^1.2.5",
@@ -35,7 +36,8 @@
     "mocha": "^2.2.5",
     "mocha-istanbul": "^0.2.0",
     "std-mocks": "~1.0.0",
-    "vows": "0.7.x"
+    "vows": "0.7.x",
+    "winston-compat": "0.0.1"
   },
   "main": "./lib/winston",
   "scripts": {
