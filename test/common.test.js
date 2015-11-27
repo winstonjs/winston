@@ -8,6 +8,7 @@
 
 var assume = require('assume'),
     winston = require('../lib/winston'),
+    common = require('../lib/winston/common'),
     helpers = require('./helpers');
 
 describe('winston/common', function () {
