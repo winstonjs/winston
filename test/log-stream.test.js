@@ -19,21 +19,21 @@ var assume = require('assume'),
     TransportStream = require('winston-transport'),
     format = require('../lib/winston/formats/format');
 
-describe('LogStream', function () {
-  it('new LogStream()', function () {
-    var logger = new winston.LogStream();
+describe('Logger', function () {
+  it('new Logger()', function () {
+    var logger = new winston.Logger();
     assume(logger).is.an('object');
     assume(isStream(logger.format));
     assume(logger.level).equals('info');
     assume(logger.exitOnError).equals(true);
   });
 
-  it('new LogStream({ parameters })', function () {
+  it('new Logger({ parameters })', function () {
     var myFormat = format(function (info, opts) {
       return info;
     })();
 
-    var logger = new winston.LogStream({
+    var logger = new winston.Logger({
       format: myFormat,
       level: 'error',
       exitOnError: false,
@@ -48,7 +48,7 @@ describe('LogStream', function () {
 
   it('.add(LegacyTransport)', function () {
     stdMocks.use();
-    var logger = new winston.LogStream();
+    var logger = new winston.Logger();
     var transport = new LegacyTransport();
     logger.add(transport);
     stdMocks.restore();
@@ -62,7 +62,7 @@ describe('LogStream', function () {
 
   it('.add(LegacyTransport) multiple', function () {
     stdMocks.use();
-    var logger = new winston.LogStream({
+    var logger = new winston.Logger({
       transports: [
         new LegacyTransport(),
         new LegacyTransport(),
@@ -79,14 +79,14 @@ describe('LogStream', function () {
   });
 
   it('.add({ invalid Transport })', function () {
-    var logger = new winston.LogStream();
+    var logger = new winston.Logger();
     assume(function () {
       logger.add(5);
     }).throws(/invalid transport/i);
   });
 
   it('.add(TransportStream)', function (done) {
-    var logger = new winston.LogStream();
+    var logger = new winston.Logger();
     var expected = { msg: 'foo', level: 'info' };
     var transport = new TransportStream({
       log: function (info) {
@@ -102,7 +102,7 @@ describe('LogStream', function () {
   });
 
   it('.configure()', function () {
-    var logger = new winston.LogStream({
+    var logger = new winston.Logger({
       transports: [new winston.transports.Console()]
     });
 
@@ -115,7 +115,7 @@ describe('LogStream', function () {
   });
 
   it('.configure({ transports })', function () {
-    var logger = new winston.LogStream();
+    var logger = new winston.Logger();
 
     assume(logger.transports.length).equals(0);
 
@@ -128,7 +128,7 @@ describe('LogStream', function () {
   });
 
   it('.configure({ transports, format })', function () {
-    var logger = new winston.LogStream(),
+    var logger = new winston.Logger(),
         readable = logger._onReadableFormat,
         format = logger.format;
 
@@ -155,7 +155,7 @@ describe('LogStream', function () {
       new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
     ];
 
-    var logger = new (winston.LogStream)({ transports: transports })
+    var logger = new (winston.Logger)({ transports: transports })
       .remove(new winston.transports.Console());
 
     assume(logger.transports.length).equals(2);
@@ -171,7 +171,7 @@ describe('LogStream', function () {
       new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
     ];
 
-    var logger = new (winston.LogStream)({ transports: transports });
+    var logger = new (winston.Logger)({ transports: transports });
 
     assume(logger.transports.length).equals(2);
     logger.remove(transports[0]);
@@ -185,7 +185,7 @@ describe('LogStream', function () {
       new (LegacyTransport)()
     ];
 
-    var logger = new (winston.LogStream)({ transports: transports });
+    var logger = new (winston.Logger)({ transports: transports });
 
     assume(logger.transports.length).equals(2);
     logger.remove(transports[1]);
@@ -194,14 +194,14 @@ describe('LogStream', function () {
   });
 
   it('.clear() [no transports]', function () {
-    var logger = new (winston.LogStream)();
+    var logger = new (winston.Logger)();
     assume(logger.transports.length).equals(0);
     logger.clear();
     assume(logger.transports.length).equals(0);
   });
 
   it ('.clear() [transports]', function () {
-    var logger = new (winston.LogStream)({
+    var logger = new (winston.Logger)({
       transports: [new (winston.transports.Console)()]
     });
 
@@ -211,7 +211,7 @@ describe('LogStream', function () {
   });
 });
 
-describe('LogStream (multiple transports of the same type)', function () {
+describe('Logger (multiple transports of the same type)', function () {
   var logger, transports;
 
   before(function () {
@@ -228,7 +228,7 @@ describe('LogStream (multiple transports of the same type)', function () {
       })
     ];
 
-    logger = new (winston.LogStream)({
+    logger = new (winston.Logger)({
       transports: transports
     });
   });
@@ -247,10 +247,10 @@ describe('LogStream (multiple transports of the same type)', function () {
   });
 });
 
-describe('LogStream (levels)', function () {
+describe('Logger (levels)', function () {
   it('report unknown levels', function () {
     stdMocks.use();
-    var logger = new winston.LogStream();
+    var logger = new winston.Logger();
     var expected = { msg: 'foo', level: 'bar' };
     logger.log(expected);
 
@@ -261,7 +261,7 @@ describe('LogStream (levels)', function () {
   });
 
   it('default levels', function (done) {
-    var logger = new winston.LogStream();
+    var logger = new winston.Logger();
     var expected = {msg: 'foo', level: 'info'};
 
     function logLevelTransport(level) {
@@ -290,7 +290,7 @@ describe('LogStream (levels)', function () {
   });
 
   it('custom levels', function (done) {
-    var logger = new winston.LogStream({
+    var logger = new winston.Logger({
       levels: {
         missing: 0,
         bad:     1,
@@ -326,7 +326,7 @@ describe('LogStream (levels)', function () {
   });
 });
 
-describe('LogStream (profile, startTimer)', function (done) {
+describe('Logger (profile, startTimer)', function (done) {
   it('profile(id, info)', function (done) {
     var writeable = new stream.Writable({
       objectMode: true,
@@ -341,7 +341,7 @@ describe('LogStream (profile, startTimer)', function (done) {
       }
     });
 
-    var logger = new winston.LogStream({
+    var logger = new winston.Logger({
       transports: [new winston.transports.Stream({ stream: writeable })]
     });
 
@@ -368,7 +368,7 @@ describe('LogStream (profile, startTimer)', function (done) {
       }
     });
 
-    var logger = new winston.LogStream({
+    var logger = new winston.Logger({
       transports: [new winston.transports.Stream({ stream: writeable })]
     });
 

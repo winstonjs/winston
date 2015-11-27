@@ -13,7 +13,7 @@ var assume = require('assume'),
     winston = require('../lib/winston'),
     helpers = require('./helpers');
 
-describe('LogStream, ExceptionHandler', function () {
+describe('Logger, ExceptionHandler', function () {
   describe('.exceptions.unhandle()', function () {
     it('does not log to any transports', function (done) {
       var logFile = path.join(__dirname, 'fixtures', 'logs', 'unhandle-exception.log');
@@ -36,7 +36,7 @@ describe('LogStream, ExceptionHandler', function () {
       //
       assume(process.listeners('uncaughtException').length).equals(1);
 
-      var logger = new (winston.LogStream)({
+      var logger = new winston.Logger({
         exceptionHandlers: [
           new (winston.transports.Console)(),
           new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
