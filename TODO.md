@@ -10,7 +10,7 @@
 - [x] Move `TransportStream` and `LegacyTransportStream` into `winston-transport`.
 - [ ] `.level` **MUST** be a getter / setter
 - [ ] `.levels` **MUST** be a getter only.
-- [x] **DEPRECATE** `winston.config.*` and move to `winston.levels`.
+- [x] Move `winston/config.js` to `winston/config/index.js`
 - [x] **DEPRECATE** `winston.clone`
 - [ ] Add convenience methods from `winston-logger`
 - [ ] Code coverage tests above 80%
