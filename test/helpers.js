@@ -10,10 +10,70 @@ var assume = require('assume'),
     fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn,
+    stream = require('stream'),
     util = require('util'),
     winston = require('../lib/winston');
 
 var helpers = exports;
+
+/**
+ * Returns a new winston.Logger instance which will invoke
+ * the `write` method on each call to `.log`
+ *
+ * @param {function} write Write function for the specified stream
+ * @returns {Logger} A winston.Logger instance
+ */
+helpers.createLogger = function (write) {
+  var writeable = new stream.Writable({
+    objectMode: true,
+    write: write
+  });
+
+  return new winston.Logger({
+    transports: [
+      new winston.transports.Stream({ stream: writeable })
+    ]
+  });
+};
+
+/**
+ * Creates a new ExceptionHandler instance with a new
+ * winston.Logger instance with the specified options
+ *
+ * @param {Object} opts Options for the logger associated
+ *                 with the ExceptionHandler
+ * @returns {ExceptionHandler} A new ExceptionHandler instance
+ */
+helpers.exceptionHandler = function (opts) {
+  var logger = new winston.Logger(opts);
+  return new winston.ExceptionHandler(logger);
+};
+
+/**
+ * Removes all listeners to `process.on('uncaughtException')`
+ * and returns an object that allows you to restore them later.
+ *
+ * @returns {Object} Facade to restore uncaughtException handlers.
+ */
+helpers.clearExceptions = function () {
+  var listeners = process.listeners('uncaughtException');
+  process.removeAllListeners('uncaughtException');
+
+  return {
+    restore: function () {
+      listeners.forEach(function (fn) {
+        process.on('uncaughtException', fn);
+      });
+    }
+  };
+};
+
+/**
+ * Throws an exception with the specified `msg`
+ */
+helpers.throw = function (msg) {
+  throw new Error(msg);
+};
 
 helpers.tryUnlink = function (file) {
   try { fs.unlinkSync(file) }
