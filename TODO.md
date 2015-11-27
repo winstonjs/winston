@@ -1,11 +1,18 @@
 
+## Communications / Compatibility
+
+- [ ] README.md / tests for `winston-transport`
+- [ ] README.md / tests for `winston-compat`
+
+
 ## Core logging
 
-- [ ] Move `TransportStream` and `LegacyTransportStream` into `winston-transport`.
+- [x] Move `TransportStream` and `LegacyTransportStream` into `winston-transport`.
 - [ ] `.level` **MUST** be a getter / setter
 - [ ] `.levels` **MUST** be a getter only.
 - [ ] **DEPRECATE** `winston.config.*` and move to `winston.levels`.
 - [x] **DEPRECATE** `winston.clone`
+- [ ] Code coverage tests above 80%
 
 ## Formats
 
@@ -22,8 +29,8 @@
 
 ## Querying, Streaming, Uncaught Exceptions
 
-- [ ] Querying
-- [ ] Streaming
+- [-] Querying
+- [-] Streaming
 - [x] Uncaught Exceptions
 
 ## Transports
