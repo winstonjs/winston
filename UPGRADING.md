@@ -5,6 +5,7 @@
 - `winston.Logger` will no longer respond with an error if the same transports are added twice.
 - `winston.hash` was removed.
 - `winston.common.pad` was removed.
+- `winston.config` is now `winston.levels`
 - `winston.Container` instances no longer have default `Console` transports
 - `winston.Container.prototype.add` no longer does crazy options parsing similar to [segmentio/winston-logger](https://github.com/segmentio/winston-logger/blob/master/lib/index.js#L20-L43)
 - `winston.transports.Memory` was removed. Use any streams2 with a large `highWaterMark` instance instead.
@@ -21,3 +22,4 @@
 ```
 var exceptions = winston.exceptionHandler();
 ```
+- humanReadableUnhandledException is now the default exception format.
