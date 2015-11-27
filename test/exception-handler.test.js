@@ -24,55 +24,63 @@ mocha.Runner.prototype.runTest = function () {
 };
 
 describe('ExceptionHandler', function () {
-  // it('has expected methods', function () {
-  //   var handler = helpers.exceptionHandler();
-  //   assume(handler.handle).is.a('function');
-  //   assume(handler.unhandle).is.a('function');
-  //   assume(handler.getAllInfo).is.a('function');
-  //   assume(handler.getProcessInfo).is.a('function');
-  //   assume(handler.getOsInfo).is.a('function');
-  //   assume(handler.getTrace).is.a('function');
-  // });
+  it('has expected methods', function () {
+    var handler = helpers.exceptionHandler();
+    assume(handler.handle).is.a('function');
+    assume(handler.unhandle).is.a('function');
+    assume(handler.getAllInfo).is.a('function');
+    assume(handler.getProcessInfo).is.a('function');
+    assume(handler.getOsInfo).is.a('function');
+    assume(handler.getTrace).is.a('function');
+  });
 
-  // it('new ExceptionHandler()', function () {
-  //   assume(function () {
-  //     new winston.ExceptionHandler();
-  //   }).throws(/Logger is required/);
-  // });
+  it('new ExceptionHandler()', function () {
+    assume(function () {
+      new winston.ExceptionHandler();
+    }).throws(/Logger is required/);
+  });
 
-  // it('new ExceptionHandler(logger)', function () {
-  //   var logger = new winston.Logger();
-  //   var handler = new winston.ExceptionHandler(logger);
-  //   assume(handler.logger).equals(logger);
-  // });
+  it('new ExceptionHandler(logger)', function () {
+    var logger = new winston.Logger();
+    var handler = new winston.ExceptionHandler(logger);
+    assume(handler.logger).equals(logger);
+  });
 
-  // it('.getProcessInfo()', function () {
-  //   var handler = helpers.exceptionHandler();
-  //   helpers.assertProcessInfo(
-  //     handler.getProcessInfo()
-  //   );
-  // });
+  it('.getProcessInfo()', function () {
+    var handler = helpers.exceptionHandler();
+    helpers.assertProcessInfo(
+      handler.getProcessInfo()
+    );
+  });
 
-  // it('.getOsInfo()', function () {
-  //   var handler = helpers.exceptionHandler();
-  //   helpers.assertOsInfo(
-  //     handler.getOsInfo()
-  //   );
-  // });
+  it('.getOsInfo()', function () {
+    var handler = helpers.exceptionHandler();
+    helpers.assertOsInfo(
+      handler.getOsInfo()
+    );
+  });
 
-  // it('.getTrace(new Error)', function () {
-  //   var handler = helpers.exceptionHandler();
-  //   helpers.assertTrace(
-  //     handler.getTrace(new Error())
-  //   );
-  // });
+  it('.getTrace(new Error)', function () {
+    var handler = helpers.exceptionHandler();
+    helpers.assertTrace(
+      handler.getTrace(new Error())
+    );
+  });
 
   it('.handle()', function (done) {
     var existing = helpers.clearExceptions();
     var writeable = new stream.Writable({
       objectMode: true,
       write: function (info) {
-        console.dir(info);
+        assume(info).is.an('object');
+        assume(info.error).is.an('error');
+        assume(info.error.message).equals('wtf this error');
+        assume(info.message).includes('uncaughtException: wtf this error');
+        assume(info.stack).is.a('string');
+        assume(info.process).is.an('object');
+        assume(info.os).is.an('object');
+        assume(info.trace).is.an('array');
+
         existing.restore();
         done();
       }
