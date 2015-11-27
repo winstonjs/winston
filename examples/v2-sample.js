@@ -1,5 +1,5 @@
 var winston = require('../');
-var LogStream = winston.LogStream;
+var Logger = winston.Logger;
 
 //
 // Writing a custom sanitizer to remove `creditCard`
@@ -18,7 +18,7 @@ var format = sanitize().pipe(winston.format.json());
 
 //
 // TODO: make functions like `winston.logger` that return
-// instances of `winston.LogStream`
+// instances of `winston.Logger`
 //
 // var logger = winston.logger({
 //   transports: [
@@ -31,7 +31,7 @@ var format = sanitize().pipe(winston.format.json());
 //   ]
 // })
 
-var logger = new LogStream({
+var logger = new Logger({
   format: format,
   level: 'info',
   transports: [

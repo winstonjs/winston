@@ -16,7 +16,7 @@ describe('Container', function () {
 
     it('.add(default-test)', function () {
       defaultTest = container.add('default-test');
-      assume(defaultTest).instanceOf(winston.LogStream);
+      assume(defaultTest).instanceOf(winston.Logger);
     });
 
     it('.get(default-test)', function () {
