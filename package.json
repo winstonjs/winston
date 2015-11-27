@@ -41,10 +41,10 @@
   },
   "main": "./lib/winston",
   "scripts": {
-    "test": "vows --spec --isolate"
+    "test": "istanbul cover _mocha test/*.test.js"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 4.2.2"
   },
   "license": "MIT"
 }
