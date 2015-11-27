@@ -1,5 +1,5 @@
 /*
- * log-stream.test.js: Tests for instances of the winston Logger
+ * logger.test.js: Tests for instances of the winston Logger
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -15,9 +15,9 @@ var assume = require('assume'),
     isStream = require('isstream'),
     stdMocks = require('std-mocks'),
     winston = require('../lib/winston'),
-    LegacyTransport = require('./mocks/legacy-transport'),
     TransportStream = require('winston-transport'),
-    format = require('../lib/winston/formats/format');
+    format = require('../lib/winston/formats/format'),
+    helpers = require('./helpers');
 
 describe('Logger', function () {
   it('new Logger()', function () {
@@ -44,38 +44,6 @@ describe('Logger', function () {
     assume(logger.level).equals('error');
     assume(logger.exitOnError).equals(false);
     assume(logger._readableState.pipesCount).equals(0);
-  });
-
-  it('.add(LegacyTransport)', function () {
-    stdMocks.use();
-    var logger = new winston.Logger();
-    var transport = new LegacyTransport();
-    logger.add(transport);
-    stdMocks.restore();
-    var output = stdMocks.flush();
-
-    assume(logger._readableState.pipesCount).equals(1);
-    assume(logger._readableState.pipes.transport).is.an('object');
-    assume(logger._readableState.pipes.transport).equals(transport);
-    assume(output.stderr).deep.equals(['legacy-test is a Legacy winston transport. Consider upgrading\n']);
-  });
-
-  it('.add(LegacyTransport) multiple', function () {
-    stdMocks.use();
-    var logger = new winston.Logger({
-      transports: [
-        new LegacyTransport(),
-        new LegacyTransport(),
-        new LegacyTransport()
-      ]
-    });
-
-    stdMocks.restore();
-    var output = stdMocks.flush();
-
-    assume(logger._readableState.pipesCount).equals(3);
-    var errorMsg = 'legacy-test is a Legacy winston transport. Consider upgrading\n';
-    assume(output.stderr).deep.equals([errorMsg, errorMsg, errorMsg]);
   });
 
   it('.add({ invalid Transport })', function () {
@@ -177,20 +145,6 @@ describe('Logger', function () {
     logger.remove(transports[0]);
     assume(logger.transports.length).equals(1);
     assume(logger.transports[0]).equals(transports[1]);
-  });
-
-  it('.remove() [LegacyTransportStream]', function () {
-    var transports = [
-      new (winston.transports.Console)(),
-      new (LegacyTransport)()
-    ];
-
-    var logger = new (winston.Logger)({ transports: transports });
-
-    assume(logger.transports.length).equals(2);
-    logger.remove(transports[1]);
-    assume(logger.transports.length).equals(1);
-    assume(logger.transports[0]).equals(transports[0]);
   });
 
   it('.clear() [no transports]', function () {
@@ -328,21 +282,14 @@ describe('Logger (levels)', function () {
 
 describe('Logger (profile, startTimer)', function (done) {
   it('profile(id, info)', function (done) {
-    var writeable = new stream.Writable({
-      objectMode: true,
-      write: function (info) {
-        assume(info).is.an('object'),
-        assume(info.something).equals('ok');
-        assume(info.level).equals('info');
-        assume(info.durationMs).is.a('number');
-        assume(info.message).equals('testing1');
-        assume(info.raw).is.a('string');
-        done();
-      }
-    });
-
-    var logger = new winston.Logger({
-      transports: [new winston.transports.Stream({ stream: writeable })]
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object'),
+      assume(info.something).equals('ok');
+      assume(info.level).equals('info');
+      assume(info.durationMs).is.a('number');
+      assume(info.message).equals('testing1');
+      assume(info.raw).is.a('string');
+      done();
     });
 
     logger.profile('testing1');
@@ -355,21 +302,14 @@ describe('Logger (profile, startTimer)', function (done) {
   });
 
   it('startTimer()', function (done) {
-    var writeable = new stream.Writable({
-      objectMode: true,
-      write: function (info) {
-        assume(info).is.an('object'),
-        assume(info.something).equals('ok');
-        assume(info.level).equals('info');
-        assume(info.durationMs).is.a('number');
-        assume(info.message).equals('testing1');
-        assume(info.raw).is.a('string');
-        done();
-      }
-    });
-
-    var logger = new winston.Logger({
-      transports: [new winston.transports.Stream({ stream: writeable })]
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object'),
+      assume(info.something).equals('ok');
+      assume(info.level).equals('info');
+      assume(info.durationMs).is.a('number');
+      assume(info.message).equals('testing1');
+      assume(info.raw).is.a('string');
+      done();
     });
 
     var timer = logger.startTimer();
