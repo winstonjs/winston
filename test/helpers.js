@@ -61,6 +61,7 @@ helpers.clearExceptions = function () {
 
   return {
     restore: function () {
+      process.removeAllListeners('uncaughtException');
       listeners.forEach(function (fn) {
         process.on('uncaughtException', fn);
       });
