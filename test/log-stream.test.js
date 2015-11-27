@@ -16,7 +16,7 @@ var assume = require('assume'),
     stdMocks = require('std-mocks'),
     winston = require('../lib/winston'),
     LegacyTransport = require('./mocks/legacy-transport'),
-    TransportStream = require('../lib/winston/transport-stream'),
+    TransportStream = require('winston-transport'),
     format = require('../lib/winston/formats/format');
 
 describe('LogStream', function () {
