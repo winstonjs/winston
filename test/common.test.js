@@ -12,6 +12,18 @@ var assume = require('assume'),
     helpers = require('./helpers');
 
 describe('winston/common', function () {
+  it('winston.paddings', function () {
+    assume(winston.paddings).is.an('object');
+    assume(winston.paddings).deep.equals({
+      error: '  ',
+      warn: '   ',
+      info: '   ',
+      http: '   ',
+      verbose: '',
+      debug: '  ',
+      silly: '  '
+    });
+  });
 
   it('setLevels(syslog)', function () {
     winston.setLevels(winston.config.syslog.levels);
@@ -24,6 +36,17 @@ describe('winston/common', function () {
     var newLevels = Object.keys(winston.config.syslog.levels);
     newLevels.forEach(function (key) {
       assume(winston[key]).is.a('function');
+    });
+
+    assume(winston.paddings).deep.equals({
+      emerg: '  ',
+      alert: '  ',
+      crit: '   ',
+      error: '  ',
+      warning: '',
+      notice: ' ',
+      info: '   ',
+      debug: '  '
     });
 
     Object.keys(winston.config.npm.levels)

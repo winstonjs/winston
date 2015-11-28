@@ -9,8 +9,10 @@
 var winston = require('../../../lib/winston');
 
 var logger = new (winston.Logger)({
-    transports: [
-      new winston.transports.Console({ colorize: process.argv[2] === 'true' })
-    ]
-  });
+  format: winston.format.colorize()
+  transports: [
+    new winston.transports.Console()
+  ]
+});
+
 logger.info('Simply a test');
