@@ -18,9 +18,9 @@
 ## Formats
 
 - [ ] String interpolation format
-- [ ] Colorize format
-- [ ] Pretty-print format
-- [ ] Uncolorize format
+- [x] Colorize format
+- [x] Pretty-print format
+- [x] Uncolorize format
 - [ ] winston.format.cli()
 
 ## Compatibility

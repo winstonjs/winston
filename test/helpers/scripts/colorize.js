@@ -8,8 +8,13 @@
 
 var winston = require('../../../lib/winston');
 
+var format = winston.format(
+  winston.format.colorize(),
+  winston.format.simple()
+);
+
 var logger = new (winston.Logger)({
-  format: winston.format.colorize()
+  format: format,
   transports: [
     new winston.transports.Console()
   ]
