@@ -84,7 +84,7 @@ describe('Logger (legacy API)', function () {
     assume(logger.transports[0]).equals(transports[0]);
   });
 
-  it('log(level, msg)', function (done) {
+  it('log(level, message)', function (done) {
     var logger = helpers.createLogger(function (info) {
       assume(info).is.an('object');
       assume(info.level).equals('info');
@@ -96,7 +96,7 @@ describe('Logger (legacy API)', function () {
     logger.log('info', 'Some super awesome log message')
   });
 
-  it('log(level, msg, meta)', function (done) {
+  it('log(level, message, meta)', function (done) {
     var meta = { one: 2 };
     var logger = helpers.createLogger(function (info) {
       assume(info).is.an('object');
