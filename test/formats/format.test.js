@@ -1,5 +1,5 @@
 /*
- * config.test.js: Tests for winston.format
+ * format.test.js: Tests for winston.format
  *
  * (C) 2015 Charlie Robbins
  * MIT LICENSE
