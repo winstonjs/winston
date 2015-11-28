@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "async": "~1.0.0",
+    "camelcase": "^2.0.1",
     "colors": "1.0.x",
     "cycle": "1.0.x",
     "eyes": "0.1.x",
@@ -41,7 +42,7 @@
   },
   "main": "./lib/winston",
   "scripts": {
-    "test": "istanbul cover _mocha test/*.test.js"
+    "test": "istanbul cover _mocha test/*.test.js test/**/*.test.js"
   },
   "engines": {
     "node": ">= 4.2.2"

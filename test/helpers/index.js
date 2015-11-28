@@ -12,7 +12,7 @@ var assume = require('assume'),
     spawn = require('child_process').spawn,
     stream = require('stream'),
     util = require('util'),
-    winston = require('../lib/winston');
+    winston = require('../../lib/winston');
 
 var helpers = exports;
 
