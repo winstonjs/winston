@@ -16,6 +16,7 @@
   - options.transport is removed. Use the transport instance on the logger directly.
 - Logger.prototype.query
   - options.transport is removed. Use the transport instance on the logger directly.
+- Setting the level on the default `winston` logger no longer sets the level on the transports associated with the default `winston` logger.
 
 
 - winston.exceptions has been removed. Use:

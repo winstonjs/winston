@@ -38,6 +38,12 @@ describe('winston', function () {
     assume(winston.version).equals(require('../package').version);
   });
 
+  it('setting level does not modify transports', function () {
+    winston.level = 'error';
+    assume(winston.level).equals('error');
+    assume(winston.default.transports[0].level).equals('info');
+  });
+
   it('abstract-winston-logger');
 
   //
