@@ -67,6 +67,13 @@ describe('ExceptionHandler', function () {
     );
   });
 
+  it('.getTrace()', function () {
+    var handler = helpers.exceptionHandler();
+    helpers.assertTrace(
+      handler.getTrace()
+    );
+  });
+
   it('.handle()', function (done) {
     var existing = helpers.clearExceptions();
     var writeable = new stream.Writable({
