@@ -55,12 +55,12 @@ describe('Logger', function () {
 
   it('.add(TransportStream)', function (done) {
     var logger = new winston.Logger();
-    var expected = { msg: 'foo', level: 'info' };
+    var expected = { message: 'foo', level: 'info' };
     var transport = new TransportStream({
       log: function (info) {
-        assume(info.msg).equals('foo');
+        assume(info.message).equals('foo');
         assume(info.level).equals('info');
-        assume(info.raw).equals(JSON.stringify({ msg: 'foo', level: 'info' }));
+        assume(info.raw).equals(JSON.stringify({ message: 'foo', level: 'info' }));
         done();
       }
     });
@@ -205,7 +205,7 @@ describe('Logger (levels)', function () {
   it('report unknown levels', function () {
     stdMocks.use();
     var logger = new winston.Logger();
-    var expected = { msg: 'foo', level: 'bar' };
+    var expected = { message: 'foo', level: 'bar' };
     logger.log(expected);
 
     stdMocks.restore();
@@ -216,7 +216,7 @@ describe('Logger (levels)', function () {
 
   it('default levels', function (done) {
     var logger = new winston.Logger();
-    var expected = {msg: 'foo', level: 'info'};
+    var expected = { message: 'foo', level: 'info' };
 
     function logLevelTransport(level) {
       return new TransportStream({
@@ -226,9 +226,9 @@ describe('Logger (levels)', function () {
             assume(obj).equals(undefined, 'Transport on level debug should never be called');
           }
 
-          assume(obj.msg).equals('foo');
+          assume(obj.message).equals('foo');
           assume(obj.level).equals('info');
-          assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'info'}));
+          assume(obj.raw).equals(JSON.stringify({ message: 'foo', level: 'info' }));
           done();
         }
       });
@@ -252,7 +252,7 @@ describe('Logger (levels)', function () {
       }
     });
 
-    var expected = { msg: 'foo', level: 'missing' };
+    var expected = { message: 'foo', level: 'missing' };
     function logLevelTransport(level) {
       return new TransportStream({
         level: level,
@@ -261,9 +261,9 @@ describe('Logger (levels)', function () {
             assume(obj).equals(undefined, 'transport on level test should never be called');
           }
 
-          assume(obj.msg).equals('foo');
+          assume(obj.message).equals('foo');
           assume(obj.level).equals('missing');
-          assume(obj.raw).equals(JSON.stringify({msg: 'foo', level: 'missing'}));
+          assume(obj.raw).equals(JSON.stringify({ message: 'foo', level: 'missing' }));
           done();
         }
       });
