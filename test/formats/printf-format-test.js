@@ -68,9 +68,6 @@ vows.describe('winston/logger/levels').addBatch({
         "should output the message": function (transport, level, msg, meta) {
           stdMocks.restore();
 
-          //
-          // TODO: Come up with a cleaner way to test this.
-          //
           var output = stdMocks.flush(),
               line   = output.stdout[0];
 
