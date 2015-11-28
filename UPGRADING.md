@@ -29,3 +29,40 @@ var exceptions = winston.exceptionHandler();
 - `.unhandleExceptions()` will no longer modify transports state, merely just add / remove the `process.on('uncaughtException')` handler.
   - call close on any explicit `exceptionHandlers`
   - set handleExceptions = false on all transports
+
+### Braindump of formats
+
+**Common**
+``` js
+{
+  level: 'info',
+  message: 'Something happened.'
+}
+```
+
+**Less common**
+``` js
+{
+  label: 'some label',
+  timestamp: new Date().toISOString() || function () {},
+  raw: true,
+  showLevel: false,
+  align: true // uses \t instead of ' '
+}
+```
+
+**Now formats**
+``` js
+{
+  json: true,
+  logstash: true,
+  colorize: 'all' || 'level' || 'message' || true,
+  prettyPrint: true || function () {}
+    // depth
+    // colorize
+}
+```
+
+**Other notes**
+- `stringify`: Use a custom format.
+- `formatter`: Use a custom format.
