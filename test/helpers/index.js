@@ -37,6 +37,18 @@ helpers.createLogger = function (write) {
 };
 
 /**
+ * Returns a new writeable stream with the specified write function.
+ * @param {function} write Write function for the specified stream
+ * @returns {stream.Writeable} A writeable stream instance
+ */
+helpers.writeable = function (write) {
+  return new stream.Writable({
+    objectMode: true,
+    write: write
+  });
+};
+
+/**
  * Creates a new ExceptionHandler instance with a new
  * winston.Logger instance with the specified options
  *
@@ -80,6 +92,23 @@ helpers.tryUnlink = function (file) {
   try { fs.unlinkSync(file) }
   catch (ex) { }
 };
+
+/**
+ * Simple test helper which creates an instance
+ * of the `colorize` format and asserts that the
+ * correct `info` object was processed.
+ */
+helpers.assumeFormatted = function (format, info, assertion) {
+  return function (done) {
+    var writeable = helpers.writeable(function (info) {
+      assertion(info);
+      done();
+    });
+
+    format.pipe(writeable);
+    format.write(info);
+  };
+}
 
 helpers.assertDateInfo = function (info) {
   assume(Date.parse(info)).is.a('number');
