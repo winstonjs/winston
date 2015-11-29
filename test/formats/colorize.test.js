@@ -88,7 +88,9 @@ describe('winston.format.colorize', function () {
 
   it('non-TTY environment', function (done) {
     spawnColorizer(function (err, data) {
-      console.dir(arguments);
+      assume(err).equals(null);
+      assume(data).includes('\u001b[32mSimply a test\u001b[39m');
+      done();
     })
   });
 });
