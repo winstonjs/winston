@@ -25,6 +25,7 @@
     "eyes": "0.1.x",
     "isstream": "0.1.x",
     "one-time": "0.0.4",
+    "pumpify": "^1.3.3",
     "stack-trace": "0.0.x",
     "winston-transport": "~1.0.1"
   },
