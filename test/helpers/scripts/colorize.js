@@ -8,10 +8,25 @@
 
 var winston = require('../../../lib/winston');
 
+var formats = {
+  colorize: winston.format.colorize(),
+  simple: winston.format.simple()
+};
+
 var format = winston.format(
-  winston.format.colorize(),
-  winston.format.simple()
+  formats.colorize,
+  formats.simple
 );
+
+format.on('readable', function () {
+  console.log('wtf pumpified');
+});
+
+Object.keys(formats).forEach(function (key) {
+  formats[key].on('readable', function () {
+    console.log('wtf %s', key);
+  });
+});
 
 var logger = new (winston.Logger)({
   format: format,
