@@ -37,7 +37,9 @@
     "istanbul": "^0.3.18",
     "mocha": "^2.2.5",
     "mocha-istanbul": "^0.2.0",
+    "split2": "~1.0.0",
     "std-mocks": "~1.0.0",
+    "through2": "~2.0.0",
     "vows": "0.7.x",
     "winston-compat": "0.0.1"
   },
