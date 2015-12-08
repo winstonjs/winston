@@ -1,20 +1,12 @@
 {
-  "name": "winston",
-  "description": "A multi-transport async logging library for Node.js",
+  "name": "winston1",
+  "description": "winston@1.1.2 for historical benchmarking purposes",
   "version": "1.1.2",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
-  "maintainers": [
-    "indexzero <charlie@nodejitsu.com>"
-  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/winstonjs/winston.git"
+    "url": "https://github.com/winstonjs/winston.git#winston1"
   },
-  "keywords": [
-    "logging",
-    "sysadmin",
-    "tools"
-  ],
   "dependencies": {
     "async": "~1.0.0",
     "colors": "1.0.x",
