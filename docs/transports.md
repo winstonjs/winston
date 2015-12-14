@@ -27,6 +27,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Airbrake](#airbrake-transport)
   * [Newrelic](#newrelic-transport) (errors only)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
+  * [Logz.io](#logzio-transport)
 
 ## Winston Core
 
@@ -167,6 +168,27 @@ The Loggly transport is based on [Nodejitsu's][6] [node-loggly][7] implementatio
 * __json:__ If true, messages will be sent to Loggly as JSON.
 
 *Metadata:* Logged in suggested [Loggly format][10]
+
+
+### Logzio Transport
+
+You can download the logzio transport here : [https://github.com/logzio/winston-logzio](https://github.com/logzio/winston-logzio)  
+
+*Basic Usage*  
+```js
+var winston = require('winston');
+var logzioWinstonTransport = require('winston-logzio');
+
+var loggerOptions = {
+    apiToken: '__YOUR_API_TOKEN__'
+};
+winston.add(logzioWinstonTransport, loggerOptions);
+
+winston.log('info', 'winston logger configured with logzio transport');
+```
+
+For more information about how to configure the logzio transport, view the README.md in the [winston-logzio repo](https://github.com/logzio/winston-logzio).
+
 
 ### Riak Transport
 
