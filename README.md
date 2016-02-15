@@ -235,7 +235,7 @@ logger.log('info', 'test message', 'first', 'second', {number: 123}, function(){
 
 
 ## Querying Logs
-Winston supports querying of logs with Loggly-like options. [See Loggly Search API](http://wiki.loggly.com/retrieve_events#optional).
+Winston supports querying of logs with Loggly-like options. [See Loggly Search API](https://www.loggly.com/docs/api-retrieving-data/).
 Specifically: `File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
 
 ``` js
