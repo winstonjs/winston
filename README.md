@@ -295,6 +295,11 @@ If you want to use this feature with the default logger simply call `.handleExce
     handleExceptions: true,
     humanReadableUnhandledException: true
   });
+  
+  //
+  // Exceptions can also be handled by multiple transports.
+  //
+  winston.handleExceptions([ transport1, transport2, ... ]);
 ```
 
 ### To Exit or Not to Exit
