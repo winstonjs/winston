@@ -47,12 +47,11 @@ vows.describe('winston/logger/filter').addBatch({
     topic: new (winston.Logger)({transports: [
       new (winston.transports.Console)({ level: 'info' })
     ]}),
-    "the filters.push() method, adding a filter only for the message": {
+    "the addFilter() method, adding a filter only for the message": {
       topic: function (logger) {
-        logger.filters.push(function (level, msg) {
+        logger.addFilter(function (level, msg) {
           return maskCardNumbers(msg);
         });
-
         return logger;
       },
       "should add the filter": function (logger) {
@@ -71,27 +70,26 @@ vows.describe('winston/logger/filter').addBatch({
   }
 }).addBatch({
   "A fresh instance of winston.Logger": {
-    topic: new (winston.Logger)({
-      transports: [new (winston.transports.Console)({ level: 'info' })]
-    }),
-    "the filters.push() method adding a filter for the message and metadata": {
+    topic: new (winston.Logger)({transports: [
+      new (winston.transports.Console)({ level: 'info' })
+    ]}),
+    "the addFilter() method adding a filter for the message and metadata": {
       topic: function (logger) {
-        logger.filters.push(function (level, msg, meta) {
+        logger.addFilter(function (level, msg, meta) {
           return maskSecrets(msg, meta);
         });
-
         return logger;
       },
       "the log() method with a filtered message and filtered metadata": {
         topic: function (logger) {
           logger.once('logging', this.callback);
-          logger.log('info', 'We should make sure the secret stays SECRET.', {
-            'SECRET': "You shouldn't see this.",
-            'public': 'But you can look at this.',
-            'secret': "We'll have to take you to Area-51 now.",
-            'not-secret': 'No worries about this one.',
-            'Secret': "It's confidential!"
-          });
+          logger.log('info',
+                     'We should make sure the secret stays SECRET.',
+                     { 'SECRET': "You shouldn't see this.",
+                       'public': 'But you can look at this.',
+                       'secret': "We'll have to take you to Area-51 now.",
+                       'not-secret': 'No worries about this one.',
+                       'Secret': "It's confidential!" });
         },
         "should filter out secrets": function (transport, level, msg, meta) {
           assert.equal(msg, 'We should make sure the ****** stays ******.');

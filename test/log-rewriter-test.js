@@ -18,7 +18,7 @@ vows.describe('winston/logger/rewriter').addBatch({
     ]}),
     "the addRewriter() method": {
       topic: function (logger) {
-        logger.rewriters.push(function (level, msg, meta) {
+        logger.addRewriter(function (level, msg, meta) {
           meta.level = level;
           meta.msg = msg;
           meta.foo = 'bar';
