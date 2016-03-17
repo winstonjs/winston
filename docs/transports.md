@@ -69,6 +69,7 @@ The Console transport takes a few simple options:
 The File transport should really be the 'Stream' transport since it will accept any [WritableStream][14]. It is named such because it will also accept filenames via the 'filename' option:
 
 * __level:__ Level of messages that this transport should log.
+* __label:__ String value indicating which object (logger or transport) created the record.
 * __silent:__ Boolean flag indicating whether to suppress output.
 * __colorize:__ Boolean flag indicating if we should colorize output.
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default true). If function is specified, its return value will be used instead of timestamps.
