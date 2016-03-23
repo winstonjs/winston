@@ -320,6 +320,16 @@ vows.describe('winton/logger').addBatch({
           assert.strictEqual(msg, 'test message {"number":123}');
         },
       },
+      "when passed a json placeholer and no meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message %j', {number: 123});
+        },
+        "should interpolate": function (transport, level, msg, meta) {
+          console.log(msg);
+          assert.strictEqual(msg, 'test message {"number":123}');
+        },
+      },
       "when passed just JSON meta and no message": {
         topic: function (logger) {
           stdMocks.use();
