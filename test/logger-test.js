@@ -365,7 +365,27 @@ vows.describe('winton/logger').addBatch({
         },
         "should interpolate with meta": function (transport, level, msg, meta) {
           assert.strictEqual(msg, 'test message % foo');
-          assert.deepEqual(meta,  {number: 123});
+          assert.deepEqual(meta, {number: 123});
+        },
+      },
+      "when passed an escaped percent sign, a format token, and no meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message %% %s', 'foo');
+        },
+        "should interpolate": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, 'test message % foo');
+          assert.deepEqual(meta, {});
+        },
+      },
+      "when passed an escaped percent sign, a json token, and no meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message %% %j', {number: 123});
+        },
+        "should interpolate": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, 'test message % {"number":123}');
+          assert.deepEqual(meta, {});
         },
       },
       "when passed interpolation strings and a meta object": {
