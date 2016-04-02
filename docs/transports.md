@@ -17,6 +17,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Riak](#riak-transport)
 
 * **[Additional Transports](#additional-transports)**
+  * [Elasticsearch](#elasticsearch-transport)
   * [SimpleDB](#simpledb-transport)
   * [Mail](#mail-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
@@ -249,6 +250,13 @@ The community has truly embraced `winston`; there are over **23** winston transp
 ```
 
 **If you have an issue using one of these modules you should contact the module author directly**
+
+### Elasticsearch Transport
+
+Log to Elasticsearch in a logstash-like format and
+leverage Kibana to browser your logs.
+
+See: https://github.com/vanthome/winston-elasticsearch.
 
 ### SimpleDB Transport
 
