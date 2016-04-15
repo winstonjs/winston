@@ -72,6 +72,16 @@ By default, only the Console transport is set on the default logger. You can add
   winston.remove(winston.transports.Console);
 ```
 
+Or do it with one call to configure():
+
+``` js
+  winston.configure({
+    transports: [
+      new (winston.transports.File)({ filename: 'somefile.log' })
+    ]
+  });
+```
+
 For more documentation about working with each individual transport supported by Winston see the [Winston Transports](docs/transports.md) document.
 
 ### Instantiating your own Logger
