@@ -24,6 +24,8 @@
     "eyes": "0.1.x",
     "isstream": "0.1.x",
     "pkginfo": "0.3.x",
+    "pretty-bytes": "~3.0.1",
+    "pretty-ms": "~2.1.0",
     "stack-trace": "0.0.x"
   },
   "devDependencies": {

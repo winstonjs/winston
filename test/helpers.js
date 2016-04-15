@@ -37,6 +37,7 @@ helpers.assertDateInfo = function (info) {
 };
 
 helpers.assertProcessInfo = function (info) {
+  assert.isString(info.uptime);
   assert.isNumber(info.pid);
   assert.isNumber(info.uid);
   assert.isNumber(info.gid);
@@ -44,12 +45,11 @@ helpers.assertProcessInfo = function (info) {
   assert.isString(info.execPath);
   assert.isString(info.version);
   assert.isArray(info.argv);
-  assert.isObject(info.memoryUsage);
 };
 
 helpers.assertOsInfo = function (info) {
-  assert.isArray(info.loadavg);
-  assert.isNumber(info.uptime);
+  assert.isNumber(info.cpus);
+  assert.isObject(info.loadavg);
 };
 
 helpers.assertTrace = function (trace) {
