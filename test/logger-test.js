@@ -335,7 +335,7 @@ vows.describe('winton/logger').addBatch({
           var output = stdMocks.flush(),
               line   = output.stdout[0];
 
-          assert.match(line, /message\=in/);
+          assert.match(line, /message\='in/);
         }
       },
       "when passed a escaped percent sign": {

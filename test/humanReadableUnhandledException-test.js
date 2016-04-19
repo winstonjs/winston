@@ -31,7 +31,7 @@ vows.describe('winston/transport/humanReadableUnhandledException').addBatch({
           assert.equal(1, transport.writeOutput.length);
 
           var msg = transport.writeOutput[0];
-          assert.notEqual(-1, msg.indexOf('stack: date=dummy date, process=dummy, os=dummy\n'));
+          assert.notEqual(-1, msg.indexOf('stack: date=\'dummy date\' process=dummy os=dummy\n'));
           assert.notEqual(-1, msg.indexOf(meta.stack[0] + '\n'));
         });
       }
