@@ -66,7 +66,7 @@ The Console transport takes a few simple options:
   winston.add(winston.transports.File, options)
 ```
 
-The File transport should really be the 'Stream' transport since it will accept any [WritableStream][14]. It is named such because it will also accept filenames via the 'filename' option:
+The File transport should really be the 'Stream' transport since it will accept any [WritableStream][0]. It is named such because it will also accept filenames via the 'filename' option:
 
 * __level:__ Level of messages that this transport should log.
 * __silent:__ Boolean flag indicating whether to suppress output.
@@ -556,7 +556,7 @@ Options:
 
 ```
 
-[0]: http://nodejs.org/docs/v0.3.5/api/streams.html#writable_Stream
+[0]: https://nodejs.org/api/stream.html#stream_class_stream_writable
 [1]: https://github.com/flatiron/winstond
 [2]: https://github.com/indexzero/winston-couchdb
 [3]: http://guide.couchdb.org/draft/design.html
