@@ -679,7 +679,7 @@ Both filters and rewriters are simple Arrays of functions which can be provided 
 
 ``` js
 var logger = new winston.Logger({
-  rewriters: [function (level, msg, meta) { /* etc etc */ }]
+  rewriters: [function (level, msg, meta) { /* etc etc */ }],
   filters:   [function (level, msg, meta) { /* etc etc */ }]
 })
 ```
