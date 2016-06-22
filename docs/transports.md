@@ -180,7 +180,7 @@ var winston = require('winston');
 var logzioWinstonTransport = require('winston-logzio');
 
 var loggerOptions = {
-    apiToken: '__YOUR_API_TOKEN__'
+    token: '__YOUR_API_TOKEN__'
 };
 winston.add(logzioWinstonTransport, loggerOptions);
 
