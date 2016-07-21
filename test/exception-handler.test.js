@@ -12,6 +12,8 @@ var stream = require('stream'),
     winston = require('../lib/winston'),
     helpers = require('./helpers');
 
+
+
 //
 // This is an awful and fragile hack that
 // needs to be changed ASAP.
@@ -24,6 +26,13 @@ mocha.Runner.prototype.runTest = function () {
 };
 
 describe('ExceptionHandler', function () {
+
+  before(function (done) {
+    require('http').createServer(function () {
+
+    }).listen(3000, done);
+  })
+
   it('has expected methods', function () {
     var handler = helpers.exceptionHandler();
     assume(handler.handle).is.a('function');
@@ -94,7 +103,10 @@ describe('ExceptionHandler', function () {
     });
 
     var transport = new winston.transports.Stream({ stream: writeable });
-    var handler = helpers.exceptionHandler({ transports: [transport] });
+    var handler = helpers.exceptionHandler({
+      exitOnError: false,
+      transports: [transport]
+    });
 
     assume(handler.catcher).equals(undefined);
 

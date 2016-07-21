@@ -51,7 +51,7 @@ describe('Logger, ExceptionHandler', function () {
     });
   });
 
-  it('Custom exitOnError function does not exit', function (done) {
+  it.skip('Custom exitOnError function does not exit', function (done) {
     var scriptDir = path.join(__dirname, 'helpers', 'scripts'),
         child = spawn('node', [path.join(scriptDir, 'exit-on-error.js')]),
         stdout = [];
