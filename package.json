@@ -22,6 +22,7 @@
     "camelcase": "^2.0.1",
     "colors": "1.0.x",
     "cycle": "1.0.x",
+    "diagnostics": "^1.0.1",
     "eyes": "0.1.x",
     "isstream": "0.1.x",
     "one-time": "0.0.4",
