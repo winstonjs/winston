@@ -320,6 +320,16 @@ vows.describe('winton/logger').addBatch({
           assert.strictEqual(msg, 'test message {"number":123}');
         },
       },
+      "when passed a json placeholer and no meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message %j', {number: 123});
+        },
+        "should interpolate": function (transport, level, msg, meta) {
+          console.log(msg);
+          assert.strictEqual(msg, 'test message {"number":123}');
+        },
+      },
       "when passed just JSON meta and no message": {
         topic: function (logger) {
           stdMocks.use();
@@ -346,6 +356,36 @@ vows.describe('winton/logger').addBatch({
         "should not interpolate": function (transport, level, msg, meta) {
           assert.strictEqual(msg, util.format('test message %%'));
           assert.deepEqual(meta, {number: 123});
+        },
+      },
+      "when passed an escaped percent sign, a format token, and a meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message %% %s', 'foo', {number: 123});
+        },
+        "should interpolate with meta": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, 'test message % foo');
+          assert.deepEqual(meta, {number: 123});
+        },
+      },
+      "when passed an escaped percent sign, a format token, and no meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message %% %s', 'foo');
+        },
+        "should interpolate": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, 'test message % foo');
+          assert.deepEqual(meta, {});
+        },
+      },
+      "when passed an escaped percent sign, a json token, and no meta": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message %% %j', {number: 123});
+        },
+        "should interpolate": function (transport, level, msg, meta) {
+          assert.strictEqual(msg, 'test message % {"number":123}');
+          assert.deepEqual(meta, {});
         },
       },
       "when passed interpolation strings and a meta object": {
