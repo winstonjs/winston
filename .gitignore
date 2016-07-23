@@ -1,5 +1,6 @@
 test/*.log
 test/fixtures/*.json
+test/fixtures/file/*.log*
 test/fixtures/logs/*.log*
 node_modules/
 node_modules/*

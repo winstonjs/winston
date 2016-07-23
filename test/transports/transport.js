@@ -28,9 +28,6 @@ module.exports = function (transport, options) {
           case 'console':
             helpers.assertConsole(transport);
             break;
-          case 'file':
-            helpers.assertFile(transport);
-            break;
           case 'couchdb':
             helpers.assertCouchdb(transport);
             break;
