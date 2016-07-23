@@ -28,9 +28,6 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
   "An instance of the File Transport": {
     "when passed a valid filename": {
       topic: maxfilesTransport,
-      "should be a valid transporter": function (transportTest) {
-        helpers.assertFile(transportTest);
-      },
       "should set the maxFiles option correctly": function (transportTest) {
         assert.isNumber(transportTest.maxFiles);
       }
