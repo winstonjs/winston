@@ -157,11 +157,6 @@ helpers.assertConsole = function (transport) {
   assert.isFunction(transport.log);
 };
 
-helpers.assertFile = function (transport) {
-  assert.instanceOf(transport, winston.transports.File);
-  assert.isFunction(transport.log);
-};
-
 helpers.assertHandleExceptions = function (options) {
   return {
     topic: function () {
