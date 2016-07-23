@@ -66,7 +66,7 @@ describe('Logger, ExceptionHandler', function () {
       assume(stdout).deep.equals(['Ignore this error']);
       child.kill();
       done();
-    }, 300);
+    }, 1000);
   });
 
   //
