@@ -9,6 +9,7 @@
 var assume = require('assume'),
     fs = require('fs'),
     path = require('path'),
+    through = require('through2'),
     spawn = require('child_process').spawn,
     stream = require('stream'),
     util = require('util'),
@@ -92,6 +93,24 @@ helpers.tryUnlink = function (file) {
   try { fs.unlinkSync(file) }
   catch (ex) { }
 };
+
+helpers.tryRead = function tryRead(filename) {
+  var proxy = through();
+  (function inner() {
+    var stream = fs.createReadStream(filename)
+      .once('open', function () {
+        stream.pipe(proxy);
+      })
+      .once('error', function (err) {
+        if (err.code === 'ENOENT') {
+          return setImmediate(inner);
+        }
+        proxy.emit('error', err);
+      });
+  })();
+
+  return proxy;
+}
 
 /**
  * Simple test helper which creates an instance

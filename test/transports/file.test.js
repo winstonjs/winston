@@ -2,30 +2,12 @@
 
 var path = require('path'),
     winston = require('../../'),
+    helpers = require('../helpers'),
     fs = require('fs'),
     split = require('split2'),
-    through = require('through2'),
     assume = require('assume');
 
 function noop() {};
-
-function tryRead(filename) {
-  var proxy = through();
-  (function inner() {
-    var stream = fs.createReadStream(filename)
-      .once('open', function () {
-        stream.pipe(proxy);
-      })
-      .once('error', function (err) {
-        if (err.code === 'ENOENT') {
-          return setImmediate(inner);
-        }
-        proxy.emit('error', err);
-      });
-  })();
-
-  return proxy;
-}
 
 describe('File({ filename })', function () {
   this.timeout(10 * 1000);
@@ -41,7 +23,7 @@ describe('File({ filename })', function () {
 
     transport.log(info, noop);
     setImmediate(function () {
-      tryRead(filename)
+      helpers.tryRead(filename)
         .on('error', function (err) {
           assume(err).false();
           done();
