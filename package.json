@@ -23,7 +23,6 @@
     "cycle": "1.0.x",
     "eyes": "0.1.x",
     "isstream": "0.1.x",
-    "pkginfo": "0.3.x",
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
