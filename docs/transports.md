@@ -21,6 +21,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Mail](#mail-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
   * [Amazon CloudWatch](#amazon-cloudwatch-transport)
+  * [Amazon Kinesis Firehose](#amazon-kinesis-firehose-transport)
   * [Graylog2](#graylog2-transport)
   * [Cassandra](#cassandra-transport)
   * [Azure Table](#azure-table)
@@ -336,6 +337,23 @@ Options:
 
 Alternatively, you may be interested in [winston-cloudwatch][26].
 
+### Amazon Kinesis Firehose Transport
+
+The [winston-firehose][28] transport relays your log messages to Amazon Kinesis Firehose.
+
+```js
+  var winston = require('winston');
+  var WFirehose = require('winston-firehose');
+
+  winston.add(WFirehose, options);
+```
+
+Options:
+
+* __streamName:__ The name of the Amazon Kinesis Firehose stream to which to log. *[required]*
+* __firehoseOptions:__ The AWS Kinesis firehose options to pass direction to the firehose client, [as documented by AWS](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Firehose.html#constructor-property). *[required]*
+
+
 ### Amazon DynamoDB Transport
 The [winston-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
 
@@ -584,3 +602,4 @@ Options:
 [25]: https://github.com/timdp/winston-aws-cloudwatch
 [26]: https://github.com/lazywithclass/winston-cloudwatch
 [27]: https://github.com/kenperkins/winston-papertrail
+[28]: https://github.com/pkallos/winston-firehose
