@@ -1,3 +1,8 @@
+## v2.2.0 / 2016-02-25
+### LEAVING CALIFORNIA EDITION
+
+- Full `CHANGELOG.md` entry forthcoming. See [the `git` diff for `2.2.0`](https://github.com/winstonjs/winston/compare/2.1.1...2.2.0) for now.
+
 ## v2.1.1 / 2015-11-18
 ### COLOR ME IMPRESSED EDITION
 
