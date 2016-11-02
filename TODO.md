@@ -1,45 +1,41 @@
 
-## Communications / Compatibility
-
-- [ ] README.md / tests for `winston-transport`
-- [ ] README.md / tests for `winston-compat`
-- [ ] Move core tests into `winston-compat`
-
 ## Core logging
-
 - [x] Move `TransportStream` and `LegacyTransportStream` into `winston-transport`.
 - [ ] `.level` **MUST** be a getter / setter
 - [ ] `.levels` **MUST** be a getter only.
 - [x] Move `winston/config.js` to `winston/config/index.js`
 - [x] **DEPRECATE** `winston.clone`
-- [ ] Add convenience methods from `winston-logger`
+- [x] Add convenience methods from `winston-transport`
+- [ ] Replace all `vows`-based tests.
 - [ ] Code coverage tests above 80%
 
-## Formats
+## Transports
+- [-] Refactor all built-in transports to be TransportStream instances.
+  - [x] Console
+  - [-] File
+  - [x] Http
 
+## Formats
 - [ ] String interpolation format
 - [x] Colorize format
 - [x] Pretty-print format
 - [x] Uncolorize format
 - [ ] winston.format.cli()
 
-## Compatibility
-
+## Communications / Compatibility
 - [x] Add friendly(ish) deprecation notices for common changes.
 - [x] winston-compat
+- [ ] README.md  for `winston-transport`.
+- [ ] 90%+ test coverage for `winston-transport`.
+- [ ] README.md / tests for `winston-compat`
+- [ ] Move core tests into `winston-compat`
+- [ ] 90%+ test coverage for `winston-compat`.
 
 ## Querying, Streaming, Uncaught Exceptions
 
 - [-] Querying
 - [-] Streaming
 - [x] Uncaught Exceptions
-
-## Transports
-
-- [-] Refactor all built-in transports to be TransportStream instances.
-  - [x] Console
-  - [-] File
-  - [x] Http
 
 ## Other Miscellaneous API changes
 
