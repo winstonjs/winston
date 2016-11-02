@@ -15,7 +15,7 @@ There also seemed to be a lot of logging libraries out there that coupled their 
 
 ## Installation
 
-```bashp
+```bash
 npm install winston
 ```
 
@@ -145,34 +145,34 @@ The way these objects are stored varies from transport to transport (to best sup
 It is possible to use multiple transports of the same type e.g. `winston.transports.File` by passing in a custom `name` when you construct the transport.
 
 ``` js
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.File)({
-      name: 'info-file',
-      filename: 'filelog-info.log',
-      level: 'info'
-    }),
-    new (winston.transports.File)({
-      name: 'error-file',
-      filename: 'filelog-error.log',
-      level: 'error'
-    })
-  ]
-});
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.File)({
+        name: 'info-file',
+        filename: 'filelog-info.log',
+        level: 'info'
+      }),
+      new (winston.transports.File)({
+        name: 'error-file',
+        filename: 'filelog-error.log',
+        level: 'error'
+      })
+    ]
+  });
 ```
 
 If you later want to remove one of these transports you can do so by using the string name. e.g.:
 
 ``` js
-logger.remove('info-file');
+  logger.remove('info-file');
 ```
 
 In this example one could also remove by passing in the instance of the Transport itself. e.g. this is equivalent to the string example above;
 
 ``` js
-// Notice it was first in the Array above
-var infoFile = logger.transports[0];
-logger.remove(infoFile);
+  // Notice it was first in the Array above
+  var infoFile = logger.transports[0];
+  logger.remove(infoFile);
 ```
 
 ## Profiling
@@ -201,33 +201,33 @@ The `log` method provides the same string interpolation methods like [`util.form
 
 This allows for the following log messages.
 ``` js
-logger.log('info', 'test message %s', 'my string');
-// info: test message my string
+  logger.log('info', 'test message %s', 'my string');
+  // info: test message my string
 
-logger.log('info', 'test message %d', 123);
-// info: test message 123
+  logger.log('info', 'test message %d', 123);
+  // info: test message 123
 
-logger.log('info', 'test message %j', {number: 123}, {});
-// info: test message {"number":123}
-// meta = {}
+  logger.log('info', 'test message %j', {number: 123}, {});
+  // info: test message {"number":123}
+  // meta = {}
 
-logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123});
-// info: test message first, second
-// meta = {number: 123}
+  logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123});
+  // info: test message first, second
+  // meta = {number: 123}
 
-logger.log('info', 'test message', 'first', 'second', {number: 123});
-// info: test message first second
-// meta = {number: 123}
+  logger.log('info', 'test message', 'first', 'second', {number: 123});
+  // info: test message first second
+  // meta = {number: 123}
 
-logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function(){});
-// info: test message first, second
-// meta = {number: 123}
-// callback = function(){}
+  logger.log('info', 'test message %s, %s', 'first', 'second', {number: 123}, function(){});
+  // info: test message first, second
+  // meta = {number: 123}
+  // callback = function(){}
 
-logger.log('info', 'test message', 'first', 'second', {number: 123}, function(){});
-// info: test message first second
-// meta = {number: 123}
-// callback = function(){}
+  logger.log('info', 'test message', 'first', 'second', {number: 123}, function(){});
+  // info: test message first second
+  // meta = {number: 123}
+  // callback = function(){}
 ```
 
 
@@ -334,15 +334,15 @@ Example 1
 Example 2
 
 ``` js
-var logger = new winston.Logger({
-  transports: [
-    new winston.transports.Console({
-      handleExceptions: true,
-      json: true
-    })
-  ],
-  exitOnError: false
-});
+  var logger = new winston.Logger({
+    transports: [
+      new winston.transports.Console({
+        handleExceptions: true,
+        json: true
+      })
+    ],
+    exitOnError: false
+  });
 ```
 
 The `exitOnError` option can also be a function to prevent exit on only certain types of errors:
@@ -365,13 +365,13 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
 Each `level` is given a specific integer priority. The higher the priority the more important the message is considered to be, and the lower the corresponding integer priority.  For example, `npm` logging levels are prioritized from 0 to 5 (highest to lowest):
 
 ``` js
-{ error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
+  { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 ```
 
 Similarly, as specified exactly in RFC5424 the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
 
 ```js
-{ emerg: 0, alert: 1, crit: 2, error: 3, warning: 4, notice: 5, info: 6, debug: 7 }
+  { emerg: 0, alert: 1, crit: 2, error: 3, warning: 4, notice: 5, info: 6, debug: 7 }
 ```
 
 If you do not explicitly define the levels that `winston` should use the `npm` levels above will be used.
@@ -678,48 +678,48 @@ Filters allow modifying the contents of **log messages**, and Rewriters allow mo
 Both filters and rewriters are simple Arrays of functions which can be provided when creating a `new winston.Logger(options)`. e.g.:
 
 ``` js
-var logger = new winston.Logger({
-  rewriters: [function (level, msg, meta) { /* etc etc */ }],
-  filters:   [function (level, msg, meta) { /* etc etc */ }]
-})
+  var logger = new winston.Logger({
+    rewriters: [function (level, msg, meta) { /* etc etc */ }],
+    filters:   [function (level, msg, meta) { /* etc etc */ }]
+  });
 ```
 
 Like any Array they can also be modified at runtime with no adverse side-effects to the `winston` internals.
 
 ``` js
-logger.filters.push(function(level, msg, meta) {
-  return meta.production
-    ? maskCardNumbers(msg)
-    : msg;
-});
+  logger.filters.push(function(level, msg, meta) {
+    return meta.production
+      ? maskCardNumbers(msg)
+      : msg;
+  });
 
-logger.info('transaction with card number 123456789012345 successful.');
+  logger.info('transaction with card number 123456789012345 successful.');
 ```
 
 This may result in this output:
 
 ```
-info: transaction with card number 123456****2345 successful.
+  info: transaction with card number 123456****2345 successful.
 ```
 
 Where as for rewriters, if you wanted to sanitize the `creditCard` field of your `meta` you could:
 
 ``` js
-logger.rewriters.push(function(level, msg, meta) {
-  if (meta.creditCard) {
-    meta.creditCard = maskCardNumbers(meta.creditCard)
-  }
+  logger.rewriters.push(function(level, msg, meta) {
+    if (meta.creditCard) {
+      meta.creditCard = maskCardNumbers(meta.creditCard)
+    }
 
-  return meta;
-});
+    return meta;
+  });
 
-logger.info('transaction ok', { creditCard: 123456789012345 });
+  logger.info('transaction ok', { creditCard: 123456789012345 });
 ```
 
 which may result in this output:
 
 ```
-info: transaction ok creditCard=123456****2345
+  info: transaction ok creditCard=123456****2345
 ```
 
 See [log-filter-test.js](./test/log-filter-test.js), where card number masking is implemented as an example along with [log-rewriter-test.js](./test/log-rewriter-test.js)
@@ -767,21 +767,21 @@ To specify custom log format you should set formatter function for transport. Cu
 Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
 
 ``` js
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({
-      timestamp: function() {
-        return Date.now();
-      },
-      formatter: function(options) {
-        // Return string will be passed to logger.
-        return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
-          (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
-      }
-    })
-  ]
-});
-logger.info('Data to log.');
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)({
+        timestamp: function() {
+          return Date.now();
+        },
+        formatter: function(options) {
+          // Return string will be passed to logger.
+          return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
+            (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+        }
+      })
+    ]
+  });
+  logger.info('Data to log.');
 ```
 
 ### Inspirations
@@ -795,20 +795,20 @@ logger.info('Data to log.');
 ## Installation
 
 ### Installing npm (node package manager)
-```
-  curl http://npmjs.org/install.sh | sh
+``` bash
+curl http://npmjs.org/install.sh | sh
 ```
 
 ### Installing winston
-```
-  [sudo] npm install winston
+``` bash
+[sudo] npm install winston
 ```
 
 ## Run Tests
 All of the winston tests are written in [vows][9], and designed to be run with npm.
 
 ``` bash
-  $ npm test
+npm test
 ```
 
 #### Author: [Charlie Robbins](http://twitter.com/indexzero)
