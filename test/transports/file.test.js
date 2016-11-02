@@ -85,7 +85,6 @@ describe('File({ filename })', function () {
 });
 
 describe('File({ stream })', function () {
-
   it('should write to the stream when logged to with expected object', function (done) {
     var streamfile = path.join(__dirname, '..', 'fixtures', 'file', 'simple-stream.log');
     var stream = fs.createWriteStream(streamfile);

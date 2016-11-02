@@ -14,6 +14,7 @@
   - [x] Console
   - [-] File
   - [x] Http
+  - [x] Steam
 
 ## Formats
 - [ ] String interpolation format
