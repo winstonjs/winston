@@ -1,3 +1,8 @@
+## v2.3.0 / 2016-11-02
+### ZOMG WHY WOULD YOU ASK EDITION
+
+- Full `CHANGELOG.md` entry forthcoming. See [the `git` diff for `2.3.0`](https://github.com/winstonjs/winston/compare/2.2.0...2.3.0) for now.
+
 ## v2.2.0 / 2016-02-25
 ### LEAVING CALIFORNIA EDITION
 
