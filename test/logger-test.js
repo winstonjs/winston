@@ -293,6 +293,19 @@ vows.describe('winton/logger').addBatch({
           assert.instanceOf(meta, Error);
         }
       },
+        "when passed an Error with circular stack object as meta": {
+            topic: function (logger) {
+                logger.once('logging', this.callback);
+                const err = new Error('I am a very weird error');
+                const circ = {};
+                circ.circ = circ;
+                err.stack = circ;
+                logger.log('info', 'An error happened: ', err);
+            },
+            "should respond with a proper error output": function (transport, level, msg, meta) {
+                assert.instanceOf(meta, Error);
+            }
+        },
       "when passed a string placeholder": {
         topic: function (logger) {
           logger.once('logging', this.callback);
