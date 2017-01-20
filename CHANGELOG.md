@@ -1,3 +1,8 @@
+## v2.3.1 / 2017-01-20
+### WELCOME TO THE APOCALYPSE EDITION
+
+- [#868](https://github.com/winstonjs/winston/pull/868), Fix 'Maximum call stack size exceeded' error with custom formatter.
+
 ## v2.3.0 / 2016-11-02
 ### ZOMG WHY WOULD YOU ASK EDITION
 
