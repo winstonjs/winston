@@ -177,7 +177,7 @@ If you later want to remove one of these transports you can do so by using the s
 logger.remove('info-file');
 ```
 
-In this example one could also remove by passing in the instance of the Transport itself. e.g. this is equivalent to the string example above;
+In this example, one could also remove by passing in the instance of the Transport itself. e.g. this is equivalent to the string example above:
 
 ``` js
 // Notice it was first in the Array above
@@ -204,7 +204,7 @@ In addition to logging messages and metadata, winston also has a simple profilin
   }, 1000);
 ```
 
-All profile messages are set to the 'info' by default and both message and metadata are optional There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
+All profile messages are set to 'info' level by default and both message and metadata are optional. There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
 
 ### String interpolation
 The `log` method provides the same string interpolation methods like [`util.format`][10].
@@ -288,7 +288,7 @@ Streaming allows you to stream your logs back from your chosen transport.
 
 With `winston`, it is possible to catch and log `uncaughtException` events from your process. There are two distinct ways of enabling this functionality either through the default winston logger or your own logger instance.
 
-If you want to use this feature with the default logger simply call `.handleExceptions()` with a transport instance.
+If you want to use this feature with the default logger, simply call `.handleExceptions()` with a transport instance.
 
 ``` js
   //
@@ -305,7 +305,7 @@ If you want to use this feature with the default logger simply call `.handleExce
     handleExceptions: true,
     humanReadableUnhandledException: true
   });
-  
+
   //
   // Exceptions can also be handled by multiple transports.
   //
@@ -314,7 +314,7 @@ If you want to use this feature with the default logger simply call `.handleExce
 
 ### To Exit or Not to Exit
 
-By default, winston will exit after logging an uncaughtException. if this is not the behavior you want,
+By default, winston will exit after logging an uncaughtException. If this is not the behavior you want,
 set `exitOnError = false`
 
 ``` js
@@ -533,7 +533,7 @@ Every logging method described in the previous section also takes an optional ca
 
 ### Working with multiple Loggers in winston
 
-Often in larger, more complex applications it is necessary to have multiple logger instances with different settings. Each logger is responsible for a different feature area (or category). This is exposed in `winston` in two ways: through `winston.loggers` and instances of `winston.Container`. In fact, `winston.loggers` is just a predefined instance of `winston.Container`:
+Often in larger, more complex, applications it is necessary to have multiple logger instances with different settings. Each logger is responsible for a different feature area (or category). This is exposed in `winston` in two ways: through `winston.loggers` and instances of `winston.Container`. In fact, `winston.loggers` is just a predefined instance of `winston.Container`:
 
 ``` js
   var winston = require('winston');
@@ -563,7 +563,7 @@ Often in larger, more complex applications it is necessary to have multiple logg
   });
 ```
 
-Now that your loggers are setup you can require winston _in any file in your application_ and access these pre-configured loggers:
+Now that your loggers are setup, you can require winston _in any file in your application_ and access these pre-configured loggers:
 
 ``` js
   var winston = require('winston');
@@ -576,7 +576,7 @@ Now that your loggers are setup you can require winston _in any file in your app
   category1.info('logging from your IoC container-based logger');
 ```
 
-If you prefer to manage the `Container` yourself you can simply instantiate one:
+If you prefer to manage the `Container` yourself, you can simply instantiate one:
 
 ``` js
   var winston = require('winston'),
@@ -694,7 +694,7 @@ var logger = new winston.Logger({
 })
 ```
 
-Like any Array they can also be modified at runtime with no adverse side-effects to the `winston` internals.
+Like any Array, they can also be modified at runtime with no adverse side-effects to the `winston` internals.
 
 ``` js
 logger.filters.push(function(level, msg, meta) {
@@ -773,8 +773,8 @@ Adding a custom transport is actually pretty easy. All you need to do is accept 
 ```
 
 ### Custom Log Format
-To specify custom log format you should set formatter function for transport. Currently supported transports are: Console, File, Memory.
-Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
+To specify a custom log format for a transport, you should set a formatter function. Currently supported transports are: Console, File, Memory.
+An options object will be passed to the formatter function. It's general properties are: timestamp, level, message, meta. Depending on the transport type, there may be additional properties.
 
 ``` js
 var logger = new (winston.Logger)({
