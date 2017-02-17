@@ -434,8 +434,8 @@ You may also dynamically change the log level of a transport:
     ]
   });
   logger.debug("Will not be logged in either transport!");
-  logger.transports.console.level = 'debug';
-  logger.transports.file.level = 'verbose';
+  logger.transports.Console.level = 'debug';
+  logger.transports.File.level = 'verbose';
   logger.verbose("Will be logged in both transports!");
 ```
 
