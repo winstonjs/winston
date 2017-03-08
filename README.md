@@ -784,8 +784,12 @@ var logger = new (winston.Logger)({
         return Date.now();
       },
       formatter: function(options) {
-        // Return string will be passed to logger.
-        return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (options.message ? options.message : '') +
+        // - Return string will be passed to logger.
+        // - Optionally, use options.colorize(options.level, <string>) to
+        //   colorize output based on the log level.
+        return options.timestamp() + ' ' +
+          options.colorize(options.level, options.level.toUpperCase()) + ' ' +
+          (options.message ? options.message : '') +
           (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
       }
     })
