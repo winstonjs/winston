@@ -191,7 +191,7 @@ In addition to logging messages and metadata, winston also has a simple profilin
 ``` js
   //
   // Start profile of 'test'
-  // Remark: Consider using Date.now() with async operations
+  // Remark: Consider using Date.now() or winston.startTimer() with async operations
   //
   winston.profile('test');
 
@@ -202,6 +202,17 @@ In addition to logging messages and metadata, winston also has a simple profilin
     //
     winston.profile('test');
   }, 1000);
+```
+
+Also you can start a timer and keep a reference that you can call .done() on
+``` js
+   // Returns an object corresponding to a specific timing. When done
+   // is called the timer will finish and log the duration. e.g.:
+   //
+   timer = winston.startTimer()
+   setTimeout(function(){
+     timer.done("Logging message");
+   }, 1000);
 ```
 
 All profile messages are set to 'info' level by default and both message and metadata are optional. There are no plans in the Roadmap to make this configurable, but I'm open to suggestions / issues.
