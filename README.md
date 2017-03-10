@@ -209,7 +209,7 @@ Also you can start a timer and keep a reference that you can call .done() on
    // Returns an object corresponding to a specific timing. When done
    // is called the timer will finish and log the duration. e.g.:
    //
-   timer = winston.startTimer()
+   var timer = winston.startTimer()
    setTimeout(function(){
      timer.done("Logging message");
    }, 1000);
