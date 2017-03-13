@@ -246,36 +246,36 @@ describe('Logger (levels)', function () {
   it('custom levels', function (done) {
     var logger = new winston.Logger({
       levels: {
-        missing: 0,
-        bad:     1,
-        test:    2
+        bad:  0,
+        test: 1,
+        ok:   2
       }
     });
 
-    var expected = { message: 'foo', level: 'missing' };
-    function logLevelTransport(level) {
+    var expected = { message: 'foo', level: 'test' };
+    function filterLevelTransport(level) {
       return new TransportStream({
         level: level,
         log: function (obj) {
-          if (level === 'test') {
-            assume(obj).equals(undefined, 'transport on level test should never be called');
+          if (level === 'bad') {
+            assume(obj).equals(undefined, 'transport on level "bad" should never be called');
           }
 
           assume(obj.message).equals('foo');
-          assume(obj.level).equals('missing');
-          assume(obj.raw).equals(JSON.stringify({ message: 'foo', level: 'missing' }));
+          assume(obj.level).equals('test');
+          assume(obj.raw).equals(JSON.stringify({ message: 'foo', level: 'test' }));
           done();
         }
       });
     }
 
-    assume(logger.missing).is.a('function');
     assume(logger.bad).is.a('function');
     assume(logger.test).is.a('function');
+    assume(logger.ok).is.a('function');
 
     logger
-      .add(logLevelTransport('test'))
-      .add(logLevelTransport('missing'))
+      .add(filterLevelTransport('bad'))
+      .add(filterLevelTransport('ok'))
       .log(expected);
   });
 });

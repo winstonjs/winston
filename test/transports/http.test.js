@@ -39,7 +39,7 @@ function mockHttpServer(opts, done) {
   return { server, mock };
 }
 
-describe('Http({ host, port, path})', function () {
+describe('Http({ host, port, path })', function () {
   var context;
   var server;
   beforeEach(function (done) {
