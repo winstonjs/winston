@@ -62,8 +62,6 @@ describe('File (stress)', function () {
           assume(counters.write).equal(counters.read);
           done();
         });
-
-      done();
     }, 10000);
   });
 });
