@@ -69,6 +69,14 @@ describe('Logger, ExceptionHandler', function () {
     }, 1000);
   });
 
+  describe.only('should save the error information to the specified file', function () {
+    it('whenstrings are thrown as errors', helpers.assertHandleExceptions({
+      script: path.join(__dirname, 'helpers', 'scripts', 'log-string-exception.js'),
+      logfile: path.join(__dirname, 'fixtures', 'logs', 'string-exception.log'),
+      message: 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL'
+    }));
+  });
+
   //
   // TODO: (Re)add these tests from winston@2
   //
@@ -82,12 +90,7 @@ describe('Logger, ExceptionHandler', function () {
   //       "with the default winston logger": helpers.assertHandleExceptions({
   //         script: path.join(__dirname, 'fixtures', 'scripts', 'default-exceptions.js'),
   //         logfile: path.join(__dirname, 'fixtures', 'logs', 'default-exception.log')
-  //       }),
-  //       "when strings are thrown as errors": helpers.assertHandleExceptions({
-  //         script: path.join(__dirname, 'fixtures', 'scripts', 'log-string-exception.js'),
-  //         logfile: path.join(__dirname, 'fixtures', 'logs', 'string-exception.log'),
-  //         message: 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL'
-  //       }),
+  //       })
   //     }
   //   }
   // });

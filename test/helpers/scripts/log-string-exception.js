@@ -12,13 +12,13 @@ var path = require('path'),
 var logger = new (winston.Logger)({
   transports: [
     new (winston.transports.File)({
-      filename: path.join(__dirname, '..', 'logs', 'string-exception.log'),
+      filename: path.join(__dirname, '..', '..', 'fixtures', 'logs', 'string-exception.log'),
       handleExceptions: true
     })
   ]
 });
 
-logger.handleExceptions();
+logger.exceptions.handle();
 
 setTimeout(function () {
   throw 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL';

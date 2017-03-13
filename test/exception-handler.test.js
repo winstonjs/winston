@@ -12,8 +12,6 @@ var stream = require('stream'),
     winston = require('../lib/winston'),
     helpers = require('./helpers');
 
-
-
 //
 // This is an awful and fragile hack that
 // needs to be changed ASAP.

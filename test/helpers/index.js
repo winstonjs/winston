@@ -177,28 +177,31 @@ helpers.assertConsole = function (transport) {
 };
 
 helpers.assertHandleExceptions = function (options) {
-  return {
-    topic: function () {
-      var that = this,
-          child = spawn('node', [options.script]);
+  return function (done) {
+    var child = spawn('node', [options.script]);
 
-      helpers.tryUnlink(options.logfile);
-      child.on('exit', function () {
-        fs.readFile(options.logfile, that.callback);
-      });
-    },
-    "should save the error information to the specified file": function (err, data) {
-      assert.isTrue(!err);
-      data = JSON.parse(data);
-
-      assert.isObject(data);
-      helpers.assertProcessInfo(data.process);
-      helpers.assertOsInfo(data.os);
-      helpers.assertTrace(data.trace);
-      if (options.message) {
-        assert.equal('uncaughtException: ' + options.message, data.message);
-      }
+    if (process.env.DEBUG) {
+      child.stdout.pipe(process.stdout);
+      child.stderr.pipe(process.stdout);
     }
+
+    helpers.tryUnlink(options.logfile);
+    child.on('exit', function () {
+      fs.readFile(options.logfile, function (err, data) {
+        assume(err).equals(null);
+        data = JSON.parse(data);
+
+        assume(data).is.an('object');
+        helpers.assertProcessInfo(data.process);
+        helpers.assertOsInfo(data.os);
+        helpers.assertTrace(data.trace);
+        if (options.message) {
+          assume(data.message).equal('uncaughtException: ' + options.message);
+        }
+
+        done();
+      });
+    });
   };
 };
 
