@@ -24,13 +24,6 @@ mocha.Runner.prototype.runTest = function () {
 };
 
 describe('ExceptionHandler', function () {
-
-  before(function (done) {
-    require('http').createServer(function () {
-
-    }).listen(3000, done);
-  })
-
   it('has expected methods', function () {
     var handler = helpers.exceptionHandler();
     assume(handler.handle).is.a('function');

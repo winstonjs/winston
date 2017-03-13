@@ -196,7 +196,7 @@ helpers.assertHandleExceptions = function (options) {
         helpers.assertOsInfo(data.os);
         helpers.assertTrace(data.trace);
         if (options.message) {
-          assume(data.message).equal('uncaughtException: ' + options.message);
+          assume(data.message).include('uncaughtException: ' + options.message);
         }
 
         done();
