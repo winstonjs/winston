@@ -11,3 +11,5 @@ examples
 examples/*
 docs
 docs/*
+.nyc_output/
+.nyc_output/*

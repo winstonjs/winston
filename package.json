@@ -38,6 +38,7 @@
     "istanbul": "^0.3.18",
     "mocha": "^2.2.5",
     "mocha-istanbul": "^0.2.0",
+    "nyc": "^10.1.2",
     "split2": "~1.0.0",
     "std-mocks": "~1.0.0",
     "through2": "~2.0.0",
@@ -46,7 +47,7 @@
   },
   "main": "./lib/winston",
   "scripts": {
-    "test": "istanbul cover _mocha test/*.test.js test/**/*.test.js"
+    "test": "nyc mocha test/*.test.js test/**/*.test.js"
   },
   "engines": {
     "node": ">= 4.2.2"
