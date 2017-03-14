@@ -69,29 +69,24 @@ describe('Logger, ExceptionHandler', function () {
     }, 1000);
   });
 
-  describe('should save the error information to the specified file', function () {
-    it('whenstrings are thrown as errors', helpers.assertHandleExceptions({
-      script: path.join(__dirname, 'helpers', 'scripts', 'log-string-exception.js'),
-      logfile: path.join(__dirname, 'fixtures', 'logs', 'string-exception.log'),
-      message: 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL'
-    }));
+  describe('.exceptions.handle()', function () {
+    describe('should save the error information to the specified file', function () {
+      it('when strings are thrown as errors', helpers.assertHandleExceptions({
+        script: path.join(__dirname, 'helpers', 'scripts', 'log-string-exception.js'),
+        logfile: path.join(__dirname, 'fixtures', 'logs', 'string-exception.log'),
+        message: 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL'
+      }));
+
+      it('with a custom winston.Logger instance', helpers.assertHandleExceptions({
+        script: path.join(__dirname, 'helpers', 'scripts', 'log-exceptions.js'),
+        logfile: path.join(__dirname, 'fixtures', 'logs', 'exception.log')
+      }));
+
+      it('with the default winston logger', helpers.assertHandleExceptions({
+        script: path.join(__dirname, 'helpers', 'scripts', 'default-exceptions.js'),
+        logfile: path.join(__dirname, 'fixtures', 'logs', 'default-exception.log')
+      }));
+    });
   });
 
-  //
-  // TODO: (Re)add these tests from winston@2
-  //
-  // vows.describe('winston/logger/exceptions').addBatch({
-  //   "When using winston": {
-  //     "the handleException() method": {
-  //       "with a custom winston.Logger instance": helpers.assertHandleExceptions({
-  //         script: path.join(__dirname, 'fixtures', 'scripts', 'log-exceptions.js'),
-  //         logfile: path.join(__dirname, 'fixtures', 'logs', 'exception.log')
-  //       }),
-  //       "with the default winston logger": helpers.assertHandleExceptions({
-  //         script: path.join(__dirname, 'fixtures', 'scripts', 'default-exceptions.js'),
-  //         logfile: path.join(__dirname, 'fixtures', 'logs', 'default-exception.log')
-  //       })
-  //     }
-  //   }
-  // });
 });

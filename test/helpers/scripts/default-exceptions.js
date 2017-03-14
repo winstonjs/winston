@@ -5,13 +5,13 @@
  * MIT LICENCE
  *
  */
- 
+
 var path = require('path'),
     winston = require('../../../lib/winston');
 
-winston.handleExceptions([
-  new (winston.transports.File)({ 
-    filename: path.join(__dirname, '..', 'logs', 'default-exception.log'),
+winston.exceptions.handle([
+  new (winston.transports.File)({
+    filename: path.join(__dirname, '..', '..', 'fixtures', 'logs', 'default-exception.log'),
     handleExceptions: true
   })
 ]);
