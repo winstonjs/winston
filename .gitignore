@@ -7,3 +7,5 @@ node_modules/*
 npm-debug.log
 coverage/
 coverage/*
+.nyc_output/
+.nyc_output/*
