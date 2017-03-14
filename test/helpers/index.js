@@ -84,16 +84,27 @@ helpers.clearExceptions = function () {
 
 /**
  * Throws an exception with the specified `msg`
+ * @param {String} msg Error mesage to use
  */
 helpers.throw = function (msg) {
   throw new Error(msg);
 };
 
-helpers.tryUnlink = function (file) {
-  try { fs.unlinkSync(file) }
+/**
+ * Attempts to unlink the specifyed `filename` ignoring errors
+ * @param {String} File Full path to attempt to unlink.
+ */
+helpers.tryUnlink = function (filename) {
+  try { fs.unlinkSync(filename); }
   catch (ex) { }
 };
 
+/**
+ * Returns a stream that will emit data for the `filename` if it exists
+ * and is capable of being opened.
+ * @param  {filename} Full path to attempt to read from.
+ * @return {Stream} Stream instance to the contents of the file
+ */
 helpers.tryRead = function tryRead(filename) {
   var proxy = through();
   (function inner() {
@@ -129,26 +140,37 @@ helpers.assumeFormatted = function (format, info, assertion) {
   };
 }
 
-helpers.assertDateInfo = function (info) {
-  assume(Date.parse(info)).is.a('number');
+/**
+ * Assumes the process structure associated with an ExceptionHandler
+ * for the `obj` provided.
+ * @param  {Object} obj Ordinary object to assert against.
+ */
+helpers.assertProcessInfo = function (obj) {
+  assume(obj.pid).is.a('number');
+  assume(obj.uid).is.a('number');
+  assume(obj.gid).is.a('number');
+  assume(obj.cwd).is.a('string');
+  assume(obj.execPath).is.a('string');
+  assume(obj.version).is.a('string');
+  assume(obj.argv).is.an('array');
+  assume(obj.memoryUsage).is.an('object');
 };
 
-helpers.assertProcessInfo = function (info) {
-  assume(info.pid).is.a('number');
-  assume(info.uid).is.a('number');
-  assume(info.gid).is.a('number');
-  assume(info.cwd).is.a('string');
-  assume(info.execPath).is.a('string');
-  assume(info.version).is.a('string');
-  assume(info.argv).is.an('array');
-  assume(info.memoryUsage).is.an('object');
+/**
+ * Assumes the OS structure associated with an ExceptionHandler
+ * for the `obj` provided.
+ * @param  {Object} obj Ordinary object to assert against.
+ */
+helpers.assertOsInfo = function (obj) {
+  assume(obj.loadavg).is.an('array');
+  assume(obj.uptime).is.a('number');
 };
 
-helpers.assertOsInfo = function (info) {
-  assume(info.loadavg).is.an('array');
-  assume(info.uptime).is.a('number');
-};
-
+/**
+ * Assumes the trace structure associated with an ExceptionHandler
+ * for the `trace` provided.
+ * @param  {Object} trace Ordinary object to assert against.
+ */
 helpers.assertTrace = function (trace) {
   trace.forEach(function (site) {
     assume(!site.column || typeof site.column === 'number').true();
@@ -160,6 +182,11 @@ helpers.assertTrace = function (trace) {
   });
 };
 
+/**
+ * Assumes the `logger` provided is a `winston.Logger` at the specified `level`.
+ * @param  {Logger} logger `winston` Logger to assert against
+ * @param  {String} level Target level logger is expected at.
+ */
 helpers.assertLogger = function (logger, level) {
   assume(logger).instanceOf(winston.Logger);
   assume(logger.log).is.a('function');
@@ -171,11 +198,13 @@ helpers.assertLogger = function (logger, level) {
   });
 };
 
-helpers.assertConsole = function (transport) {
-  assert.instanceOf(transport, winston.transports.Console);
-  assert.isFunction(transport.log);
-};
-
+/**
+ * Asserts that the script located at `options.script` logs a single exception
+ * (conforming to the ExceptionHandler structure) at the specified `options.logfile`.
+ * @param  {Object} options Configuration for this test.
+ * @return {function} Test macro asserting that `options.script` performs the
+ *                    expected behavior.
+ */
 helpers.assertHandleExceptions = function (options) {
   return function (done) {
     var child = spawn('node', [options.script]);

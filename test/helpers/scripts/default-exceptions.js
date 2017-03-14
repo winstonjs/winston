@@ -16,6 +16,8 @@ winston.exceptions.handle([
   })
 ]);
 
+winston.info('Log something before error');
+
 setTimeout(function () {
   throw new Error('OH NOES! It failed!');
 }, 1000);
