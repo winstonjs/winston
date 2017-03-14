@@ -311,28 +311,6 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   return tests;
 };
 
-helpers.assertOptionsThrow = function (options, errMsg) {
-  return function () {
-    assert.throws(
-      function () {
-        try {
-          new (winston.transports.Console)(options);
-        } catch (err) {
-          throw(err);
-        }
-      },
-      new RegExp('^' + errMsg.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '$')
-    );
-  }
-};
-
-helpers.assertStderrLevels = function (transport, stderrLevels) {
-  return function () {
-    assume(JSON.stringify(Object.keys(transport.stderrLevels).sort()))
-      .equals(JSON.stringify(stderrLevels.sort()));
-  }
-};
-
 helpers.testLoggingToStreams = function (levels, transport, stderrLevels, stdMocks) {
   return {
     topic: function () {
