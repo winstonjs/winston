@@ -113,7 +113,6 @@ describe('Logger (legacy API)', function () {
 
   it('.cli() throws', function () {
     var logger = new winston.Logger();
-
     assume(logger.cli).throws(/Use a custom/);
   });
 });
