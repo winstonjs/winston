@@ -43,6 +43,7 @@
 - [x] Move `LogStream` back to `Logger`.
 - [x] Add LogStream.prototype.configure from `winston@2.0.0`
 - [x] `winston.Container` instances no longer add any transports by default.
+- [ ] Strip wrapping `(` `)` from all occurances of `new (winston.transports.*)`.
 
 ## Benchmarking
 
