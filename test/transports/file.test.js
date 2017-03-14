@@ -81,10 +81,10 @@ describe('File({ filename })', function () {
   // "An instance of the File Transport": require('./transport')(winston.transports.File, {
   //   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
   // })
-
 });
 
 describe('File({ stream })', function () {
+  it('should display the deprecation notice');
   it('should write to the stream when logged to with expected object', function (done) {
     var streamfile = path.join(__dirname, '..', 'fixtures', 'file', 'simple-stream.log');
     var stream = fs.createWriteStream(streamfile);
