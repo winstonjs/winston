@@ -31,6 +31,7 @@
     "winston-transport": "~1.0.1"
   },
   "devDependencies": {
+    "abstract-winston-transport": "*",
     "assume": "^1.2.5",
     "common-style": "^3.1.0",
     "cross-spawn-async": "^2.0.0",
