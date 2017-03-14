@@ -14,6 +14,8 @@ var assume = require('assume'),
     helpers = require('./helpers');
 
 describe('Logger, ExceptionHandler', function () {
+  this.timeout(5000);
+
   describe('.exceptions.unhandle()', function () {
     it('does not log to any transports', function (done) {
       var logFile = path.join(__dirname, 'fixtures', 'logs', 'unhandle-exception.log');
