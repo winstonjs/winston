@@ -24,6 +24,8 @@ mocha.Runner.prototype.runTest = function () {
 };
 
 describe('ExceptionHandler', function () {
+  this.timeout(5000);
+
   it('has expected methods', function () {
     var handler = helpers.exceptionHandler();
     assume(handler.handle).is.a('function');
