@@ -53,7 +53,7 @@ function assertStderrLevels(transport, stderrLevels) {
   };
 }
 
-describe('Console transport', function () {
+describe.skip('Console transport', function () {
   describe('with defaults', function () {
     it('logs all levels (EXCEPT error and debug) to stdout', function () {
       stdMocks.use();
@@ -129,6 +129,11 @@ describe('Console transport', function () {
       done();
     });
   });
+});
+
+require('abstract-winston-transport')({
+  name: 'Console',
+  Transport: winston.transports.Console
 });
 
 // vows.describe('winston/transports/console').addBatch({
