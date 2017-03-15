@@ -98,3 +98,11 @@ describe('File({ stream })', function () {
     //
   });
 });
+
+require('abstract-winston-transport')({
+  name: 'File',
+  Transport: winston.transports.File,
+  construct: {
+    filename: path.join(__dirname, '..', 'fixtures', 'file', 'abstract.log')
+  }
+});
