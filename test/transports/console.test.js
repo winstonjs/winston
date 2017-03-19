@@ -53,7 +53,7 @@ function assertStderrLevels(transport, stderrLevels) {
   };
 }
 
-describe.skip('Console transport', function () {
+describe('Console transport', function () {
   describe('with defaults', function () {
     it('logs all levels (EXCEPT error and debug) to stdout', function () {
       stdMocks.use();

@@ -10,6 +10,7 @@
 - [ ] Code coverage tests above 80%
 
 ## Transports
+- [ ] Implement `stream.Writable.writev` in `TransportStream`.
 - [-] Refactor all built-in transports to be TransportStream instances.
   - [x] Console
   - [-] File
