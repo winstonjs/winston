@@ -10,7 +10,7 @@
 - [ ] Code coverage tests above 80%
 
 ## Transports
-- [ ] Implement `stream.Writable.writev` in `TransportStream`.
+- [x] Implement `stream.Writable.writev` in `TransportStream`.
 - [-] Refactor all built-in transports to be TransportStream instances.
   - [x] Console
   - [-] File
@@ -23,6 +23,9 @@
 - [x] Pretty-print format
 - [x] Uncolorize format
 - [ ] winston.format.cli()
+- [ ] Use of different formats across multiple Transports. e.g.:
+    - Colors on `Console`
+    - Not on `File`
 
 ## Communications / Compatibility
 - [x] Add friendly(ish) deprecation notices for common changes.
@@ -48,5 +51,6 @@
 
 ## Benchmarking
 
-- [-] Benchmark against winston@2.0.0
-- [-] Benchmark JSON format against bunyan
+- [x] Benchmark against winston@2.0.0
+- [x] Benchmark JSON format against bunyan
+- [-] Submit PR for all `pino` benchmarks.
