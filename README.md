@@ -817,7 +817,7 @@ logger.info('Data to log.');
 
 ### Installing npm (node package manager)
 ```
-  curl http://npmjs.org/install.sh | sh
+  curl https://npmjs.org/install.sh | sh
 ```
 
 ### Installing winston
