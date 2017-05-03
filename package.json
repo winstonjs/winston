@@ -31,6 +31,9 @@
     "std-mocks": "~1.0.0",
     "vows": "0.7.x"
   },
+  "scripts": {
+    "test": "node_modules/vows/bin/vows test/"
+  },
   "main": "./lib/winston",
   "scripts": {
     "test": "vows --spec --isolate"
