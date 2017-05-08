@@ -708,7 +708,7 @@ var logger = new winston.Logger({
 Like any Array, they can also be modified at runtime with no adverse side-effects to the `winston` internals.
 
 ``` js
-logger.filters.push(function(level, msg, meta) {
+logger.addFilter(function(level, msg, meta) {
   return meta.production
     ? maskCardNumbers(msg)
     : msg;
@@ -726,7 +726,7 @@ info: transaction with card number 123456****2345 successful.
 Where as for rewriters, if you wanted to sanitize the `creditCard` field of your `meta` you could:
 
 ``` js
-logger.rewriters.push(function(level, msg, meta) {
+logger.addRewriter(function(level, msg, meta) {
   if (meta.creditCard) {
     meta.creditCard = maskCardNumbers(meta.creditCard)
   }
