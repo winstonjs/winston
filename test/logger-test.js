@@ -190,7 +190,7 @@ vows.describe('winton/logger').addBatch({
             assert.equal(level, 'info');
 
             assert.isNumber(meta.durationMs);
-            assert.isTrue(meta.durationMs >= 50 && meta.durationMs < 100);
+            assert.isTrue(meta.durationMs >= 50 && meta.durationMs < 500);
           }
         }
       },
