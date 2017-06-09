@@ -53,6 +53,20 @@ vows.describe('winston/container').addBatch({
           assert.isTrue(!container.loggers['default-test']);
         }
       }
+    },
+    "the add() method transports rewriters and filters options to logger": {
+      topic: function (container) {
+        var options = {
+          'rewriters': [function () { }],
+          'filters':   [function () { }, function () { }],
+        }
+        return container.add('options-test', options);
+      },
+      "should respond with logger that have the rewriters/filters provided by options": function (logger) {
+        assert.instanceOf(logger, winston.Logger);
+        assert.equal(helpers.size(logger.rewriters), 1);
+        assert.equal(helpers.size(logger.filters), 2);
+      }
     }
   },
   "An instance of winston.Container with explicit transports": {
