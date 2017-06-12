@@ -31,6 +31,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Pusher](#pusher-transport)
+  * [Google Stackdriver Logging)(#google-stackdriver-transport)
 
 ## Winston Core
 
@@ -569,6 +570,19 @@ Options:
 - Kibana4 integration
 - Integration with [SPM Performance Monitoring for Node.js](http://www.sematext.com/spm/integrations/nodejs-monitoring.html)
 
+### Google Stackdriver Transport
+
+[@google-cloud/logging-winston][29] provides a transport to relay your log messages to [Stackdriver Logging][30].
+
+```js
+  const winston = require('winston');
+  const Stackdriver = require('@google-cloud/logging-winston');
+  winston.add(Stackdriver, {
+    projectId: 'your-project-id',
+    keyFilename: '/path/to/keyfile.json'
+  });
+```
+
 ## Find more Transports
 
 ``` bash
@@ -632,3 +646,5 @@ Options:
 [26]: https://github.com/lazywithclass/winston-cloudwatch
 [27]: https://github.com/kenperkins/winston-papertrail
 [28]: https://github.com/pkallos/winston-firehose
+[29]: https://www.npmjs.com/package/@google-cloud/logging-winston
+[30]: https://cloud.google.com/logging/
