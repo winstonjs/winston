@@ -256,7 +256,7 @@ The community has truly embraced `winston`; there are over **23** winston transp
 ### Elasticsearch Transport
 
 Log to Elasticsearch in a logstash-like format and
-leverage Kibana to browser your logs.
+leverage Kibana to browse your logs.
 
 See: https://github.com/vanthome/winston-elasticsearch.
 
