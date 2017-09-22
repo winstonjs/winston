@@ -305,7 +305,7 @@ If you want to use this feature with the default logger, simply call `.handleExc
   //
   // You can add a separate exception logger by passing it to `.handleExceptions`
   //
-  winston.handleExceptions(new winston.transports.File({ filename: 'path/to/exceptions.log' }))
+  winston.handleExceptions(new winston.transports.File({ filename: 'path/to/exceptions.log' }));
 
   //
   // Alternatively you can set `.handleExceptions` to true when adding transports to winston.
