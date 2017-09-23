@@ -30,6 +30,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Newrelic](#newrelic-transport) (errors only)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
+  * [Pusher](#pusher-transport)
 
 ## Winston Core
 
@@ -391,6 +392,25 @@ To Configure using environment authentication:
 ```
 
 Also supports callbacks for completion when the DynamoDB putItem has been compelted.
+
+### Pusher Transport
+[winston-pusher](https://github.com/meletisf/winston-pusher) is a Pusher transport.
+
+```js
+var PusherLogger = require('winston-pusher').PusherLogger
+winston.add(PusherLogger, options);
+```
+
+This transport sends the logs to a Pusher app for real time processing and it uses the following options:
+
+* __pusher__ [Object]
+  * __appId__ The application id obtained from the dashboard
+  * __key__ The application key obtained from the dashboard
+  * __secret__ The application secret obtained from the dashboard
+  * __cluster__ The cluster
+  * __encrypted__ Whether the data will be send through SSL
+* __channel__ The channel of the event (default: default)
+* __event__ The event name (default: default)
 
 ### Papertrail Transport
 
