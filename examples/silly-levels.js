@@ -15,7 +15,7 @@ var myCustomLevels = {
     }
 };
 
-var customLevelLogger = new (winston.Logger)({ levels: myCustomLevels.levels });
+var customLevelLogger = winston.createLogger({ levels: myCustomLevels.levels });
 customLevelLogger.foobar('some foobar level-ed message');
 customLevelLogger.foobar('some foobar level-ed message');
 customLevelLogger.foobar('some foobar level-ed message');

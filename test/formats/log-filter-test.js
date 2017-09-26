@@ -44,7 +44,7 @@ function maskSecrets(msg, meta) {
 
 vows.describe('winston/logger/filter').addBatch({
   "An instance of winston.Logger": {
-    topic: new (winston.Logger)({transports: [
+    topic: winston.createLogger({transports: [
       new (winston.transports.Console)({ level: 'info' })
     ]}),
     "the filters.push() method, adding a filter only for the message": {
@@ -71,7 +71,7 @@ vows.describe('winston/logger/filter').addBatch({
   }
 }).addBatch({
   "A fresh instance of winston.Logger": {
-    topic: new (winston.Logger)({
+    topic: winston.createLogger({
       transports: [new (winston.transports.Console)({ level: 'info' })]
     }),
     "the filters.push() method adding a filter for the message and metadata": {

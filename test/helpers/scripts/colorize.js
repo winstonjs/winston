@@ -13,7 +13,7 @@ var format = winston.format(
   winston.format.simple()
 );
 
-var logger = new (winston.Logger)({
+var logger = winston.createLogger({
   format: format,
   transports: [
     new winston.transports.Console()

@@ -535,7 +535,7 @@ If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic
 ``` js
   var winston = require('winston')
   var Logsene = require('winston-logsene')
-  var logger = new winston.Logger()
+  var logger = winston.createLogger()
   logger.add (Logsene, {token: process.env.LOGSENE_TOKEN})
   logger.info ("Info message no. %d logged to %s",1,'Logsene', {metadata: "test-log", count:1 , tags: ['test', 'info', 'winston'], memoryUsage: process.memoryUsage()})
 ```

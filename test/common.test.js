@@ -25,7 +25,7 @@ function logOnInterval(opts, done) {
   var message = opts.message || '';
   var open = opts.open;
   var transport = new winston.transports.File({ filename: filename });
-  var logger = new winston.Logger({ transports: [transport] });
+  var logger = winston.createLogger({ transports: [transport] });
 
   if (open) {
     transport.once('open', open);
@@ -38,7 +38,7 @@ function logOnInterval(opts, done) {
 
   fs.unlink(filename, function () {
     const intervalId = setInterval(function () {
-      logger.info(++counters.write + message);
+      logger.info({ message: ++counters.write + message });
     }, interval);
 
     setTimeout(function () {
@@ -66,39 +66,6 @@ describe('winston/common', function () {
       debug: '  ',
       silly: '  '
     });
-  });
-
-  it('setLevels(syslog)', function () {
-    winston.setLevels(winston.config.syslog.levels);
-
-    assume(winston.transports).is.an('object');
-    assume(winston.transports.Console).is.a('function');
-    assume(winston.default.transports).is.an('array');
-    assume(winston.config).is.an('object');
-
-    var newLevels = Object.keys(winston.config.syslog.levels);
-    newLevels.forEach(function (key) {
-      assume(winston[key]).is.a('function');
-    });
-
-    assume(winston.paddings).deep.equals({
-      emerg: '  ',
-      alert: '  ',
-      crit: '   ',
-      error: '  ',
-      warning: '',
-      notice: ' ',
-      info: '   ',
-      debug: '  '
-    });
-
-    Object.keys(winston.config.npm.levels)
-      .filter(function (key) {
-        return newLevels.indexOf(key) === -1;
-      })
-      .forEach(function (key) {
-        assume(typeof winston[key]).equals('undefined');
-      });
   });
 
   describe('tailFile', function () {
@@ -132,13 +99,5 @@ describe('winston/common', function () {
         done();
       });
     });
-  });
-
-  //
-  // Reset levels once we have tested setLevels works
-  // as expected.
-  //
-  after(function () {
-    winston.setLevels(winston.config.npm.levels);
   });
 });

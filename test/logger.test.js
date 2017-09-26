@@ -21,7 +21,7 @@ var assume = require('assume'),
 
 describe('Logger', function () {
   it('new Logger()', function () {
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     assume(logger).is.an('object');
     assume(isStream(logger.format));
     assume(logger.level).equals('info');
@@ -33,7 +33,7 @@ describe('Logger', function () {
       return info;
     })();
 
-    var logger = new winston.Logger({
+    var logger = winston.createLogger({
       format: myFormat,
       level: 'error',
       exitOnError: false,
@@ -47,14 +47,14 @@ describe('Logger', function () {
   });
 
   it('.add({ invalid Transport })', function () {
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     assume(function () {
       logger.add(5);
     }).throws(/invalid transport/i);
   });
 
   it('.add(TransportStream)', function (done) {
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     var expected = { message: 'foo', level: 'info' };
     var transport = new TransportStream({
       log: function (info) {
@@ -70,7 +70,7 @@ describe('Logger', function () {
   });
 
   it('.configure()', function () {
-    var logger = new winston.Logger({
+    var logger = winston.createLogger({
       transports: [new winston.transports.Console()]
     });
 
@@ -83,7 +83,7 @@ describe('Logger', function () {
   });
 
   it('.configure({ transports })', function () {
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
 
     assume(logger.transports.length).equals(0);
 
@@ -96,7 +96,7 @@ describe('Logger', function () {
   });
 
   it('.configure({ transports, format })', function () {
-    var logger = new winston.Logger(),
+    var logger = winston.createLogger(),
         readable = logger._onReadableFormat,
         format = logger.format;
 
@@ -123,7 +123,7 @@ describe('Logger', function () {
       new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
     ];
 
-    var logger = new (winston.Logger)({ transports: transports })
+    var logger = winston.createLogger({ transports: transports })
       .remove(new winston.transports.Console());
 
     assume(logger.transports.length).equals(2);
@@ -139,7 +139,7 @@ describe('Logger', function () {
       new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
     ];
 
-    var logger = new (winston.Logger)({ transports: transports });
+    var logger = winston.createLogger({ transports: transports });
 
     assume(logger.transports.length).equals(2);
     logger.remove(transports[0]);
@@ -148,14 +148,14 @@ describe('Logger', function () {
   });
 
   it('.clear() [no transports]', function () {
-    var logger = new (winston.Logger)();
+    var logger = winston.createLogger();
     assume(logger.transports.length).equals(0);
     logger.clear();
     assume(logger.transports.length).equals(0);
   });
 
   it ('.clear() [transports]', function () {
-    var logger = new (winston.Logger)({
+    var logger = winston.createLogger({
       transports: [new (winston.transports.Console)()]
     });
 
@@ -182,7 +182,7 @@ describe('Logger (multiple transports of the same type)', function () {
       })
     ];
 
-    logger = new (winston.Logger)({
+    logger = winston.createLogger({
       transports: transports
     });
   });
@@ -204,7 +204,7 @@ describe('Logger (multiple transports of the same type)', function () {
 describe('Logger (levels)', function () {
   it('report unknown levels', function () {
     stdMocks.use();
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     var expected = { message: 'foo', level: 'bar' };
     logger.log(expected);
 
@@ -215,7 +215,7 @@ describe('Logger (levels)', function () {
   });
 
   it('default levels', function (done) {
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     var expected = { message: 'foo', level: 'info' };
 
     function logLevelTransport(level) {
@@ -244,7 +244,7 @@ describe('Logger (levels)', function () {
   });
 
   it('custom levels', function (done) {
-    var logger = new winston.Logger({
+    var logger = winston.createLogger({
       levels: {
         bad:  0,
         test: 1,

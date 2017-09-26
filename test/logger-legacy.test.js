@@ -33,14 +33,14 @@ describe('Logger (legacy API)', function () {
 
     deprecated.forEach(function (opts) {
       assume(function () {
-        var logger = new winston.Logger(opts)
+        var logger = winston.createLogger(opts)
       }).throws(/Use a custom/);
     });
   });
 
   it('.add(LegacyTransport)', function () {
     stdMocks.use();
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     var transport = new LegacyTransport();
     logger.add(transport);
     stdMocks.restore();
@@ -54,7 +54,7 @@ describe('Logger (legacy API)', function () {
 
   it('.add(LegacyTransport) multiple', function () {
     stdMocks.use();
-    var logger = new winston.Logger({
+    var logger = winston.createLogger({
       transports: [
         new LegacyTransport(),
         new LegacyTransport(),
@@ -76,7 +76,7 @@ describe('Logger (legacy API)', function () {
       new (LegacyTransport)()
     ];
 
-    var logger = new (winston.Logger)({ transports: transports });
+    var logger = winston.createLogger({ transports: transports });
 
     assume(logger.transports.length).equals(2);
     logger.remove(transports[1]);
@@ -112,7 +112,7 @@ describe('Logger (legacy API)', function () {
   });
 
   it('.cli() throws', function () {
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     assume(logger.cli).throws(/Use a custom/);
   });
 });

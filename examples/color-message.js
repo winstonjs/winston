@@ -1,6 +1,6 @@
 var winston = require('../lib/winston');
 
-var logger = module.exports = new (winston.Logger)({
+var logger = module.exports = winston.createLogger({
   transports: [
     new (winston.transports.Console)({
       colorize: 'all'

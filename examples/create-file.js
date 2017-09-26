@@ -15,7 +15,7 @@ catch (ex) { }
 // Create a new winston logger instance with two tranports: Console, and File
 //
 //
-var logger = new (winston.Logger)({
+var logger = winston.createLogger({
   transports: [
     new (winston.transports.Console)(),
     new (winston.transports.File)({ filename: filename })

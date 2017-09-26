@@ -27,7 +27,7 @@ vows.describe('winston/logger/cli').addBatch({
   },
   "When an instance of winston.Logger": {
     topic: function () {
-      return new winston.Logger({
+      return winston.createLogger({
         transports: [
           new winston.transports.Console()
         ]

@@ -37,7 +37,7 @@ describe('Logger, ExceptionHandler', function () {
       // that our assumptions about mocha are maintained.
       //
       assume(process.listeners('uncaughtException').length).equals(1);
-      var logger = new winston.Logger({
+      var logger = winston.createLogger({
         exceptionHandlers: [
           new (winston.transports.Console)(),
           new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})

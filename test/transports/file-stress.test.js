@@ -29,7 +29,7 @@ describe('File (stress)', function () {
   });
 
   it('should handle a high volume of writes', function (done) {
-    const logger = new winston.Logger({
+    const logger = winston.createLogger({
       transports: [new winston.transports.File({
         filename: logPath
       })]

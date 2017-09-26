@@ -14,7 +14,7 @@ var assert = require('assert'),
 
 vows.describe('winston/logger/levels').addBatch({
   "The winston logger": {
-    topic: new (winston.Logger)({
+    topic: winston.createLogger({
       transports: [
         new (winston.transports.Console)()
       ]
