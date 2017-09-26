@@ -135,8 +135,7 @@ helpers.assumeFormatted = function (format, info, assertion) {
       done();
     });
 
-    format.pipe(writeable);
-    format.write(info);
+    writeable.write(format.transform(info, format.options));
   };
 }
 
