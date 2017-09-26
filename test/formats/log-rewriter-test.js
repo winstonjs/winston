@@ -14,7 +14,7 @@ var assert = require('assert'),
 vows.describe('winston/logger/rewriter').addBatch({
   "An instance of winston.Logger": {
     topic: winston.createLogger({transports: [
-      new (winston.transports.Console)({ level: 'info' })
+      new winston.transports.Console({ level: 'info' })
     ]}),
     "the addRewriter() method": {
       topic: function (logger) {
@@ -47,7 +47,7 @@ vows.describe('winston/logger/rewriter').addBatch({
 }).addBatch({
   "An instance of winston.Logger with explicit rewriter": {
     topic: winston.createLogger({transports: [
-      new (winston.transports.Console)({ level: 'info'})
+      new winston.transports.Console({ level: 'info'})
     ], rewriters: [
       function (level, msg, meta) {
         meta.level = level;
@@ -75,7 +75,7 @@ vows.describe('winston/logger/rewriter').addBatch({
 }).addBatch({
   "An instance of winston.Logger with rewriters": {
     topic: winston.createLogger({transports: [
-      new (winston.transports.Console)({ level: 'info' })
+      new winston.transports.Console({ level: 'info' })
     ], rewriters: [
       function (level, msg, meta) {
         meta.numbers.push(1);

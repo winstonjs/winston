@@ -16,7 +16,7 @@ vows.describe('winston/logger/levels').addBatch({
   "The winston logger": {
     topic: winston.createLogger({
       transports: [
-        new (winston.transports.Console)()
+        new winston.transports.Console()
       ]
     }),
     "the log() method": {

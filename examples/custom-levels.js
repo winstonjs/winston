@@ -33,7 +33,7 @@ var config = {
 
 var logger = module.exports = winston.createLogger({
   transports: [
-    new (winston.transports.Console)({
+    new winston.transports.Console({
       colorize: true
     })
   ],

@@ -17,8 +17,8 @@ catch (ex) { }
 //
 var logger = winston.createLogger({
   transports: [
-    new (winston.transports.Console)(),
-    new (winston.transports.File)({ filename: filename })
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: filename })
   ]
 });
 

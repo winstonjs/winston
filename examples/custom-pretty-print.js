@@ -9,7 +9,7 @@ function myPrettyPrint(obj) {
 
 var logger = winston.createLogger({
   transports: [
-    new (winston.transports.Console)({ prettyPrint: myPrettyPrint }),
+    new winston.transports.Console({ prettyPrint: myPrettyPrint }),
   ]
 });
 

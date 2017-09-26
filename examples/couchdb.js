@@ -9,9 +9,9 @@ var winston = require('../lib/winston');
 //
 var logger = winston.createLogger({
   transports: [
-    new (winston.transports.Console)(),
-    new (winston.transports.Couchdb)({ 'host': 'localhost', 'db': 'logs' })
-    // if you need auth do this: new (winston.transports.Couchdb)({ 'user': 'admin', 'pass': 'admin', 'host': 'localhost', 'db': 'logs' })
+    new winston.transports.Console(),
+    new winston.transports.Couchdb({ 'host': 'localhost', 'db': 'logs' })
+    // if you need auth do this: new winston.transports.Couchdb({ 'user': 'admin', 'pass': 'admin', 'host': 'localhost', 'db': 'logs' })
   ]
 });
 
