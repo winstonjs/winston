@@ -6,26 +6,29 @@
 - [x] Move `winston/config.js` to `winston/config/index.js`
 - [x] **DEPRECATE** `winston.clone`
 - [x] Add convenience methods from `winston-transport`
-- [ ] Replace all `vows`-based tests.
+- [-] Replace all `vows`-based tests.
+  - [x] `test/*-test.js`
+  - [-] `test/formats/*-test.js` 
+  - [-] `test/transports/*-test.js` 
 - [ ] Code coverage tests above 80%
 
 ## Transports
 - [x] Implement `stream.Writable.writev` in `TransportStream`.
-- [-] Refactor all built-in transports to be TransportStream instances.
+- [x] Refactor all built-in transports to be TransportStream instances.
   - [x] Console
-  - [-] File
+  - [x] File
   - [x] Http
   - [x] Steam
 
 ## Formats
-- [ ] String interpolation format
 - [x] Colorize format
 - [x] Pretty-print format
 - [x] Uncolorize format
+- [ ] String interpolation format
 - [ ] winston.format.cli()
 - [ ] Use of different formats across multiple Transports. e.g.:
-    - Colors on `Console`
-    - Not on `File`
+  - Colors on `Console`
+  - Not on `File`
 
 ## Communications / Compatibility
 - [x] Add friendly(ish) deprecation notices for common changes.
@@ -35,6 +38,7 @@
 - [ ] README.md / tests for `winston-compat`
 - [ ] Move core tests into `winston-compat`
 - [ ] 90%+ test coverage for `winston-compat`.
+- [ ] Migrate all `examples/*.js` to the new API.
 
 ## Querying, Streaming, Uncaught Exceptions
 
@@ -47,7 +51,7 @@
 - [x] Move `LogStream` back to `Logger`.
 - [x] Add LogStream.prototype.configure from `winston@2.0.0`
 - [x] `winston.Container` instances no longer add any transports by default.
-- [ ] Strip wrapping `(` `)` from all occurances of `new (winston.transports.*)`.
+- [x] Strip wrapping `(` `)` from all occurances of `new winston.transports.*)`.
 
 ## Benchmarking
 
