@@ -16,17 +16,17 @@ var path = require('path'),
 
 const defaultLevels = winston.config.npm.levels;
 const transports = {
-  defaults: new (winston.transports.Console)(),
-  noStderr: new (winston.transports.Console)({ stderrLevels: [] }),
-  debugStdout: new (winston.transports.Console)({ debugStdout: true }),
-  stderrLevels: new (winston.transports.Console)({
+  defaults: new winston.transports.Console(),
+  noStderr: new winston.transports.Console({ stderrLevels: [] }),
+  debugStdout: new winston.transports.Console({ debugStdout: true }),
+  stderrLevels: new winston.transports.Console({
     stderrLevels: ['info', 'warn']
   }),
-  eol: new (winston.transports.Console)({ eol: 'X' }),
-  syslog: new (winston.transports.Console)({
+  eol: new winston.transports.Console({ eol: 'X' }),
+  syslog: new winston.transports.Console({
     levels: winston.config.syslog.levels
   }),
-  customLevelStderr: new (winston.transports.Console)({
+  customLevelStderr: new winston.transports.Console({
     levels: {
       alpha: 0,
       beta: 1,

@@ -23,7 +23,7 @@ function assertFileFormatter (basename, options) {
   return {
     topic: function () {
       options.filename = filename;
-      var transport = new (winston.transports.File)(options);
+      var transport = new winston.transports.File(options);
 
       // We must wait until transport file has emitted the 'flush'
       // event to be sure the file has been created and written

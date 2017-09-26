@@ -72,7 +72,7 @@ describe('Logger (legacy API)', function () {
 
   it('.remove() [LegacyTransportStream]', function () {
     var transports = [
-      new (winston.transports.Console)(),
+      new winston.transports.Console(),
       new (LegacyTransport)()
     ];
 

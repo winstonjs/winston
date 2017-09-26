@@ -22,7 +22,7 @@ vows.describe('winston/transport/prettyPrint').addBatch({
   "When pretty option is used": {
     "with memory transport": {
       topic: function () {
-        var transport = new (winston.transports.Memory)({prettyPrint: myPrettyPrint});
+        var transport = new winston.transports.Memory({prettyPrint: myPrettyPrint});
         return this.callback(null, transport);
       },
       "should log using a function value": function (_, transport) {

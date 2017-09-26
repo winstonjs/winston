@@ -77,7 +77,7 @@ Or do it with one call to configure():
 ``` js
   winston.configure({
     transports: [
-      new (winston.transports.File)({ filename: 'somefile.log' })
+      new winston.transports.File({ filename: 'somefile.log' })
     ]
   });
 ```
@@ -90,8 +90,8 @@ If you would prefer to manage the object lifetime of loggers you are free to ins
 ``` js
   var logger = winston.createLogger({
     transports: [
-      new (winston.transports.Console)(),
-      new (winston.transports.File)({ filename: 'somefile.log' })
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: 'somefile.log' })
     ]
   });
 ```
@@ -120,8 +120,8 @@ You can also wholesale reconfigure a `winston.Logger` instance using the `config
   var logger = winston.createLogger({
     level: 'info',
     transports: [
-      new (winston.transports.Console)(),
-      new (winston.transports.File)({ filename: 'somefile.log' })
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: 'somefile.log' })
     ]
   });
 
@@ -157,12 +157,12 @@ It is possible to use multiple transports of the same type e.g. `winston.transpo
 ``` js
 var logger = winston.createLogger({
   transports: [
-    new (winston.transports.File)({
+    new winston.transports.File({
       name: 'info-file',
       filename: 'filelog-info.log',
       level: 'info'
     }),
-    new (winston.transports.File)({
+    new winston.transports.File({
       name: 'error-file',
       filename: 'filelog-error.log',
       level: 'error'
@@ -428,8 +428,8 @@ Setting the level for your logging message can be accomplished in one of two way
 ``` js
   var logger = winston.createLogger({
     transports: [
-      new (winston.transports.Console)({ level: 'error' }),
-      new (winston.transports.File)({
+      new winston.transports.Console({ level: 'error' }),
+      new winston.transports.File({
         filename: 'somefile.log',
         level: 'info'
       })
@@ -442,8 +442,8 @@ You may also dynamically change the log level of a transport:
 ``` js
   var logger = winston.createLogger({
     transports: [
-      new (winston.transports.Console)({ level: 'warn' }),
-      new (winston.transports.File)({ filename: 'somefile.log', level: 'error' })
+      new winston.transports.Console({ level: 'warn' }),
+      new winston.transports.File({ filename: 'somefile.log', level: 'error' })
     ]
   });
   logger.debug("Will not be logged in either transport!");
@@ -670,7 +670,7 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
   //
   var logger = winston.createLogger({
     transports: [
-      new (winston.transports.Console)()
+      new winston.transports.Console()
     ]
   });
 
@@ -775,7 +775,7 @@ Options object will be passed to the format function. It's general properties ar
 ``` js
 var logger = winston.createLogger({
   transports: [
-    new (winston.transports.Console)({
+    new winston.transports.Console({
       timestamp: function() {
         return Date.now();
       },

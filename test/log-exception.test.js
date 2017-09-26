@@ -39,8 +39,8 @@ describe('Logger, ExceptionHandler', function () {
       assume(process.listeners('uncaughtException').length).equals(1);
       var logger = winston.createLogger({
         exceptionHandlers: [
-          new (winston.transports.Console)(),
-          new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+          new winston.transports.Console(),
+          new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
         ]
       });
 

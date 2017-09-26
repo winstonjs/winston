@@ -119,8 +119,8 @@ describe('Logger', function () {
 
   it('.remove() [transport not added]', function () {
     var transports = [
-      new (winston.transports.Console)(),
-      new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
     ];
 
     var logger = winston.createLogger({ transports: transports })
@@ -135,8 +135,8 @@ describe('Logger', function () {
 
   it('.remove() [TransportStream]', function () {
     var transports = [
-      new (winston.transports.Console)(),
-      new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
     ];
 
     var logger = winston.createLogger({ transports: transports });
@@ -156,7 +156,7 @@ describe('Logger', function () {
 
   it ('.clear() [transports]', function () {
     var logger = winston.createLogger({
-      transports: [new (winston.transports.Console)()]
+      transports: [new winston.transports.Console()]
     });
 
     assume(logger.transports.length).equals(1);
@@ -170,12 +170,12 @@ describe('Logger (multiple transports of the same type)', function () {
 
   before(function () {
     transports = [
-      new (winston.transports.File)({
+      new winston.transports.File({
         name: 'filelog-info.log',
         filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
         level: 'info'
       }),
-      new (winston.transports.File)({
+      new winston.transports.File({
         name: 'filelog-error.log',
         filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
         level: 'error'

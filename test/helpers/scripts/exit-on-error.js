@@ -15,7 +15,7 @@ winston.exitOnError = function (err) {
 };
 
 winston.handleExceptions([
-  new (winston.transports.File)({
+  new winston.transports.File({
     filename: path.join(__dirname, '..', 'logs', 'exit-on-error.log'),
     handleExceptions: true
   })
