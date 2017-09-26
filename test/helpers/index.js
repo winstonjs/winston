@@ -30,7 +30,7 @@ helpers.createLogger = function (write) {
     write: write
   });
 
-  return new winston.Logger({
+  return winston.createLogger({
     transports: [
       new winston.transports.Stream({ stream: writeable })
     ]
@@ -58,7 +58,7 @@ helpers.writeable = function (write) {
  * @returns {ExceptionHandler} A new ExceptionHandler instance
  */
 helpers.exceptionHandler = function (opts) {
-  var logger = new winston.Logger(opts);
+  var logger = winston.createLogger(opts);
   return new winston.ExceptionHandler(logger);
 };
 

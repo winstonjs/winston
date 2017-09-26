@@ -1,6 +1,8 @@
 
 ### Braindump of breaking changes
 
+- `winston.Logger` has been replaced with `winston.createLogger`.
+- `winston.setLevels` has been removed. Levels are frozen at the time of Logger creation.
 - `winston.Logger` will no longer respond with an error when logging with no transports
 - `winston.Logger` will no longer respond with an error if the same transports are added twice.
 - Logger.prototype.stream

@@ -31,7 +31,7 @@ var config = {
   }
 };
 
-var logger = module.exports = new (winston.Logger)({
+var logger = module.exports = winston.createLogger({
   transports: [
     new (winston.transports.Console)({
       colorize: true

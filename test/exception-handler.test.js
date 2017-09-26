@@ -43,7 +43,7 @@ describe('ExceptionHandler', function () {
   });
 
   it('new ExceptionHandler(logger)', function () {
-    var logger = new winston.Logger();
+    var logger = winston.createLogger();
     var handler = new winston.ExceptionHandler(logger);
     assume(handler.logger).equals(logger);
   });

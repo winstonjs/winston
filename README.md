@@ -88,7 +88,7 @@ For more documentation about working with each individual transport supported by
 If you would prefer to manage the object lifetime of loggers you are free to instantiate them yourself:
 
 ``` js
-  var logger = new (winston.Logger)({
+  var logger = winston.createLogger({
     transports: [
       new (winston.transports.Console)(),
       new (winston.transports.File)({ filename: 'somefile.log' })
@@ -117,7 +117,7 @@ You can work with this logger in the same way that you work with the default log
 You can also wholesale reconfigure a `winston.Logger` instance using the `configure` method:
 
 ``` js
-  var logger = new winston.Logger({
+  var logger = winston.createLogger({
     level: 'info',
     transports: [
       new (winston.transports.Console)(),
@@ -155,7 +155,7 @@ The way these objects are stored varies from transport to transport (to best sup
 It is possible to use multiple transports of the same type e.g. `winston.transports.File` by passing in a custom `name` when you construct the transport.
 
 ``` js
-var logger = new (winston.Logger)({
+var logger = winston.createLogger({
   transports: [
     new (winston.transports.File)({
       name: 'info-file',
@@ -329,7 +329,7 @@ By default, winston will exit after logging an uncaughtException. If this is not
 set `exitOnError = false`
 
 ``` js
-  var logger = new (winston.Logger)({ exitOnError: false });
+  var logger = winston.createLogger({ exitOnError: false });
 
   //
   // or, like this:
@@ -342,7 +342,7 @@ When working with custom logger instances, you can pass in separate transports t
 Example 1
 
 ``` js
-  var logger = new (winston.Logger)({
+  var logger = winston.createLogger({
     transports: [
       new winston.transports.File({ filename: 'path/to/all-logs.log' })
     ],
@@ -355,7 +355,7 @@ Example 1
 Example 2
 
 ``` js
-var logger = new winston.Logger({
+var logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
       handleExceptions: true,
@@ -373,7 +373,7 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
     return err.code !== 'EPIPE';
   }
 
-  var logger = new (winston.Logger)({ exitOnError: ignoreEpipe });
+  var logger = winston.createLogger({ exitOnError: ignoreEpipe });
 
   //
   // or, like this:
@@ -426,7 +426,7 @@ Setting the level for your logging message can be accomplished in one of two way
 `winston` allows you to define a `level` property on each transport which specifies the **maximum** level of messages that a transport should log. For example, using the `npm` levels you could log only `error` messages to the console and everything `info` and below to a file (which includes `error` messages):
 
 ``` js
-  var logger = new (winston.Logger)({
+  var logger = winston.createLogger({
     transports: [
       new (winston.transports.Console)({ level: 'error' }),
       new (winston.transports.File)({
@@ -440,7 +440,7 @@ Setting the level for your logging message can be accomplished in one of two way
 You may also dynamically change the log level of a transport:
 
 ``` js
-  var logger = new (winston.Logger)({
+  var logger = winston.createLogger({
     transports: [
       new (winston.transports.Console)({ level: 'warn' }),
       new (winston.transports.File)({ filename: 'somefile.log', level: 'error' })
@@ -452,28 +452,7 @@ You may also dynamically change the log level of a transport:
   logger.verbose("Will be logged in both transports!");
 ```
 
-As of 0.2.0, winston supports customizable logging levels, defaulting to [npm][0] style logging levels. Changing logging levels is easy:
-
-``` js
-  //
-  // Change levels on the default winston logger
-  //
-  winston.setLevels(winston.config.syslog.levels);
-
-  //
-  // Change levels on an instance of a logger
-  //
-  logger.setLevels(winston.config.syslog.levels);
-```
-
-Calling `.setLevels` on a logger will remove all of the previous helper methods for the old levels and define helper methods for the new levels. Thus, you should be careful about the logging statements you use when changing levels. For example, if you ran this code after changing to the syslog levels:
-
-``` js
-  //
-  // Logger does not have 'silly' defined since that level is not in the syslog levels
-  //
-  logger.silly('some silly message');
-```
+`winston` supports customizable logging levels, defaulting to [npm][0] style logging levels. Levels must be specified at the time of creating your logger. 
 
 ### Using Custom Logging Levels
 In addition to the predefined `npm` and `syslog` levels available in Winston, you can also choose to define your own:
@@ -494,7 +473,10 @@ In addition to the predefined `npm` and `syslog` levels available in Winston, yo
     }
   };
 
-  var customLevelLogger = new (winston.Logger)({ levels: myCustomLevels.levels });
+  var customLevelLogger = winston.createLogger({ 
+    levels: myCustomLevels.levels 
+  });
+  
   customLevelLogger.foobar('some foobar level-ed message');
 ```
 
@@ -686,7 +668,7 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
   //
   // Configure CLI on an instance of winston.Logger
   //
-  var logger = new winston.Logger({
+  var logger = winston.createLogger({
     transports: [
       new (winston.transports.Console)()
     ]
@@ -698,10 +680,10 @@ Configuring output for this style is easy, just use the `.cli()` method on `wins
 ### Filters and Rewriters
 Filters allow modifying the contents of **log messages**, and Rewriters allow modifying the contents of **log meta** e.g. to mask data that should not appear in logs.
 
-Both filters and rewriters are simple Arrays of functions which can be provided when creating a `new winston.Logger(options)`. e.g.:
+Both filters and rewriters are simple Arrays of functions which can be provided when creating a `winston.createLogger(options)`. e.g.:
 
 ``` js
-var logger = new winston.Logger({
+var logger = winston.createLogger({
   rewriters: [function (level, msg, meta) { /* etc etc */ }],
   filters:   [function (level, msg, meta) { /* etc etc */ }]
 })
@@ -791,7 +773,7 @@ To specify custom log format you should set formatter function for transport. Cu
 Options object will be passed to the format function. It's general properties are: timestamp, level, message, meta. Depending on the transport type may be additional properties.
 
 ``` js
-var logger = new (winston.Logger)({
+var logger = winston.createLogger({
   transports: [
     new (winston.transports.Console)({
       timestamp: function() {

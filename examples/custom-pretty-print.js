@@ -7,7 +7,7 @@ function myPrettyPrint(obj) {
     .replace(/\}/g, ' >');
 }
 
-var logger = new (winston.Logger)({
+var logger = winston.createLogger({
   transports: [
     new (winston.transports.Console)({ prettyPrint: myPrettyPrint }),
   ]
