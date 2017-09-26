@@ -97,7 +97,6 @@ describe('Logger', function () {
 
   it('.configure({ transports, format })', function () {
     var logger = winston.createLogger(),
-        readable = logger._onReadableFormat,
         format = logger.format;
 
     assume(logger.transports.length).equals(0);
@@ -107,15 +106,10 @@ describe('Logger', function () {
       format: winston.format.json()
     });
 
-    var listeners = logger.format.listeners('readable');
-
     assume(logger.transports.length).equals(1);
     assume(logger.transports[0].name).equals('console');
     assume(logger.format).not.equals(format);
-    assume(listeners.length).equals(1);
-    assume(listeners).not.includes(readable);
   });
-
 
   it('.remove() [transport not added]', function () {
     var transports = [
