@@ -24,6 +24,7 @@
 - [x] Colorize format
 - [x] Pretty-print format
 - [x] Uncolorize format
+- [ ] humanReadableUnhandledException should be the default
 - [ ] String interpolation format
 - [ ] winston.format.cli()
 - [ ] Use of different formats across multiple Transports. e.g.:
