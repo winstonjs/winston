@@ -21,11 +21,16 @@ describe('File({ filename })', function () {
     var info = { raw: 'this is my log message' };
     var logged;
 
+    function cleanup() {
+      fs.unlinkSync(filename);
+    }
+
     transport.log(info, noop);
     setImmediate(function () {
       helpers.tryRead(filename)
         .on('error', function (err) {
           assume(err).false();
+          cleanup();
           done();
         })
         .pipe(split())
@@ -33,7 +38,10 @@ describe('File({ filename })', function () {
           assume(logged).true();
           assume(d).to.equal(info.raw);
         })
-        .on('end', done);
+        .on('end', function () {
+          cleanup();
+          done();
+        });
     });
 
     transport.once('logged', function () {
