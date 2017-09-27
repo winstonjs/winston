@@ -60,6 +60,7 @@ The Console transport takes a few simple options:
 * __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
 * __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `['error', 'debug']`)
 * (Deprecated: Use __stderrLevels__ instead) __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. Cannot be used with __stderrLevels__. (default false)
+* __useConsole:__ Boolean flag indicating if we should use `console.log` and `console.error` instead of `process.stdout.write` and `process.stderr.write` (for use with the v8-inspector debug protocol socket)
 
 *Metadata:* Logged via util.inspect(meta);
 
@@ -175,9 +176,9 @@ The Loggly transport is based on [Nodejitsu's][6] [node-loggly][7] implementatio
 
 ### Logzio Transport
 
-You can download the logzio transport here : [https://github.com/logzio/winston-logzio](https://github.com/logzio/winston-logzio)  
+You can download the logzio transport here : [https://github.com/logzio/winston-logzio](https://github.com/logzio/winston-logzio)
 
-*Basic Usage*  
+*Basic Usage*
 ```js
 var winston = require('winston');
 var logzioWinstonTransport = require('winston-logzio');
