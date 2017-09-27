@@ -25,6 +25,7 @@
     "diagnostics": "^1.0.1",
     "eyes": "0.1.x",
     "isstream": "0.1.x",
+    "logform": "^1.0.0",
     "one-time": "0.0.4",
     "pumpify": "^1.3.3",
     "stack-trace": "0.0.x",
