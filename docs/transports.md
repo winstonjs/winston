@@ -227,21 +227,52 @@ In addition to the options accepted by the [riak-js][12] [client][13], the Riak 
 As of `winston@0.3.0` the MongoDB transport has been broken out into a new module: [winston-mongodb][14]. Using it is just as easy:
 
 ``` js
-  var MongoDB = require('winston-mongodb').MongoDB;
-  winston.add(MongoDB, options);
+  var winston = require('winston');
+
+  /**
+   * Requiring `winston-mongodb` will expose
+   * `winston.transports.MongoDB`
+   */
+  require('winston-mongodb');
+
+  winston.add(winston.transports.MongoDB, options);
 ```
 
 The MongoDB transport takes the following options. 'db' is required:
 
-* __level:__ Level of messages that this transport should log.
-* __silent:__ Boolean flag indicating whether to suppress output.
-* __db:__ The name of the database you want to log to. *[required]*
-* __collection__: The name of the collection you want to store log messages in, defaults to 'log'.
-* __safe:__ Boolean indicating if you want eventual consistency on your log messages, if set to true it requires an extra round trip to the server to ensure the write was committed, defaults to true.
-* __host:__ The host running MongoDB, defaults to localhost.
-* __port:__ The port on the host that MongoDB is running on, defaults to MongoDB's default port.
+* __level:__ Level of messages that this transport should log, defaults to
+'info'.
+* __silent:__ Boolean flag indicating whether to suppress output, defaults to
+false.
+* __db:__ MongoDB connection uri, pre-connected db object or promise object
+which will be resolved with pre-connected db object.
+* __options:__ MongoDB connection parameters (optional, defaults to
+`{poolSize: 2, autoReconnect: true}`).
+* __collection__: The name of the collection you want to store log messages in,
+defaults to 'log'.
+* __storeHost:__ Boolean indicating if you want to store machine hostname in
+logs entry, if set to true it populates MongoDB entry with 'hostname' field,
+which stores os.hostname() value.
+* __username:__ The username to use when logging into MongoDB.
+* __password:__ The password to use when logging into MongoDB. If you don't
+supply a username and password it will not use MongoDB authentication.
+* __label:__ Label stored with entry object if defined.
+* __name:__ Transport instance identifier. Useful if you need to create multiple
+MongoDB transports.
+* __capped:__ In case this property is true, winston-mongodb will try to create
+new log collection as capped, defaults to false.
+* __cappedSize:__ Size of logs capped collection in bytes, defaults to 10000000.
+* __cappedMax:__ Size of logs capped collection in number of documents.
+* __tryReconnect:__ Will try to reconnect to the database in case of fail during
+initialization. Works only if __db__ is a string. Defaults to false.
+* __decolorize:__ Will remove color attributes from the log entry message,
+defaults to false.
+* __expireAfterSeconds:__ Seconds before the entry is removed. Works only if __capped__ is not set.
 
-*Metadata:* Logged as a native JSON object.
+*Metadata:* Logged as a native JSON object in 'meta' property.
+
+*Logging unhandled exceptions:* For logging unhandled exceptions specify
+winston-mongodb as `handleExceptions` logger according to winston documentation.
 
 ## Additional Transports
 
