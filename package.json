@@ -19,21 +19,17 @@
   ],
   "dependencies": {
     "async": "~1.0.0",
-    "camelcase": "^4.1.0",
-    "colors": "~1.1.2",
-    "cycle": "1.0.x",
     "diagnostics": "^1.0.1",
-    "eyes": "0.1.x",
     "isstream": "0.1.x",
     "logform": "^1.0.0",
     "one-time": "0.0.4",
-    "pumpify": "^1.3.3",
     "stack-trace": "0.0.x",
     "winston-transport": "^2.0.0"
   },
   "devDependencies": {
     "abstract-winston-transport": "*",
     "assume": "^1.2.5",
+    "colors": "~1.1.2",
     "common-style": "^3.1.0",
     "cross-spawn-async": "^2.0.0",
     "hock": "1.x.x",
