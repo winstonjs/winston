@@ -36,7 +36,7 @@ const exceptions = winston.exceptionHandler();
 - `winston.common.serialized` was removed (use `winston-compat`).
 - `winston.common.log` was removed (use `winston-compat`).
 
-### Braindump of formats
+### Below this is mostly unstructured braindump
 
 **Common**
 ``` js
