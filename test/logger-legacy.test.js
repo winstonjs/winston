@@ -17,7 +17,6 @@ var assume = require('assume'),
     winston = require('../lib/winston'),
     LegacyTransport = require('./helpers/mocks/legacy-transport'),
     TransportStream = require('winston-transport'),
-    format = require('../lib/winston/formats/format'),
     helpers = require('./helpers');
 
 describe('Logger (legacy API)', function () {

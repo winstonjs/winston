@@ -121,23 +121,7 @@ helpers.tryRead = function tryRead(filename) {
   })();
 
   return proxy;
-}
-
-/**
- * Simple test helper which creates an instance
- * of the `colorize` format and asserts that the
- * correct `info` object was processed.
- */
-helpers.assumeFormatted = function (format, info, assertion) {
-  return function (done) {
-    var writeable = helpers.writeable(function (info) {
-      assertion(info);
-      done();
-    });
-
-    writeable.write(format.transform(info, format.options));
-  };
-}
+};
 
 /**
  * Assumes the process structure associated with an ExceptionHandler

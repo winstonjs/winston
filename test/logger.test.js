@@ -16,7 +16,7 @@ var assume = require('assume'),
     stdMocks = require('std-mocks'),
     winston = require('../lib/winston'),
     TransportStream = require('winston-transport'),
-    format = require('../lib/winston/formats/format'),
+    format = require('../lib/winston').format,
     helpers = require('./helpers');
 
 describe('Logger', function () {
