@@ -16,16 +16,25 @@ var assert = require('assert'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
 
-var maxfilesTransport = new winston.transports.File({
-  timestamp: false,
-  json: false,
-  filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles.log'),
-  maxsize: 4096,
-  maxFiles: 3
-});
+var filenameParams = [
+  {basename: 'testmaxfiles', appendBaseName: 'testmaxfiles', desc: ''},
+  {basename: 'testmaxnumfiles0', appendBaseName: 'testmaxnumfiles0.', desc: ' with tailing-number file names'}
+];
 
-vows.describe('winston/transports/file/maxfiles').addBatch({
-  "An instance of the File Transport": {
+var batch = {};
+filenameParams.forEach(function(params) {
+  var basename = params.basename;
+  var appendBaseName = params.appendBaseName;
+
+  var maxfilesTransport = new winston.transports.File({
+    timestamp: false,
+    json: false,
+    filename: path.join(__dirname, '..', 'fixtures', 'logs', basename+'.log'),
+    maxsize: 4096,
+    maxFiles: 3
+  });
+
+  batch["An instance of the File Transport" + params.desc] = {
     "when passed a valid filename": {
       topic: maxfilesTransport,
       "should be a valid transporter": function (transportTest) {
@@ -37,12 +46,12 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
     },
     "when delete old test files": {
       topic: function () {
-        exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles*'), this.callback);
+        exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', basename+'*'), this.callback);
       },
       "and when passed more files than the maxFiles": {
         topic: function () {
           var that = this,
-              created = 0;
+            created = 0;
 
           function data(ch) {
             return new Array(1018).join(String.fromCharCode(65 + ch));
@@ -71,8 +80,8 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
         },
         "should be only 3 files called 5.log, 4.log and 3.log": function () {
           for (var num = 0; num < 6; num++) {
-            var file = !num ? 'testmaxfiles.log' : 'testmaxfiles' + num + '.log',
-                fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
+            var file = !num ? basename+'.log' : appendBaseName + num + '.log',
+              fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
 
             // There should be no files with that name
             if (num >= 0 && num < 3) {
@@ -90,13 +99,15 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
         "should have the correct content": function () {
           ['D', 'E', 'F'].forEach(function (name, inx) {
             var counter = inx + 3,
-                logsDir = path.join(__dirname, '..', 'fixtures', 'logs'),
-                content = fs.readFileSync(path.join(logsDir, 'testmaxfiles' + counter + '.log'), 'utf-8');
+              logsDir = path.join(__dirname, '..', 'fixtures', 'logs'),
+              content = fs.readFileSync(path.join(logsDir, appendBaseName + counter + '.log'), 'utf-8');
             // The content minus the 7 characters added by winston
             assert.lengthOf(content.match(new RegExp(name, 'g')), 4068);
           });
         }
       }
     }
-  }
-}).export(module);
+  };
+});
+
+vows.describe('winston/transports/file/maxfiles').addBatch(batch).export(module);

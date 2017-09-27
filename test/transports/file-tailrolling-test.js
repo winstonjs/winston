@@ -5,27 +5,35 @@ var assert = require('assert'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
 
-var maxfilesTransport = new winston.transports.File({
-  timestamp: false,
-  json: false,
-  filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testtailrollingfiles.log'),
-  maxsize: 4096,
-  maxFiles: 3,
-  tailable: true
-});
+var filenameParams = [
+  {basename: 'testtailrollingfiles', appendBaseName: 'testtailrollingfiles', desc: ''},
+  {basename: 'testtailrollingnumfiles0', appendBaseName: 'testtailrollingnumfiles0.', desc: ' with tailing-number file names'}
+];
 
-process.on('uncaughtException', function (err) {
-  console.log('caught exception');
-  console.error(err);
-});
+var batch = {};
+filenameParams.forEach(function(params) {
+  var basename = params.basename;
+  var appendBaseName = params.appendBaseName;
 
-vows.describe('winston/transports/file/tailrolling').addBatch({
-  "An instance of the File Transport": {
+  var maxfilesTransport = new winston.transports.File({
+    timestamp: false,
+    json: false,
+    filename: path.join(__dirname, '..', 'fixtures', 'logs', basename + '.log'),
+    maxsize: 4096,
+    maxFiles: 3,
+    tailable: true
+  });
+
+  process.on('uncaughtException', function (err) {
+    console.log('caught exception');
+    console.error(err);
+  });
+  batch["An instance of the File Transport" + params.desc] = {
     "when delete old test files": {
       topic: function () {
         var logs = path.join(__dirname, '..', 'fixtures', 'logs');
         fs.readdirSync(logs).forEach(function (file) {
-          if (~file.indexOf('testtailrollingfiles')) {
+          if (~file.indexOf(basename)) {
             fs.unlinkSync(path.join(logs, file));
           }
         });
@@ -35,11 +43,11 @@ vows.describe('winston/transports/file/tailrolling').addBatch({
       "and when passed more files than the maxFiles": {
         topic: function () {
           var that = this,
-              created = 0;
+            created = 0;
 
           function data(ch) {
             return new Array(1018).join(String.fromCharCode(65 + ch));
-          };
+          }
 
           function logKbytes(kbytes, txt) {
             //
@@ -65,7 +73,7 @@ vows.describe('winston/transports/file/tailrolling').addBatch({
         "should be 3 log files, base to maxFiles - 1": function () {
           var file, fullpath;
           for (var num = 0; num < 4; num++) {
-            file = !num ? 'testtailrollingfiles.log' : 'testtailrollingfiles' + num + '.log';
+            file = !num ? (basename  + '.log') : (appendBaseName + num + '.log');
             fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
 
             if (num == 3) {
@@ -78,9 +86,9 @@ vows.describe('winston/transports/file/tailrolling').addBatch({
           return false;
         },
         "should have files in correct order": function () {
-          var file, fullpath, content;
+          var file, content;
           ['D', 'C', 'B'].forEach(function (letter, i) {
-            file = !i ? 'testtailrollingfiles.log' : 'testtailrollingfiles' + i + '.log';
+            file = !i ? (basename + '.log') : (appendBaseName + i + '.log');
             content = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', file), 'ascii');
 
             assert.lengthOf(content.match(new RegExp(letter, 'g')), 4068);
@@ -88,5 +96,7 @@ vows.describe('winston/transports/file/tailrolling').addBatch({
         }
       }
     }
-  }
-}).export(module);
+  };
+});
+
+vows.describe('winston/transports/file/tailrolling').addBatch(batch).export(module);
