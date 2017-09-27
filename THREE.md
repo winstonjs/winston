@@ -15,6 +15,7 @@
   - [x] Code coverage tests above 90% for `winston-transport`.
   - [-] Code coverage tests above 90% for `logform` _(currently `~65%`)_.
   - [ ] Core scenarios covered in `abstract-winston-transport`.
+  - [x] Code coverage tests above 60% for `winston-compat`.
 
 ## Transports
 - [x] Implement `stream.Writable.writev` in `TransportStream`.
@@ -45,7 +46,6 @@
 - [ ] Update the `README.md` in `winston`.
 - [ ] Update examples in `docs/transports.md`.
 - [ ] README.md  for `winston-transport`.
-- [ ] 90%+ test coverage for `winston-transport`.
 - [ ] README.md / tests for `winston-compat`
 - [ ] Move core tests into `winston-compat`
 - [ ] 90%+ test coverage for `winston-compat`.
