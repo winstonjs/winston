@@ -1,3 +1,18 @@
+
+- **Rewrite of core logging internals:** `Logger` & `Transport` are now implemented using Node.js `objectMode` streams. 
+- **Your transports _should_ not break:** Special attention has been given to ensure backwards compatibility with existing transports. You will likely see this:
+```
+YourTransport is a legacy winston transport. Consider upgrading to winston@3: 
+- Upgrade docs: https://github.com/winstonjs/winston/tree/master/UPGRADE.md
+```
+- **`filters`, `rewriters`, and `common.log` are now _formats_:** `winston.format` offers a simple mechanism for user-land formatting & style features. The organic & frankly messy growth of `common.log` is of the past; these feature requests can be implemented entirely outside of `winston` itself.
+- **Increased modularity:** several subsystems are now stand-alone packages: 
+  - [logform] exposed as `winston.format`
+  - [winston-transport] exposed as `winston.Transport`
+  - [abstract-winston-transport] used for reusable unit test suites for transport authors.
+- **`2.x` branch will get little to no maintenance:** no feature requests will be accepted – only a limited number of open PRs will be merged. Hoping the [significant performance benefits][perf-bench] incentivizes folks to upgrade quickly. Don't agree? Say something!
+- **No guaranteed support for `node@4` or below:** all code will be migrated to ES6 over time. This release was started when ES5 was still a hard requirement due to the current LTS needs.
+
 ## v2.3.1 / 2017-01-20
 ### WELCOME TO THE APOCALYPSE EDITION
 
