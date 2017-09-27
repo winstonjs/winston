@@ -42,9 +42,9 @@ helpers.createLogger = function (write) {
  * @param {function} write Write function for the specified stream
  * @returns {stream.Writeable} A writeable stream instance
  */
-helpers.writeable = function (write) {
+helpers.writeable = function (write, objectMode) {
   return new stream.Writable({
-    objectMode: true,
+    objectMode: objectMode !== false,
     write: write
   });
 };
