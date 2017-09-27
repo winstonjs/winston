@@ -68,8 +68,12 @@ The default logger is accessible through the winston module directly. Any method
 By default, only the Console transport is set on the default logger. You can add or remove transports via the add() and remove() methods:
 
 ``` js
-  winston.add(winston.transports.File, { filename: 'somefile.log' });
-  winston.remove(winston.transports.Console);
+  const files = new winston.transports.File({ filename: 'im-a-logfile.log' });
+  const console = new winston.transports.Console();
+
+  winston.add(console);
+  winston.add(files);
+  winston.remove(console);
 ```
 
 Or do it with one call to configure():
@@ -109,9 +113,13 @@ You can work with this logger in the same way that you work with the default log
   // Adding / Removing Transports
   //   (Yes It's chainable)
   //
+  const files = new winston.transports.File({ filename: 'im-a-logfile.log' });
+  const console = new winston.transports.Console();
+
   logger
-    .add(winston.transports.File)
-    .remove(winston.transports.Console);
+    .add(console)
+    .add(files)
+    .remove(console);
 ```
 
 You can also wholesale reconfigure a `winston.Logger` instance using the `configure` method:
@@ -129,16 +137,18 @@ You can also wholesale reconfigure a `winston.Logger` instance using the `config
   // Replaces the previous transports with those in the
   // new configuration wholesale.
   //
+  const DailyRotateFile = require('winston-daily-rotate-file');
   logger.configure({
     level: 'verbose',
     transports: [
-      new (require('winston-daily-rotate-file'))(opts)
+      new DailyRotateFile(opts)
     ]
   });
 ```
 
 
 ### Logging with Metadata
+
 In addition to logging string messages, winston will also optionally log additional JSON metadata objects. Adding metadata is simple:
 
 ``` js
