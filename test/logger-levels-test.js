@@ -19,6 +19,19 @@ vows.describe('winston/logger/levels').addBatch({
         new (winston.transports.Console)()
       ]
     }),
+    "the log() method": {
+      "when passed an unrecognized log level": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('yo', 'mama', { goes_to_college: true })
+        },
+        "should log all arguments at the 'info' level": function (transport, level, msg, meta) {
+          assert.strictEqual(level, 'info');
+          assert.strictEqual(msg, 'yo mama');
+          assert.deepEqual(meta, { goes_to_college: true });
+        }
+      }
+    },
     "the info() method": {
       "when passed metadata": {
         topic: function (logger) {
