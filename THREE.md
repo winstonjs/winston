@@ -31,8 +31,8 @@
 - [x] `winston.format.uncolorize()` format.
 - [ ] `winston.format.padLevels()` format.
 - [x] `winston.format.logstash()` format.
-- [ ] `winston.format.cli()`
-- [ ] String interpolation _(i.e. splat)_ via format
+- [x] `winston.format.cli()`
+- [x] String interpolation _(i.e. splat)_ via format
 - [ ] `humanReadableUnhandledException` should be the default
 - [ ] Mutable levels via `displayLevel` (for `colorize`). 
 - [x] Use of different formats across multiple Transports. e.g.:
@@ -45,17 +45,16 @@
 - [x] Create `winston-compat` to help with backwards compatibility for transport authors.  
 - [ ] Update the `README.md` in `winston`.
 - [ ] Update examples in `docs/transports.md`.
-- [ ] README.md  for `winston-transport`.
-- [ ] README.md / tests for `winston-compat`
-- [ ] Move core tests into `winston-compat`
-- [ ] 90%+ test coverage for `winston-compat`.
+- [-] `README.md` for `winston-transport`.
+- [ ] `README.md` for `winston-compat`.
+- [-] `README.md` for `logform`.
 - [-] Migrate all `examples/*.js` to the new API.
 
 ## Querying, Streaming, Uncaught Exceptions
 
+- [x] Uncaught Exceptions
 - [-] Querying
 - [-] Streaming
-- [x] Uncaught Exceptions
 
 ## Other Miscellaneous API changes
 
