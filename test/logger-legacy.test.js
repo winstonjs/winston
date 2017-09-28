@@ -99,7 +99,6 @@ describe('Logger (legacy API)', function () {
     var meta = { one: 2 };
     var logger = helpers.createLogger(function (info) {
       assume(info).is.an('object');
-      assume(info).equals(meta);
       assume(info.level).equals('info');
       assume(info.message).equals('Some super awesome log message');
       assume(info.one).equals(2);
@@ -108,6 +107,43 @@ describe('Logger (legacy API)', function () {
     });
 
     logger.log('info', 'Some super awesome log message', meta);
+  });
+
+  it('log(level, formatStr, ...splat)', function (done) {
+    const format = winston.format.combine(
+      winston.format.splat(),
+      winston.format.printf(info => `${info.level}: ${info.message}`)
+    );
+
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.message).equals('100% such wow {"much":"javascript"}');
+      assume(info.splat).deep.equals([100, 'wow', { much: 'javascript' }]);
+      assume(info.raw).equals('info: 100% such wow {"much":"javascript"}');
+      done();
+    }, format);
+
+    logger.log('info', '%d%% such %s %j', 100, 'wow', { much: 'javascript' });
+  });
+
+  it('log(level, formatStr, ...splat, meta)', function (done) {
+    const format = winston.format.combine(
+      winston.format.splat(),
+      winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify(info.meta)}`)
+    );
+
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.message).equals('100% such wow {"much":"javascript"}');
+      assume(info.splat).deep.equals([100, 'wow', { much: 'javascript' }]);
+      assume(info.meta).deep.equals({ thisIsMeta: true });
+      assume(info.raw).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
+      done();
+    }, format);
+
+    logger.log('info', '%d%% such %s %j', 100, 'wow', { much: 'javascript' }, { thisIsMeta: true });
   });
 
   it('.cli() throws', function () {

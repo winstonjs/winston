@@ -24,13 +24,14 @@ var helpers = exports;
  * @param {function} write Write function for the specified stream
  * @returns {Logger} A winston.Logger instance
  */
-helpers.createLogger = function (write) {
+helpers.createLogger = function (write, format) {
   var writeable = new stream.Writable({
     objectMode: true,
     write: write
   });
 
   return winston.createLogger({
+    format,
     transports: [
       new winston.transports.Stream({ stream: writeable })
     ]
