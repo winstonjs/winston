@@ -8,7 +8,7 @@
 
 var winston = require('../../../lib/winston');
 
-var format = winston.format(
+var format = winston.format.combine(
   winston.format.colorize({ message: true }),
   winston.format.simple()
 );

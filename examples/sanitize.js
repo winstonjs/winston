@@ -10,7 +10,7 @@ const sanitize = winston.format(function (info, opts) {
 
 const logger = winston.createLogger({
   level: 'info',
-  format: winston.format(
+  format: winston.format.combine(
     sanitize({ env: process.env.NODE_ENV }),
     winston.format.json()
   ),
