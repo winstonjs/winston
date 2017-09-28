@@ -30,6 +30,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Newrelic](#newrelic-transport) (errors only)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
+  * [Cisco Spark](#cisco-spark-transport)
 
 ## Winston Core
 
@@ -549,6 +550,28 @@ Options:
 - Kibana4 integration
 - Integration with [SPM Performance Monitoring for Node.js](http://www.sematext.com/spm/integrations/nodejs-monitoring.html)
 
+### Cisco Spark Transport
+
+[winston-spark][29] is a transport for [Cisco Spark](https://www.ciscospark.com/)
+
+``` js
+  var winston = require('winston');
+  require('winston-spark');
+
+  var options = {
+    accessToken: '***Your Spark Access Token***',
+    roomId: '***Spark Room Id***'
+  };
+
+  winston.add(winston.transports.SparkLogger, options);
+```
+
+Valid Options are as the following:
+* __accessToken__ Your Spark Access Token. *[required]*
+* __roomId__ Spark Room Id. *[required]*
+* __level__ Log Level (default: info)
+* __hideMeta__ Hide MetaData (default: false)
+
 ## Find more Transports
 
 ``` bash
@@ -612,3 +635,4 @@ Options:
 [26]: https://github.com/lazywithclass/winston-cloudwatch
 [27]: https://github.com/kenperkins/winston-papertrail
 [28]: https://github.com/pkallos/winston-firehose
+[29]: https://github.com/joelee/winston-spark
