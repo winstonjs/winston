@@ -30,8 +30,15 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 for (let i = 0; i < 100; i++) {
+  if (!(i % 5)) {
+    logger.error({
+      message: 'Error number: ' + (i % 5),
+      creditCard: i
+    });
+  }
+
   logger.info({
     message: 'Some reasonable message',
     creditCard: i
-  })
+  });
 }
