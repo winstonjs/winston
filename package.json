@@ -24,6 +24,7 @@
     "logform": "^1.0.0",
     "one-time": "0.0.4",
     "stack-trace": "0.0.x",
+    "triple-beam": "^1.0.0",
     "winston-transport": "^2.0.0"
   },
   "devDependencies": {
