@@ -18,7 +18,7 @@ describe('Profiler', function () {
 
   it('.done({ info })', function (done) {
     var profiler = new Profiler({
-      log: function (info) {
+      write: function (info) {
         assume(info).is.an('object'),
         assume(info.something).equals('ok');
         assume(info.level).equals('info');

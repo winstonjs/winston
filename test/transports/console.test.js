@@ -8,11 +8,12 @@
  *
  */
 
-var path = require('path'),
-    assume = require('assume'),
-    winston = require('../../lib/winston'),
-    helpers = require('../helpers'),
-    stdMocks = require('std-mocks');
+const path = require('path');
+const assume = require('assume');
+const { LEVEL } = require('triple-beam');
+const winston = require('../../lib/winston');
+const helpers = require('../helpers');
+const stdMocks = require('std-mocks');
 
 const defaultLevels = winston.config.npm.levels;
 const transports = {
@@ -61,6 +62,7 @@ describe('Console transport', function () {
       Object.keys(defaultLevels)
         .forEach(function (level) {
           const info = {
+            [LEVEL]: level,
             message: `This is level ${level}`,
             level
           };
