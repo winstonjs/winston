@@ -29,15 +29,16 @@
 - [x] `winston.format.colorize()` format.
 - [x] `winston.format.prettyPrint()` format.
 - [x] `winston.format.uncolorize()` format.
-- [ ] `winston.format.padLevels()` format.
 - [x] `winston.format.logstash()` format.
 - [x] `winston.format.cli()`
 - [x] String interpolation _(i.e. splat)_ via format
-- [ ] `humanReadableUnhandledException` should be the default
-- [ ] Mutable levels via `displayLevel` (for `colorize`). 
 - [x] Use of different formats across multiple Transports. e.g.:
-  - Colors on `Console`
-  - Not on `File`
+   - Colors on `Console`
+   - Not on `File`
+- [-] Mutable levels on `info` objects via `triple-beam` and `LEVEL` Symbol.
+   - Needed for `winston.formats.colorize()`. 
+- [ ] `winston.format.padLevels()` format.
+- [ ] `humanReadableUnhandledException` should be the default
 
 ## Communications / Compatibility
 
