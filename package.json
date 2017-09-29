@@ -24,11 +24,11 @@
     "logform": "^1.0.0",
     "one-time": "0.0.4",
     "stack-trace": "0.0.x",
-    "triple-beam": "^1.0.0",
-    "winston-transport": "^2.0.0"
+    "triple-beam": "^1.0.1",
+    "winston-transport": "^3.0.0"
   },
   "devDependencies": {
-    "abstract-winston-transport": "*",
+    "abstract-winston-transport": ">= 0.3.0",
     "assume": "^1.2.5",
     "colors": "~1.1.2",
     "common-style": "^3.1.0",
