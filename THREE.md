@@ -38,6 +38,7 @@
 - [x] Mutable levels on `info` objects 
     – Use `triple-beam` and `Symbol.for('level')`.
    - Needed for `winston.formats.colorize()`. 
+- [ ] Quieter finalized output using `Symbol.for('message')` 
 - [ ] `winston.format.padLevels()` format.
 - [ ] `humanReadableUnhandledException` should be the default
 
