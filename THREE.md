@@ -35,7 +35,8 @@
 - [x] Use of different formats across multiple Transports. e.g.:
    - Colors on `Console`
    - Not on `File`
-- [-] Mutable levels on `info` objects via `triple-beam` and `LEVEL` Symbol.
+- [x] Mutable levels on `info` objects 
+    – Use `triple-beam` and `Symbol.for('level')`.
    - Needed for `winston.formats.colorize()`. 
 - [ ] `winston.format.padLevels()` format.
 - [ ] `humanReadableUnhandledException` should be the default
@@ -48,7 +49,7 @@
 - [ ] Update examples in `docs/transports.md`.
 - [-] `README.md` for `winston-transport`.
 - [ ] `README.md` for `winston-compat`.
-- [-] `README.md` for `logform`.
+- [x] `README.md` for `logform`.
 - [-] Migrate all `examples/*.js` to the new API.
 
 ## Querying, Streaming, Uncaught Exceptions
