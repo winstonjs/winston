@@ -8,16 +8,17 @@
 
 'use strict';
 
-var assume = require('assume'),
-    path = require('path'),
-    stream = require('stream'),
-    util = require('util'),
-    isStream = require('isstream'),
-    stdMocks = require('std-mocks'),
-    winston = require('../lib/winston'),
-    LegacyTransport = require('./helpers/mocks/legacy-transport'),
-    TransportStream = require('winston-transport'),
-    helpers = require('./helpers');
+const assume = require('assume');
+const path = require('path');
+const stream = require('stream');
+const util = require('util');
+const isStream = require('isstream');
+const stdMocks = require('std-mocks');
+const { MESSAGE } = require('triple-beam');
+const winston = require('../lib/winston');
+const LegacyTransport = require('./helpers/mocks/legacy-transport');
+const TransportStream = require('winston-transport');
+const helpers = require('./helpers');
 
 describe('Logger (legacy API)', function () {
   it('new Logger({ DEPRECATED })', function () {
@@ -88,7 +89,7 @@ describe('Logger (legacy API)', function () {
       assume(info).is.an('object');
       assume(info.level).equals('info');
       assume(info.message).equals('Some super awesome log message');
-      assume(info.raw).is.a('string');
+      assume(info[MESSAGE]).is.a('string');
       done();
     });
 
@@ -102,7 +103,7 @@ describe('Logger (legacy API)', function () {
       assume(info.level).equals('info');
       assume(info.message).equals('Some super awesome log message');
       assume(info.one).equals(2);
-      assume(info.raw).is.a('string');
+      assume(info[MESSAGE]).is.a('string');
       done();
     });
 
@@ -120,7 +121,7 @@ describe('Logger (legacy API)', function () {
       assume(info.level).equals('info');
       assume(info.message).equals('100% such wow {"much":"javascript"}');
       assume(info.splat).deep.equals([100, 'wow', { much: 'javascript' }]);
-      assume(info.raw).equals('info: 100% such wow {"much":"javascript"}');
+      assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"}');
       done();
     }, format);
 
@@ -139,7 +140,7 @@ describe('Logger (legacy API)', function () {
       assume(info.message).equals('100% such wow {"much":"javascript"}');
       assume(info.splat).deep.equals([100, 'wow', { much: 'javascript' }]);
       assume(info.meta).deep.equals({ thisIsMeta: true });
-      assume(info.raw).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
+      assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
       done();
     }, format);
 
