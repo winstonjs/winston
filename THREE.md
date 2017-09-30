@@ -13,8 +13,8 @@
   - [-] `test/transports/*-test.js` 
 - [ ] Code coverage tests above 80% for `winston` _(currently `~72%`)_.
   - [x] Code coverage tests above 90% for `winston-transport`.
-  - [-] Code coverage tests above 90% for `logform` _(currently `~65%`)_.
-  - [ ] Core scenarios covered in `abstract-winston-transport`.
+  - [x] Code coverage tests above 90% for `logform`
+  - [-] Core scenarios covered in `abstract-winston-transport`.
   - [x] Code coverage tests above 60% for `winston-compat`.
 
 ## Transports
@@ -36,9 +36,10 @@
    - Colors on `Console`
    - Not on `File`
 - [x] Mutable levels on `info` objects 
-    – Use `triple-beam` and `Symbol.for('level')`.
+   – Use `triple-beam` and `Symbol.for('level')`.
    - Needed for `winston.formats.colorize()`. 
-- [ ] Quieter finalized output using `Symbol.for('message')` 
+- [x] Quieter finalized output using `Symbol.for('message')` 
+- [x] Filtering messages completely in a format.
 - [ ] `winston.format.padLevels()` format.
 - [ ] `humanReadableUnhandledException` should be the default
 
