@@ -1,10 +1,10 @@
 'use strict';
 
-var path = require('path'),
-    writeable = require('../helpers').writeable,
-    winston = require('../../'),
-    split = require('split2'),
-    assume = require('assume');
+const path = require('path');
+const writeable = require('../helpers').writeable;
+const winston = require('../../');
+const split = require('split2');
+const assume = require('assume');
 
 describe('Stream({ stream })', function () {
   it('should support objectMode streams', function (done) {
