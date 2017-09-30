@@ -223,7 +223,7 @@ describe('Logger (levels)', function () {
 
           assume(obj.message).equals('foo');
           assume(obj.level).equals('info');
-          assume(obj.raw).equals(JSON.stringify({ message: 'foo', level: 'info' }));
+          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'info' }));
           done();
         }
       });
@@ -258,7 +258,7 @@ describe('Logger (levels)', function () {
 
           assume(obj.message).equals('foo');
           assume(obj.level).equals('test');
-          assume(obj.raw).equals(JSON.stringify({ message: 'foo', level: 'test' }));
+          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'test' }));
           done();
         }
       });

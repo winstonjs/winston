@@ -19,8 +19,9 @@ describe('File({ filename })', function () {
       filename: filename
     });
 
-    var info = { raw: 'this is my log message' };
-    var logged;
+    var info = { [MESSAGE]: 'this is my log message' };
+    var logged = 0;
+    var read = 0
 
     function cleanup() {
       fs.unlinkSync(filename);
@@ -36,7 +37,7 @@ describe('File({ filename })', function () {
         })
         .pipe(split())
         .on('data', function (d) {
-          assume(logged).true();
+          assume(++read).lte(logged);
           assume(d).to.equal(info[MESSAGE]);
         })
         .on('end', function () {
@@ -46,7 +47,7 @@ describe('File({ filename })', function () {
     });
 
     transport.once('logged', function () {
-      logged = true;
+      logged++;
     });
   });
 
@@ -113,5 +114,9 @@ require('abstract-winston-transport')({
   Transport: winston.transports.File,
   construct: {
     filename: path.join(__dirname, '..', 'fixtures', 'file', 'abstract.log')
+  },
+  after(opts, done) {
+    const abstractFile = opts.construct.filename;
+    fs.unlink(abstractFile, done.bind(null, null));
   }
 });

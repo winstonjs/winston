@@ -121,7 +121,7 @@ describe('Console transport', function () {
 
   it('{ eol } adds a custom EOL delimiter', function (done) {
     stdMocks.use();
-    transports.eol.log({ raw: 'info: testing. 1 2 3...' }, function () {
+    transports.eol.log({ [MESSAGE]: 'info: testing. 1 2 3...' }, function () {
       stdMocks.restore();
 
       var output = stdMocks.flush(),

@@ -2,6 +2,7 @@
 
 const path = require('path');
 const writeable = require('../helpers').writeable;
+const { MESSAGE } = require('triple-beam');
 const winston = require('../../');
 const split = require('split2');
 const assume = require('assume');
@@ -26,11 +27,11 @@ describe('Stream({ stream })', function () {
     const expected = {
       level: 'info',
       message: 'lolwut testing!',
-      raw: 'info: lolwut testing!'
+      [MESSAGE]: 'info: lolwut testing!'
     };
 
     const stream = writeable(function (raw) {
-      assume(raw.toString()).equals(expected.raw);
+      assume(raw.toString()).equals(expected[MESSAGE]);
       done();
     }, false);
 
