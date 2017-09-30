@@ -8,16 +8,17 @@
 
 'use strict';
 
-var assume = require('assume'),
-    path = require('path'),
-    stream = require('stream'),
-    util = require('util'),
-    isStream = require('isstream'),
-    stdMocks = require('std-mocks'),
-    winston = require('../lib/winston'),
-    TransportStream = require('winston-transport'),
-    format = require('../lib/winston').format,
-    helpers = require('./helpers');
+const assume = require('assume');
+const path = require('path');
+const stream = require('stream');
+const util = require('util');
+const isStream = require('isstream');
+const stdMocks = require('std-mocks');
+const { MESSAGE } = require('triple-beam');
+const winston = require('../lib/winston');
+const TransportStream = require('winston-transport');
+const format = require('../lib/winston').format;
+const helpers = require('./helpers');
 
 describe('Logger', function () {
   it('new Logger()', function () {
@@ -60,7 +61,7 @@ describe('Logger', function () {
       log: function (info) {
         assume(info.message).equals('foo');
         assume(info.level).equals('info');
-        assume(info.raw).equals(JSON.stringify({ message: 'foo', level: 'info' }));
+        assume(info[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'info' }));
         done();
       }
     });
@@ -282,7 +283,7 @@ describe('Logger (profile, startTimer)', function (done) {
       assume(info.level).equals('info');
       assume(info.durationMs).is.a('number');
       assume(info.message).equals('testing1');
-      assume(info.raw).is.a('string');
+      assume(info[MESSAGE]).is.a('string');
       done();
     });
 
@@ -302,7 +303,7 @@ describe('Logger (profile, startTimer)', function (done) {
       assume(info.level).equals('info');
       assume(info.durationMs).is.a('number');
       assume(info.message).equals('testing2');
-      assume(info.raw).is.a('string');
+      assume(info[MESSAGE]).is.a('string');
       done();
     });
 
@@ -325,7 +326,7 @@ describe('Logger (profile, startTimer)', function (done) {
       assume(info.level).equals('info');
       assume(info.durationMs).is.a('number');
       assume(info.message).equals('testing1');
-      assume(info.raw).is.a('string');
+      assume(info[MESSAGE]).is.a('string');
       done();
     });
 

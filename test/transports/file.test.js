@@ -1,11 +1,12 @@
 'use strict';
 
-var path = require('path'),
-    winston = require('../../'),
-    helpers = require('../helpers'),
-    fs = require('fs'),
-    split = require('split2'),
-    assume = require('assume');
+const path = require('path');
+const winston = require('../../');
+const helpers = require('../helpers');
+const fs = require('fs');
+const { MESSAGE } = require('triple-beam');
+const split = require('split2');
+const assume = require('assume');
 
 function noop() {};
 
@@ -36,7 +37,7 @@ describe('File({ filename })', function () {
         .pipe(split())
         .on('data', function (d) {
           assume(logged).true();
-          assume(d).to.equal(info.raw);
+          assume(d).to.equal(info[MESSAGE]);
         })
         .on('end', function () {
           cleanup();

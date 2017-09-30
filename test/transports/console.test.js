@@ -10,7 +10,7 @@
 
 const path = require('path');
 const assume = require('assume');
-const { LEVEL } = require('triple-beam');
+const { LEVEL, MESSAGE } = require('triple-beam');
 const winston = require('../../lib/winston');
 const helpers = require('../helpers');
 const stdMocks = require('std-mocks');
@@ -67,7 +67,7 @@ describe('Console transport', function () {
             level
           };
 
-          info.raw = JSON.stringify(info);
+          info[MESSAGE] = JSON.stringify(info);
           transports.defaults.log(info);
         });
 
