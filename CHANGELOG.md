@@ -6,6 +6,7 @@ YourTransport is a legacy winston transport. Consider upgrading to winston@3:
 - Upgrade docs: https://github.com/winstonjs/winston/tree/master/UPGRADE.md
 ```
 - **`filters`, `rewriters`, and `common.log` are now _formats_:** `winston.format` offers a simple mechanism for user-land formatting & style features. The organic & frankly messy growth of `common.log` is of the past; these feature requests can be implemented entirely outside of `winston` itself.
+- **`syslog` are now the default levels:** RFC524 for the win.
 - **Increased modularity:** several subsystems are now stand-alone packages: 
   - [logform] exposed as `winston.format`
   - [winston-transport] exposed as `winston.Transport`
