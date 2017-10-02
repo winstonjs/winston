@@ -675,7 +675,7 @@ winston.exceptions.handle(
 // get more readable exceptions.
 //
 winston.add(new winston.transports.File({
-  filename: 'path/to/all-logs.log',
+  filename: 'path/to/combined.log',
   handleExceptions: true
 }));
 ```
@@ -703,7 +703,7 @@ transport.
 ``` js
 const logger = winston.createLogger({
   transports: [
-    new winston.transports.File({ filename: 'path/to/all-logs.log' })
+    new winston.transports.File({ filename: 'path/to/combined.log' })
   ],
   exceptionHandlers: [
     new winston.transports.File({ filename: 'path/to/exceptions.log' })
@@ -836,14 +836,13 @@ winston.level = 'debug';
 winston.log('debug', 'Now my debug messages are written to console!');
 ```
 
-By default, only the `Console` transport is set on the default logger. You can
-add or remove transports via the add() and remove() methods:
+By default, no transports are set on the default logger. You must
+add or remove transports via the `add()` and `remove()` methods:
 
 ``` js
-const files = new winston.transports.File({ filename: 'im-a-logfile.log' });
+const files = new winston.transports.File({ filename: 'combined.log' });
 const console = new winston.transports.Console();
 
-// TDX: this will not work by default
 winston.add(console);
 winston.add(files);
 winston.remove(console);
