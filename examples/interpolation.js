@@ -1,3 +1,5 @@
+'use strict';
+
 const { createLogger, format, transports } = require('../');
 const logger = createLogger({
   format: format.combine(

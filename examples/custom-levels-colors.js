@@ -1,16 +1,11 @@
-/*
- * custom-levels.js: Custom logger and color levels in winston
- *
- * (C) 2012, Nodejitsu Inc.
- *
- */
+'use strict';
 
-var winston = require('../lib/winston');
+const winston = require('../lib/winston');
 
 //
 // Logging levels
 //
-var config = {
+const config = {
   levels: {
     error: 0,
     debug: 1,
@@ -31,14 +26,15 @@ var config = {
   }
 };
 
-var logger = module.exports = winston.createLogger({
-  transports: [
-    new winston.transports.Console({
-      colorize: true
-    })
-  ],
+const logger = module.exports = winston.createLogger({
   levels: config.levels,
-  colors: config.colors
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.simple()
+  ),
+  transports: [
+    new winston.transports.Console()
+  ]
 });
 
 logger.data('hello')

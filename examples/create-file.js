@@ -1,9 +1,10 @@
+'use strict';
 
-var fs = require('fs'),
-    path = require('path'),
-    winston = require('../lib/winston');
+const fs = require('fs');
+const path = require('path');
+const winston = require('../lib/winston');
 
-var filename = path.join(__dirname, 'created-logfile.log');
+const filename = path.join(__dirname, 'created-logfile.log');
 
 //
 // Remove the file, ignoring any errors
@@ -15,10 +16,10 @@ catch (ex) { }
 // Create a new winston logger instance with two tranports: Console, and File
 //
 //
-var logger = winston.createLogger({
+const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: filename })
+    new winston.transports.File({ filename })
   ]
 });
 
