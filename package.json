@@ -1,7 +1,7 @@
 {
   "name": "winston2x",
-  "description": "winston@2.1.1 for historical benchmarking purposes",
-  "version": "2.1.1",
+  "description": "winston@2.4.0 for historical benchmarking purposes",
+  "version": "2.4.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "Jarrett Cruger <jcrugzz@gmail.com>",
