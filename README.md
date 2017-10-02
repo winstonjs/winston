@@ -60,8 +60,8 @@ logger to use throughout your application if you so choose.
 ## Table of contents
 
 * [Logging](#logging)
-  * [Creating your logger](#instantiating-your-own-logger)
-  * [Streams, `objectMode`, and info` objects](#streams-objectMode-and-info-objects)
+  * [Creating your logger](#creating-your-own-logger)
+  * [Streams, `objectMode`, and info` objects](#streams-objectmode-and-info-objects)
 * [Formats](#formats)
   * [Combining formats](#combining-formats)
   * [String interpolation](#string-interpolation)
@@ -205,7 +205,7 @@ object represents a single log message. The object itself is mutable. Every
 As a consumer you may add whatever properties you wish – _internal state is
 maintained by `Symbol` properties:_
 
-- `Symbol.for('level')` _**(READ-ONLY)**:_equal to `level` property. Is 
+- `Symbol.for('level')` _**(READ-ONLY)**:_ equal to `level` property. Is 
 treated as immutable by all code.  
 - `Symbol.for('message'):` complete string message set by "finalizing 
 formats": `json`, `logstash`, `printf`, `prettyPrint`, and `simple`. 
@@ -529,16 +529,20 @@ colors, in addition to passing the levels to the Logger itself, you must make
 winston aware of them:
 
 ``` js
-  //
-  // Make winston aware of these colors
-  //
-  winston.addColors(myCustomLevels.colors);
+//
+// TDX: THIS HAS TO BE UPDATED
+//
+winston.addColors(myCustomLevels.colors);
 ```
 
 This enables transports with the 'colorize' option set to appropriately color
 the output of custom levels.
 
 ## Transports
+
+There are several [core transports] included in  `winston`, which leverage the
+built-in networking and file I/O offered by Node.js core. In addition, there
+are [additional transports] written by members of the community.
 
 ## Multiple transports of the same type
 
@@ -582,7 +586,7 @@ const util = require('util');
 
 //
 // Inherit from `winston-transport` so you can take advantage
-// of the base functionality and `.handleExceptions()`.
+// of the base functionality and `.exceptions.handle()`.
 //
 module.exports = class YourCustomTransport extends Transport {
   constructor(opts) {
@@ -689,17 +693,43 @@ winston.stream({ start: -1 }).on('log', function(log) {
 ### Handling Uncaught Exceptions with winston
 
 With `winston`, it is possible to catch and log `uncaughtException` events
-from your process. There are two distinct ways of enabling this functionality
-either through the default winston logger or your own logger instance.
+from your process. With your own logger instance you can enable this behavior
+when it's created or later on in your applications lifecycle:
+
+``` js
+const { createLogger, transports } = require('winston');
+
+// Enable exception handling when you create your logger.
+const logger = winston.createLogger({
+  transports: [
+    new transports.File({ filename: 'combined.log' }) 
+  ],
+  exceptionHandlers: [
+    new transports.File({ filename: 'exceptions.log' })
+  ]
+});
+
+// Or enable it later on by adding a transport or using `.exceptions.handle`
+const logger = winston.createLogger({
+  transports: [
+    new transports.File({ filename: 'combined.log' }) 
+  ]
+});
+
+// Call exceptions.handle with a transport to handle exceptions
+logger.exceptions.handle(
+  new transports.File({ filename: 'exceptions.log' })
+);
+```
 
 If you want to use this feature with the default logger, simply call
-`.handleExceptions()` with a transport instance.
+`.exceptions.handle()` with a transport instance.
 
 ``` js
 //
 // You can add a separate exception logger by passing it to `.handleExceptions`
 //
-winston.handleExceptions(
+winston.exceptions.handle(
   new winston.transports.File({ filename: 'path/to/exceptions.log' })
 );
 
@@ -712,11 +742,6 @@ winston.add(new winston.transports.File({
   filename: 'path/to/all-logs.log',
   handleExceptions: true
 }));
-
-//
-// Exceptions can also be handled by multiple transports.
-//
-winston.handleExceptions([ transport1, transport2, ... ]);
 ```
 
 ### To Exit or Not to Exit
@@ -734,7 +759,7 @@ logger.exitOnError = false;
 ```
 
 When working with custom logger instances, you can pass in separate transports
-to the `exceptionHandlers` property or set `.handleExceptions` on any
+to the `exceptionHandlers` property or set `handleExceptions` on any
 transport.
 
 ##### Example 1
@@ -756,8 +781,7 @@ const logger = winston.createLogger({
 const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
-      handleExceptions: true,
-      json: true
+      handleExceptions: true
     })
   ],
   exitOnError: false
@@ -858,16 +882,6 @@ logger.on('error', function (err) { /* Do Something */ });
 logger.emitErrs = false;
 ```
 
-Every logging method described in the previous section also takes an optional
-callback which will be called only when all of the transports have logged the
-specified message.
-
-``` js
-logger.info('CHILL WINSTON!', { seriously: true }, function (err, level, msg, meta) {
-  // [msg] and [meta] have now been logged at [level] to **every** transport.
-});
-```
-
 ### Working with multiple Loggers in winston
 
 Often in larger, more complex, applications it is necessary to have multiple
@@ -960,6 +974,8 @@ npm test
 [Transports]: #transports
 [Logging levels]: #logging-levels
 [Formats]: #formats
+[core transports]: docs/transports.md#winston-core
+[additional transports]: docs/transports.md#additional-transports
 
 [RFC5424]: https://tools.ietf.org/html/rfc5424
 [EventEmitter]: https://nodejs.org/dist/latest/docs/api/events.html#events_class_eventemitter
