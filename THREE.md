@@ -1,6 +1,7 @@
 # winston@3 remaining items
 
 ## Core logging
+- [ ] Make `Logger.prototype.level` a setter to set level on transports.
 - [x] Remove `new winston.Logger` in favor of `winston.createLogger`.
 - [x] Finish implementation for `TransportStream` and `LegacyTransportStream`. 
 - [x] Move `TransportStream` and `LegacyTransportStream` into `winston-transport`.
@@ -50,12 +51,12 @@
 
 - [x] Add friendly(ish) deprecation notices for common changes.
 - [x] Create `winston-compat` to help with backwards compatibility for transport authors.  
-- [ ] Update the `README.md` in `winston`.
+- [x] Update the `README.md` in `winston`.
 - [ ] Update examples in `docs/transports.md`.
 - [x] `README.md` for `winston-transport`.
 - [ ] `README.md` for `winston-compat`.
 - [x] `README.md` for `logform`.
-- [-] Migrate all `examples/*.js` to the new API.
+- [x] Migrate all `examples/*.js` to the new API.
 
 ## Querying, Streaming, Uncaught Exceptions
 
