@@ -61,10 +61,12 @@ logger to use throughout your application if you so choose.
 
 * [Logging](#logging)
   * [Creating your logger](#instantiating-your-own-logger)
-  * [Object-streams and `logform`](#object-streams-and-logform)
+  * [Streams, `objectMode`, and info` objects](#streams-objectMode-and-info-objects)
 * [Formats](#formats)
-  * [Logging with metadata](#logging-with-metadata)
+  * [Combining formats](#combining-formats)
   * [String interpolation](#string-interpolation)
+  * [Filtering `info` Objects](#filtering-info-objects)
+  * [Creating custom formats](#creating-custom-formats)
 * [Logging Levels](#logging-levels)
   * [Using logging levels](#using-logging-levels)
   * [Using custom logging levels](#using-custom-logging-levels)
@@ -180,39 +182,207 @@ logger.configure({
 });
 ```
 
-### Object-streams and `logform`
+### Streams, `objectMode`, and info` objects
 
+In `winston`, both `Logger` and `Transport` instances are treated as
+`objectMode` streams that accept a specialized `info` object. The `info`
+object represents a single log message. The object itself is mutable. Every
+`info` must have at least the `level` and `message` properties:
 
+``` js
+{
+  level: 'info',                 // Level of the logging message  
+  message: 'Hey! Log something?' // Descriptive message being logged.
+}
+```
+
+`winston.format` itself exposes several additional properties:
+
+- `splat`: string interpolation splat for `%d %s`-style messages.
+- `timestamp`: timestamp the message was received.
+- `label`: custom label associated with each message.
+
+As a consumer you may add whatever properties you wish – _internal state is
+maintained by `Symbol` properties:_
+
+- `Symbol.for('level')` _**(READ-ONLY)**:_equal to `level` property. Is 
+treated as immutable by all code.  
+- `Symbol.for('message'):` complete string message set by "finalizing 
+formats": `json`, `logstash`, `printf`, `prettyPrint`, and `simple`. 
 
 ## Formats
 
+Formats in `winston` can be accessed from `winston.format`. They are
+implemented in, `logform`, a separate module from `winston`. This allows
+flexibility when writing your own transports in case you wish to include a
+default format with your transport.
+
+### Combining formats
+
+Any number of formats may be combined into a single format using
+`format.combine`. Since `format.combine` takes no `opts`, as a convenience it
+returns pre-created instance of the combined format.
+
+``` js
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, prettyPrint } = format;
+
+const logger = createLogger({
+  combine(
+    label({ label: 'right meow!' }),
+    timestamp(),
+    prettyPrint()
+  ),
+  transports: [new transports.Console()]
+})
+
+logger.log({
+  level: 'info',
+  message: 'What time is the testing at?'
+});
+// Outputs:
+// { level: 'info',
+//   message: 'What time is the testing at?',
+//   label: 'right meow!',
+//   timestamp: '2017-09-30T03:57:26.875Z' }
+```
+
 ### String interpolation
 
-The `log` method provides the same string interpolation methods like [util.format].
+The `log` method provides the string interpolation using [util.format]. **It
+must be enabled using `format.splat`.**
 
-This allows for the following log messages.
+Below is an example that defines a format with string interpolation of
+messages using `format.splat` and then serializes the entire `info` message
+using `format.simple`.
+
 ``` js
+const { createLogger, format, transports } = require('winston');
+const logger = createLogger({
+  format: format.combine(
+    format.splat(),
+    format.simple()
+  ),
+  transports: [new transports.Console()]
+});
+
+// info: test message my string {}
 logger.log('info', 'test message %s', 'my string');
-// {
-//   level: 'info'
-//   message: 'test message %s',
-//   splat: ['my string']
-// } 
 
+// info: test message my 123 {}
 logger.log('info', 'test message %d', 123);
-// {
-//   level: 'info'
-//   message: 'test message %s',
-//   splat: ['123']
-// } 
 
+// info: test message first second {number: 123}
 logger.log('info', 'test message %s, %s', 'first', 'second', { number: 123 });
+```
+
+### Filtering `info` Objects
+
+If you wish to filter out a given `info` Object completely when logging then 
+simply return a falsey value.
+
+``` js
+const { createLogger, format, transports } = require('winston');
+
+// Ignore log messages if the have { private: true }
+const ignorePrivate = format((info, opts) => {
+  if (info.private) { return false; }
+  return info;
+});
+
+const logger = createLogger({
+  format: format.combine(
+    ignorePrivate(),
+    format.json()
+  ),
+  transports: [new transports.Console()]
+});
+
+// Outputs: {"level":"error","message":"Public error to share"}
+logger.log({
+  level: 'error',
+  message: 'Public error to share'
+});
+
+// Messages with { private: true } will not be written when logged.
+logger.log({
+  private: true,
+  level: 'error',
+  message: 'This is super secret - hide it.'
+});
+```
+
+Use of `format.combine` will respect any falsey values return and stop
+evaluation of later formats in the series. For example:
+
+``` js
+const { format } = require('winston');
+const { combine, timestamp, label } = format;
+
+const willNeverThrow = format.combine(
+  format(info => { return false })(), // Ignores everything
+  format(info => { throw new Error('Never reached') })()
+);
+```
+
+### Creating custom formats
+
+Formats are prototypal objects (i.e. class instances) that define a single 
+method: `transform(info, opts)` and return the mutated `info`:
+
+- `info`: an object representing the log message.
+- `opts`: setting specific to the current instance of the format.
+
+They are expected to return one of two things:
+
+- **An `info` Object** representing the modified `info` argument. Object 
+references need not be preserved if immutability is preferred. All current 
+built-in formats consider `info` mutable, but [immutablejs] is being 
+considered for future releases.
+- **A falsey value** indicating that the `info` argument should be ignored by the 
+caller. (See: [Filtering `info` Objects](#filtering-info-objects)) below.
+
+`winston.format` is designed to be as simple as possible. To define a new
+format simple pass it a `transform(info, opts)` function to get a new
+`Format`.
+
+The named `Format` returned can be used to create as many copies of the given
+`Format` as desired:
+
+``` js
+const { format } = require('winston');
+
+const volume = format((info, opts) => {
+  if (opts.yell) {
+    info.message = info.message.toUpperCase();
+  } else if (opts.whisper) {
+    info.message = info.message.toLowerCase();
+  }
+
+  return info;
+});
+
+// `volume` is now a function that returns instances of the format.
+const scream = volume({ yell: true });
+console.dir(scream.transform({
+  level: 'info',
+  message: `sorry for making you YELL in your head!`
+}, scream.options));
 // {
 //   level: 'info'
-//   message: 'test message %s %s',
-//   splat: ['first', 'second']
-//   number: 123
-// } 
+//   message: 'SORRY FOR MAKING YOU YELL IN YOUR HEAD!'
+// }
+
+// `volume` can be used multiple times to create different formats.
+const whisper = volume({ whisper: true });
+console.dir(whisper.transform({
+  level: 'info',
+  message: `WHY ARE THEY MAKING US YELL SO MUCH!`
+}), whisper.options);
+// {
+//   level: 'info'
+//   message: 'why are they making us yell so much!'
+// }
 ```
 
 ## Logging Levels
@@ -776,7 +946,9 @@ yarn add winston
 ```
 
 ## Run Tests
-All of the winston tests are written with `mocha`, `nyc`, and `assume`. They can be run with `npm`.
+
+All of the winston tests are written with `mocha`, `nyc`, and `assume`.  They
+can be run with `npm`.
 
 ``` bash
 npm test
