@@ -83,7 +83,6 @@ logger to use throughout your application if you so choose.
   * [Using the default logger](#using-the-default-logger)
   * [Events and Callbacks in `winston`](#events-and-callbacks-in-winston)
   * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
-  * [Using winston in a CLI tool](#using-winston-in-a-cli-tool)
 * [Installation](#installation)
 * [Run Tests](#run-tests)
 
