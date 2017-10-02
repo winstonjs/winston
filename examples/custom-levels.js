@@ -1,44 +1,21 @@
-/*
- * custom-levels.js: Custom logger and color levels in winston
- *
- * (C) 2012, Nodejitsu Inc.
- *
- */
-
 var winston = require('../lib/winston');
 
-//
-// Logging levels
-//
-var config = {
-  levels: {
-    error: 0,
-    debug: 1,
-    warn: 2,
-    data: 3,
-    info: 4,
-    verbose: 5,
-    silly: 6
-  },
-  colors: {
-    error: 'red',
-    debug: 'blue',
-    warn: 'yellow',
-    data: 'grey',
-    info: 'green',
-    verbose: 'cyan',
-    silly: 'magenta'
-  }
+var myCustomLevels = {
+    levels: {
+        foo: 0,
+        bar: 1,
+        baz: 2,
+        foobar: 3
+    },
+    colors: {
+        foo: 'blue',
+        bar: 'green',
+        baz: 'yellow',
+        foobar: 'red'
+    }
 };
 
-var logger = module.exports = winston.createLogger({
-  transports: [
-    new winston.transports.Console({
-      colorize: true
-    })
-  ],
-  levels: config.levels,
-  colors: config.colors
-});
-
-logger.data('hello')
+var customLevelLogger = winston.createLogger({ levels: myCustomLevels.levels });
+customLevelLogger.foobar('some foobar level-ed message');
+customLevelLogger.foobar('some foobar level-ed message');
+customLevelLogger.foobar('some foobar level-ed message');
