@@ -93,16 +93,14 @@ Logging levels in `winston` conform to the severity ordering specified by
 from most important to least important._
 
 ``` js
-const levels = {
-  emerg: 0,
-  alert: 1,
-  crit: 2,
-  error: 3,
-  warning: 4,
-  notice: 5,
-  info: 6,
-  debug: 7
-};
+const levels = { 
+  error: 0, 
+  warn: 1, 
+  info: 2, 
+  verbose: 3, 
+  debug: 4, 
+  silly: 5 
+}
 ```
 
 ### Creating your own Logger
@@ -112,7 +110,7 @@ You get started by creating a logger using `winston.createLogger`:
 const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'somefile.log' })
+    new winston.transports.File({ filename: 'combined.log' })
   ]
 });
 ```
@@ -146,7 +144,7 @@ You can add or remove transports from the `logger` once it has been provided
 to you from `winston.createLogger`:
 
 ``` js
-const files = new winston.transports.File({ filename: 'im-a-logfile.log' });
+const files = new winston.transports.File({ filename: 'combined.log' });
 const console = new winston.transports.Console();
 
 logger
@@ -164,7 +162,7 @@ const logger = winston.createLogger({
   level: 'info',
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'somefile.log' })
+    new winston.transports.File({ filename: 'combined.log' })
   ]
 });
 
@@ -463,7 +461,7 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({ level: 'error' }),
     new winston.transports.File({
-      filename: 'somefile.log',
+      filename: 'combined.log',
       level: 'info'
     })
   ]
@@ -474,8 +472,8 @@ You may also dynamically change the log level of a transport:
 
 ``` js
 const transports = {
-  console: new winston.transports.Console({ level: 'warn': level: 'notice' }),
-  file: new winston.transports.File({ filename: 'somefile.log', level: 'error' })
+  console: new winston.transports.Console({ level: 'warn': level: 'warn' }),
+  file: new winston.transports.File({ filename: 'combined.log', level: 'error' })
 };
 
 const logger = winston.createLogger({
@@ -528,10 +526,7 @@ colors, in addition to passing the levels to the Logger itself, you must make
 winston aware of them:
 
 ``` js
-//
-// TDX: THIS HAS TO BE UPDATED
-//
-winston.addColors(myCustomLevels.colors);
+winston.addColors(myCustomLevels);
 ```
 
 This enables transports with the 'colorize' option set to appropriately color
