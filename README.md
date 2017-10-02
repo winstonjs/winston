@@ -19,9 +19,10 @@ example, one may want error logs to be stored in a persistent remote location
 
 `winston` aims to decouple parts of the logging process to make it more
 flexible and extensible. Attention is given to supporting flexibility in log
-formatting (see: [Formats]) & levels (see: that are decoupled from the
-implementation of transport logging (i.e. how the logs are stored / indexed)
-to the API that they exposed to the programmer.
+formatting (see: [Formats]) & levels (see: [Using custom logging levels]), and
+ensuring those APIs decoupled from the implementation of transport logging
+(i.e. how the logs are stored / indexed, see: [Adding Custom Transports]) to
+the API that they exposed to the programmer.
 
 ## Usage
 
@@ -987,6 +988,8 @@ npm test
 [Transports]: #transports
 [Logging levels]: #logging-levels
 [Formats]: #formats
+[Using custom logging levels]: #using-custom-logging-levels
+[Adding Custom Transports]: #adding-custom-transports
 [core transports]: docs/transports.md#winston-core
 [additional transports]: docs/transports.md#additional-transports
 
