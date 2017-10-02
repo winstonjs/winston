@@ -11,6 +11,8 @@
   - [x] `test/*-test.js`
   - [-] `test/formats/*-test.js` 
   - [-] `test/transports/*-test.js` 
+- [ ] Move `winston.config` into `triple-beam` around a base `Levels` class.
+- [ ] Update to the latest `npm` levels (e.g. including `http`).
 - [ ] Code coverage tests above 80% for `winston` _(currently `~72%`)_.
   - [x] Code coverage tests above 90% for `winston-transport`.
   - [x] Code coverage tests above 90% for `logform`
@@ -24,6 +26,7 @@
   - [x] File
   - [x] Http
   - [x] Steam
+- [ ] Move `logged` event into `winston-transport` to remove need for it in each individual Transport written.
 
 ## Formats
 - [x] `winston.format.colorize()` format.
@@ -49,7 +52,7 @@
 - [x] Create `winston-compat` to help with backwards compatibility for transport authors.  
 - [ ] Update the `README.md` in `winston`.
 - [ ] Update examples in `docs/transports.md`.
-- [-] `README.md` for `winston-transport`.
+- [x] `README.md` for `winston-transport`.
 - [ ] `README.md` for `winston-compat`.
 - [x] `README.md` for `logform`.
 - [-] Migrate all `examples/*.js` to the new API.
@@ -69,7 +72,8 @@
 
 ## Benchmarking
 
-- [x] Benchmark against winston@2.0.0
-- [x] Benchmark JSON format against bunyan
+- [x] Benchmark against `winston@1.0.0` in `logmark`.
+- [x] Benchmark against `winston@2.0.0` in `logmark`.
+- [x] Benchmark JSON format against `bunyan` in `logmark`.
 - [x] Benchmark against `pino` in `logmark`.
 - [-] Submit PR for all `pino` benchmarks.
