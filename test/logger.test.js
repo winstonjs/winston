@@ -197,16 +197,17 @@ describe('Logger (multiple transports of the same type)', function () {
 });
 
 describe('Logger (levels)', function () {
-  it('report unknown levels', function () {
+  it('report unknown levels', function (done) {
     stdMocks.use();
-    var logger = winston.createLogger();
+    var logger = helpers.createLogger(function (info) {});
     var expected = { message: 'foo', level: 'bar' };
     logger.log(expected);
 
     stdMocks.restore();
     var output = stdMocks.flush();
 
-    assume(output.stderr).deep.equals(['Unknown logger level: bar\n']);
+    assume(output.stderr).deep.equals(['[winston] Unknown logger level: bar\n']);
+    done();
   });
 
   it('default levels', function (done) {
