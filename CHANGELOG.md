@@ -13,6 +13,25 @@ YourTransport is a legacy winston transport. Consider upgrading to winston@3:
 - **`2.x` branch will get little to no maintenance:** no feature requests will be accepted – only a limited number of open PRs will be merged. Hoping the [significant performance benefits][perf-bench] incentivizes folks to upgrade quickly. Don't agree? Say something!
 - **No guaranteed support for `node@4` or below:** all code will be migrated to ES6 over time. This release was started when ES5 was still a hard requirement due to the current LTS needs.
 
+## v2.4.0 / 2017-10-01
+### ZOMFG WINSTON@3.0.0-RC0 EDITION
+
+- [#1036] Container.add() 'filters' and 'rewriters' option passing to logger.
+- [#1066] Fixed working of "humanReadableUnhandledException" parameter when additional data is added in meta.
+- [#1040] Added filtering by log level
+- [#1042] Fix regressions brought by `2.3.1`.
+  - Fix regression on array printing.
+  - Fix regression on falsy value.
+- [#977] Always decycle objects before cloning.
+  - Fixes [#862]
+  - Fixes [#474]
+  - Fixes [#914]
+- [57af38a] Missing context in `.lazyDrain` of `File` transport.
+- [178935f] Suppress excessive Node warning from `fs.unlink`.
+- [fcf04e1] Add `label` option to `File` transport docs.
+- [7e736b4], [24300e2] Added more info about undocumented `winston.startTimer()` method.
+- [#1076], [#1082], [#1029], [#989], [e1e7188] Minor grammatical & style updates to `README.md`.
+
 ## v2.3.1 / 2017-01-20
 ### WELCOME TO THE APOCALYPSE EDITION
 
