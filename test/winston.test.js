@@ -21,7 +21,7 @@ describe('winston', function () {
   });
 
   it('has expected initial state', function () {
-    assume(winston.default.transports[0]).is.an('object');
+    assume(winston.default.transports).deep.equals([]);
     assume(winston.level).equals('info');
   });
 
@@ -36,12 +36,6 @@ describe('winston', function () {
 
   it('exposes version', function () {
     assume(winston.version).equals(require('../package').version);
-  });
-
-  it('setting level does not modify transports', function () {
-    winston.level = 'error';
-    assume(winston.level).equals('error');
-    assume(winston.default.transports[0].level).equals('info');
   });
 
   it('abstract-winston-logger');
