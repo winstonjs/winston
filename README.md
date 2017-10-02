@@ -118,13 +118,13 @@ const logger = winston.createLogger({
 
 A logger accepts a following parameters:
 
-| Name          | Default                 |  Description    |
-| ------------- | ----------------------- | --------------- |
-| `level`       | `'info'`                | Log only if `info.level` less than or equal to this level  |  
-| `levels`      | `winston.config.syslog` | Levels (and colors) representing log priorities            |
-| `format`      | `winston.formats.json`  | Formatting for `info` messages  (see: [Formats])           |
-| `transports`  | `[]` _(No transports)_  | Set of logging targets for `info` messages                 |
-| `exitOnError` | `true`                  | If false, handled exceptions will not cause `process.exit` |
+| Name          | Default                |  Description    |
+| ------------- | ---------------------- | --------------- |
+| `level`       | `'info'`               | Log only if `info.level` less than or equal to this level  |  
+| `levels`      | `winston.config.npm`   | Levels (and colors) representing log priorities            |
+| `format`      | `winston.formats.json` | Formatting for `info` messages  (see: [Formats])           |
+| `transports`  | `[]` _(No transports)_ | Set of logging targets for `info` messages                 |
+| `exitOnError` | `true`                 | If false, handled exceptions will not cause `process.exit` |
 
 The levels provided to `createLogger` will be defined as convenience methods
 on the `logger` returned. 
@@ -254,7 +254,7 @@ lowest):
 ```
 
 If you do not explicitly define the levels that `winston` should use the
-`syslog` levels above will be used.
+`npm` levels above will be used.
 
 ### Using Logging Levels
 
@@ -283,7 +283,11 @@ winston.log('info', "127.0.0.1 - there's no place like home");
 winston.info("127.0.0.1 - there's no place like home");
 ```
 
-`winston` allows you to define a `level` property on each transport which specifies the **maximum** level of messages that a transport should log. For example, using the `npm` levels you could log only `error` messages to the console and everything `info` and below to a file (which includes `error` messages):
+`winston` allows you to define a `level` property on each transport which
+specifies the **maximum** level of messages that a transport should log. For
+example, using the `syslog` levels you could log only `error` messages to the
+console and everything `info` and below to a file (which includes `error`
+messages):
 
 ``` js
 const logger = winston.createLogger({
@@ -300,25 +304,30 @@ const logger = winston.createLogger({
 You may also dynamically change the log level of a transport:
 
 ``` js
+const transports = {
+  console: new winston.transports.Console({ level: 'warn': level: 'notice' }),
+  file: new winston.transports.File({ filename: 'somefile.log', level: 'error' })
+};
+
 const logger = winston.createLogger({
   transports: [
-    new winston.transports.Console({ level: 'warn' }),
-    new winston.transports.File({ filename: 'somefile.log', level: 'error' })
+    transports.console,
+    transports.file
   ]
 });
 
-logger.debug('Will not be logged in either transport!');
-logger.transports.Console.level = 'debug';
-logger.transports.File.level = 'verbose';
-logger.verbose('Will be logged in both transports!');
+logger.info('Will not be logged in either transport!');
+transports.console.level = 'info';
+transports.file.level = 'info';
+logger.info('Will be logged in both transports!');
 ```
 
-`winston` supports customizable logging levels, defaulting to [syslog][RFC5424] style
+`winston` supports customizable logging levels, defaulting to npm style
 logging levels. Levels must be specified at the time of creating your logger.
 
 ### Using Custom Logging Levels
 
-In addition to the predefined `npm` and `syslog` levels available in
+In addition to the predefined `npm`, `syslog`, and `cli` levels available in
 `winston`, you can also choose to define your own:
 
 ``` js
