@@ -788,6 +788,7 @@ To specify a custom log format for a transport, you should set a formatter funct
 An options object will be passed to the formatter function. Its general properties are: timestamp, level, message, meta. Depending on the transport type, there may be additional properties.
 
 ``` js
+var config = winston.config;
 var logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
@@ -799,7 +800,7 @@ var logger = new (winston.Logger)({
         // - Optionally, use options.colorize(options.level, <string>) to
         //   colorize output based on the log level.
         return options.timestamp() + ' ' +
-          options.colorize(options.level, options.level.toUpperCase()) + ' ' +
+          config.colorize(options.level, options.level.toUpperCase()) + ' ' +
           (options.message ? options.message : '') +
           (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
       }
