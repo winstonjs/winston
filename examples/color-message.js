@@ -1,6 +1,8 @@
-var winston = require('../lib/winston');
+'use strict';
 
-var logger = module.exports = winston.createLogger({
+const winston = require('../');
+
+const logger = module.exports = winston.createLogger({
   transports: [new winston.transports.Console()],
   format: winston.format.combine(
     winston.format.colorize({ all: true }),

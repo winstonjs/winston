@@ -1,8 +1,13 @@
-var winston = require('../lib/winston');
+'use strict';
 
-var logger = winston.createLogger({
+const winston = require('../');
+
+//
+// As of winston@3, the default logging format is JSON.
+//
+const logger = winston.createLogger({
   transports: [
-    new winston.transports.Console({ raw: true }),
+    new winston.transports.Console(),
   ]
 });
 
