@@ -214,6 +214,26 @@ implemented in, `logform`, a separate module from `winston`. This allows
 flexibility when writing your own transports in case you wish to include a
 default format with your transport.
 
+In modern versions of `node` template strings are very performant and are the recommended way for doing most end-user formatting. If you want to bespoke format your logs, `winston.format.printf` is for you:
+
+``` js
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, printf } = format;
+
+const myFormat = printf(info => {
+  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
+});
+
+const logger = createLogger({
+  combine(
+    label({ label: 'right meow!' }),
+    timestamp(),
+    myFormat
+  ),
+  transports: [new transports.Console()]
+});
+```
+
 ### Combining formats
 
 Any number of formats may be combined into a single format using
