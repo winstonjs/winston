@@ -1,4 +1,11 @@
 
+## v3.0.0-rc0 / 2017-10-02
+### IT'S-DONE.GIF EDITION
+
+**See [UPGRADE-3.0.md](UPGRADE-3.0.md) for a complete & living upgrade guide.**
+
+**See [3.0.0.md](3.0.0.md) for a list of remaining RC tasks.**
+
 - **Rewrite of core logging internals:** `Logger` & `Transport` are now implemented using Node.js `objectMode` streams. 
 - **Your transports _should_ not break:** Special attention has been given to ensure backwards compatibility with existing transports. You will likely see this:
 ```
@@ -6,6 +13,23 @@ YourTransport is a legacy winston transport. Consider upgrading to winston@3:
 - Upgrade docs: https://github.com/winstonjs/winston/tree/master/UPGRADE.md
 ```
 - **`filters`, `rewriters`, and `common.log` are now _formats_:** `winston.format` offers a simple mechanism for user-land formatting & style features. The organic & frankly messy growth of `common.log` is of the past; these feature requests can be implemented entirely outside of `winston` itself.
+``` js
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, printf } = format;
+
+const myFormat = printf(info => {
+  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
+});
+
+const logger = createLogger({
+  combine(
+    label({ label: 'right meow!' }),
+    timestamp(),
+    myFormat
+  ),
+  transports: [new transports.Console()]
+});
+```
 - **Increased modularity:** several subsystems are now stand-alone packages: 
   - [logform] exposed as `winston.format`
   - [winston-transport] exposed as `winston.Transport`

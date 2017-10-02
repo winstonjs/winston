@@ -8,10 +8,10 @@ A logger for just about everything.
 
 [![Join the chat at https://gitter.im/winstonjs/winston](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/winstonjs/winston?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## winston@3.0.0-rc1
+## winston@3.0.0-rc0
 
 We are looking for feedback on the latest version of `winston`:
-`winston@3.0.0-rc1`.
+`winston@3.0.0-rc0`.
 
 ```
 npm i winston@next --save
