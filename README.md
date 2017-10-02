@@ -62,15 +62,15 @@ logger to use throughout your application if you so choose.
 * [Logging](#logging)
   * [Creating your logger](#creating-your-own-logger)
   * [Streams, `objectMode`, and info` objects](#streams-objectmode-and-info-objects)
-* [Formats](#formats)
+* [Formats]
   * [Combining formats](#combining-formats)
   * [String interpolation](#string-interpolation)
   * [Filtering `info` Objects](#filtering-info-objects)
   * [Creating custom formats](#creating-custom-formats)
-* [Logging Levels](#logging-levels)
+* [Logging levels]
   * [Using logging levels](#using-logging-levels)
   * [Using custom logging levels](#using-custom-logging-levels)
-* [Transports](https://github.com/winstonjs/winston/blob/master/docs/transports.md)
+* [Transports]
   * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
   * [Adding Custom Transports](#adding-custom-transports)
 * [Exceptions](#exceptions)
@@ -610,84 +610,6 @@ module.exports = class YourCustomTransport extends Transport {
 };
 ```
 
-## Profiling
-
-In addition to logging messages and metadata, `winston` also has a simple
-profiling mechanism implemented for any logger:
-
-``` js
-//
-// Start profile of 'test'
-//
-logger.profile('test');
-
-setTimeout(function () {
-  //
-  // Stop profile of 'test'. Logging will now take place:
-  //   '17 Jan 21:00:00 - info: test duration=1000ms'
-  //
-  logger.profile('test');
-}, 1000);
-```
-
-Also you can start a timer and keep a reference that you can call `.done()``
-on:
-
-``` js
- // Returns an object corresponding to a specific timing. When done
- // is called the timer will finish and log the duration. e.g.:
- //
- const profiler = logger.startTimer();
- setTimeout(function () {
-   profiler.done({ message: 'Logging message' });
- }, 1000);
-```
-
-All profile messages are set to 'info' level by default and both message and
-metadata are optional. There are no plans in the Roadmap to make this
-configurable, but we are open to suggestions through new issues!
-
-## Querying Logs
-
-`winston` supports querying of logs with Loggly-like options. [See Loggly
-Search API](https://www.loggly.com/docs/api-retrieving-data/). Specifically:
-`File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
-
-``` js
-const options = {
-  from: new Date() - (24 * 60 * 60 * 1000),
-  until: new Date(),
-  limit: 10,
-  start: 0,
-  order: 'desc',
-  fields: ['message']
-};
-
-//
-// Find items logged between today and yesterday.
-//
-logger.query(options, function (err, results) {
-  if (err) {
-    /* TODO: handle me */
-    throw err;
-  }
-
-  console.log(results);
-});
-```
-
-## Streaming Logs
-Streaming allows you to stream your logs back from your chosen transport.
-
-``` js
-//
-// Start at the end.
-//
-winston.stream({ start: -1 }).on('log', function(log) {
-  console.log(log);
-});
-```
-
 ## Exceptions
 
 ### Handling Uncaught Exceptions with winston
@@ -802,6 +724,84 @@ const logger = winston.createLogger({ exitOnError: ignoreEpipe });
 // or, like this:
 //
 logger.exitOnError = ignoreEpipe;
+```
+
+## Profiling
+
+In addition to logging messages and metadata, `winston` also has a simple
+profiling mechanism implemented for any logger:
+
+``` js
+//
+// Start profile of 'test'
+//
+logger.profile('test');
+
+setTimeout(function () {
+  //
+  // Stop profile of 'test'. Logging will now take place:
+  //   '17 Jan 21:00:00 - info: test duration=1000ms'
+  //
+  logger.profile('test');
+}, 1000);
+```
+
+Also you can start a timer and keep a reference that you can call `.done()``
+on:
+
+``` js
+ // Returns an object corresponding to a specific timing. When done
+ // is called the timer will finish and log the duration. e.g.:
+ //
+ const profiler = logger.startTimer();
+ setTimeout(function () {
+   profiler.done({ message: 'Logging message' });
+ }, 1000);
+```
+
+All profile messages are set to 'info' level by default and both message and
+metadata are optional. There are no plans in the Roadmap to make this
+configurable, but we are open to suggestions through new issues!
+
+## Querying Logs
+
+`winston` supports querying of logs with Loggly-like options. [See Loggly
+Search API](https://www.loggly.com/docs/api-retrieving-data/). Specifically:
+`File`, `Couchdb`, `Redis`, `Loggly`, `Nssocket`, and `Http`.
+
+``` js
+const options = {
+  from: new Date() - (24 * 60 * 60 * 1000),
+  until: new Date(),
+  limit: 10,
+  start: 0,
+  order: 'desc',
+  fields: ['message']
+};
+
+//
+// Find items logged between today and yesterday.
+//
+logger.query(options, function (err, results) {
+  if (err) {
+    /* TODO: handle me */
+    throw err;
+  }
+
+  console.log(results);
+});
+```
+
+## Streaming Logs
+Streaming allows you to stream your logs back from your chosen transport.
+
+``` js
+//
+// Start at the end.
+//
+winston.stream({ start: -1 }).on('log', function(log) {
+  console.log(log);
+});
 ```
 
 ## Further Reading
