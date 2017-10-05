@@ -238,7 +238,7 @@ const myFormat = printf(info => {
 });
 
 const logger = createLogger({
-  combine(
+  format: combine(
     label({ label: 'right meow!' }),
     timestamp(),
     myFormat
@@ -258,7 +258,7 @@ const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, label, prettyPrint } = format;
 
 const logger = createLogger({
-  combine(
+  format: combine(
     label({ label: 'right meow!' }),
     timestamp(),
     prettyPrint()
