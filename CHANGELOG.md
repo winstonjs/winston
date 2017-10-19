@@ -1,4 +1,8 @@
 
+## v3.0.0-rc1 / 2017-10-19
+
+ - Fix file transport improper binding of `_onDrain` and `_onError` [#1104](https://github.com/winstonjs/winston/pull/1104)
+
 ## v3.0.0-rc0 / 2017-10-02
 ### IT'S-DONE.GIF EDITION
 
@@ -6,10 +10,10 @@
 
 **See [3.0.0.md](3.0.0.md) for a list of remaining RC tasks.**
 
-- **Rewrite of core logging internals:** `Logger` & `Transport` are now implemented using Node.js `objectMode` streams. 
+- **Rewrite of core logging internals:** `Logger` & `Transport` are now implemented using Node.js `objectMode` streams.
 - **Your transports _should_ not break:** Special attention has been given to ensure backwards compatibility with existing transports. You will likely see this:
 ```
-YourTransport is a legacy winston transport. Consider upgrading to winston@3: 
+YourTransport is a legacy winston transport. Consider upgrading to winston@3:
 - Upgrade docs: https://github.com/winstonjs/winston/tree/master/UPGRADE.md
 ```
 - **`filters`, `rewriters`, and `common.log` are now _formats_:** `winston.format` offers a simple mechanism for user-land formatting & style features. The organic & frankly messy growth of `common.log` is of the past; these feature requests can be implemented entirely outside of `winston` itself.
@@ -30,7 +34,7 @@ const logger = createLogger({
   transports: [new transports.Console()]
 });
 ```
-- **Increased modularity:** several subsystems are now stand-alone packages: 
+- **Increased modularity:** several subsystems are now stand-alone packages:
   - [logform] exposed as `winston.format`
   - [winston-transport] exposed as `winston.Transport`
   - [abstract-winston-transport] used for reusable unit test suites for transport authors.
