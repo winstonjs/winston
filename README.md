@@ -74,7 +74,7 @@ logger to use throughout your application if you so choose.
 
 * [Logging](#logging)
   * [Creating your logger](#creating-your-own-logger)
-  * [Streams, `objectMode`, and info` objects](#streams-objectmode-and-info-objects)
+  * [Streams, `objectMode`, and `info` objects](#streams-objectmode-and-info-objects)
 * [Formats]
   * [Combining formats](#combining-formats)
   * [String interpolation](#string-interpolation)
