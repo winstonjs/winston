@@ -192,7 +192,7 @@ logger.configure({
 });
 ```
 
-### Streams, `objectMode`, and info` objects
+### Streams, `objectMode`, and `info` objects
 
 In `winston`, both `Logger` and `Transport` instances are treated as
 `objectMode` streams that accept an `info` object. The `info`
