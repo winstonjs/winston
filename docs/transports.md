@@ -24,6 +24,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Amazon CloudWatch](#amazon-cloudwatch-transport)
   * [Amazon Kinesis Firehose](#amazon-kinesis-firehose-transport)
   * [Graylog2](#graylog2-transport)
+  * [Graylog2](#graylog2-transport-http-or-TCP)
   * [Cassandra](#cassandra-transport)
   * [Azure Table](#azure-table)
   * [Airbrake](#airbrake-transport)
@@ -486,6 +487,28 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
   - __hostname__: the name of this host (default: os.hostname())
   - __facility__: the facility for these log messages (default: "Node.js")
   - __bufferSize__: max UDP packet size, should never exceed the MTU of your system (default: 1400)
+  
+### Graylog2 Transport (http or TCP)
+
+[winston-log2gelf][31] is a Graylog2 transport using http(s)? or TCP (optinally over TLS) as transport protocols:
+
+``` js
+  var winston = require('winston');
+  winston.add(require('winston-log2gelf'), options);
+```
+
+The Graylog2 transport connects to a Graylog2 server over HTTP or TCP using the following options:
+* __name__:  Transport name
+* __hostname__: The name of this host (default: os.hostname())
+* __host__: The GELF server address (default: 127.0.0.1)
+* __port__: The GELF server port (default: 12201)
+* __protocol__: Protocol used to send data (TCP, TLS [TCP over TLS], HTTP or HTTPS). (default: tcp)
+* __level__: Level of messages this transport should log. See [winston levels](https://github.com/winstonjs/winston#logging-levels) (default: info)
+* __silent__: Boolean flag indicating whether to suppress output. (default: false)
+* __handleExceptions__: Boolean flag, whenever to handle uncaught exceptions. (default: false)
+* __service__: as facility is depreacated, service describes what kind of "service" this is (like MySQLd or Apache2). (default: nodejs)
+* __environment__: the environment on which your service is running. (default: development)
+* __release__: the version of your service (e.g. 1.0.0).
 
 ### Cassandra Transport
 
@@ -679,3 +702,4 @@ Options:
 [28]: https://github.com/pkallos/winston-firehose
 [29]: https://www.npmjs.com/package/@google-cloud/logging-winston
 [30]: https://cloud.google.com/logging/
+[31]: https://github.com/Buzut/winston-log2gelf
