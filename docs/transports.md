@@ -24,7 +24,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Amazon CloudWatch](#amazon-cloudwatch-transport)
   * [Amazon Kinesis Firehose](#amazon-kinesis-firehose-transport)
   * [Graylog2](#graylog2-transport)
-  * [Graylog2](#graylog2-transport-http-or-TCP)
+  * [Graylog2](#graylog2-transport-http-or-tcp)
   * [Cassandra](#cassandra-transport)
   * [Azure Table](#azure-table)
   * [Airbrake](#airbrake-transport)
