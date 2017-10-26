@@ -505,7 +505,7 @@ You may also dynamically change the log level of a transport:
 
 ``` js
 const transports = {
-  console: new winston.transports.Console({ level: 'warn': level: 'warn' }),
+  console: new winston.transports.Console({ level: 'warn' }),
   file: new winston.transports.File({ filename: 'combined.log', level: 'error' })
 };
 
