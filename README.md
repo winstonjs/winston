@@ -128,7 +128,7 @@ const logger = winston.createLogger({
 });
 ```
 
-A logger accepts a following parameters:
+A logger accepts the following parameters:
 
 | Name          | Default                |  Description    |
 | ------------- | ---------------------- | --------------- |
