@@ -11,8 +11,7 @@ var assume = require('assume'),
     path = require('path'),
     winston = require('../lib/winston'),
     tailFile = require('../lib/winston/tail-file'),
-    Stream = require('stream').Stream,
-    helpers = require('./helpers');
+    Stream = require('stream').Stream;
 
 //
 // Test helper that performs writes to a specific log file

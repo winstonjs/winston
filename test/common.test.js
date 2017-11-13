@@ -12,8 +12,6 @@ var assume = require('assume'),
 
 
 describe('winston/common', function () {
-  this.timeout(10 * 1000);
-
   it('winston.paddings', function () {
     assume(winston.paddings).is.an('object');
     assume(winston.paddings).deep.equals({
