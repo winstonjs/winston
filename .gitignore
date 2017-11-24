@@ -1,6 +1,12 @@
 test/*.log
 test/fixtures/*.json
+test/fixtures/file/*.log*
 test/fixtures/logs/*.log*
 node_modules/
 node_modules/*
 npm-debug.log
+coverage/
+coverage/*
+.nyc_output/
+.nyc_output/*
+*.log

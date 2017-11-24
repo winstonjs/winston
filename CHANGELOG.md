@@ -1,3 +1,65 @@
+
+## v3.0.0-rc1 / 2017-10-19
+
+ - Fix file transport improper binding of `_onDrain` and `_onError` [#1104](https://github.com/winstonjs/winston/pull/1104)
+
+## v3.0.0-rc0 / 2017-10-02
+### IT'S-DONE.GIF EDITION
+
+**See [UPGRADE-3.0.md](UPGRADE-3.0.md) for a complete & living upgrade guide.**
+
+**See [3.0.0.md](3.0.0.md) for a list of remaining RC tasks.**
+
+- **Rewrite of core logging internals:** `Logger` & `Transport` are now implemented using Node.js `objectMode` streams.
+- **Your transports _should_ not break:** Special attention has been given to ensure backwards compatibility with existing transports. You will likely see this:
+```
+YourTransport is a legacy winston transport. Consider upgrading to winston@3:
+- Upgrade docs: https://github.com/winstonjs/winston/tree/master/UPGRADE.md
+```
+- **`filters`, `rewriters`, and `common.log` are now _formats_:** `winston.format` offers a simple mechanism for user-land formatting & style features. The organic & frankly messy growth of `common.log` is of the past; these feature requests can be implemented entirely outside of `winston` itself.
+``` js
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, printf } = format;
+
+const myFormat = printf(info => {
+  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
+});
+
+const logger = createLogger({
+  combine(
+    label({ label: 'right meow!' }),
+    timestamp(),
+    myFormat
+  ),
+  transports: [new transports.Console()]
+});
+```
+- **Increased modularity:** several subsystems are now stand-alone packages:
+  - [logform] exposed as `winston.format`
+  - [winston-transport] exposed as `winston.Transport`
+  - [abstract-winston-transport] used for reusable unit test suites for transport authors.
+- **`2.x` branch will get little to no maintenance:** no feature requests will be accepted – only a limited number of open PRs will be merged. Hoping the [significant performance benefits][perf-bench] incentivizes folks to upgrade quickly. Don't agree? Say something!
+- **No guaranteed support for `node@4` or below:** all code will be migrated to ES6 over time. This release was started when ES5 was still a hard requirement due to the current LTS needs.
+
+## v2.4.0 / 2017-10-01
+### ZOMFG WINSTON@3.0.0-RC0 EDITION
+
+- [#1036] Container.add() 'filters' and 'rewriters' option passing to logger.
+- [#1066] Fixed working of "humanReadableUnhandledException" parameter when additional data is added in meta.
+- [#1040] Added filtering by log level
+- [#1042] Fix regressions brought by `2.3.1`.
+  - Fix regression on array printing.
+  - Fix regression on falsy value.
+- [#977] Always decycle objects before cloning.
+  - Fixes [#862]
+  - Fixes [#474]
+  - Fixes [#914]
+- [57af38a] Missing context in `.lazyDrain` of `File` transport.
+- [178935f] Suppress excessive Node warning from `fs.unlink`.
+- [fcf04e1] Add `label` option to `File` transport docs.
+- [7e736b4], [24300e2] Added more info about undocumented `winston.startTimer()` method.
+- [#1076], [#1082], [#1029], [#989], [e1e7188] Minor grammatical & style updates to `README.md`.
+
 ## v2.3.1 / 2017-01-20
 ### WELCOME TO THE APOCALYPSE EDITION
 

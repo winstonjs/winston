@@ -1,15 +1,16 @@
-var winston = require('../lib/winston');
+'use strict';
 
-function myPrettyPrint(obj) {
-  return JSON.stringify(obj)
-    .replace(/\{/g, '< wow ')
-    .replace(/\:/g, ' such ')
-    .replace(/\}/g, ' >');
-}
+const winston = require('../');
 
-var logger = new (winston.Logger)({
+const logger = winston.createLogger({
+  format: winston.format.printf(info => {
+    return JSON.stringify(info)
+      .replace(/\{/g, '< wow ')
+      .replace(/\:/g, ' such ')
+      .replace(/\}/g, ' >')
+  }),
   transports: [
-    new (winston.transports.Console)({ prettyPrint: myPrettyPrint }),
+    new winston.transports.Console(),
   ]
 });
 

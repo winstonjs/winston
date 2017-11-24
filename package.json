@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
-  "version": "2.3.1",
+  "version": "3.0.0-rc1",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "Jarrett Cruger <jcrugzz@gmail.com>",
@@ -18,25 +18,38 @@
     "tools"
   ],
   "dependencies": {
-    "async": "~1.0.0",
-    "colors": "1.0.x",
-    "cycle": "1.0.x",
-    "eyes": "0.1.x",
+    "async": "^1.0.0",
+    "diagnostics": "^1.0.1",
     "isstream": "0.1.x",
-    "stack-trace": "0.0.x"
+    "logform": "^1.2.1",
+    "one-time": "0.0.4",
+    "stack-trace": "0.0.x",
+    "triple-beam": "^1.0.1",
+    "winston-transport": "^3.0.1"
   },
   "devDependencies": {
+    "abstract-winston-transport": ">= 0.5.1",
+    "assume": "^1.5.1",
+    "colors": "~1.1.2",
     "cross-spawn-async": "^2.0.0",
-    "hock": "1.x.x",
-    "std-mocks": "~1.0.0",
-    "vows": "0.7.x"
+    "eslint-config-populist": "^4.1.0",
+    "hock": "^1.3.2",
+    "mocha": "^3.2.0",
+    "nyc": "^11.2.1",
+    "split2": "^2.1.1",
+    "std-mocks": "^1.0.0",
+    "through2": "^2.0.0",
+    "winston-compat": "^0.0.1"
   },
   "main": "./lib/winston",
   "scripts": {
-    "test": "vows --spec --isolate"
+    "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
+    "pretest": "npm run lint",
+    "test": "nyc mocha test/*.test.js test/**/*.test.js",
+    "report": "nyc report --reporter=lcov"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 4.2.2"
   },
   "license": "MIT"
 }
