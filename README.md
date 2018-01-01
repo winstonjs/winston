@@ -883,7 +883,7 @@ message:
 ``` js
 const transport = new winston.transports.Console();
 const logger = winston.createLogger({
-  transports: [transport];
+  transports: [transport]
 });
 
 transport.on('logged', function (info) {
