@@ -59,7 +59,7 @@ vows.describe('winston/transports/file/zippedArchive').addBatch({
       },
       "should be only 3 files called testarchive.log, testarchive1.log.gz and testarchive2.log.gz": function() {
         //Give the archive a little time to settle
-      //  setTimeout(function() {
+        setTimeout(function() {
           for (var num = 0; num < 6; num++) {
             var file = !num ? 'testarchive.log' : 'testarchive' + num + '.log.gz',
               fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
@@ -76,7 +76,7 @@ vows.describe('winston/transports/file/zippedArchive').addBatch({
               }, Error);
             }
           }
-        //},5000);
+        },5000);
       },
     }
   },
