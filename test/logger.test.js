@@ -70,6 +70,13 @@ describe('Logger', function () {
     logger.log(expected);
   });
 
+  it('.stream()', function () {
+    var logger = winston.createLogger();
+    var outStream = logger.stream();
+
+    assume(isStream(outStream)).true();
+  });
+
   it('.configure()', function () {
     var logger = winston.createLogger({
       transports: [new winston.transports.Console()]
