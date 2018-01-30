@@ -8,6 +8,7 @@ TL;DR? The `winston` project is actively working towards getting `3.0.0` out of 
    - [Bugs][#bugs]
    - [Documentation](#documentation)
    - [Feature Requests](#feature-requests)
+- [Be kind & actively empathetic to one another](CODE_OF_CONDUCT.md)
 
 Looking for somewhere to help? Checkout the [Roadmap](#roadmap) & help triage open issues! Find an issue that looks like a duplicate? It probably is! Comment on it so we know it's maybe a duplicate 🙏.
 
