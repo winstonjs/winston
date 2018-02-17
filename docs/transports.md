@@ -637,6 +637,9 @@ Valid Options are as the following:
   });
 ```
 
+### SSE transport with KOA 2
+[winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.    
+
 ## Find more Transports
 
 ``` bash
