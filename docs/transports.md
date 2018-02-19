@@ -31,7 +31,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Pusher](#pusher-transport)
-  * [Google Stackdriver Logging)(#google-stackdriver-transport)
+  * [Google Stackdriver Logging](#google-stackdriver-transport)
 
 ## Winston Core
 
