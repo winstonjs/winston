@@ -30,6 +30,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Newrelic](#newrelic-transport) (errors only)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
+  * [Cisco Spark](#cisco-spark-transport)
   * [Pusher](#pusher-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
 
@@ -601,6 +602,28 @@ Options:
 - Kibana4 integration
 - Integration with [SPM Performance Monitoring for Node.js](http://www.sematext.com/spm/integrations/nodejs-monitoring.html)
 
+### Cisco Spark Transport
+
+[winston-spark][31] is a transport for [Cisco Spark](https://www.ciscospark.com/)
+
+``` js
+  var winston = require('winston');
+  require('winston-spark');
+
+  var options = {
+    accessToken: '***Your Spark Access Token***',
+    roomId: '***Spark Room Id***'
+  };
+
+  winston.add(winston.transports.SparkLogger, options);
+```
+
+Valid Options are as the following:
+* __accessToken__ Your Spark Access Token. *[required]*
+* __roomId__ Spark Room Id. *[required]*
+* __level__ Log Level (default: info)
+* __hideMeta__ Hide MetaData (default: false)
+
 ### Google Stackdriver Transport
 
 [@google-cloud/logging-winston][29] provides a transport to relay your log messages to [Stackdriver Logging][30].
@@ -679,3 +702,4 @@ Options:
 [28]: https://github.com/pkallos/winston-firehose
 [29]: https://www.npmjs.com/package/@google-cloud/logging-winston
 [30]: https://cloud.google.com/logging/
+[31]: https://github.com/joelee/winston-spark
