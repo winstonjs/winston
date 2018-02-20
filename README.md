@@ -412,7 +412,7 @@ const whisper = volume({ whisper: true });
 console.dir(whisper.transform({
   level: 'info',
   message: `WHY ARE THEY MAKING US YELL SO MUCH!`
-}), whisper.options);
+}, whisper.options));
 // {
 //   level: 'info'
 //   message: 'why are they making us yell so much!'
@@ -653,7 +653,7 @@ when it's created or later on in your applications lifecycle:
 const { createLogger, transports } = require('winston');
 
 // Enable exception handling when you create your logger.
-const logger = winston.createLogger({
+const logger = createLogger({
   transports: [
     new transports.File({ filename: 'combined.log' }) 
   ],
@@ -663,7 +663,7 @@ const logger = winston.createLogger({
 });
 
 // Or enable it later on by adding a transport or using `.exceptions.handle`
-const logger = winston.createLogger({
+const logger = createLogger({
   transports: [
     new transports.File({ filename: 'combined.log' }) 
   ]
