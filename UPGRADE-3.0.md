@@ -37,13 +37,13 @@
   - `options.transport` is removed. Use the transport instance on the logger directly.
 
 ## Exceptions & exception handling
-- `winston.exceptions` has been removed. Use:
+- `winston.exception` has been removed. Use:
 ``` js
-const exceptions = winston.exceptionHandler();
+const exception = winston.ExceptionHandler();
 ```
 - `humanReadableUnhandledException` is now the default exception format.
 - `.unhandleExceptions()` will no longer modify transports state, merely just add / remove the `process.on('uncaughtException')` handler.
-  - Call close on any explicit `exceptionHandlers`.
+  - Call close on any explicit `ExceptionHandlers`.
   - Set `handleExceptions = false` on all transports.
 
 ## Transports
