@@ -20,6 +20,10 @@ npm i winston@next --save
 See the [Upgrade Guide](UPGRADE-3.0.md) for more information. Bug reports and
 PRs welcome!
 
+## 3.0.0 Documentation
+
+Please note that the documentation below is for 3.0.0. [See here for the 2.4.0 documentation.](https://github.com/winstonjs/winston/tree/2.4.0).
+
 ## Motivation
 
 `winston` is designed to be a simple and universal logging library with
