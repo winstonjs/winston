@@ -991,7 +991,7 @@ yarn add winston
 
 ## Run Tests
 
-All of the winston tests are written with `mocha`, `nyc`, and `assume`.  They
+All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and [`assume`][assume].  They
 can be run with `npm`.
 
 ``` bash
@@ -1012,6 +1012,9 @@ npm test
 [RFC5424]: https://tools.ietf.org/html/rfc5424
 [EventEmitter]: https://nodejs.org/dist/latest/docs/api/events.html#events_class_eventemitter
 [util.format]: https://nodejs.org/dist/latest/docs/api/util.html#util_util_format_format_args
+[mocha]: https://mochajs.org
+[nyc]: https://github.com/istanbuljs/nyc
+[assume]: https://github.com/bigpipe/assume
 
 [Charlie Robbins]: http://github.com/indexzero
 [Jarrett Cruger]: https://github.com/jcrugzz
