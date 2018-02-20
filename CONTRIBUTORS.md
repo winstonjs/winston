@@ -5,7 +5,7 @@ TL;DR? The `winston` project is actively working towards getting `3.0.0` out of 
 - [What makes up `winston@3.0.0`?](#what-makes-up-winston-3.0.0)
 - [What about `winston@2.x`?!](#what-about-winston-2.x)
 - [Roadmap](#roadmap)
-   - [Bugs][#bugs]
+   - [Bugs](#bugs)
    - [Documentation](#documentation)
    - [Feature Requests](#feature-requests)
 - [Be kind & actively empathetic to one another](CODE_OF_CONDUCT.md)
@@ -53,7 +53,7 @@ const logger = createLogger({
 
 Below is the list of items that make up the roadmap through `3.1.0`. We are actively triaging the open issues, so it is likely a few more critical path items will be added to this list before `3.0.0` gets out of RC.
 
-- [Bugs][#bugs]
+- [Bugs](#bugs)
 - [Documentation](#documentation)
 - [Feature Requests](#feature-requests)
 
