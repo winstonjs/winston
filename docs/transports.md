@@ -33,6 +33,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Cisco Spark](#cisco-spark-transport)
   * [Pusher](#pusher-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
+  * [SSE with KOA 2](#sse-transport-with-koa-2)
 
 ## Winston Core
 
@@ -636,6 +637,9 @@ Valid Options are as the following:
     keyFilename: '/path/to/keyfile.json'
   });
 ```
+
+### SSE transport with KOA 2
+[winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.    
 
 ## Find more Transports
 
