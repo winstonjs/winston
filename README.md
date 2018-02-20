@@ -150,7 +150,7 @@ on the `logger` returned.
 // Logging
 //
 logger.log({
-  level: 'info'
+  level: 'info',
   message: 'Hello distributed log files!'
 });
 
