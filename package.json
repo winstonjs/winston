@@ -18,7 +18,7 @@
     "tools"
   ],
   "dependencies": {
-    "async": "^1.0.0",
+    "async": "^2.6.0",
     "diagnostics": "^1.0.1",
     "isstream": "0.1.x",
     "logform": "^1.2.1",
