@@ -78,7 +78,7 @@ logger to use throughout your application if you so choose.
 
 * [Logging](#logging)
   * [Creating your logger](#creating-your-own-logger)
-  * [Streams, `objectMode`, and info` objects](#streams-objectmode-and-info-objects)
+  * [Streams, `objectMode`, and `info` objects](#streams-objectmode-and-info-objects)
 * [Formats]
   * [Combining formats](#combining-formats)
   * [String interpolation](#string-interpolation)
@@ -196,7 +196,7 @@ logger.configure({
 });
 ```
 
-### Streams, `objectMode`, and info` objects
+### Streams, `objectMode`, and `info` objects
 
 In `winston`, both `Logger` and `Transport` instances are treated as
 `objectMode` streams that accept an `info` object. The `info`
