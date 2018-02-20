@@ -33,6 +33,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Cisco Spark](#cisco-spark-transport)
   * [Pusher](#pusher-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
+  * [SSE with KOA 2](#sse-transport-with-koa-2)
 
 ## Winston Core
 
