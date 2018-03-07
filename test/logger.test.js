@@ -340,4 +340,31 @@ describe('Logger (profile, startTimer)', function (done) {
       });
     }, 100);
   });
+
+  it('Logger (undefined)', function (done) {
+    var logger = helpers.createLogger(function (info) {
+      assume(info.message).equals(undefined);
+      done();
+    });
+
+    logger.info(undefined);
+  });
+
+  it('Logger (null)', function (done) {
+    var logger = helpers.createLogger(function (info) {
+      assume(info.message).equals(null);
+      done();
+    });
+
+    logger.info(null);
+  });
+
+  it('Logger (Error)', function (done) {
+    var logger = helpers.createLogger(function (info) {
+      assume(info.message).instanceOf(Error);
+      done();
+    });
+
+    logger.info(new Error('test'));
+  });
 });

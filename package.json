@@ -21,6 +21,7 @@
     "async": "^2.6.0",
     "diagnostics": "^1.0.1",
     "isstream": "0.1.x",
+    "lodash.isplainobject": "^4.0.6",
     "logform": "^1.2.1",
     "one-time": "0.0.4",
     "stack-trace": "0.0.x",

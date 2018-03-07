@@ -102,7 +102,7 @@ describe('Logger (legacy API)', function () {
       assume(info).is.an('object');
       assume(info.level).equals('info');
       assume(info.message).equals('Some super awesome log message');
-      assume(info.one).equals(2);
+      assume(info.meta).deep.equals(meta);
       assume(info[MESSAGE]).is.a('string');
       done();
     });
