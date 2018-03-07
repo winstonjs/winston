@@ -7,6 +7,7 @@ const fs = require('fs');
 const { MESSAGE } = require('triple-beam');
 const split = require('split2');
 const assume = require('assume');
+const assert = require('assert');
 
 function noop() {};
 
@@ -48,6 +49,38 @@ describe('File({ filename })', function () {
 
     transport.once('logged', function () {
       logged++;
+    });
+  });
+
+  it('should not write to file when silent option is true', function (done) {
+    var filename = path.join(__dirname, '..', 'fixtures', 'file', 'simple.log');
+    var transport = new winston.transports.File({
+      filename: filename,
+      silent: true
+    });
+
+    var info = { [MESSAGE]: 'this is my log message' };
+
+    function cleanup() {
+      fs.unlinkSync(filename);
+    }
+
+    transport.log(info, noop);
+    setImmediate(function () {
+      helpers.tryRead(filename)
+        .on('error', function (err) {
+          assume(err).false();
+          cleanup();
+          done();
+        })
+        .pipe(split())
+        .on('data', function () {
+          assert(false);
+        })
+        .on('end', function () {
+          cleanup();
+          done();
+        });
     });
   });
 
