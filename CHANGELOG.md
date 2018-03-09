@@ -1,3 +1,8 @@
+## v2.4.1 / 2018-03-09
+### NODE@10 EDITION
+
+- [#1227] (@mcollina) Always pass a function to `fs.close`.
+
 ## v2.4.0 / 2017-10-01
 ### ZOMFG WINSTON@3.0.0-RC0 EDITION
 
