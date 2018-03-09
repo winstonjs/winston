@@ -34,6 +34,7 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Pusher](#pusher-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
+  * [Sumo Logic](#sumo-logic-transport)
 
 ## Winston Core
 
@@ -641,6 +642,19 @@ Valid Options are as the following:
 ### SSE transport with KOA 2
 [winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.    
 
+### Sumo Logic Transport
+[winston-sumologic-transport][32] is a transport for Sumo Logic
+
+```javascript
+  var winston = require('winston');
+  var { SumoLogic } = require('winston-sumologic-transport');
+  
+  winston.add(SumoLogic, options);
+```
+
+Options:
+* __url__: The Sumo Logic HTTP collector URL
+
 ## Find more Transports
 
 ``` bash
@@ -707,3 +721,4 @@ Valid Options are as the following:
 [29]: https://www.npmjs.com/package/@google-cloud/logging-winston
 [30]: https://cloud.google.com/logging/
 [31]: https://github.com/joelee/winston-spark
+[32]: https://github.com/avens19/winston-sumologic-transport
