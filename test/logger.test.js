@@ -276,6 +276,54 @@ describe('Logger (levels)', function () {
   });
 });
 
+describe('Logger (logging exotic data types)', function () {
+  describe('.log', function () {
+    it(`.log(new Error()) uses Error instance as info`, function (done) {
+      const err = new Error('test');
+      err.level = 'info';
+
+      const logger = helpers.createLogger(function (info) {
+        assume(info).instanceOf(Error);
+        assume(info).equals(err);
+        done();
+      });
+
+      logger.log(err);
+    });
+  });
+
+  describe('.info', function () {
+    it('.info(undefined) creates info with { message: undefined }', function (done) {
+      const logger = helpers.createLogger(function (info) {
+        assume(info.message).equals(undefined);
+        done();
+      });
+
+      logger.info(undefined);
+    });
+
+    it('.info(null) creates info with { message: null }', function (done) {
+      const logger = helpers.createLogger(function (info) {
+        assume(info.message).equals(null);
+        done();
+      });
+
+      logger.info(null);
+    });
+
+    it('.info(new Error()) uses Error instance as info', function (done) {
+      const err = new Error('test');
+      const logger = helpers.createLogger(function (info) {
+        assume(info).instanceOf(Error);
+        assume(info).equals(err);
+        done();
+      });
+
+      logger.info(err);
+    });
+  });
+});
+
 describe('Logger (profile, startTimer)', function (done) {
   it('profile(id, info)', function (done) {
     var logger = helpers.createLogger(function (info) {
@@ -339,36 +387,5 @@ describe('Logger (profile, startTimer)', function (done) {
         level: 'info'
       });
     }, 100);
-  });
-
-  describe('.info', function () {
-    it('.info(undefined) creates info with { message: null }', function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals(undefined);
-        done();
-      });
-
-      logger.info(undefined);
-    });
-
-    it('.info(null) creates info with { message: null }', function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals(null);
-        done();
-      });
-
-      logger.info(null);
-    });
-
-    it('.info(new Error()) uses Error instance as info', function (done) {
-      const err = new Error('test');
-      const logger = helpers.createLogger(function (info) {
-        assume(info).instanceOf(Error);
-        assume(info).equals(err);
-        done();
-      });
-
-      logger.info(err);
-    });
   });
 });
