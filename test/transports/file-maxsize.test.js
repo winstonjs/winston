@@ -14,7 +14,7 @@ const assume = require('assume');
 const winston = require('../../');
 
 const MESSAGE = Symbol.for('message');
-const kbStr = new Array(1024).join('-');
+const fillWith = ['a', 'b', 'c', 'd', 'e'];
 const maxsizeTransport = new winston.transports.File({
   level: 'info',
   format: winston.format.printf(info => info.message),
@@ -26,6 +26,10 @@ const maxsizeTransport = new winston.transports.File({
 // Log the specified kbytes to the transport
 //
 function logKbytes (kbytes) {
+  const filler = fillWith.shift();
+  const kbStr = Array(1024).fill(filler).join('');
+  fillWith.push(filler);
+
   //
   // With printf format that displays the message only
   // winston adds exactly 0 characters.
@@ -35,12 +39,18 @@ function logKbytes (kbytes) {
   }
 }
 
+//
+// Remove all log fixtures
+//
+function removeFixtures(done) {
+  exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize*'), done);
+}
+
 describe('File (maxsize)', function () {
   this.timeout(10000);
 
-  before(function (done) {
-    exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize*'), done);
-  });
+  before(removeFixtures);
+  //after(removeFixtures);
 
   it('should create multiple files correctly when passed more than the maxsize', function (done) {
     //
@@ -53,21 +63,23 @@ describe('File (maxsize)', function () {
     // correct filesize
     //
     function assumeFilesCreated() {
-      files.forEach(function (file) {
+      files.forEach(function (file, i) {
         let stats;
         try {
           stats = fs.statSync(file);
-          assume(stats.size).equals(4096);
         } catch (ex) {
           assume(stats).is.an('object', `${file} failed to open: ${ex.message}`);
         }
+
+        const text = fs.readFileSync(file, 'utf8');
+        assume(text[0]).equals(fillWith[i]);
+        assume(stats.size).equals(4096);
       });
 
       done();
     }
 
     maxsizeTransport.on('open', function (file) {
-      console.dir(arguments);
       const match = file.match(/(\d+)\.log$/);
       const count = match ? match[1] : 0;
 
@@ -76,7 +88,7 @@ describe('File (maxsize)', function () {
         return assumeFilesCreated();
       }
 
-      logKbytes(4);
+      setImmediate(() => logKbytes(4));
     });
 
     logKbytes(4);
