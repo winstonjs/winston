@@ -61,7 +61,7 @@ The Console transport takes a few simple options:
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 * __humanReadableUnhandledException__ Boolean flag indicating if uncaught exception should be output as human readable, instead of a single line
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
-* __formatter:__ If function is specified, its return value will be used instead of default output. (default undefined)
+* __format:__ If function is specified, its return value will be used instead of default output. (default undefined)
 * __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `['error', 'debug']`)
 * (Deprecated: Use __stderrLevels__ instead) __debugStdout:__ Boolean flag indicating if 'debug'-level output should be redirected to stdout instead of to stderr. Cannot be used with __stderrLevels__. (default false)
 
@@ -89,7 +89,7 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __depth__ Numeric indicating how many times to recurse while formatting the object with `util.inspect` (only used with `prettyPrint: true`) (default null, unlimited)
 * __logstash:__ If true, messages will be logged as JSON and formatted for logstash (default false).
 * __showLevel:__ Boolean flag indicating if we should prepend output with level (default true).
-* __formatter:__ If function is specified and `json` is set to `false`, its return value will be used instead of default output. (default undefined)
+* __format:__ If function is specified and `json` is set to `false`, its return value will be used instead of default output. (default undefined)
 * __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.  This option requires __maxFiles__ to be set, or it will be ignored.
 * __maxRetries:__ The number of stream creation retry attempts before entering a failed state. In a failed state the transport stays active but performs a NOOP on it's log function. (default 2)
 * __zippedArchive:__ If true, all log files but the current one will be zipped.
