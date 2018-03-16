@@ -3,7 +3,12 @@
 ## v3.0.0-rc3 / 2018-03-16
 ### I GOT NOTHING EDITION
 
-- CHANGELOG entry forthcoming.
+- [#1195], (@Nilegfx) Fix type error when creating `new stream.Stream()`
+- [#1109], (@vsetka) Fix file transprot bug where `self.filename` was not being updated on `ENOENT`
+- [#1153], (@wizardnet972) Make prototype methods return like the original method
+- [#1234], (@guiguan, @indexzero) Add tests for properly handling logging of `undefined`, `null` and `Error` values
+- [#1235], (@indexzero) Add example demonstrating how `meta` objects BECOME the `info` object
+- Minor fixes to docs & examples: [#1232], [#1185]
 
 ## v3.0.0-rc2 / 2018-03-09
 ### MAINTENANCE RESUMES EDITION
