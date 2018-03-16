@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v3.0.0-rc3 / 2018-03-16
+### I GOT NOTHING EDITION
+
+- CHANGELOG entry forthcoming.
+
 ## v3.0.0-rc2 / 2018-03-09
 ### MAINTENANCE RESUMES EDITION
 
