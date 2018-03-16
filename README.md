@@ -572,8 +572,48 @@ winston aware of them:
 winston.addColors(myCustomLevels);
 ```
 
-This enables transports with the 'colorize' option set to appropriately color
+This enables transports with the 'colorize' option set to appropriately color and style 
 the output of custom levels.
+
+Additionally, you can also change background color and font style. 
+For example,
+``` js
+baz: 'italic yellow',
+foobar: 'bold red cyanBG'
+```
+
+Possible options are below.
+
+* Font styles
+  - bold
+  - dim
+  - italic
+  - underline
+  - inverse
+  - hidden
+  - strikethrough
+
+* Font foreground colors
+  - black
+  - red
+  - green
+  - yellow
+  - blue
+  - magenta
+  - cyan
+  - white
+  - gray
+  - grey
+
+* Background colors
+  - blackBG
+  - redBG
+  - greenBG
+  - yellowBG
+  - blueBG
+  - magentaBG
+  - cyanBG
+  - whiteBG
 
 ## Transports
 
