@@ -8,10 +8,10 @@ A logger for just about everything.
 
 [![Join the chat at https://gitter.im/winstonjs/winston](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/winstonjs/winston?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## winston@3.0.0-rc0
+## winston@3.0.0-rc2
 
 We are looking for feedback on the latest version of `winston`:
-`winston@3.0.0-rc0`.
+`winston@3.0.0-rc2`.
 
 ```
 npm i winston@next --save
@@ -584,36 +584,14 @@ foobar: 'bold red cyanBG'
 
 Possible options are below.
 
-* Font styles
-  - bold
-  - dim
-  - italic
-  - underline
-  - inverse
-  - hidden
-  - strikethrough
+* Font styles: `bold`, `dim`, `italic`, `underline`, `inverse`, `hidden`, 
+  `strikethrough`.
 
-* Font foreground colors
-  - black
-  - red
-  - green
-  - yellow
-  - blue
-  - magenta
-  - cyan
-  - white
-  - gray
-  - grey
+* Font foreground colors: `black`, `red`, `green`, `yellow`, `blue`, `magenta`,
+  `cyan`, `white`, `gray`, `grey`.
 
-* Background colors
-  - blackBG
-  - redBG
-  - greenBG
-  - yellowBG
-  - blueBG
-  - magentaBG
-  - cyanBG
-  - whiteBG
+* Background colors: `blackBG`, `redBG`, `greenBG`, `yellowBG`, `blueBG`
+  `magentaBG`, `cyanBG`, `whiteBG`
 
 ## Transports
 
