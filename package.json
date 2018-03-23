@@ -20,7 +20,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "diagnostics": "^1.0.1",
-    "isstream": "0.1.x",
+    "is-stream": "^1.1.0",
     "logform": "^1.2.1",
     "one-time": "0.0.4",
     "stack-trace": "0.0.x",
