@@ -60,7 +60,7 @@ Development `winston@2.x` has ceased. Please consider upgrading to `winston@3.0.
 Before opening issues for new features consider if this feature could be implemented as a [custom format]. If it is, you will see your issue closed with this message:
 
 ```
-Yes, in `winston@3.0.0` you can colorize your labels using [custom formats](https://github.com/winstonjs/winston#creating-custom-formats)
+In `winston@3.0.0` you can <IMPLEMENT FEATURE> using [custom formats](https://github.com/winstonjs/winston#creating-custom-formats). Please consider upgrading.
 ```
 
 ## Roadmap
