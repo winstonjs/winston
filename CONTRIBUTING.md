@@ -4,6 +4,7 @@ TL;DR? The `winston` project is actively working towards getting `3.0.0` out of 
 
 - [What makes up `winston@3.0.0`?](#what-makes-up-winston-3.0.0)
 - [What about `winston@2.x`?!](#what-about-winston-2.x)
+- [Could this be implemented as a format?](#could-this-be-implemented-as-a-format)
 - [Roadmap](#roadmap)
    - [Bugs](#bugs)
    - [Documentation](#documentation)
@@ -44,10 +45,23 @@ const logger = createLogger({
 });
 ```
 
-
 ## What about `winston@2.x`?!
 
 > _If you are opening an issue regarding the `2.x` release-line please know that 2.x work has ceased. The `winston` team will review PRs that fix issues, but as issues are opened we will close them._
+
+You will commonly see this closing `winston@2.x` issues:
+
+```
+Development `winston@2.x` has ceased. Please consider upgrading to `winston@3.0.0-rc3`. If you feel strongly about this bug please open a PR against the `2.x` branch. Thank you for using `winston`!
+```
+
+## Could this be implemented as a format?
+
+Before opening issues for new features consider if this feature could be implemented as a [custom format]. If it is, you will see your issue closed with this message:
+
+```
+Yes, in `winston@3.0.0` you can colorize your labels using [custom formats](https://github.com/winstonjs/winston#creating-custom-formats)
+```
 
 ## Roadmap
 
@@ -90,3 +104,4 @@ There are no known feature requests that are considered **must have** for `3.0.0
 [triple-beam]: https://github.com/winstonjs/triple-beam
 [abstract-winston-transport]: https://github.com/winstonjs/abstract-winston-transport
 [stress-test]: https://github.com/winstonjs/winston/blob/master/test/transports/file-stress.test.js
+[custom format]: https://github.com/winstonjs/winston#creating-custom-formats
