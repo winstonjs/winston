@@ -569,7 +569,7 @@ colors, in addition to passing the levels to the Logger itself, you must make
 winston aware of them:
 
 ``` js
-winston.addColors(myCustomLevels);
+winston.addColors(myCustomLevels.colors);
 ```
 
 This enables transports with the 'colorize' option set to appropriately color and style 
