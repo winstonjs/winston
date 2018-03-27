@@ -36,7 +36,8 @@ const transports = {
       epsilon: 4,
     },
     stderrLevels: ['delta', 'epsilon']
-  })
+  }),
+  silent: new winston.transports.Console({ silent: true })
 };
 
 /**
@@ -77,6 +78,35 @@ describe('Console transport', function () {
       assume(output.stderr).length(2);
       assume(output.stdout).is.an('array');
       assume(output.stdout).length(5);
+    });
+
+    it("should set stderrLevels to ['error', 'debug'] by default", assertStderrLevels(
+      transports.defaults,
+      ['error', 'debug']
+    ));
+
+    it('does not log to console if silent is true', function () {
+      stdMocks.use({ print: true });
+
+      transports.silent.levels = defaultLevels;
+      Object.keys(defaultLevels)
+        .forEach(function (level) {
+          const info = {
+            [LEVEL]: level,
+            message: `This is level ${level}`,
+            level
+          };
+
+          info[MESSAGE] = JSON.stringify(info);
+          transports.silent.log(info);
+        });
+
+      stdMocks.restore();
+      var output = stdMocks.flush();
+      assume(output.stderr).is.an('array');
+      assume(output.stderr).length(0);
+      assume(output.stdout).is.an('array');
+      assume(output.stdout).length(0);
     });
 
     it("should set stderrLevels to ['error', 'debug'] by default", assertStderrLevels(
