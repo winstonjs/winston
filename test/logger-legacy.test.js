@@ -12,7 +12,7 @@ const assume = require('assume');
 const path = require('path');
 const stream = require('stream');
 const util = require('util');
-const isStream = require('isstream');
+const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
 const { MESSAGE } = require('triple-beam');
 const winston = require('../lib/winston');
@@ -84,7 +84,7 @@ describe('Logger (legacy API)', function () {
     assume(logger.transports[0]).equals(transports[0]);
   });
 
-  it('log(level, message)', function (done) {
+  it('.log(level, message)', function (done) {
     var logger = helpers.createLogger(function (info) {
       assume(info).is.an('object');
       assume(info.level).equals('info');
@@ -96,7 +96,36 @@ describe('Logger (legacy API)', function () {
     logger.log('info', 'Some super awesome log message')
   });
 
-  it('log(level, message, meta)', function (done) {
+  it(`.log(level, undefined) creates info with { message: undefined }`, function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals(undefined);
+      done();
+    });
+
+    logger.log('info', undefined);
+  });
+
+  it(`.log(level, null) creates info with { message: null }`, function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals(null);
+      done();
+    });
+
+    logger.log('info', null);
+  });
+
+  it(`.log(level, new Error()) uses Error instance as info`, function (done) {
+    const err = new Error('test');
+    const logger = helpers.createLogger(function (info) {
+      assume(info).instanceOf(Error);
+      assume(info).equals(err);
+      done();
+    });
+
+    logger.log('info', err);
+  });
+
+  it('.log(level, message, meta)', function (done) {
     var meta = { one: 2 };
     var logger = helpers.createLogger(function (info) {
       assume(info).is.an('object');
@@ -110,7 +139,7 @@ describe('Logger (legacy API)', function () {
     logger.log('info', 'Some super awesome log message', meta);
   });
 
-  it('log(level, formatStr, ...splat)', function (done) {
+  it('.log(level, formatStr, ...splat)', function (done) {
     const format = winston.format.combine(
       winston.format.splat(),
       winston.format.printf(info => `${info.level}: ${info.message}`)
@@ -128,7 +157,7 @@ describe('Logger (legacy API)', function () {
     logger.log('info', '%d%% such %s %j', 100, 'wow', { much: 'javascript' });
   });
 
-  it('log(level, formatStr, ...splat, meta)', function (done) {
+  it('.log(level, formatStr, ...splat, meta)', function (done) {
     const format = winston.format.combine(
       winston.format.splat(),
       winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify(info.meta)}`)

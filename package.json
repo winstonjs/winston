@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A multi-transport async logging library for Node.js",
-  "version": "3.0.0-rc1",
+  "version": "3.0.0-rc3",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "Jarrett Cruger <jcrugzz@gmail.com>",
@@ -18,9 +18,9 @@
     "tools"
   ],
   "dependencies": {
-    "async": "^1.0.0",
+    "async": "^2.6.0",
     "diagnostics": "^1.0.1",
-    "isstream": "0.1.x",
+    "is-stream": "^1.1.0",
     "logform": "^1.2.1",
     "one-time": "0.0.4",
     "stack-trace": "0.0.x",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "abstract-winston-transport": ">= 0.5.1",
     "assume": "^1.5.1",
-    "colors": "~1.1.2",
+    "colors": "^1.2.0",
     "cross-spawn-async": "^2.0.0",
     "eslint-config-populist": "^4.1.0",
     "hock": "^1.3.2",

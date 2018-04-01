@@ -1,5 +1,27 @@
+# CHANGELOG
+
+## v3.0.0-rc3 / 2018-03-16
+### I GOT NOTHING EDITION
+
+- [#1195], (@Nilegfx) Fix type error when creating `new stream.Stream()`
+- [#1109], (@vsetka) Fix file transprot bug where `self.filename` was not being updated on `ENOENT`
+- [#1153], (@wizardnet972) Make prototype methods return like the original method
+- [#1234], (@guiguan, @indexzero) Add tests for properly handling logging of `undefined`, `null` and `Error` values
+- [#1235], (@indexzero) Add example demonstrating how `meta` objects BECOME the `info` object
+- Minor fixes to docs & examples: [#1232], [#1185]
+
+## v3.0.0-rc2 / 2018-03-09
+### MAINTENANCE RESUMES EDITION
+
+- [#1209], (@dabh) Use new version of colors, solving a number of issues.
+- [#1197], (@indexzero) Roadmap & guidelines for contributors.
+- [#1100] Require the package.json by its full name.
+- [#1149] Updates `async` to latest (`2.6.0`)
+- [#1228], (@mcollina) Always pass a function to `fs.close`. 
+- Minor fixes to docs & examples: [#1177], [#1182], [#1208], [#1198], [#1165], [#1110], [#1117], [#1097], [#1155], [#1084], [#1141], [#1210], [#1223].
 
 ## v3.0.0-rc1 / 2017-10-19
+### OMG THEY FORGOT TO NAME IT EDITION
 
  - Fix file transport improper binding of `_onDrain` and `_onError` [#1104](https://github.com/winstonjs/winston/pull/1104)
 

@@ -31,8 +31,11 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Newrelic](#newrelic-transport) (errors only)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
+  * [Cisco Spark](#cisco-spark-transport)
   * [Pusher](#pusher-transport)
-  * [Google Stackdriver Logging)(#google-stackdriver-transport)
+  * [Google Stackdriver Logging](#google-stackdriver-transport)
+  * [SSE with KOA 2](#sse-transport-with-koa-2)
+  * [Sumo Logic](#sumo-logic-transport)
 
 ## Winston Core
 
@@ -624,6 +627,28 @@ Options:
 - Kibana4 integration
 - Integration with [SPM Performance Monitoring for Node.js](http://www.sematext.com/spm/integrations/nodejs-monitoring.html)
 
+### Cisco Spark Transport
+
+[winston-spark][31] is a transport for [Cisco Spark](https://www.ciscospark.com/)
+
+``` js
+  var winston = require('winston');
+  require('winston-spark');
+
+  var options = {
+    accessToken: '***Your Spark Access Token***',
+    roomId: '***Spark Room Id***'
+  };
+
+  winston.add(winston.transports.SparkLogger, options);
+```
+
+Valid Options are as the following:
+* __accessToken__ Your Spark Access Token. *[required]*
+* __roomId__ Spark Room Id. *[required]*
+* __level__ Log Level (default: info)
+* __hideMeta__ Hide MetaData (default: false)
+
 ### Google Stackdriver Transport
 
 [@google-cloud/logging-winston][29] provides a transport to relay your log messages to [Stackdriver Logging][30].
@@ -636,6 +661,22 @@ Options:
     keyFilename: '/path/to/keyfile.json'
   });
 ```
+
+### SSE transport with KOA 2
+[winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.    
+
+### Sumo Logic Transport
+[winston-sumologic-transport][32] is a transport for Sumo Logic
+
+```javascript
+  var winston = require('winston');
+  var { SumoLogic } = require('winston-sumologic-transport');
+  
+  winston.add(SumoLogic, options);
+```
+
+Options:
+* __url__: The Sumo Logic HTTP collector URL
 
 ## Find more Transports
 
@@ -702,4 +743,6 @@ Options:
 [28]: https://github.com/pkallos/winston-firehose
 [29]: https://www.npmjs.com/package/@google-cloud/logging-winston
 [30]: https://cloud.google.com/logging/
-[31]: https://github.com/Buzut/winston-log2gelf
+[31]: https://github.com/joelee/winston-spark
+[32]: https://github.com/avens19/winston-sumologic-transport
+[33]: https://github.com/Buzut/winston-log2gelf

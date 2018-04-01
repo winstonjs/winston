@@ -12,7 +12,7 @@ const assume = require('assume');
 const path = require('path');
 const stream = require('stream');
 const util = require('util');
-const isStream = require('isstream');
+const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
 const { MESSAGE } = require('triple-beam');
 const winston = require('../lib/winston');
@@ -68,6 +68,13 @@ describe('Logger', function () {
 
     logger.add(transport);
     logger.log(expected);
+  });
+
+  it('.stream()', function () {
+    var logger = winston.createLogger();
+    var outStream = logger.stream();
+
+    assume(isStream(outStream)).true();
   });
 
   it('.configure()', function () {
@@ -273,6 +280,54 @@ describe('Logger (levels)', function () {
       .add(filterLevelTransport('bad'))
       .add(filterLevelTransport('ok'))
       .log(expected);
+  });
+});
+
+describe('Logger (logging exotic data types)', function () {
+  describe('.log', function () {
+    it(`.log(new Error()) uses Error instance as info`, function (done) {
+      const err = new Error('test');
+      err.level = 'info';
+
+      const logger = helpers.createLogger(function (info) {
+        assume(info).instanceOf(Error);
+        assume(info).equals(err);
+        done();
+      });
+
+      logger.log(err);
+    });
+  });
+
+  describe('.info', function () {
+    it('.info(undefined) creates info with { message: undefined }', function (done) {
+      const logger = helpers.createLogger(function (info) {
+        assume(info.message).equals(undefined);
+        done();
+      });
+
+      logger.info(undefined);
+    });
+
+    it('.info(null) creates info with { message: null }', function (done) {
+      const logger = helpers.createLogger(function (info) {
+        assume(info.message).equals(null);
+        done();
+      });
+
+      logger.info(null);
+    });
+
+    it('.info(new Error()) uses Error instance as info', function (done) {
+      const err = new Error('test');
+      const logger = helpers.createLogger(function (info) {
+        assume(info).instanceOf(Error);
+        assume(info).equals(err);
+        done();
+      });
+
+      logger.info(err);
+    });
   });
 });
 
