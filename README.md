@@ -27,7 +27,7 @@ There are two different ways to use winston: directly via the default logger, or
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
   * [String interpolation](#string-interpolation)
-* [Transports](https://github.com/winstonjs/winston/blob/master/docs/transports.md)
+* [Transports](https://github.com/winstonjs/winston/blob/2.4.0/docs/transports.md)
   * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
