@@ -493,7 +493,7 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
   
 ### Graylog2 Transport (http or TCP)
 
-[winston-log2gelf][31] is a Graylog2 transport using http(s)? or TCP (optinally over TLS) as transport protocols:
+[winston-log2gelf][33] is a Graylog2 transport using http(s)? or TCP (optinally over TLS) as transport protocols:
 
 ``` js
   var winston = require('winston');
