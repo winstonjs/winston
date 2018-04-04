@@ -592,6 +592,17 @@ Possible options are below.
 
 * Background colors: `blackBG`, `redBG`, `greenBG`, `yellowBG`, `blueBG`
   `magentaBG`, `cyanBG`, `whiteBG`
+  
+### Colorizing Standard logging levels
+
+To colorize the standard logging level add
+```js
+winston.format.combine(
+  winston.format.colorize(),
+  winston.format.json()
+)
+```
+where `winston.format.json()` is whatever other formatter you want to use.
 
 ## Transports
 
