@@ -141,6 +141,7 @@ A logger accepts the following parameters:
 | `format`      | `winston.formats.json` | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_ | Set of logging targets for `info` messages                 |
 | `exitOnError` | `true`                 | If false, handled exceptions will not cause `process.exit` |
+| `silent`      | `false`                | If true, all logs are suppressed |
 
 The levels provided to `createLogger` will be defined as convenience methods
 on the `logger` returned. 

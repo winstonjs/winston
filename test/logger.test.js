@@ -165,6 +165,26 @@ describe('Logger', function () {
     logger.clear();
     assume(logger.transports.length).equals(0);
   });
+
+  it('{ silent: true }', function (done) {
+    const neverLogTo = new TransportStream({
+      log: function (info) {
+        assume(false).true('TransportStream was improperly written to');
+      }
+    });
+
+    var logger = winston.createLogger({
+      transports: [neverLogTo],
+      silent: true
+    });
+
+    logger.log({
+      level: 'info',
+      message: 'This should be ignored'
+    });
+
+    setImmediate(() => done());
+  });
 });
 
 describe('Logger (multiple transports of the same type)', function () {
