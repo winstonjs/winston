@@ -25,7 +25,7 @@
     "one-time": "0.0.4",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.0.1",
-    "winston-transport": "^3.0.1"
+    "winston-transport": "^3.1.0"
   },
   "devDependencies": {
     "abstract-winston-transport": ">= 0.5.1",
