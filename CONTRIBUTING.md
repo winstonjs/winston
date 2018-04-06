@@ -52,7 +52,7 @@ const logger = createLogger({
 You will commonly see this closing `winston@2.x` issues:
 
 ```
-Development `winston@2.x` has ceased. Please consider upgrading to `winston@3.0.0-rc3`. If you feel strongly about this bug please open a PR against the `2.x` branch. Thank you for using `winston`!
+Development `winston@2.x` has ceased. Please consider upgrading to `winston@3.0.0-rc4`. If you feel strongly about this bug please open a PR against the `2.x` branch. Thank you for using `winston`!
 ```
 
 ## Could this be implemented as a format?
@@ -76,6 +76,7 @@ Below is the list of items that make up the roadmap through `3.1.0`. We are acti
 #### Show stoppers before `3.0.0`
 
 - [ ] https://github.com/winstonjs/winston/issues/1144: this is _the_ purpose of `winston`. If we cannot log at high-volume we cannot ship out of RC. There was [test coverage for this][stress-test] that should be failing, but isnt
+- [ ] Error handling within formats [#1261]
 - [ ] Triage all open issues.
 
 ### Documentation
@@ -91,11 +92,18 @@ Below is the known set of high-priority feature requests to support the communit
 
 There are no known feature requests that are considered **must have** for `3.0.0` to get out of RC. 
 
+- [x] `silent` support.
+
 #### Must have before `3.1.0`
 
 - [Type definitions for TypeScript](https://github.com/winstonjs/winston/issues/1096)
+  - [x] Supporting libraries: `winston-transport`, `logform`
+  - [ ] `winston` itself 
 - [Browser support](https://github.com/winstonjs/winston/issues/287)
+  - [ ] Unit tests for `webpack` & `rollup` 
 - Benchmarking for `File` and `Stream` transports:
+   - [x] Benchmarking integration in `pino`.
+   - [ ] Upgrade `pino` to latest `winston`.
    - See: https://github.com/winstonjs/logmark
    - See also: https://github.com/pinojs/pino/pull/232
 
