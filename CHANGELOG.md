@@ -1,5 +1,26 @@
 # CHANGELOG
 
+### v3.0.0-rc4 / 2018-04-06
+### IF A TREE FALLS IN THE FORREST DOES IT MAKE A LOG VERSION
+
+- (@indexzero, @dabh) Add support for `{ silent }` option to
+``` js
+require('winston').Logger;
+require('winston-transport').TransportStream;
+```
+- Better browser support
+  - [#1145], (@Jasu) Replace `isstream` with `is-stream` to make stream detection work in browser.
+  - [#1146], (@Jasu) Rename query to different than function name, to support Babel 6.26.
+- Better Typescript support in all supporting libraries
+  - `logform@1.4.1` 
+- Update documentation
+  - (@indexzero) Correct link to upgrade guide. Fixes #1255.
+  - [#1258], (@morenoh149) Document how to colorize levels. Fixes #1135.
+  - [#1246], (@KlemenPlazar) Update colors argument when adding custom colors
+  - Update `CONTRIBUTING.md` 
+  - [#1239], (@dabh) Add changelog entries for `v3.0.0-rc3`
+  - Add example showing that `{ level }` can be deleted from info objects because `Symbol.for('level')` is what `winston` uses internally. Fixes #1184.
+
 ## v3.0.0-rc3 / 2018-03-16
 ### I GOT NOTHING EDITION
 
