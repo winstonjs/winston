@@ -1,7 +1,7 @@
 # Upgrading to `winston@3.0.0`
 
 > This document is a **work in progress.** Having trouble upgrading to 
-> `winston@3.0.0-rc{X}`? Open an issue so we can improve this guide! 
+> `winston@3.0.0`? Open an issue so we can improve this guide! 
 
 - [Breaking changes]
    - [Top-level `winston.*` API]
