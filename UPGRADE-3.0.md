@@ -12,11 +12,11 @@
 ## Formatting options
 - Default output format is now `formats.json()`.
 
-#### `winston.Logger`
-- `filters`: Use a custom `format`.
-- `rewriters`: Use a custom `format`.
+### `winston.Logger`
+- `filters`: Use a custom `format`. See: [Formatters and Rewriters] below.
+- `rewriters`: Use a custom `format`. See: [Formatters and Rewriters] below.
 
-#### `winston.transports.{File,Console,Http}`
+### `winston.transports.{File,Console,Http}`
 - `stringify`: Use a custom `format`.
 - `formatter`: Use a custom `format`.
 - `json`: Use `formats.json()`.
@@ -35,6 +35,69 @@
   - `options.transport` is removed. Use the transport instance on the logger directly.
 - `Logger.prototype.query`
   - `options.transport` is removed. Use the transport instance on the logger directly.
+
+## Migrating `formatters` and `rewriters` to `formats` in `winston@3`
+
+In `winston@3.x.x` `info` objects are considered mutable. The API _combined
+formatters and rewriters into a single, new concept:_ **formats**. 
+
+### Filters
+
+If you are looking to upgrade your `filter` behavior please read on. In 
+`winston@2.x` this **filter** behavior:
+
+``` js
+```
+
+Can be modeled as a **custom format** that you combine with other formats:
+
+``` js
+```
+
+### Rewriters
+
+If you are looking to upgrade your `rewriter` behavior please read on. In 
+`winston@2.x` this **rewriter** behavior:
+
+``` js
+const logger = new winston.Logger(options);
+logger.rewriters.push(function(level, msg, meta) {
+  if (meta.creditCard) {
+    meta.creditCard = maskCardNumbers(meta.creditCard)
+  }
+
+  return meta;
+});
+
+logger.info('transaction ok', { creditCard: 123456789012345 });
+```
+
+Can be modeled as a **custom format** that you combine with other formats:
+
+``` js 
+const maskFormat = winston.format(info => {
+  // You can CHANGE existing property values
+  if (info.creditCard) {
+    info.creditCard = maskCardNumbers(info.creditCard);
+  }
+
+  // You can also ADD NEW properties if you wish
+  info.hasCreditCard = !!info.creditCard;
+
+  return info;
+});
+
+const logger = winston.createLogger({
+  format: winston.formats.combine(
+    maskFormat(),
+    winston.formats.json()
+  )
+});
+
+logger.info('transaction ok', { creditCard: 123456789012345 });
+```
+
+See [examples/format-mutate.js](/examples/format-mutate.js) for a complete end-to-end example.
 
 ## Exceptions & exception handling
 - `winston.exception` has been removed. Use:
