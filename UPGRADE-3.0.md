@@ -212,6 +212,19 @@ const logger = createLogger({
 });
 ```
 
+[Breaking changes]: #breaking-changes
+[Top-level `winston.*` API]: #top-level-winston-api
+[Transports]: #transports
+[`winston.Container` and `winston.loggers`]: #winstoncontainer-and-winstonloggers
+[`winston.Logger`]: #winstonlogger
+[Exceptions & exception handling]: #exceptions--exception-handling
+[Other minor breaking changes]: #other-minor-breaking-changes
+[Upgrading to `winston.format`]: #upgrading-to-winstonformat
+[Removed `winston.Logger` formatting options]: #removed-winstonlogger-formatting-options
+[Removed `winston.transports.{File,Console,Http}` formatting options]: #removed-winstontransportsfileconsolehttp-formatting-options
+[Migrating `formatters` and `rewriters` to `formats` in `winston@3`]: #migrating-formatters-and-rewriters-to-formats-in-winston3
+[Modularity: `winston-transport`, `logform` and more]: #modularity-winston-transport-logform-and-more
+
 [winston-transport]: https://github.com/winstonjs/winston-transport
 [logform]: https://github.com/winstonjs/logform
 [triple-beam]: https://github.com/winstonjs/triple-beam
