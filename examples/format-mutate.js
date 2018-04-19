@@ -14,6 +14,7 @@ function maskCardNumbers(num) {
   }).join('');
 }
 
+// Define the format that mutates the info object.
 const maskFormat = winston.format(info => {
   // You can CHANGE existing property values
   if (info.creditCard) {
@@ -26,6 +27,7 @@ const maskFormat = winston.format(info => {
   return info;
 });
 
+// Then combine the format with other formats and make a logger
 const logger = winston.createLogger({
   format: winston.format.combine(
     //
