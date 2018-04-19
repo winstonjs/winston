@@ -13,7 +13,7 @@
 - [Upgrading to `winston.format`]
    - [Removed `winston.Logger` formatting options]
    - [Removed `winston.transports.{File,Console,Http}` formatting options]
-   - [Migrating `formatters` and `rewriters` to `formats` in `winston@3`]
+   - [Migrating `filters` and `rewriters` to `formats` in `winston@3`]
 - [Modularity: `winston-transport`, `logform` and more]
 
 ## Breaking changes
@@ -63,8 +63,8 @@ Custom formats can now be created with no changes to `winston` core. _We encoura
 
 ### Removed `winston.Logger` formatting options
 - The default output format is now `formats.json()`.
-- `filters`: Use a custom `format`. See: [Formatters and Rewriters] below.
-- `rewriters`: Use a custom `format`. See: [Formatters and Rewriters] below.
+- `filters`: Use a custom `format`. See: [Filters and Rewriters] below.
+- `rewriters`: Use a custom `format`. See: [Filters and Rewriters] below.
 
 ### Removed `winston.transports.{File,Console,Http}` formatting options
 - `stringify`: Use a [custom format].
@@ -78,7 +78,7 @@ Custom formats can now be created with no changes to `winston` core. _We encoura
 - `align`: Use `formats.align()`.
 - `showLevel`: Use a [custom format].
 
-### Migrating `formatters` and `rewriters` to `formats` in `winston@3`
+### Migrating `filters` and `rewriters` to `formats` in `winston@3`
 
 In `winston@3.x.x` `info` objects are considered mutable. The API _combined
 formatters and rewriters into a single, new concept:_ **formats**. 
@@ -222,12 +222,14 @@ const logger = createLogger({
 [Upgrading to `winston.format`]: #upgrading-to-winstonformat
 [Removed `winston.Logger` formatting options]: #removed-winstonlogger-formatting-options
 [Removed `winston.transports.{File,Console,Http}` formatting options]: #removed-winstontransportsfileconsolehttp-formatting-options
-[Migrating `formatters` and `rewriters` to `formats` in `winston@3`]: #migrating-formatters-and-rewriters-to-formats-in-winston3
+[Migrating `filters` and `rewriters` to `formats` in `winston@3`]: #migrating-filters-and-rewriters-to-formats-in-winston3
 [Modularity: `winston-transport`, `logform` and more]: #modularity-winston-transport-logform-and-more
+
+[Filters and Rewriters]: #migrating-filters-and-rewriters-to-formats-in-winston3
+[custom format]: /README.md#creating-custom-formats
 
 [winston-transport]: https://github.com/winstonjs/winston-transport
 [logform]: https://github.com/winstonjs/logform
 [triple-beam]: https://github.com/winstonjs/triple-beam
 [abstract-winston-transport]: https://github.com/winstonjs/abstract-winston-transport
 
-[custom format]: /README.md#creating-custom-formats
