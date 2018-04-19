@@ -230,4 +230,4 @@ const logger = createLogger({
 [triple-beam]: https://github.com/winstonjs/triple-beam
 [abstract-winston-transport]: https://github.com/winstonjs/abstract-winston-transport
 
-[custom-format]: /README.md#creating-custom-formats
+[custom format]: /README.md#creating-custom-formats
