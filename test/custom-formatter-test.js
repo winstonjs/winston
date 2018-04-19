@@ -14,7 +14,7 @@ var assert = require('assert'),
     winston = require('../lib/winston'),
     helpers = require('./helpers');
 
-function assertFileFormatter (basename, options) {
+function assertFileFormatter (basename, options, meta) {
   var filename = path.join(__dirname, 'fixtures', 'logs', basename + '.log');
 
   try { fs.unlinkSync(filename) }
@@ -28,7 +28,7 @@ function assertFileFormatter (basename, options) {
       // We must wait until transport file has emitted the 'flush'
       // event to be sure the file has been created and written
       transport.once('flush', this.callback.bind(this, null, filename));
-      transport.log('info', 'What does the fox say?', null, function () {});
+      transport.log('info', 'What does the fox say?', meta || null, function () {});
     },
     "should log with the appropriate format": function (_, filename) {
       var data = fs.readFileSync(filename, 'utf8');
@@ -67,7 +67,19 @@ vows.describe('winston/transport/formatter').addBatch({
           return params.timestamp() +' '+ params.level.toUpperCase() +' '+ (undefined !== params.message ? params.message : '') +
             ( params.meta && Object.keys(params.meta).length ? '\n'+ JSON.stringify(params.meta) : '' );
         }
-      })
+      }),
+      "and function value with custom format and error as metadata":
+        assertFileFormatter('customFormatterErrorMetadata', {
+          pattern: /^\d{13,} INFO What does the fox say\?.*My very special error message/,
+          json: false,
+          timestamp: function() {
+            return Date.now();
+          },
+          formatter: function(params) {
+            return params.timestamp() +' '+ params.level.toUpperCase() +' '+ params.message +' '+
+              JSON.stringify(params.meta);
+          }
+        }, new Error("My very special error message"))
     }
   }
 }).export(module);
