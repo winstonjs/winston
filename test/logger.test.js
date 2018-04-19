@@ -348,6 +348,16 @@ describe('Logger (logging exotic data types)', function () {
 
       logger.info(err);
     });
+
+    it.skip(`.info('any string', new Error())`, function (done) {
+      const err = new Error('test');
+      const logger = helpers.createLogger(function (info) {
+        // TODO (indexzero): assert this works.
+        done();
+      });
+
+      logger.info(err);
+    });
   });
 });
 
