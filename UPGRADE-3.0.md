@@ -47,11 +47,50 @@ If you are looking to upgrade your `filter` behavior please read on. In
 `winston@2.x` this **filter** behavior:
 
 ``` js
+const isSecret = /super secret/;
+const logger = new winston.Logger(options);
+logger.filters.push(function(level, msg, meta) {
+  return msg.replace(isSecret, 'su*** se****');
+});
+
+// Outputs: {"level":"error","message":"Public error to share"}
+logger.error('Public error to share');
+
+// Outputs: {"level":"error","message":"This is su*** se**** - hide it."}
+logger.error('This is super secret - hide it.');
 ```
 
 Can be modeled as a **custom format** that you combine with other formats:
 
 ``` js
+const { createLogger, format, transports } = require('winston');
+
+// Ignore log messages if the have { private: true }
+const isSecret = /super secret/;
+const filterSecret = format((info, opts) => {
+  info.message = info.message.replace(isSecret, 'su*** se****');
+  return info;
+});
+
+const logger = createLogger({
+  format: format.combine(
+    filterSecret(),
+    format.json()
+  ),
+  transports: [new transports.Console()]
+});
+
+// Outputs: {"level":"error","message":"Public error to share"}
+logger.log({
+  level: 'error',
+  message: 'Public error to share'
+});
+
+// Outputs: {"level":"error","message":"This is su*** se**** - hide it."}
+logger.log({
+  level: 'error',
+  message: 'This is super secret - hide it.'
+});
 ```
 
 ### Rewriters
@@ -97,7 +136,7 @@ const logger = winston.createLogger({
 logger.info('transaction ok', { creditCard: 123456789012345 });
 ```
 
-See [examples/format-mutate.js](/examples/format-mutate.js) for a complete end-to-end example.
+See [examples/format-mutate.js](/examples/format-mutate.js) for a complete end-to-end example that covers both filtering and rewriting behavior in `winston@2.x`.
 
 ## Exceptions & exception handling
 - `winston.exception` has been removed. Use:
