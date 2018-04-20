@@ -1,3 +1,15 @@
+## v2.4.2 / 2018-04-20
+### SUPER TROOPERS 2 EDITION
+
+- [#1281] Use `Buffer.alloc` and `Buffer.from`.
+- [#1086] clone() cloning prototype's custom methods.
+- [#1188] Don't swallow Error message/stack when using formatter.
+- Allow support for custom HTTP headers in HTTP transport
+- [#1253] Fix 2.x README.md (fixes [#1179])
+- Internal maintenance
+  - Add .gitignores from 3.x for easier maintenance switching.
+  - Add `package-lock.json` & `.gitattributes`
+
 ## v2.4.1 / 2018-03-09
 ### NODE@10 EDITION
 
