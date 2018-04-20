@@ -1,6 +1,6 @@
 # CONTRIBUTING
 
-TL;DR? The `winston` project is actively working towards getting `3.0.0` out of RC (currently `3.0.0-rc4`). 
+TL;DR? The `winston` project is actively working towards getting `3.0.0` out of RC (currently `3.0.0-rc5`). 
 
 - [Be kind & actively empathetic to one another](CODE_OF_CONDUCT.md)
 - [What makes up `winston@3.0.0`?](#what-makes-up-winston-3.0.0)
@@ -51,7 +51,7 @@ const logger = createLogger({
 You will commonly see this closing `winston@2.x` issues:
 
 ```
-Development `winston@2.x` has ceased. Please consider upgrading to `winston@3.0.0-rc4`. If you feel strongly about this bug please open a PR against the `2.x` branch. Thank you for using `winston`!
+Development `winston@2.x` has ceased. Please consider upgrading to `winston@3.0.0-rc5`. If you feel strongly about this bug please open a PR against the `2.x` branch. Thank you for using `winston`!
 ```
 
 ## Could this be implemented as a format?

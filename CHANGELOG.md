@@ -1,10 +1,32 @@
 # CHANGELOG
 
-- Bump `assume` to `^2.0.1`.
-- Bump `winston-compat` to `^0.1.1`.
+## v3.0.0-rc5 / 2018-04-20
+### UNOFFICIAL NATIONAL HOLIDAY EDITION
+
+- [#1281] Use `Buffer.alloc` and `Buffer.from` instead of `new Buffer`.
+- Better browser support
+  - [#1142] Move common tailFile to a separate file
+  - [#1279] Use feature detection to be safer for browser usage. 
+- MOAR Docs!
+  - **Document that we are pushing for a May 29th, 2018 release of `winston@3.0.0`**
+  - **Add David Hyde as official contributor.**
+  - [#1278] Final Draft of Upgrade Guide in `UPGRADE-3.0.md`
+  - Merge Roadmap from `3.0.0.md` into `CONTRIBUTING.md` and other
+    improvements to `CONTRIBUTING.md`
+- Improve & expand examples
+  - [#1175] Add more copy about printf formats based on issue feedback.
+  - [#1134] Add sampleto document timestamps more clearly as an example.
+  - [#1273] Add example using multiple formats.
+  - [#1250] Add an example illustrating the "finish" event for AWS Lambda scenarios.
+  - Use simple format to better show that `humanReadableUnhandledException` is now the default message format.
+  - Add example to illustrate that example code from winston-transport 
+    `README.md` is correct. 
+- Update `devDependencies`
+  - Bump `assume` to `^2.0.1`.
+  - Bump `winston-compat` to `^0.1.1`.
 
 ## v3.0.0-rc4 / 2018-04-06
-### IF A TREE FALLS IN THE FORREST DOES IT MAKE A LOG VERSION
+### IF A TREE FALLS IN THE FORREST DOES IT MAKE A LOG EDITION
 
 - (@indexzero, @dabh) Add support for `{ silent }` option to
 ``` js
