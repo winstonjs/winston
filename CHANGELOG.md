@@ -1,6 +1,8 @@
 # CHANGELOG
 
-### v3.0.0-rc4 / 2018-04-06
+
+
+## v3.0.0-rc4 / 2018-04-06
 ### IF A TREE FALLS IN THE FORREST DOES IT MAKE A LOG VERSION
 
 - (@indexzero, @dabh) Add support for `{ silent }` option to
