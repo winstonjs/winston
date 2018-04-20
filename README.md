@@ -10,7 +10,7 @@ A logger for just about everything.
 
 ## winston@3.0.0-rc4
 
-We are looking for feedback on the latest version of `winston`:
+**We are pushing for a May 29th, 2018 release of `winston@3.0.0`**, currently
 `winston@3.0.0-rc4`.
 
 ```
@@ -20,9 +20,10 @@ npm i winston@next --save
 See the [Upgrade Guide](UPGRADE-3.0.md) for more information. Bug reports and
 PRs welcome!
 
-## 3.0.0 Documentation
+## Looking for `winston@2.x` documentation?
 
-Please note that the documentation below is for 3.0.0. [See here for the 2.4.0 documentation.](https://github.com/winstonjs/winston/tree/2.4.0).
+Please note that the documentation below is for `winston@3`. 
+[Read the `winston@2.x` documentation].
 
 ## Motivation
 
@@ -1051,6 +1052,8 @@ npm test
 [mocha]: https://mochajs.org
 [nyc]: https://github.com/istanbuljs/nyc
 [assume]: https://github.com/bigpipe/assume
+
+[Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x 
 
 [Charlie Robbins]: http://github.com/indexzero
 [Jarrett Cruger]: https://github.com/jcrugzz
