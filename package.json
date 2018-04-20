@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "abstract-winston-transport": ">= 0.5.1",
-    "assume": "^1.5.1",
+    "assume": "^2.0.1",
     "colors": "^1.2.0",
     "cross-spawn-async": "^2.0.0",
     "eslint-config-populist": "^4.1.0",
@@ -39,7 +39,7 @@
     "split2": "^2.1.1",
     "std-mocks": "^1.0.0",
     "through2": "^2.0.0",
-    "winston-compat": "^0.0.1"
+    "winston-compat": "^0.1.1"
   },
   "main": "./lib/winston",
   "scripts": {
