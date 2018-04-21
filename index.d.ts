@@ -5,14 +5,188 @@
 
 import {Format, FormatWrap} from 'logform';
 import * as Transport from 'winston-transport';
-import * as Config from "./lib/winston/config";
-import * as Transports from "./lib/winston/transports";
 import * as stream from "stream";
+import {Agent} from "http";
 
 declare namespace winston {
+    // TRANSPORTS
+
+    interface ConsoleTransportOptions extends Transport.TransportStreamOptions {
+        stderrLevels?: string[];
+        debugStdout?: boolean;
+        eol?: string;
+    }
+
+    interface ConsoleTransportInstance extends Transport {
+        name: string;
+        stderrLevels: string[];
+        eol: string;
+
+        new(options?: ConsoleTransportOptions): ConsoleTransportInstance;
+    }
+
+    interface FileTransportOptions extends Transport.TransportStreamOptions {
+        filename?: string;
+        dirname?: string;
+        options?: object;
+        maxsize?: number;
+        stream?: NodeJS.WritableStream;
+        rotationFormat?: Function;
+        zippedArchive?: boolean;
+        maxFiles?: number;
+        eol?: string;
+        tailable?: boolean;
+    }
+
+    interface FileTransportInstance extends Transport {
+        name: string;
+        filename: string;
+        dirname: string;
+        options: object;
+        maxsize: number | null;
+        rotationFormat: Function | boolean;
+        zippedArchive: boolean;
+        maxFiles: number | null;
+        eol: string;
+        tailable: boolean;
+
+        new(options?: FileTransportOptions): FileTransportInstance;
+    }
+
+    interface HttpTransportOptions extends Transport.TransportStreamOptions {
+        ssl?: any;
+        host?: string;
+        port?: number;
+        auth?: { username: string; password: string; };
+        path?: string;
+        agent?: Agent;
+        headers?: object;
+    }
+
+    interface HttpTransportInstance extends Transport {
+        name: string;
+        ssl: boolean;
+        host: string;
+        port: number;
+        auth?: { username: string, password: string };
+        path: string;
+        agent?: Agent | null;
+
+        new(options?: HttpTransportOptions): HttpTransportInstance;
+    }
+
+    interface StreamTransportOptions extends Transport.TransportStreamOptions {
+        stream: NodeJS.WritableStream;
+    }
+
+    interface StreamTransportInstance extends Transport {
+        new(options?: StreamTransportOptions): StreamTransportInstance;
+    }
+
+    interface Transports {
+        File: FileTransportInstance;
+        Console: ConsoleTransportInstance;
+        Http: HttpTransportInstance;
+        Stream: StreamTransportInstance;
+    }
+
+    // CONFIG
+
+    interface AbstractConfigSetLevels {
+        [key: string]: number;
+    }
+
+    interface AbstractConfigSetColors {
+        [key: string]: string | string[];
+    }
+
+    interface AbstractConfigSet {
+        levels: AbstractConfigSetLevels;
+        colors: AbstractConfigSetColors;
+    }
+
+    interface CliConfigSetLevels extends AbstractConfigSetLevels {
+        error: number;
+        warn: number;
+        help: number;
+        data: number;
+        info: number;
+        debug: number;
+        prompt: number;
+        verbose: number;
+        input: number;
+        silly: number;
+    }
+
+    interface CliConfigSetColors extends AbstractConfigSetColors {
+        error: string | string[];
+        warn: string | string[];
+        help: string | string[];
+        data: string | string[];
+        info: string | string[];
+        debug: string | string[];
+        prompt: string | string[];
+        verbose: string | string[];
+        input: string | string[];
+        silly: string | string[];
+    }
+
+    interface NpmConfigSetLevels extends AbstractConfigSetLevels {
+        error: number;
+        warn: number;
+        info: number;
+        verbose: number;
+        debug: number;
+        silly: number;
+    }
+
+    interface NpmConfigSetColors extends AbstractConfigSetColors {
+        error: string | string[];
+        warn: string | string[];
+        info: string | string[];
+        verbose: string | string[];
+        debug: string | string[];
+        silly: string | string[];
+    }
+
+    interface SyslogConfigSetLevels extends AbstractConfigSetLevels {
+        emerg: number;
+        alert: number;
+        crit: number;
+        error: number;
+        warning: number;
+        notice: number;
+        info: number;
+        debug: number;
+    }
+
+    interface SyslogConfigSetColors extends AbstractConfigSetColors {
+        emerg: string | string[];
+        alert: string | string[];
+        crit: string | string[];
+        error: string | string[];
+        warning: string | string[];
+        notice: string | string[];
+        info: string | string[];
+        debug: string | string[];
+    }
+
+    interface Config {
+        allColors: AbstractConfigSetColors;
+        cli: { levels: CliConfigSetLevels, colors: CliConfigSetColors };
+        npm: { levels: NpmConfigSetLevels, colors: NpmConfigSetColors };
+        syslog: { levels: SyslogConfigSetLevels, colors: SyslogConfigSetColors };
+
+        addColors(colors: AbstractConfigSetColors): void;
+
+        colorize(level: number, message?: string): string;
+    }
+
+    // MAIN
+
     interface ExceptionHandler {
         logger: Logger;
-        handlers: Map;
+        handlers: Map<any, any>;
         catcher: Function | boolean;
 
         handle(): void;
@@ -63,7 +237,7 @@ declare namespace winston {
     }
 
     interface LoggerOptions {
-        levels?: Config.AbstractConfigSetLevels;
+        levels?: AbstractConfigSetLevels;
         silent?: string;
         format?: Format;
         level?: string;
@@ -75,7 +249,7 @@ declare namespace winston {
     interface Logger extends stream.Transform {
         silent: boolean;
         format: Format;
-        levels: Config.AbstractConfigSetLevels;
+        levels: AbstractConfigSetLevels;
         level: string;
         transports: Transport[];
         paddings: string[];
@@ -128,12 +302,12 @@ declare namespace winston {
         version: string;
         transports: Transports;
         config: Config;
-        Transport: Transport;
+        // Transport: Transport;
         ExceptionHandler: ExceptionHandler;
         Container: Container;
         loggers: Container;
 
-        addColors(target: Config.AbstractConfigSetColors): any;
+        addColors(target: AbstractConfigSetColors): any;
         format(formatFn?: Function): Format | FormatWrap;
         createLogger(options?: LoggerOptions): Logger;
 
