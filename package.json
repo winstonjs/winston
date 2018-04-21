@@ -49,7 +49,7 @@
     "report": "nyc report --reporter=lcov"
   },
   "engines": {
-    "node": ">= 4.2.2"
+    "node": ">= 6.4.0"
   },
   "license": "MIT"
 }
