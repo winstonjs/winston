@@ -18,6 +18,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "files": [
-    "index.d.ts"
+    "index.d.ts",
+    "lib/winston/config/index.d.ts",
+    "lib/winston/transports/index.d.ts"
   ]
 }
