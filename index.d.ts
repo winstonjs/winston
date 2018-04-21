@@ -5,6 +5,9 @@
 
 import {Format, FormatWrap} from 'logform';
 import * as Transport from 'winston-transport';
+import * as Config from "./lib/winston/config";
+import * as Transports from "./lib/winston/transports";
+import * as stream from "stream";
 
 declare namespace winston {
     interface ExceptionHandler {
@@ -60,30 +63,29 @@ declare namespace winston {
     }
 
     interface LoggerOptions {
-        levels?: AbstractConfigSetLevels;
+        levels?: Config.AbstractConfigSetLevels;
         silent?: string;
         format?: Format;
         level?: string;
         exitOnError?: Function | boolean;
-        transports?: Transport.TransportStream[] | Transport.TransportStream;
+        transports?: Transport[] | Transport;
         exceptionHandlers?: any;
     }
 
     interface Logger extends stream.Transform {
         silent: boolean;
         format: Format;
-        levels: AbstractConfigSetLevels;
+        levels: Config.AbstractConfigSetLevels;
         level: string;
-        exitOnError: any;
-        transports: Transport.TransportStream[];
+        transports: Transport[];
         paddings: string[];
         exceptions: ExceptionHandler;
         profilers: object;
         exitOnError: Function | boolean;
 
         log: LogMethod;
-        add(transport: Transport.TransportStream): Logger;
-        remove(transport: Transport.TransportStream): Logger;
+        add(transport: Transport): Logger;
+        remove(transport: Transport): Logger;
         clear(): Logger;
         close(): Logger;
 
@@ -131,7 +133,7 @@ declare namespace winston {
         Container: Container;
         loggers: Container;
 
-        addColors(target: AbstractConfigSetColors): any;
+        addColors(target: Config.AbstractConfigSetColors): any;
         format(formatFn?: Function): Format | FormatWrap;
         createLogger(options?: LoggerOptions): Logger;
 
@@ -139,8 +141,8 @@ declare namespace winston {
         log: LogMethod;
         query(options?: QueryOptions, callback?: (err: Error, results: any) => void): any;
         stream(options?: any): NodeJS.ReadableStream;
-        add(transport: Transport.TransportStream): Logger;
-        remove(transport: Transport.TransportStream): Logger;
+        add(transport: Transport): Logger;
+        remove(transport: Transport): Logger;
         clear(): Logger;
         startTimer(): Profiler;
         profile(id: string | number): Logger;

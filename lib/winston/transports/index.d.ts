@@ -7,14 +7,13 @@ import * as Transport from 'winston-transport';
 import { Agent } from 'http';
 
 declare namespace winston {
-
     interface ConsoleTransportOptions extends Transport.TransportStreamOptions {
         stderrLevels?: string[];
         debugStdout?: boolean;
         eol?: string;
     }
 
-    interface ConsoleTransportInstance extends Transport.TransportStream {
+    interface ConsoleTransportInstance extends Transport {
         name: string;
         stderrLevels: string[];
         eol: string;
@@ -27,7 +26,7 @@ declare namespace winston {
         dirname?: string;
         options?: object;
         maxsize?: number;
-        stream?: WritableStream;
+        stream?: NodeJS.WritableStream;
         rotationFormat?: Function;
         zippedArchive?: boolean;
         maxFiles?: number;
@@ -35,7 +34,7 @@ declare namespace winston {
         tailable?: boolean;
     }
 
-    interface FileTransportInstance extends Transport.TransportStream {
+    interface FileTransportInstance extends Transport {
         name: string;
         filename: string;
         dirname: string;
@@ -60,7 +59,7 @@ declare namespace winston {
         headers?: object;
     }
 
-    interface HttpTransportInstance extends Transport.TransportStream {
+    interface HttpTransportInstance extends Transport {
         name: string;
         ssl: boolean;
         host: string;
@@ -73,10 +72,10 @@ declare namespace winston {
     }
 
     interface StreamTransportOptions extends Transport.TransportStreamOptions {
-        stream: WritableStream;
+        stream: NodeJS.WritableStream;
     }
 
-    interface StreamTransportInstance extends Transport.TransportStream {
+    interface StreamTransportInstance extends Transport {
         new(options?: StreamTransportOptions): StreamTransportInstance;
     }
 
@@ -86,7 +85,6 @@ declare namespace winston {
         Http: HttpTransportInstance;
         Stream: StreamTransportInstance;
     }
-
 }
 
 export = winston;
