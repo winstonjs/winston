@@ -28,6 +28,7 @@
     "winston-transport": "^3.1.0"
   },
   "devDependencies": {
+    "@types/node": "^9.6.6",
     "abstract-winston-transport": ">= 0.5.1",
     "assume": "^2.0.1",
     "colors": "^1.2.0",
