@@ -10,7 +10,7 @@ before_install:
 
 script:
   - npm test
-  - tsc -p test
+  - tsc --version ; tsc -p test
 
 notifications:
   email:
