@@ -25,7 +25,7 @@
     "one-time": "0.0.4",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.0.1",
-    "winston-transport": "^3.1.0"
+    "winston-transport": "git+https://github.com/DABH/winston-transport.git#reorder-definitions"
   },
   "devDependencies": {
     "@types/node": "^9.6.6",
