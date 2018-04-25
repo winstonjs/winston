@@ -83,7 +83,7 @@ Below is the list of items that make up the roadmap through `3.1.0`. We are acti
 - [ ] Triage all open issues since October 2017
 
 ### High priority issues (non-blocking)
-- [ ] https://github.com/winstonjs/winston/issues/1144: this is _the_ purpose of `winston`. If we cannot log at high-volume we cannot ship out of RC. There was [test coverage for this][stress-test] that should be failing, but isnt
+- [x] [#1144]: this is _the_ purpose of `winston`. If we cannot log at high-volume we cannot ship out of RC. There was [test coverage for this][stress-test] that should be failing, but isnt. _(Fixed by #1291)._
 - [ ] Error handling within formats [#1261]
 - [ ] Update `docs/transports.md`.
 
@@ -99,7 +99,8 @@ Below is the list of items that make up the roadmap through `3.1.0`. We are acti
   - [x] `test/*-test.js`
   - [-] `test/formats/*-test.js` 
   - [-] `test/transports/*-test.js` 
-- [ ] Move `winston.config` into `triple-beam` around a base `Levels` class.
+- [x] Move `winston.config` into `triple-beam` around a base `Levels` class.
+  _(Fixed in `triple-beam@1.2.0`)_
 - [ ] Update to the latest `npm` levels (e.g. including `http`).
 - [ ] Code coverage tests above 80% for `winston` _(currently `~72%`)_.
   - [x] Code coverage tests above 90% for `winston-transport`.
@@ -131,7 +132,7 @@ Below is the list of items that make up the roadmap through `3.1.0`. We are acti
    - Needed for `winston.formats.colorize()`. 
 - [x] Quieter finalized output using `Symbol.for('message')` 
 - [x] Filtering messages completely in a format.
-- [ ] `winston.format.padLevels()` format.
+- [x] `winston.format.padLevels()` format.
 - [x] `humanReadableUnhandledException` should be the default
 
 ### Communications / Compatibility
