@@ -3,8 +3,9 @@
 
 /// <reference types="node" />
 
-import * as Transport from 'winston-transport';
 import {Agent} from "http";
+
+import * as Transport from 'winston-transport';
 
 declare namespace winston {
   interface ConsoleTransportOptions extends Transport.TransportStreamOptions {
