@@ -32,12 +32,28 @@
 - `winston.Container.prototype.add` no longer does crazy options parsing. Implementation inspired by [segmentio/winston-logger](https://github.com/segmentio/winston-logger/blob/master/lib/index.js#L20-L43)
 
 ### `winston.Logger`
-- `winston.Logger` will no longer respond with an error when logging with no transports
-- `winston.Logger` will no longer respond with an error if the same transports are added twice.
+
+- `winston.Logger.add` no longer accepts prototypes / classes. Pass **an instance of our transport instead.**
+
+**Don't do this**
+``` js
+// DON'T DO THIS. It will no longer work
+logger.add(winston.transports.Console);
+
+// Do this instead.
+logger.add(new winston.transports.Console());
+```
+
+- `winston.Logger` will no longer respond with an error when logging with no
+  transports
+- `winston.Logger` will no longer respond with an error if the same transports
+  are added twice.
 - `Logger.prototype.stream`
-  - `options.transport` is removed. Use the transport instance on the logger directly.
+  - `options.transport` is removed. Use the transport instance on the logger
+    directly.
 - `Logger.prototype.query`
-  - `options.transport` is removed. Use the transport instance on the logger directly.
+  - `options.transport` is removed. Use the transport instance on the logger 
+    directly.
 
 ### Exceptions & exception handling
 - `winston.exception` has been removed. Use:
