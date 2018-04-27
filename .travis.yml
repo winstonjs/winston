@@ -7,9 +7,11 @@ node_js:
 
 before_install:
   - travis_retry npm install
+  - travis_retry npm install typescript
 
 script:
   - npm test
+  - tsc --version ; tsc -p test
 
 notifications:
   email:
