@@ -26,6 +26,7 @@
 ### Transports
 - `winston.transports.Memory` was removed. Use any Node.js `stream.Writeable` with a large `highWaterMark` instance instead.
 - When writing transports use `winston-transport` instead of `winston.Transport`
+- Many formatting options that were previously configurable on transports (e.g. `json`, `raw`, `colorize`, `prettyPrint`, `timestamp`, `logstash`, `align`) should now be set by adding the appropriate formatter instead.
 
 ### `winston.Container` and `winston.loggers`
 - `winston.Container` instances no longer have default `Console` transports

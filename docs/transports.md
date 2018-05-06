@@ -54,7 +54,6 @@ The Console transport takes a few simple options:
 
 * __level:__ Level of messages that this transport should log (default 'info').
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
-* __colorize:__ Boolean flag indicating if we should colorize output (default false).
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default false). If function is specified, its return value will be used instead of timestamps.
 * __json:__ Boolean flag indicating whether or not the output should be JSON. If true, will log out multi-line JSON objects. (default false)
 * __stringify:__ Boolean flag indiciating if the output should be passed through JSON.stringify, resulting in single-line output. Most useful when used in conjunction with the json flag. (default false)
@@ -78,7 +77,6 @@ The File transport should really be the 'Stream' transport since it will accept 
 * __level:__ Level of messages that this transport should log.
 * __label:__ String value indicating which object (logger or transport) created the record.
 * __silent:__ Boolean flag indicating whether to suppress output.
-* __colorize:__ Boolean flag indicating if we should colorize output.
 * __timestamp:__ Boolean flag indicating if we should prepend output with timestamps (default true). If function is specified, its return value will be used instead of timestamps.
 * __filename:__ The filename of the logfile to write output to.
 * __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file.
@@ -270,8 +268,6 @@ new log collection as capped, defaults to false.
 * __cappedMax:__ Size of logs capped collection in number of documents.
 * __tryReconnect:__ Will try to reconnect to the database in case of fail during
 initialization. Works only if __db__ is a string. Defaults to false.
-* __decolorize:__ Will remove color attributes from the log entry message,
-defaults to false.
 * __expireAfterSeconds:__ Seconds before the entry is removed. Works only if __capped__ is not set.
 
 *Metadata:* Logged as a native JSON object in 'meta' property.

@@ -90,8 +90,6 @@ declare namespace winston {
     syslog: { levels: SyslogConfigSetLevels, colors: SyslogConfigSetColors };
 
     addColors(colors: AbstractConfigSetColors): void;
-
-    colorize(level: number, message?: string): string;
   }
 }
 

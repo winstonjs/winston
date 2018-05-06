@@ -13,7 +13,8 @@ const config = {
     data: 3,
     info: 4,
     verbose: 5,
-    silly: 6
+    silly: 6,
+    custom: 7
   },
   colors: {
     error: 'red',
@@ -22,19 +23,24 @@ const config = {
     data: 'grey',
     info: 'green',
     verbose: 'cyan',
-    silly: 'magenta'
+    silly: 'magenta',
+    custom: 'yellow'
   }
 };
+
+const customColorize = winston.format.colorize();
+customColorize.addColors(config.colors);
 
 const logger = module.exports = winston.createLogger({
   levels: config.levels,
   format: winston.format.combine(
-    winston.format.colorize(),
+    customColorize,
     winston.format.simple()
   ),
   transports: [
     new winston.transports.Console()
-  ]
+  ],
+  level: 'custom'
 });
 
-logger.data('hello')
+logger.custom('hello')
