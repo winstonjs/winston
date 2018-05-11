@@ -194,6 +194,23 @@ helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
   circmetadatatest[assertMsg] = assertFn;
   tests['when passed circular metadata'] = circmetadatatest;
 
+  var circerror = new Error("message!");
+  var foo = {};
+  var circerrordatatest;
+
+  foo.bar = foo;
+  circerror.foo = foo;
+  circerror.stack = 'Some stacktrace';
+
+  circerrordatatest = {
+    topic: function () {
+      transport.log('info', 'test message', circerror, this.callback.bind(this, null));
+    }
+  };
+
+  circerrordatatest[assertMsg] = assertFn;
+  tests['when passed circular error as metadata'] = circerrordatatest;
+
   return tests;
 };
 
