@@ -74,9 +74,12 @@ declare namespace winston {
 
   interface StreamTransportOptions extends Transport.TransportStreamOptions {
     stream: NodeJS.WritableStream;
+    eol?: string;
   }
 
   interface StreamTransportInstance extends Transport {
+    eol: string;
+
     new(options?: StreamTransportOptions): StreamTransportInstance;
   }
 
