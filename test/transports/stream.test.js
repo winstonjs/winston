@@ -3,6 +3,7 @@
 const path = require('path');
 const writeable = require('../helpers').writeable;
 const { MESSAGE } = require('triple-beam');
+const os = require('os');
 const winston = require('../../');
 const split = require('split2');
 const assume = require('assume');
@@ -31,7 +32,7 @@ describe('Stream({ stream })', function () {
     };
 
     const stream = writeable(function (raw) {
-      assume(raw.toString()).equals(expected[MESSAGE]);
+      assume(raw.toString()).equals(`${expected[MESSAGE]}${os.EOL}`);
       done();
     }, false);
 
