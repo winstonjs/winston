@@ -22,4 +22,4 @@ setTimeout(() => {
   try {
     fs.unlinkSync(filePath); // eslint-disable-line no-sync
   } catch (ex) {} // eslint-disable-line no-empty
-});
+}, 2000);
