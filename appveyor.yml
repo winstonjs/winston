@@ -15,11 +15,12 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
   - npm install typescript
-  
+
 build: off
 
 test_script:
-  - tsc --version ; tsc -p test
+  - .\node_modules\.bin\tsc --version
+  - .\node_modules\.bin\tsc -p test
   - npm run test
 
 notifications:
