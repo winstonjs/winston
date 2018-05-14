@@ -5,7 +5,7 @@
  * MIT LICENSE
  *
  */
-const exec = require('child_process').exec;
+const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const assume = require('assume');
@@ -17,7 +17,7 @@ const MESSAGE = Symbol.for('message');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize*'), done);
+  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize*'), done);
 }
 
 describe('File (maxsize)', function () {
