@@ -60,10 +60,10 @@ describe('File (maxsize)', function () {
         }
 
         const text = fs.readFileSync(file, 'utf8');
-        // Fails to assert the 5th file because it's empty.
         assume(text[0]).equals(fillWith[i]);
-        // Fails on each file because the eol also adds to the size.
-        assume(stats.size).equals(4096);
+        // Either 4096 on Unix or 4100 on Windows
+        // because of the eol.
+        assume(stats.size).either([4096, 4100]);
       });
 
       done();
