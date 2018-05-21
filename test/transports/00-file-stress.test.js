@@ -97,6 +97,7 @@ describe('File (stress)', function () {
         .on('data', function (d) {
           const json = JSON.parse(d);
           assume(json.level).equal('info');
+          assume(json.message).equal('a'.repeat(16384 - os.EOL.length - 1));
           assume(json.counter).equal(++counters.read);
         })
         .on('end', function () {
