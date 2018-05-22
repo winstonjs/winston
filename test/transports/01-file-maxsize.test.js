@@ -63,7 +63,11 @@ describe('File (maxsize)', function () {
         assume(text[0]).equals(fillWith[i]);
         // Either 4096 on Unix or 4100 on Windows
         // because of the eol.
-        assume(stats.size).either([4096, 4100]);
+        if (process.platform === 'win32') {
+          assume(stats.size).equals(4100);
+        } else {
+          assume(stats.size).equals(4096);
+        }
       });
 
       done();
