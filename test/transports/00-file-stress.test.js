@@ -50,6 +50,7 @@ describe('File (stress)', function () {
       helpers.tryRead(logPath)
         .on('error', function (err) {
           assume(err).false();
+          logger.close();
           done();
         })
         .pipe(split())
@@ -60,6 +61,7 @@ describe('File (stress)', function () {
         })
         .on('end', function () {
           assume(counters.write).equal(counters.read);
+          logger.close();
           done();
         });
     }, 10000);
@@ -91,6 +93,7 @@ describe('File (stress)', function () {
       helpers.tryRead(logPath)
         .on('error', function (err) {
           assume(err).false();
+          logger.close();
           done();
         })
         .pipe(split())
@@ -102,6 +105,7 @@ describe('File (stress)', function () {
         })
         .on('end', function () {
           assume(counters.write).equal(counters.read);
+          logger.close();
           done();
         });
     }, 10000);
@@ -129,6 +133,7 @@ describe('File (stress)', function () {
       helpers.tryRead(logPath)
         .on('error', function (err) {
           assume(err).false();
+          logger.close();
           done();
         })
         .pipe(split())
@@ -140,6 +145,7 @@ describe('File (stress)', function () {
         })
         .on('end', function () {
           assume(counters.write).equal(counters.read);
+          logger.close();
           done();
         });
     }, 10000);

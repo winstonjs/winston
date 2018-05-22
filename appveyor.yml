@@ -1,0 +1,29 @@
+version: "{build}"
+
+environment:
+  matrix:
+    - nodejs_version: 6
+    - nodejs_version: 8
+    - nodejs_version: 10
+
+matrix:
+  fast_finish: true
+
+platform: x64
+
+install:
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  - npm install
+  - npm install typescript
+
+build: off
+
+test_script:
+  - .\node_modules\.bin\tsc --version
+  - .\node_modules\.bin\tsc -p test
+  - npm run test
+
+notifications:
+  - provider: Email
+    to:
+      - travis@nodejitsu.com

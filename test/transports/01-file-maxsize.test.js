@@ -5,7 +5,7 @@
  * MIT LICENSE
  *
  */
-const exec = require('child_process').exec;
+const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const assume = require('assume');
@@ -17,7 +17,7 @@ const MESSAGE = Symbol.for('message');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize*'), done);
+  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize*'), done);
 }
 
 describe('File (maxsize)', function () {
@@ -60,10 +60,14 @@ describe('File (maxsize)', function () {
         }
 
         const text = fs.readFileSync(file, 'utf8');
-        // Fails to assert the 5th file because it's empty.
         assume(text[0]).equals(fillWith[i]);
-        // Fails on each file because the eol also adds to the size.
-        assume(stats.size).equals(4096);
+        // Either 4096 on Unix or 4100 on Windows
+        // because of the eol.
+        if (process.platform === 'win32') {
+          assume(stats.size).equals(4100);
+        } else {
+          assume(stats.size).equals(4096);
+        }
       });
 
       done();
