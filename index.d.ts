@@ -97,7 +97,7 @@ declare namespace winston {
     clear(): Logger;
     close(): Logger;
 
-    // for cli levels
+    // for cli and npm levels
     error: LeveledLogMethod;
     warn: LeveledLogMethod;
     help: LeveledLogMethod;
@@ -105,6 +105,7 @@ declare namespace winston {
     info: LeveledLogMethod;
     debug: LeveledLogMethod;
     prompt: LeveledLogMethod;
+    http: LeveledLogMethod;
     verbose: LeveledLogMethod;
     input: LeveledLogMethod;
     silly: LeveledLogMethod;
@@ -140,7 +141,16 @@ declare namespace winston {
   let addColors: (target: Config.AbstractConfigSetColors) => any;
   let createLogger: (options?: LoggerOptions) => Logger;
 
-  // Pass-through methods routed to the default logger.
+  // Pass-through npm level methods routed to the default logger.
+  let error: LeveledLogMethod;
+  let warn: LeveledLogMethod;
+  let info: LeveledLogMethod;
+  let http: LeveledLogMethod;
+  let verbose: LeveledLogMethod;
+  let debug: LeveledLogMethod;
+  let silly: LeveledLogMethod;
+
+  // Other pass-through methods routed to the default logger.
   let log: LogMethod;
   let query: (options?: QueryOptions, callback?: (err: Error, results: any) => void) => any;
   let stream: (options?: any) => NodeJS.ReadableStream;
