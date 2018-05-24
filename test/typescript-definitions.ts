@@ -11,5 +11,8 @@ const logger: winston.Logger = winston.createLogger({
 let err: Error = new Error('ttdt');
 logger.error('The error was: ', err);
 logger.log('info', 'hey dude', { foo: 'bar' });
-logger.log({level: 'info', message: 'hey dude', meta: { foo: 'bar' }});
+logger.log({ level: 'info', message: 'hey dude', meta: { foo: 'bar' } });
 
+// Default logger
+winston.http('New incoming connection')
+winston.error('The error was: ', err)
