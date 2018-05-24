@@ -319,6 +319,37 @@ describe('Logger (levels)', function () {
       .add(filterLevelTransport('ok'))
       .log(expected);
   });
+
+  it('sets transports levels', done => {
+    const logger = winston.createLogger();
+    const expectedError = { message: 'foo', level: 'error' };
+    const expectedInfo = { message: 'bar', level: 'info' };
+
+    function logLevelTransport(level) {
+      logger.level = level;
+      return new TransportStream({
+        log(obj) {
+          if (level === 'info') {
+            assume(obj).equals(undefined, 'Transport on level info should never be called');
+          }
+
+          assume(obj.message).equals('foo');
+          assume(obj.level).equals('error');
+          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'error' }));
+          assume(this.level).equals(logger.level);
+          done();
+        }
+      });
+    }
+
+    assume(logger.error).is.a('function');
+    assume(logger.info).is.a('function');
+
+    logger
+      .add(logLevelTransport('error'))
+      .log(expectedInfo)
+      .log(expectedError);
+  });
 });
 
 describe('Logger (stream semantics)', function () {
