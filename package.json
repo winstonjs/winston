@@ -47,8 +47,8 @@
   "scripts": {
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
-    "test": "nyc mocha test/*.test.js test/**/*.test.js",
-    "report": "nyc report --reporter=lcov"
+    "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
+    "test:mocha": "mocha test/*.test.js test/**/*.test.js"
   },
   "engines": {
     "node": ">= 6.4.0"
