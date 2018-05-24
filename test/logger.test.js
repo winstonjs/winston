@@ -329,7 +329,7 @@ describe('Logger (levels)', function () {
       logger.level = level;
       return new TransportStream({
         log(obj) {
-          if (level === 'info') {
+          if (obj.level === 'info') {
             assume(obj).equals(undefined, 'Transport on level info should never be called');
           }
 
