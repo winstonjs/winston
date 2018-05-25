@@ -31,7 +31,7 @@ describe('winston', () => {
     ['createLogger', 'add', 'remove', 'clear']
       .concat(Object.keys(winston.config.npm.levels))
       .forEach(key => {
-        assume(winston[key]).is.a('function', 'winston.' + key);
+        assume(winston[key]).is.a('function', `winston.${key}`);
       });
   });
 

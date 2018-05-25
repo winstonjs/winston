@@ -65,7 +65,7 @@ vows.describe('winston/transports/file/tailrolling').addBatch({
 
           logKbytes(4, created);
         },
-        'should be 3 log files, base to maxFiles - 1': function () {
+        'should be 3 log files, base to maxFiles - 1'() {
           let file;
           let fullpath;
 

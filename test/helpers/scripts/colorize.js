@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * colorize.js: A test fixture for logging colorized messages
  *

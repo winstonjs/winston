@@ -66,7 +66,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
           logKbytes(4, created);
         },
         'should be only 3 files called 5.log, 4.log and 3.log': () => {
-          for (var num = 0; num < 6; num++) {
+          for (let num = 0; num < 6; num++) {
             const file = !num ? 'testmaxfiles.log' : `testmaxfiles${num}.log`;
             const fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
 

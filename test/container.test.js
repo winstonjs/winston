@@ -38,12 +38,12 @@ describe('Container', () => {
       assume(container.loggers.has('default-test')).falsy();
     });
 
-    it('.close(non-existent)', function () {
+    it('.close(non-existent)', () => {
       container.close('non-existent');
       assume(container.loggers.has('non-existent')).falsy();
     });
 
-    it('.close()', function () {
+    it('.close()', () => {
       container.close();
       assume(container.loggers.has()).falsy();
     });

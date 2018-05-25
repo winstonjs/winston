@@ -11,9 +11,9 @@
 const assume = require('assume');
 const fs = require('fs');
 const path = require('path');
+const tailFile = require('../lib/winston/tail-file');
 const winston = require('../lib/winston');
 const { Stream } = require('stream');
-const tailFile = require('../lib/winston/tail-file');
 
 //
 // Test helper that performs writes to a specific log file
@@ -82,7 +82,7 @@ describe('tailFile', function () {
 
       stream.on('line', buff => {
         expected += 1;
-        assume(JSON.parse('' + buff)).is.an('object');
+        assume(JSON.parse(`${buff}`)).is.an('object');
       });
     }
 

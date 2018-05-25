@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * http-test.js: Tests for instances of the HTTP transport
  *
@@ -26,7 +28,7 @@ function mockHttpServer(opts, done) {
   };
 
   mock
-    .post('/' + opts.path, opts.payload)
+    .post(`/${opts.path}`, opts.payload)
     .min(1)
     .max(1)
     .reply(200);
@@ -38,15 +40,13 @@ function mockHttpServer(opts, done) {
 
 describe('Http({ host, port, path })', () => {
   let context;
-  let server;
 
   beforeEach(done => {
     context = mockHttpServer(done);
-    server = context.server;
   });
 
   it('should send logs over HTTP', done => {
-    const port = server.address().port;
+    const { port } = context.server.address();
     const httpTransport = new Http({
       host,
       port,
@@ -75,6 +75,6 @@ describe('Http({ host, port, path })', () => {
   });
 
   afterEach(done => {
-    server.close(done);
+    context.server.close(done);
   });
 });

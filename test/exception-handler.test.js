@@ -20,9 +20,9 @@ const winston = require('../lib/winston');
 // https://github.com/mochajs/mocha/issues/1985
 //
 const _runTest = mocha.Runner.prototype.runTest;
-mocha.Runner.prototype.runTest = function () {
+mocha.Runner.prototype.runTest = function (...args) {
   this.allowUncaught = true;
-  _runTest.apply(this, arguments);
+  _runTest.apply(this, args);
 };
 
 describe('ExceptionHandler', function () {
