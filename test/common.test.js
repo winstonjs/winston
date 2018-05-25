@@ -15,13 +15,13 @@ describe('winston/common', () => {
   it('winston.paddings', () => {
     assume(winston.paddings).is.an('object');
     assume(winston.paddings).deep.equals({
-      error: '   ',
-      warn: '    ',
-      info: '    ',
-      http: '    ',
-      verbose: ' ',
-      debug: '   ',
-      silly: '   '
+      error: '  ',
+      warn: '   ',
+      info: '   ',
+      http: '   ',
+      verbose: '',
+      debug: '  ',
+      silly: '  '
     });
   });
 });
