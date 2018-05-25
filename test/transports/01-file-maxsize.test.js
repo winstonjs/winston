@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * file-test.js: Tests for instances of the File transport
  *
@@ -5,13 +7,13 @@
  * MIT LICENSE
  *
  */
-const rimraf = require('rimraf');
-const fs = require('fs');
-const path = require('path');
-const assume = require('assume');
-const winston = require('../../');
 
-const MESSAGE = Symbol.for('message');
+const assume = require('assume');
+const fs = require('fs');
+const { MESSAGE } = require('triple-beam');
+const path = require('path');
+const rimraf = require('rimraf');
+const winston = require('../../');
 
 //
 // Remove all log fixtures
@@ -24,16 +26,15 @@ describe('File (maxsize)', function () {
   this.timeout(10000);
 
   before(removeFixtures);
-  after(removeFixtures);
 
-  it('should create multiple files correctly when passed more than the maxsize', function (done) {
+  it('should create multiple files correctly when passed more than the maxsize', done => {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
     const maxsizeTransport = new winston.transports.File({
       level: 'info',
       format: winston.format.printf(info => info.message),
       filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize.log'),
       maxsize: 4096
-    })
+    });
 
     //
     // Have to wait for `fs.stats` to be done in `maxsizeTransport.open()`.
@@ -51,14 +52,15 @@ describe('File (maxsize)', function () {
     // correct filesize
     //
     function assumeFilesCreated() {
-      files.map(function (file, i) {
+      files.map((file, i) => {
         let stats;
         try {
-          stats = fs.statSync(file);
+          stats = fs.statSync(file); // eslint-disable-line no-sync
         } catch (ex) {
           assume(stats).is.an('object', `${file} failed to open: ${ex.message}`);
         }
 
+        // eslint-disable-next-line no-sync
         const text = fs.readFileSync(file, 'utf8');
         assume(text[0]).equals(fillWith[i]);
         // Either 4096 on Unix or 4100 on Windows
@@ -95,15 +97,12 @@ describe('File (maxsize)', function () {
       // With printf format that displays the message only
       // winston adds exactly 0 characters.
       //
-      for (var i = 0; i < kbytes; i++) {
+      for (let i = 0; i < kbytes; i++) {
         maxsizeTransport.log({ level: 'info', [MESSAGE]: kbStr });
       }
     }
 
-    maxsizeTransport.on('open', function (file) {
-      const match = file.match(/(\d+)\.log$/);
-      const count = match ? match[1] : 0;
-
+    maxsizeTransport.on('open', file => {
       if (files.length === 5) {
         return assumeFilesCreated();
       }
@@ -112,4 +111,6 @@ describe('File (maxsize)', function () {
       setImmediate(() => logKbytes(4));
     });
   });
+
+  after(removeFixtures);
 });

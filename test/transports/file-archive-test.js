@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * file-archive-test.js: Tests for instances of the File transport setting the archive option,
  *
@@ -6,15 +8,13 @@
  *
  */
 
-var assert = require('assert'),
-  exec = require('child_process').exec,
-  fs = require('fs'),
-  path = require('path'),
-  vows = require('vows'),
-  winston = require('../../lib/winston'),
-  helpers = require('../helpers');
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const vows = require('vows');
+const winston = require('../../lib/winston');
 
-var archiveTransport = new winston.transports.File({
+const archiveTransport = new winston.transports.File({
   timestamp: true,
   json: false,
   zippedArchive: true,
@@ -35,21 +35,19 @@ function logKbytes(kbytes, txt) {
   // winston adds exactly 7 characters:
   // [info](4)[ :](2)[\n](1)
   //
-  for (var i = 0; i < kbytes; i++) {
-    archiveTransport.log('info', data(txt), null, function() {});
+  for (let i = 0; i < kbytes; i++) {
+    archiveTransport.log('info', data(txt), null, () => {});
   }
 }
 
 vows.describe('winston/transports/file/zippedArchive').addBatch({
-  "An instance of the File Transport with tailable true": {
-    "when created archived files are rolled": {
-      topic: function() {
-        var that = this,
-          created = 0;
-
-        archiveTransport.on('logged', function() {
+  'An instance of the File Transport with tailable true': {
+    'when created archived files are rolled': {
+      topic() {
+        let created = 0;
+        archiveTransport.on('logged', () => {
           if (++created === 6) {
-            return that.callback();
+            return this.callback();
           }
 
           logKbytes(4, created);
@@ -57,27 +55,26 @@ vows.describe('winston/transports/file/zippedArchive').addBatch({
 
         logKbytes(4, created);
       },
-      "should be only 3 files called testarchive.log, testarchive1.log.gz and testarchive2.log.gz": function() {
-        //Give the archive a little time to settle
-      //  setTimeout(function() {
-          for (var num = 0; num < 6; num++) {
-            var file = !num ? 'testarchive.log' : 'testarchive' + num + '.log.gz',
-              fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
+      'should be only 3 files called testarchive.log, testarchive1.log.gz and testarchive2.log.gz': () => {
+        for (let num = 0; num < 6; num++) {
+          const file = !num ? 'testarchive.log' : `testarchive${num}.log.gz`;
+          const fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
 
-            // There should be no files with that name
-            if (num >= 3) {
-              assert.throws(function() {
-                fs.statSync(fullpath);
-              }, Error);
-            } else {
-              // The other files should exist
-              assert.doesNotThrow(function() {
-                fs.statSync(fullpath);
-              }, Error);
-            }
+          // There should be no files with that name
+          if (num >= 3) {
+            assert.throws(() => {
+              // eslint-disable-next-line no-sync
+              fs.statSync(fullpath);
+            }, Error);
+          } else {
+            // The other files should exist
+            assert.doesNotThrow(() => {
+              // eslint-disable-next-line no-sync
+              fs.statSync(fullpath);
+            }, Error);
           }
-        //},5000);
-      },
+        }
+      }
     }
-  },
+  }
 }).export(module);

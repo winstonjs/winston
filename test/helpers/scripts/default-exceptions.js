@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * default-exceptions.js: A test fixture for logging exceptions with the default winston logger.
  *
@@ -6,8 +8,8 @@
  *
  */
 
-var path = require('path'),
-    winston = require('../../../lib/winston');
+const path = require('path');
+const winston = require('../../../lib/winston');
 
 winston.exceptions.handle([
   new winston.transports.File({
@@ -18,6 +20,6 @@ winston.exceptions.handle([
 
 winston.info('Log something before error');
 
-setTimeout(function () {
+setTimeout(() => {
   throw new Error('OH NOES! It failed!');
 }, 1000);

@@ -35,7 +35,7 @@
     "cross-spawn-async": "^2.0.0",
     "eslint-config-populist": "^4.1.0",
     "hock": "^1.3.2",
-    "mocha": "^3.2.0",
+    "mocha": "^5.2.0",
     "nyc": "^11.2.1",
     "rimraf": "^2.6.2",
     "split2": "^2.1.1",

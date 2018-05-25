@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * log-exception.test.js: Tests for exception data gathering in winston.
  *
@@ -6,41 +8,43 @@
  *
  */
 
-var assume = require('assume'),
-    fs = require('fs'),
-    path = require('path'),
-    spawn = require('child_process').spawn,
-    winston = require('../lib/winston'),
-    helpers = require('./helpers');
+const assume = require('assume');
+const fs = require('fs');
+const helpers = require('./helpers');
+const path = require('path');
+const { spawn } = require('child_process');
+const winston = require('../lib/winston');
 
 describe('Logger, ExceptionHandler', function () {
   this.timeout(5000);
 
-  describe('.exceptions.unhandle()', function () {
-    it('does not log to any transports', function (done) {
-      var logFile = path.join(__dirname, 'fixtures', 'logs', 'unhandle-exception.log');
+  describe('.exceptions.unhandle()', () => {
+    it('does not log to any transports', done => {
+      const logFile = path.join(__dirname, 'fixtures', 'logs', 'unhandle-exception.log');
 
       helpers.tryUnlink(logFile);
 
       spawn('node', [path.join(__dirname, 'helpers', 'scripts', 'unhandle-exceptions.js')])
-        .on('exit', function () {
-          fs.exists(logFile, function (exists) {
+        .on('exit', () => {
+          fs.exists(logFile, exists => { // eslint-disable-line max-nested-callbacks
             assume(exists).false();
             done();
           });
         });
     });
 
-    it('handlers immutable', function () {
+    it('handlers immutable', () => {
       //
       // A single default listener is added by mocha confirming
       // that our assumptions about mocha are maintained.
       //
       assume(process.listeners('uncaughtException').length).equals(1);
-      var logger = winston.createLogger({
+      const logger = winston.createLogger({
         exceptionHandlers: [
           new winston.transports.Console(),
-          new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+          new winston.transports.File({
+            filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log')
+          })
         ]
       });
 
@@ -52,17 +56,17 @@ describe('Logger, ExceptionHandler', function () {
     });
   });
 
-  it('Custom exitOnError function does not exit', function (done) {
-    var scriptDir = path.join(__dirname, 'helpers', 'scripts'),
-        child = spawn('node', [path.join(scriptDir, 'exit-on-error.js')]),
-        stdout = [];
+  it('Custom exitOnError function does not exit', done => {
+    const scriptDir = path.join(__dirname, 'helpers', 'scripts');
+    const child = spawn('node', [path.join(scriptDir, 'exit-on-error.js')]);
+    const stdout = [];
 
     child.stdout.setEncoding('utf8');
-    child.stdout.on('data', function (line) {
+    child.stdout.on('data', line => {
       stdout.push(line);
     });
 
-    setTimeout(function () {
+    setTimeout(() => {
       assume(child.killed).false();
       assume(stdout).deep.equals(['Ignore this error']);
       child.kill();
@@ -70,8 +74,8 @@ describe('Logger, ExceptionHandler', function () {
     }, 1000);
   });
 
-  describe('.exceptions.handle()', function () {
-    describe('should save the error information to the specified file', function () {
+  describe('.exceptions.handle()', () => {
+    describe('should save the error information to the specified file', () => {
       it('when strings are thrown as errors', helpers.assertHandleExceptions({
         script: path.join(__dirname, 'helpers', 'scripts', 'log-string-exception.js'),
         logfile: path.join(__dirname, 'fixtures', 'logs', 'string-exception.log'),

@@ -8,12 +8,10 @@
  *
  */
 
-const path = require('path');
 const assume = require('assume');
 const { LEVEL, MESSAGE } = require('triple-beam');
-const winston = require('../../lib/winston');
-const helpers = require('../helpers');
 const stdMocks = require('std-mocks');
+const winston = require('../../lib/winston');
 
 const defaultLevels = winston.config.npm.levels;
 const transports = {
@@ -33,34 +31,34 @@ const transports = {
       beta: 1,
       gamma: 2,
       delta: 3,
-      epsilon: 4,
+      epsilon: 4
     },
     stderrLevels: ['delta', 'epsilon']
   })
 };
 
 /**
- * Returns a function that asserts the `transport` has the specified
+ * Returns a function hat asserts the `transport` has the specified
  * `stderrLevels`.
  *
  * @param  {TransportStream} transport Transport to assert against
  * @param  {Array} stderrLevels Set of levels assumed to exist
- * @return {function} Assertion function to execute comparison
+ * @returns {function} Assertion function to execute comparison
  */
 function assertStderrLevels(transport, stderrLevels) {
-  return function () {
+  return () => {
     assume(JSON.stringify(Object.keys(transport.stderrLevels).sort()))
       .equals(JSON.stringify(stderrLevels.sort()));
   };
 }
 
-describe('Console transport', function () {
-  describe('with defaults', function () {
-    it('logs all levels (EXCEPT error and debug) to stdout', function () {
+describe('Console transport', () => {
+  describe('with defaults', () => {
+    it('logs all levels (EXCEPT error and debug) to stdout', () => {
       stdMocks.use();
       transports.defaults.levels = defaultLevels;
       Object.keys(defaultLevels)
-        .forEach(function (level) {
+        .forEach(level => {
           const info = {
             [LEVEL]: level,
             message: `This is level ${level}`,
@@ -72,7 +70,7 @@ describe('Console transport', function () {
         });
 
       stdMocks.restore();
-      var output = stdMocks.flush();
+      const output = stdMocks.flush();
       assume(output.stderr).is.an('array');
       assume(output.stderr).length(2);
       assume(output.stdout).is.an('array');
@@ -85,47 +83,47 @@ describe('Console transport', function () {
     ));
   });
 
-  describe('throws an appropriate error when', function () {
-    it('if both debugStdout and stderrLevels are set { debugStdout, stderrLevels }', function () {
-      assume(function () {
-        let throwing = new winston.transports.Console({
+  describe('throws an appropriate error when', () => {
+    it('if both debugStdout and stderrLevels are set { debugStdout, stderrLevels }', () => {
+      assume(() => (
+        new winston.transports.Console({
           stderrLevels: ['foo', 'bar'],
           debugStdout: true
         })
-      }).throws(/Cannot set debugStdout and stderrLevels/);
+      )).throws(/Cannot set debugStdout and stderrLevels/);
     });
 
-    it("if stderrLevels is set, but not an Array { stderrLevels: 'Not an Array' }", function () {
-      assume(function () {
-        let throwing = new winston.transports.Console({
+    it('if stderrLevels is set, but not an Array { stderrLevels: \'Not an Array\' }', () => {
+      assume(() => (
+        new winston.transports.Console({
           stderrLevels: 'Not an Array',
           debugStdout: false
         })
-      }).throws(/Cannot set stderrLevels to type other than Array/);
+      )).throws(/Cannot set stderrLevels to type other than Array/);
     });
 
-    it("if stderrLevels contains non-string elements { stderrLevels: ['good', /^invalid$/, 'valid']", function () {
-      assume(function () {
-        let throwing = new winston.transports.Console({
+    it('if stderrLevels contains non-string elements { stderrLevels: [\'good\', /^invalid$/, \'valid\']', () => {
+      assume(() => (
+        new winston.transports.Console({
           stderrLevels: ['good', /^invalid$/, 'valid'],
           debugStdout: false
         })
-      }).throws(/Cannot have non-string elements in stderrLevels Array/);
+      )).throws(/Cannot have non-string elements in stderrLevels Array/);
     });
   });
 
-  it("{ stderrLevels: ['info', 'warn'] } logs to them appropriately", assertStderrLevels(
+  it('{ stderrLevels: [\'info\', \'warn\'] } logs to them appropriately', assertStderrLevels(
     transports.stderrLevels,
     ['info', 'warn']
   ));
 
-  it('{ eol } adds a custom EOL delimiter', function (done) {
+  it('{ eol } adds a custom EOL delimiter', done => {
     stdMocks.use();
-    transports.eol.log({ [MESSAGE]: 'info: testing. 1 2 3...' }, function () {
+    transports.eol.log({ [MESSAGE]: 'info: testing. 1 2 3...' }, () => {
       stdMocks.restore();
 
-      var output = stdMocks.flush(),
-          line   = output.stdout[0];
+      const output = stdMocks.flush();
+      const line = output.stdout[0];
 
       assume(line).equal('info: testing. 1 2 3...X');
       done();

@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * file-maxfiles-test.js: Tests for instances of the File transport setting the max file size,
  * and setting a number for max files created.
@@ -8,15 +10,14 @@
  *
  */
 
-var assert = require('assert'),
-    exec = require('child_process').exec,
-    fs = require('fs'),
-    path = require('path'),
-    vows = require('vows'),
-    winston = require('../../lib/winston'),
-    helpers = require('../helpers');
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const rimraf = require('rimraf');
+const vows = require('vows');
+const winston = require('../../lib/winston');
 
-var maxfilesTransport = new winston.transports.File({
+const maxfilesTransport = new winston.transports.File({
   timestamp: false,
   json: false,
   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles.log'),
@@ -25,25 +26,23 @@ var maxfilesTransport = new winston.transports.File({
 });
 
 vows.describe('winston/transports/file/maxfiles').addBatch({
-  "An instance of the File Transport": {
-    "when passed a valid filename": {
-      topic: maxfilesTransport,
-      "should set the maxFiles option correctly": function (transportTest) {
+  'An instance of the File Transport': {
+    'when passed a valid filename': {
+      'topic': maxfilesTransport,
+      'should set the maxFiles option correctly': transportTest => {
         assert.isNumber(transportTest.maxFiles);
       }
     },
-    "when delete old test files": {
-      topic: function () {
-        exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles*'), this.callback);
+    'when delete old test files': {
+      topic() {
+        rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles*'), this.callback);
       },
-      "and when passed more files than the maxFiles": {
-        topic: function () {
-          var that = this,
-              created = 0;
-
+      'and when passed more files than the maxFiles': {
+        topic() {
+          let created = 0;
           function data(ch) {
             return new Array(1018).join(String.fromCharCode(65 + ch));
-          };
+          }
 
           function logKbytes(kbytes, txt) {
             //
@@ -51,14 +50,14 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
             // winston adds exactly 7 characters:
             // [info](4)[ :](2)[\n](1)
             //
-            for (var i = 0; i < kbytes; i++) {
-              maxfilesTransport.log('info', data(txt), null, function () { });
+            for (let i = 0; i < kbytes; i++) {
+              maxfilesTransport.log('info', data(txt), null, () => {});
             }
           }
 
-          maxfilesTransport.on('logged', function () {
+          maxfilesTransport.on('logged', () => {
             if (++created === 6) {
-              return that.callback();
+              return this.callback();
             }
 
             logKbytes(4, created);
@@ -66,29 +65,33 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
 
           logKbytes(4, created);
         },
-        "should be only 3 files called 5.log, 4.log and 3.log": function () {
+        'should be only 3 files called 5.log, 4.log and 3.log': () => {
           for (var num = 0; num < 6; num++) {
-            var file = !num ? 'testmaxfiles.log' : 'testmaxfiles' + num + '.log',
-                fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
+            const file = !num ? 'testmaxfiles.log' : `testmaxfiles${num}.log`;
+            const fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
 
             // There should be no files with that name
             if (num >= 0 && num < 3) {
-              assert.throws(function () {
+              assert.throws(() => {
+                // eslint-disable-next-line no-sync
                 fs.statSync(fullpath);
               }, Error);
             } else {
               // The other files should be exist
-              assert.doesNotThrow(function () {
+              assert.doesNotThrow(() => {
+                // eslint-disable-next-line no-sync
                 fs.statSync(fullpath);
               }, Error);
             }
           }
         },
-        "should have the correct content": function () {
-          ['D', 'E', 'F'].forEach(function (name, inx) {
-            var counter = inx + 3,
-                logsDir = path.join(__dirname, '..', 'fixtures', 'logs'),
-                content = fs.readFileSync(path.join(logsDir, 'testmaxfiles' + counter + '.log'), 'utf-8');
+        'should have the correct content': () => {
+          ['D', 'E', 'F'].forEach((name, inx) => {
+            const counter = inx + 3;
+            const logsDir = path.join(__dirname, '..', 'fixtures', 'logs');
+            // eslint-disable-next-line no-sync
+            const content = fs.readFileSync(path.join(logsDir, `testmaxfiles${counter}.log`), 'utf-8');
+
             // The content minus the 7 characters added by winston
             assert.lengthOf(content.match(new RegExp(name, 'g')), 4068);
           });

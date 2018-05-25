@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * profiler.js: Tests for exception simple profiling.
  *
@@ -6,20 +8,18 @@
  *
  */
 
-var assume = require('assume'),
-    Profiler = require('../lib/winston/profiler');
+const assume = require('assume');
+const Profiler = require('../lib/winston/profiler');
 
-describe('Profiler', function () {
-  it('new Profiler()', function () {
-    assume(function () {
-      var profiler = new Profiler();
-    }).throws();
+describe('Profiler', () => {
+  it('new Profiler()', () => {
+    assume(() => new Profiler()).throws();
   });
 
-  it('.done({ info })', function (done) {
-    var profiler = new Profiler({
-      write: function (info) {
-        assume(info).is.an('object'),
+  it('.done({ info })', done => {
+    const profiler = new Profiler({
+      write(info) {
+        assume(info).is.an('object');
         assume(info.something).equals('ok');
         assume(info.level).equals('info');
         assume(info.durationMs).is.a('number');
@@ -28,7 +28,7 @@ describe('Profiler', function () {
       }
     });
 
-    setTimeout(function () {
+    setTimeout(() => {
       profiler.done({
         something: 'ok',
         level: 'info',

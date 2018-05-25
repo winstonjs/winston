@@ -1,52 +1,50 @@
 'use strict';
 
-const path = require('path');
-const winston = require('../../');
-const helpers = require('../helpers');
-const fs = require('fs');
-const { MESSAGE } = require('triple-beam');
-const split = require('split2');
 const assume = require('assume');
+const fs = require('fs');
+const helpers = require('../helpers');
+const { MESSAGE } = require('triple-beam');
+const path = require('path');
+const split = require('split2');
+const winston = require('../../');
 
-function noop() {};
+function noop() {}
 
 describe('File({ filename })', function () {
   this.timeout(10 * 1000);
 
-  it('should write to the file when logged to with expected object', function (done) {
-    var filename = path.join(__dirname, '..', 'fixtures', 'file', 'simple.log');
-    var transport = new winston.transports.File({
-      filename: filename
-    });
+  it('should write to the file when logged to with expected object', done => {
+    const filename = path.join(__dirname, '..', 'fixtures', 'file', 'simple.log');
+    const transport = new winston.transports.File({ filename });
 
-    var info = { [MESSAGE]: 'this is my log message' };
-    var logged = 0;
-    var read = 0
+    const info = { [MESSAGE]: 'this is my log message' };
+    let logged = 0;
+    let read = 0;
 
     function cleanup() {
-      fs.unlinkSync(filename);
+      fs.unlinkSync(filename); // eslint-disable-line no-sync
     }
 
     transport.log(info, noop);
-    setImmediate(function () {
+    setImmediate(() => {
       helpers.tryRead(filename)
-        .on('error', function (err) {
+        .on('error', err => {
           assume(err).false();
           cleanup();
           done();
         })
         .pipe(split())
-        .on('data', function (d) {
+        .on('data', d => {
           assume(++read).lte(logged);
           assume(d).to.equal(info[MESSAGE]);
         })
-        .on('end', function () {
+        .on('end', () => {
           cleanup();
           done();
         });
     });
 
-    transport.once('logged', function () {
+    transport.once('logged', () => {
       logged++;
     });
   });
@@ -93,19 +91,18 @@ describe('File({ filename })', function () {
   // })
 });
 
-describe('File({ stream })', function () {
+describe('File({ stream })', () => {
   it('should display the deprecation notice');
-  it('should write to the stream when logged to with expected object', function (done) {
-    var streamfile = path.join(__dirname, '..', 'fixtures', 'file', 'simple-stream.log');
-    var stream = fs.createWriteStream(streamfile);
-    var streamTransport = new winston.transports.File({
-      stream: stream
-    });
+  it('should write to the stream when logged to with expected object', done => {
+    const streamfile = path.join(__dirname, '..', 'fixtures', 'file', 'simple-stream.log');
+    const stream = fs.createWriteStream(streamfile);
+    // eslint-disable-next-line no-unused-vars
+    const streamTransport = new winston.transports.File({ stream });
 
-    done();
     //
     // TODO: Flesh out these assertions
     //
+    done();
   });
 });
 
@@ -117,6 +114,6 @@ require('abstract-winston-transport')({
   },
   after(opts, done) {
     const abstractFile = opts.construct.filename;
-    fs.unlink(abstractFile, done.bind(null, null));
+    fs.unlink(abstractFile, done);
   }
 });

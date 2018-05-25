@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * config.test.js: Tests for winston.config
  *
@@ -6,12 +8,11 @@
  *
  */
 
-var assume = require('assume'),
-    winston = require('../lib/winston'),
-    helpers = require('./helpers');
+const assume = require('assume');
+const winston = require('../lib/winston');
 
-describe('winston.config', function () {
-  it('should have expected methods', function () {
+describe('winston.config', () => {
+  it('should have expected methods', () => {
     assume(winston.config).is.an('object');
     assume(winston.config.addColors).is.a('function');
     assume(winston.config.cli).is.an('object');

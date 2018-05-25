@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * default-exceptions.js: A test fixture for logging exceptions with the default winston logger.
  *
@@ -6,10 +8,10 @@
  *
  */
 
-var path = require('path'),
-    winston = require('../../../lib/winston');
+const path = require('path');
+const winston = require('../../../lib/winston');
 
-winston.exitOnError = function (err) {
+winston.exitOnError = err => {
   process.stdout.write(err.message);
   return err.message !== 'Ignore this error';
 };
@@ -21,6 +23,6 @@ winston.handleExceptions([
   })
 ]);
 
-setTimeout(function () {
+setTimeout(() => {
   throw new Error('Ignore this error');
 }, 100);

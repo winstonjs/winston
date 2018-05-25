@@ -6,15 +6,15 @@
  *
  */
 
-var winston = require('../../../lib/winston');
+const winston = require('../../../lib/winston');
 
-var format = winston.format.combine(
+const format = winston.format.combine(
   winston.format.colorize({ message: true }),
   winston.format.simple()
 );
 
-var logger = winston.createLogger({
-  format: format,
+const logger = winston.createLogger({
+  format,
   transports: [
     new winston.transports.Console()
   ]

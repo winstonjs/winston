@@ -1,21 +1,19 @@
 'use strict';
 
-const path = require('path');
-const writeable = require('../helpers').writeable;
+const assume = require('assume');
 const { MESSAGE } = require('triple-beam');
 const os = require('os');
 const winston = require('../../');
-const split = require('split2');
-const assume = require('assume');
+const { writeable } = require('../helpers');
 
-describe('Stream({ stream })', function () {
-  it('should support objectMode streams', function (done) {
+describe('Stream({ stream })', () => {
+  it('should support objectMode streams', done => {
     const expected = {
       level: 'info',
       message: 'lolwut testing!'
     };
 
-    const stream = writeable(function (info) {
+    const stream = writeable(info => {
       assume(info).equals(expected);
       done();
     });
@@ -24,14 +22,14 @@ describe('Stream({ stream })', function () {
     transport.log(expected);
   });
 
-  it('should support UTF8 encoding streams', function (done) {
+  it('should support UTF8 encoding streams', done => {
     const expected = {
       level: 'info',
       message: 'lolwut testing!',
       [MESSAGE]: 'info: lolwut testing!'
     };
 
-    const stream = writeable(function (raw) {
+    const stream = writeable(raw => {
       assume(raw.toString()).equals(`${expected[MESSAGE]}${os.EOL}`);
       done();
     }, false);
@@ -40,9 +38,8 @@ describe('Stream({ stream })', function () {
     transport.log(expected);
   });
 
-  it('should throw when not passed a stream', function () {
-    assume(function () {
-      const stream = new winston.transports.Stream()
-    }).throws('options.stream is required.');''
+  it('should throw when not passed a stream', () => {
+    assume(() => new winston.transports.Stream())
+      .throws('options.stream is required.');'';
   });
 });

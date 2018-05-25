@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * tail-file.test.js: Tests for lib/winston/tail-file.js
  *
@@ -6,41 +8,48 @@
  *
  */
 
-var assume = require('assume'),
-    fs = require('fs'),
-    path = require('path'),
-    winston = require('../lib/winston'),
-    tailFile = require('../lib/winston/tail-file'),
-    Stream = require('stream').Stream;
+const assume = require('assume');
+const fs = require('fs');
+const path = require('path');
+const winston = require('../lib/winston');
+const { Stream } = require('stream');
+const tailFile = require('../lib/winston/tail-file');
 
 //
 // Test helper that performs writes to a specific log file
 // on a given interval
 //
-function logOnInterval(opts, done) {
-  var filename = opts.file;
-  var interval = opts.interval || 100;
-  var timeout = opts.timeout || 10 * 1000;
-  var message = opts.message || '';
-  var open = opts.open;
-  var transport = new winston.transports.File({ filename: filename });
-  var logger = winston.createLogger({ transports: [transport] });
+function logOnInterval({
+  filename,
+  interval = 100,
+  timeout = (10 * 1000),
+  message = '',
+  open
+}, done) {
+  // const filename = opts.file;
+  // const interval = opts.interval || 100;
+  // const timeout = opts.timeout || 10 * 1000;
+  // const message = opts.message || '';
+  // const open = opts.open;
+
+  const transport = new winston.transports.File({ filename });
+  const logger = winston.createLogger({ transports: [transport] });
 
   if (open) {
     transport.once('open', open);
   }
 
-  let counters = {
+  const counters = {
     write: 0,
     read: 0
   };
 
-  fs.unlink(filename, function () {
-    const intervalId = setInterval(function () {
+  fs.unlink(filename, () => {
+    const intervalId = setInterval(() => {
       logger.info({ message: ++counters.write + message });
     }, interval);
 
-    setTimeout(function () {
+    setTimeout(() => {
       //
       // Clear the interval to stop writes, then pause
       // briefly to let any listening streams flush.
@@ -54,32 +63,38 @@ function logOnInterval(opts, done) {
 
 describe('tailFile', function () {
   this.timeout(10 * 1000);
-  it('is a function', function () {
+
+  it('is a function', () => {
     assume(tailFile).is.a('function');
     assume(tailFile.length).equals(2);
   });
 
-  it('returns a stream that emits "line" for every line', function (done) {
-    var tailable = path.join(__dirname, 'fixtures', 'logs', 'common-tail-file.log');
-    var expected = 0;
+  it('returns a stream that emits "line" for every line', done => {
+    const tailable = path.join(__dirname, 'fixtures', 'logs', 'common-tail-file.log');
+    let expected = 0;
+
     //
     // Performs the actual tail and asserts it.
     //
     function startTailFile() {
-      var stream = tailFile({ file: tailable });
+      const stream = tailFile({ file: tailable });
       assume(stream).instanceof(Stream);
 
-      stream.on('line', function (buff) {
+      stream.on('line', buff => {
         expected += 1;
         assume(JSON.parse('' + buff)).is.an('object');
       });
     }
 
     logOnInterval({
-      file: tailable,
+      filename: tailable,
       open: startTailFile,
       timeout: 5000
-    }, function (err, actual) {
+    }, (err, actual) => {
+      if (err) {
+        return done(err);
+      }
+
       assume(expected).equals(actual.write);
       done();
     });

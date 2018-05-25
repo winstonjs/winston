@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * exception-test.js: Tests for exception data gathering in winston.
  *
@@ -6,18 +8,17 @@
  *
  */
 
-var assume = require('assume'),
-    stream = require('stream'),
-    path = require('path'),
-    winston = require('../lib/winston'),
-    ExceptionStream = require('../lib/winston/exception-stream'),
-    helpers = require('./helpers');
+const assume = require('assume');
+const ExceptionStream = require('../lib/winston/exception-stream');
+const path = require('path');
+const stream = require('stream');
+const winston = require('../lib/winston');
 
-describe('ExceptionStream', function () {
-  it('has expected methods', function () {
-    var filename = path.join(__dirname, 'fixtures', 'logs', 'exception-stream.log');
-    var transport = new winston.transports.File({ filename });
-    var instance = new ExceptionStream(transport);
+describe('ExceptionStream', () => {
+  it('has expected methods', () => {
+    const filename = path.join(__dirname, 'fixtures', 'logs', 'exception-stream.log');
+    const transport = new winston.transports.File({ filename });
+    const instance = new ExceptionStream(transport);
 
     assume(instance.handleExceptions).is.true();
     assume(instance.transport).equals(transport);
@@ -26,10 +27,10 @@ describe('ExceptionStream', function () {
     assume(instance).inherits(stream.Writable);
   });
 
-  it('throws without a transport', function () {
-    assume(function () {
-      var stream = new ExceptionStream();
-      stream._write({ exception: true });
+  it('throws without a transport', () => {
+    assume(() => {
+      const exceptionStream = new ExceptionStream();
+      exceptionStream._write({ exception: true });
     }).throws('ExceptionStream requires a TransportStream instance.');
-  })
+  });
 });

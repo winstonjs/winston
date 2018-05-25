@@ -8,11 +8,11 @@
  *
  */
 
-const fs = require('fs');
-const os  = require('os');
-const path = require('path');
 const assume = require('assume');
+const fs = require('fs');
 const helpers = require('../helpers');
+const path = require('path');
+const os  = require('os');
 const split = require('split2');
 const winston = require('../../lib/winston');
 
@@ -20,19 +20,26 @@ describe('File (stress)', function () {
   this.timeout(30 * 1000);
 
   const logPath = path.resolve(__dirname, '../fixtures/logs/file-stress-test.log');
-  beforeEach(function () {
+  beforeEach(done => {
     try {
-      fs.unlinkSync(logPath);
+      fs.unlinkSync(logPath); // eslint-disable-line no-sync
     } catch (ex) {
-      if (ex && ex.code !== 'ENOENT') { return done(ex); }
+      if (ex && ex.code !== 'ENOENT') {
+        return done(ex);
+      }
+
     }
+
+    return done();
   });
 
-  it('should handle a high volume of writes', function (done) {
+  it('should handle a high volume of writes', done => {
     const logger = winston.createLogger({
-      transports: [new winston.transports.File({
-        filename: logPath
-      })]
+      transports: [
+        new winston.transports.File({
+          filename: logPath
+        })
+      ]
     });
 
     const counters = {
@@ -40,26 +47,26 @@ describe('File (stress)', function () {
       read: 0
     };
 
-    const interval = setInterval(function () {
+    const interval = setInterval(() => {
       logger.info(++counters.write);
     }, 0);
 
-    setTimeout(function () {
+    setTimeout(() => {
       clearInterval(interval);
 
       helpers.tryRead(logPath)
-        .on('error', function (err) {
+        .on('error', err => {
           assume(err).false();
           logger.close();
           done();
         })
         .pipe(split())
-        .on('data', function (d) {
+        .on('data', d => {
           const json = JSON.parse(d);
           assume(json.level).equal('info');
           assume(json.message).equal(++counters.read);
         })
-        .on('end', function () {
+        .on('end', () => {
           assume(counters.write).equal(counters.read);
           logger.close();
           done();
@@ -67,11 +74,13 @@ describe('File (stress)', function () {
     }, 10000);
   });
 
-  it('should handle a high volume of large writes', function (done) {
+  it('should handle a high volume of large writes', done => {
     const logger = winston.createLogger({
-      transports: [new winston.transports.File({
-        filename: logPath
-      })]
+      transports: [
+        new winston.transports.File({
+          filename: logPath
+        })
+      ]
     });
 
     const counters = {
@@ -79,7 +88,7 @@ describe('File (stress)', function () {
       read: 0
     };
 
-    const interval = setInterval(function () {
+    const interval = setInterval(() => {
       const msg = {
         counter: ++counters.write,
         message: 'a'.repeat(16384 - os.EOL.length - 1)
@@ -87,23 +96,23 @@ describe('File (stress)', function () {
       logger.info(msg);
     }, 0);
 
-    setTimeout(function () {
+    setTimeout(() => {
       clearInterval(interval);
 
       helpers.tryRead(logPath)
-        .on('error', function (err) {
+        .on('error', err => {
           assume(err).false();
           logger.close();
           done();
         })
         .pipe(split())
-        .on('data', function (d) {
+        .on('data', d => {
           const json = JSON.parse(d);
           assume(json.level).equal('info');
           assume(json.message).equal('a'.repeat(16384 - os.EOL.length - 1));
           assume(json.counter).equal(++counters.read);
         })
-        .on('end', function () {
+        .on('end', () => {
           assume(counters.write).equal(counters.read);
           logger.close();
           done();
@@ -111,11 +120,13 @@ describe('File (stress)', function () {
     }, 10000);
   });
 
-  it('should handle a high volume of large writes synchronous', function (done) {
+  it('should handle a high volume of large writes synchronous', done => {
     const logger = winston.createLogger({
-      transports: [new winston.transports.File({
-        filename: logPath
-      })]
+      transports: [
+        new winston.transports.File({
+          filename: logPath
+        })
+      ]
     });
 
     const counters = {
@@ -129,21 +140,21 @@ describe('File (stress)', function () {
     }));
     msgs.forEach(msg => logger.info(msg));
 
-    setTimeout(function () {
+    setTimeout(() => {
       helpers.tryRead(logPath)
-        .on('error', function (err) {
+        .on('error', err => {
           assume(err).false();
           logger.close();
           done();
         })
         .pipe(split())
-        .on('data', function (d) {
+        .on('data', d => {
           const json = JSON.parse(d);
           assume(json.level).equal('info');
           assume(json.message).equal('a'.repeat(16384 - os.EOL.length - 1));
           assume(json.counter).equal(++counters.read);
         })
-        .on('end', function () {
+        .on('end', () => {
           assume(counters.write).equal(counters.read);
           logger.close();
           done();

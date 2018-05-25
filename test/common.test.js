@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * common.test.js: Tests for lib/winston/common.js
  *
@@ -6,13 +8,11 @@
  *
  */
 
-var assume = require('assume'),
-    winston = require('../lib/winston'),
-    common = require('../lib/winston/common');
+const assume = require('assume');
+const winston = require('../lib/winston');
 
-
-describe('winston/common', function () {
-  it('winston.paddings', function () {
+describe('winston/common', () => {
+  it('winston.paddings', () => {
     assume(winston.paddings).is.an('object');
     assume(winston.paddings).deep.equals({
       error: '  ',
