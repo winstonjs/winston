@@ -26,6 +26,7 @@
 ### Transports
 - `winston.transports.Memory` was removed. Use any Node.js `stream.Writeable` with a large `highWaterMark` instance instead.
 - When writing transports use `winston-transport` instead of `winston.Transport`
+- In `winston.transports.Console`, log level 'debug' ouptut is now sent to stdout by default rather than stderr (controlled by `debugStdout` option)
 
 ### `winston.Container` and `winston.loggers`
 - `winston.Container` instances no longer have default `Console` transports

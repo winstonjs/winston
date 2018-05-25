@@ -56,7 +56,7 @@ function assertStderrLevels(transport, stderrLevels) {
 
 describe('Console transport', function () {
   describe('with defaults', function () {
-    it('logs all levels (EXCEPT error and debug) to stdout', function () {
+    it('logs all levels (EXCEPT error) to stdout', function () {
       stdMocks.use();
       transports.defaults.levels = defaultLevels;
       Object.keys(defaultLevels)
@@ -74,14 +74,14 @@ describe('Console transport', function () {
       stdMocks.restore();
       var output = stdMocks.flush();
       assume(output.stderr).is.an('array');
-      assume(output.stderr).length(2);
+      assume(output.stderr).length(1);
       assume(output.stdout).is.an('array');
-      assume(output.stdout).length(5);
+      assume(output.stdout).length(6);
     });
 
-    it("should set stderrLevels to ['error', 'debug'] by default", assertStderrLevels(
+    it("should set stderrLevels to ['error'] by default", assertStderrLevels(
       transports.defaults,
-      ['error', 'debug']
+      ['error']
     ));
   });
 
