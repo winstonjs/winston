@@ -72,7 +72,7 @@ declare namespace winston {
 
   interface LoggerOptions {
     levels?: Config.AbstractConfigSetLevels;
-    silent?: string;
+    silent?: boolean;
     format?: logform.Format;
     level?: string;
     exitOnError?: Function | boolean;
