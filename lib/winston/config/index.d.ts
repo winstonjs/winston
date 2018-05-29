@@ -47,6 +47,7 @@ declare namespace winston {
     error: number;
     warn: number;
     info: number;
+    http: number;
     verbose: number;
     debug: number;
     silly: number;

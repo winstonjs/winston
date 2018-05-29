@@ -131,8 +131,14 @@ helpers.tryRead = function tryRead(filename) {
  */
 helpers.assertProcessInfo = function (obj) {
   assume(obj.pid).is.a('number');
-  assume(obj.uid).is.a('number');
-  assume(obj.gid).is.a('number');
+  // `process.gid` and `process.uid` do no exist on Windows.
+  if (process.platform === 'win32') {
+    assume(obj.uid).is.a('null');
+    assume(obj.gid).is.a('null');
+  } else {
+    assume(obj.uid).is.a('number');
+    assume(obj.gid).is.a('number');
+  }
   assume(obj.cwd).is.a('string');
   assume(obj.execPath).is.a('string');
   assume(obj.version).is.a('string');

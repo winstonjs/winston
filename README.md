@@ -670,7 +670,7 @@ module.exports = class YourCustomTransport extends Transport {
   }
 
   log(info, callback) {
-    setImmediate(function () {
+    setImmediate(() => {
       this.emit('logged', info);
     });
 

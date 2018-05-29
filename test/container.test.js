@@ -33,7 +33,17 @@ describe('Container', function () {
 
     it('.close(default-test)', function () {
       container.close('default-test');
-      assume(container.loggers['default-test']).falsy();
+      assume(container.loggers.has('default-test')).falsy();
+    });
+
+    it('.close(non-existent)', function () {
+      container.close('non-existent');
+      assume(container.loggers.has('non-existent')).falsy();
+    });
+
+    it('.close()', function () {
+      container.close();
+      assume(container.loggers.has()).falsy();
     });
   });
 
