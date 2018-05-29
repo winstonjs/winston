@@ -571,12 +571,10 @@ colors, in addition to passing the levels to the Logger itself, you must make
 winston aware of them:
 
 ``` js
-const customColorize = winston.format.colorize();
-customColorize.addColors(myCustomLevels.colors);
-// Now use customColorize as part of your logger's format as shown below
+winston.addColors(myCustomLevels.colors);
 ```
 
-This enables loggers using the `customColorize` formatter to appropriately color and style 
+This enables loggers using the `colorize` formatter to appropriately color and style 
 the output of custom levels.
 
 Additionally, you can also change background color and font style. 

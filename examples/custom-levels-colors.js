@@ -28,13 +28,12 @@ const config = {
   }
 };
 
-const customColorize = winston.format.colorize();
-customColorize.addColors(config.colors);
+winston.addColors(config.colors);
 
 const logger = module.exports = winston.createLogger({
   levels: config.levels,
   format: winston.format.combine(
-    customColorize,
+    winston.format.colorize(),
     winston.format.simple()
   ),
   transports: [
