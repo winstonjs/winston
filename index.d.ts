@@ -22,8 +22,8 @@ declare namespace winston {
     handlers: Map<any, any>;
     catcher: Function | boolean;
 
-    handle(): void;
-    unhandle(): void;
+    handle(...transports: Transport[]): void;
+    unhandle(...transports: Transport[]): void;
     getAllInfo(err: string | Error): object;
     getProcessInfo(): object;
     getOsInfo(): object;

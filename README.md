@@ -717,14 +717,14 @@ If you want to use this feature with the default logger, simply call
 
 ``` js
 //
-// You can add a separate exception logger by passing it to `.handleExceptions`
+// You can add a separate exception logger by passing it to `.exceptions.handle`
 //
 winston.exceptions.handle(
   new winston.transports.File({ filename: 'path/to/exceptions.log' })
 );
 
 //
-// Alternatively you can set `.handleExceptions` to true when adding transports
+// Alternatively you can set `handleExceptions` to true when adding transports
 // to winston. You can use the `.humanReadableUnhandledException` option to 
 // get more readable exceptions.
 //

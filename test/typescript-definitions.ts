@@ -16,3 +16,5 @@ logger.log({ level: 'info', message: 'hey dude', meta: { foo: 'bar' } });
 // Default logger
 winston.http('New incoming connection')
 winston.error('The error was: ', err)
+
+winston.exceptions.handle(new winston.transports.File({ filename: 'exceptions.log' }));
