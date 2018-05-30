@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## v3.0.0-rc6 / 2018-05-24
-### T-MINUS 5-DAYS TO WINSTON@3 EDITION
+## v3.0.0-rc6 / 2018-05-30
+### T-MINUS 6-DAY TO WINSTON@3 EDITION
 
+  - **Document that we are pushing for a June 5th, 2018 release of `winston@3.0.0`**
 - [#1287], (@DABH) Added types for Typescript.
 - [#1286], (@ChrisAlderson) Migrate codebase to ES6
   - [#1324], (@ChrisAlderson) Fix regression introduced by ES6 migration for
@@ -14,6 +15,9 @@
   for backwards compatibility.
 - [#1320], (@ChrisAlderson) Enhance tests to run on Windows.
 - Internal project maintenance
+  - Bump to `winston-transport@4.0.0` which may cause incompatibilities if
+    your custom transport does not explicitly require `winston-transport`
+    itself. 
   - [#1292], (@ChrisAlderson) Add node v10 to TravisCI build matrix.
   - [#1296], (@indexzero) Improve `UPGRADE-3.0.md`. Add Github Issue Template.
   - Remove "npm run report" in favor of reports being automatically generate.
