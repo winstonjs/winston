@@ -15,7 +15,7 @@
     "winston",
     "logging",
     "sysadmin",
-    "tools"
+    "tools",
     "json",
     "stream"
   ],
