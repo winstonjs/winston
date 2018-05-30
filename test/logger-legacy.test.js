@@ -21,6 +21,10 @@ const LegacyMixedTransport = require('./helpers/mocks/legacy-mixed-transport');
 const TransportStream = require('winston-transport');
 const helpers = require('./helpers');
 
+/*
+ * Assumes that the `TransportClass` with the given { name, displayName }
+ * are properly handled by a winston Logger.
+ */
 function assumeAcceptsLegacy({ displayName, name, TransportClass }) {
   return function () {
     it(`.add(${name})`, function () {
@@ -34,7 +38,7 @@ function assumeAcceptsLegacy({ displayName, name, TransportClass }) {
       assume(logger._readableState.pipesCount).equals(1);
       assume(logger._readableState.pipes.transport).is.an('object');
       assume(logger._readableState.pipes.transport).equals(transport);
-      assume(output.stderr.join('')).to.include('legacy-test is a legacy winston transport. Consider upgrading');
+      assume(output.stderr.join('')).to.include(`${name} is a legacy winston transport. Consider upgrading`);
     });
 
     it(`.add(${name}) multiple`, function () {
@@ -51,7 +55,7 @@ function assumeAcceptsLegacy({ displayName, name, TransportClass }) {
       var output = stdMocks.flush();
 
       assume(logger._readableState.pipesCount).equals(3);
-      var errorMsg = 'legacy-test is a legacy winston transport. Consider upgrading';
+      var errorMsg = `${name} is a legacy winston transport. Consider upgrading`;
       assume(output.stderr.join('')).to.include(errorMsg);
     });
 
@@ -61,8 +65,7 @@ function assumeAcceptsLegacy({ displayName, name, TransportClass }) {
         new TransportClass()
       ];
 
-      var logger = winston.createLogger({ transports: transports });
-
+      const logger = winston.createLogger({ transports: transports });
       assume(logger.transports.length).equals(2);
       logger.remove(transports[1]);
       assume(logger.transports.length).equals(1);
