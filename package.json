@@ -16,6 +16,8 @@
     "logging",
     "sysadmin",
     "tools"
+    "json",
+    "stream"
   ],
   "dependencies": {
     "async": "^2.6.0",
