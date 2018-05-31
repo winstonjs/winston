@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v3.0.0 / 2018-06-05
+### GET IN THE CHOPPA EDITION
+
+- [#1332], (@DABH): logger.debug is sent to stderr (Fixed [#1024])
+- [#1328], (@ChrisAlderson): Logger level doesn't update transports level (Fixes [#1191]).
+- [#1340], (@indexzero): Check log.length when evaluating "legacyness" of transports (Fixes [#1280])
+- [TODO], (@indexzero): REMAINS OPEN, NO PR (Related to winston-transport#24, Fixes #1250). 
+- [TODO]: REMAINS OPEN, NO PR (Fixes #1261) 
+- [TODO]: REMAINS OPEN, NO PR (Fixes #1289)
+
 ## v3.0.0-rc6 / 2018-05-30
 ### T-MINUS 6-DAY TO WINSTON@3 EDITION
 
