@@ -303,6 +303,39 @@ describe('Logger (levels)', function () {
   });
 });
 
+describe('Logger (stream semantics)', function () {
+  it(`'finish' event awaits transports to emit 'finish'`, function (done) {
+    const transports = [
+      new TransportStream({ log: function () {} }),
+      new TransportStream({ log: function () {} }),
+      new TransportStream({ log: function () {} })
+    ];
+
+    const finished = [];
+    const logger = winston.createLogger({ transports });
+
+    // Assert each transport emits finish
+    transports.forEach((transport, i) => {
+      transport.on('finish', () => finished[i] = true);
+    });
+
+    // Manually end the last transport to simulate mixed
+    // finished state
+    transports[2].end();
+
+    // Assert that all transport 'finish' events have been
+    // emitted when the logger emits 'finish'.
+    logger.on('finish', function () {
+      assume(finished[0]).true();
+      assume(finished[1]).true();
+      assume(finished[2]).true();
+      done();
+    });
+
+    setImmediate(() => logger.end());
+  });
+});
+
 describe('Logger (logging exotic data types)', function () {
   describe('.log', function () {
     it(`.log(new Error()) uses Error instance as info`, function (done) {
