@@ -47,6 +47,24 @@ describe('Logger', function () {
     assume(logger._readableState.pipesCount).equals(0);
   });
 
+  it('new Logger({ levels }) defines custom methods', function () {
+    var myFormat = format(function (info, opts) {
+      return info;
+    })();
+
+    var logger = winston.createLogger({
+      levels: winston.config.syslog.levels,
+      format: myFormat,
+      level: 'error',
+      exitOnError: false,
+      transports: []
+    });
+
+    Object.keys(winston.config.syslog.levels).forEach(level => {
+      assume(logger[level]).is.a('function');
+    })
+  });
+
   it('.add({ invalid Transport })', function () {
     var logger = winston.createLogger();
     assume(function () {
