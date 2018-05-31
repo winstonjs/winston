@@ -10,7 +10,7 @@
 
 const assume = require('assume');
 const path = require('path');
-const stream = require('stream');
+const stream = require('readable-stream');
 const util = require('util');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');

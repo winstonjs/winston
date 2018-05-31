@@ -6,12 +6,12 @@
  *
  */
 
-var assume = require('assume'),
-    fs = require('fs'),
-    path = require('path'),
-    winston = require('../lib/winston'),
-    tailFile = require('../lib/winston/tail-file'),
-    Stream = require('stream').Stream;
+const assume = require('assume');
+const fs = require('fs');
+const path = require('path');
+const winston = require('../lib/winston');
+const tailFile = require('../lib/winston/tail-file');
+const { Stream } = require('readable-stream');
 
 //
 // Test helper that performs writes to a specific log file

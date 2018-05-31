@@ -6,10 +6,9 @@
  *
  */
 
-var assume = require('assume'),
-    winston = require('../lib/winston'),
-    common = require('../lib/winston/common');
-
+const assume = require('assume');
+const winston = require('../lib/winston');
+const common = require('../lib/winston/common');
 
 describe('winston/common', function () {
   it('winston.paddings', function () {
