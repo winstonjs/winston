@@ -38,7 +38,6 @@
 
 - `winston.Logger.add` no longer accepts prototypes / classes. Pass **an instance of our transport instead.**
 
-**Don't do this**
 ``` js
 // DON'T DO THIS. It will no longer work
 logger.add(winston.transports.Console);

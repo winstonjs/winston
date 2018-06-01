@@ -726,8 +726,7 @@ winston.exceptions.handle(
 
 //
 // Alternatively you can set `handleExceptions` to true when adding transports
-// to winston. You can use the `.humanReadableUnhandledException` option to 
-// get more readable exceptions.
+// to winston.
 //
 winston.add(new winston.transports.File({
   filename: 'path/to/combined.log',
