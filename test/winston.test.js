@@ -6,9 +6,9 @@
  *
  */
 
-var format = require('util').format,
-    assume = require('assume'),
-    winston = require('../lib/winston');
+const { format } = require('util');
+const assume = require('assume');
+const winston = require('../lib/winston');
 
 describe('winston', function () {
 

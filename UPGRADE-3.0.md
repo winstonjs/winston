@@ -36,6 +36,17 @@
 
 ### `winston.Logger`
 
+- `winston.Logger.log` and level-specific methods (`.info`, `.error`, etc)
+**no longer accepts a callback.** The vast majority of use cases for this
+feature was folks awaiting _all logging_ to complete, not just a single
+logging message. To accomplish this:
+
+``` js
+logger.log('info', 'some message');
+logger.on('finish', () => process.exit());
+logger.end();
+```
+
 - `winston.Logger.add` no longer accepts prototypes / classes. Pass **an instance of our transport instead.**
 
 ``` js

@@ -10,7 +10,7 @@
 
 const assume = require('assume');
 const path = require('path');
-const stream = require('stream');
+const stream = require('readable-stream');
 const util = require('util');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
@@ -318,6 +318,39 @@ describe('Logger (levels)', function () {
       .add(filterLevelTransport('bad'))
       .add(filterLevelTransport('ok'))
       .log(expected);
+  });
+});
+
+describe('Logger (stream semantics)', function () {
+  it(`'finish' event awaits transports to emit 'finish'`, function (done) {
+    const transports = [
+      new TransportStream({ log: function () {} }),
+      new TransportStream({ log: function () {} }),
+      new TransportStream({ log: function () {} })
+    ];
+
+    const finished = [];
+    const logger = winston.createLogger({ transports });
+
+    // Assert each transport emits finish
+    transports.forEach((transport, i) => {
+      transport.on('finish', () => finished[i] = true);
+    });
+
+    // Manually end the last transport to simulate mixed
+    // finished state
+    transports[2].end();
+
+    // Assert that all transport 'finish' events have been
+    // emitted when the logger emits 'finish'.
+    logger.on('finish', function () {
+      assume(finished[0]).true();
+      assume(finished[1]).true();
+      assume(finished[2]).true();
+      done();
+    });
+
+    setImmediate(() => logger.end());
   });
 });
 
