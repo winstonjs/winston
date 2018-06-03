@@ -352,6 +352,41 @@ describe('Logger (stream semantics)', function () {
 
     setImmediate(() => logger.end());
   });
+
+  it(`rethrows errors from user-defined formats`, function () {
+    stdMocks.use();
+    const logger = winston.createLogger( {
+      transports: [new winston.transports.Console()],
+      format: winston.format.printf((info) => {
+        // Set a trap.
+        if (info.message === 'ENDOR') {
+          throw new Error('ITS A TRAP!');
+        }
+
+        return info.message;
+      })
+    });
+
+    // Trigger the trap.  Swallow the error so processing continues.
+    try {
+      logger.info('ENDOR');
+    } catch (err) {
+      assume(err.message).equals('ITS A TRAP!');
+    }
+
+    const expected = [
+      'Now witness the power of the fully armed and operational logger',
+      'Consider the philosophical and metaphysical – BANANA BANANA BANANA',
+      'I was god once. I saw – you were doing well until everyone died.'
+    ];
+
+    expected.forEach(msg => logger.info(msg));
+
+    stdMocks.restore();
+    const actual = stdMocks.flush();
+    assume(actual.stdout).deep.equals(expected.map(msg => `${msg}\n`));
+    assume(actual.stderr).deep.equals([]);
+  });
 });
 
 describe('Logger (logging exotic data types)', function () {
