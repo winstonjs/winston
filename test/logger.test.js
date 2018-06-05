@@ -321,34 +321,41 @@ describe('Logger (levels)', function () {
   });
 
   it('sets transports levels', done => {
-    const logger = winston.createLogger();
-    const expectedError = { message: 'foo', level: 'error' };
-    const expectedInfo = { message: 'bar', level: 'info' };
-
-    function logLevelTransport(level) {
-      logger.level = level;
-      return new TransportStream({
-        log(obj) {
-          if (obj.level === 'info') {
-            assume(obj).equals(undefined, 'Transport on level info should never be called');
-          }
-
-          assume(obj.message).equals('foo');
-          assume(obj.level).equals('error');
-          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'error' }));
-          assume(this.level).equals(logger.level);
-          done();
+    let logger;
+    const transport = new TransportStream({
+      log(obj) {
+        if (obj.level === 'info') {
+          assume(obj).equals(undefined, 'Transport on level info should never be called');
         }
-      });
-    }
 
-    assume(logger.error).is.a('function');
-    assume(logger.info).is.a('function');
+        assume(obj.message).equals('foo');
+        assume(obj.level).equals('error');
+        assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'error' }));
+        done();
+      }
+    });
 
-    logger
-      .add(logLevelTransport('error'))
-      .log(expectedInfo)
-      .log(expectedError);
+    // Begin our test in the next tick after the pipe event is
+    // emitted from the transport.
+    transport.once('pipe', () => setImmediate(() => {
+      const expectedError = { message: 'foo', level: 'error' };
+      const expectedInfo = { message: 'bar', level: 'info' };
+
+      assume(logger.error).is.a('function');
+      assume(logger.info).is.a('function');
+
+      // Set the level
+      logger.level = 'error';
+
+      // Log the messages. "info" should never arrive.
+      logger
+        .log(expectedInfo)
+        .log(expectedError);
+    }));
+
+    logger = winston.createLogger({
+      transports: [transport]
+    });
   });
 });
 
