@@ -7,7 +7,7 @@
 - [#1328], (@ChrisAlderson): Logger level doesn't update transports level (Fixes [#1191]).
 - [#1356], (@indexzero) Move splat functionality into logform. (Fixes [#1298]).
 - [#1340], (@indexzero): Check log.length when evaluating "legacyness" of transports (Fixes [#1280]).
-- [#1346], (@indexzero): Implement _final from Node.js streams. (Related to winston-transport#24, Fixes [#1250]).
+- [#1346], (@indexzero): Implement `_final` from Node.js streams. (Related to winston-transport#24, Fixes [#1250]).
 - [#1347], (@indexzero): Wrap calls to `format.transform` with try / catch (Fixes [#1261]).
 - [#1357], (@indexzero): Remove paddings as we have no use for it in the current API.
 - [TODO]: REMAINS OPEN, NO PR (Fixes [#1289])
