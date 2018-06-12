@@ -1036,7 +1036,7 @@ npm test
 ```
 
 #### Author: [Charlie Robbins]
-#### Contributors: [Jarrett Cruger], [David Hyde]
+#### Contributors: [Jarrett Cruger], [David Hyde], [Chris Alderson]
 
 [Transports]: #transports
 [Logging levels]: #logging-levels
@@ -1058,3 +1058,4 @@ npm test
 [Charlie Robbins]: http://github.com/indexzero
 [Jarrett Cruger]: https://github.com/jcrugzz
 [David Hyde]: https://github.com/dabh
+[Chris Alderson]: https://github.com/chrisalderson
