@@ -535,6 +535,20 @@ describe('Logger (logging exotic data types)', function () {
 
       logger.log(err);
     });
+
+    it(`.info('Hello') and .info('Hello %d') both preserve meta without splat format`, function (done) {
+      const logged = [];
+      const logger = helpers.createLogger(function (info, enc, next) {
+        logged.push(info);
+        assume(info.label).equals('world');
+        next();
+
+        if (logged.length === 2) done();
+      });
+
+      logger.info('Hello', { label: 'world' });
+      logger.info('Hello %d', { label: 'world' });
+    });
   });
 
   describe('.info', function () {
