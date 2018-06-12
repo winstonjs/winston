@@ -14,6 +14,7 @@
 - Documentation
   - [#1301], (@westonpace) Cleaned up some of the documentation on `colorize`
     to address concerns in [#1095].
+  - First pass at a heavy refactor of `docs/transports.md`.
 - Dependency management
   - Regenerate `package-lock.json`.
   - Upgrade to `logform@^1.9.0`.
