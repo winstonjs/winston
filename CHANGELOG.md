@@ -1,3 +1,8 @@
+## v2.4.3 / 2018-06-12
+### OMG OMG OMG WINSTON@3.0.0 RELEASE EDITION
+
+- [#1307] Decycle circular `Error` instances.
+
 ## v2.4.2 / 2018-04-20
 ### SUPER TROOPERS 2 EDITION
 
