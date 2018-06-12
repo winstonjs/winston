@@ -28,7 +28,7 @@
     "readable-stream": "^2.3.6",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.3.0",
-    "winston-transport": "^4.0.0"
+    "winston-transport": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^9.6.6",
