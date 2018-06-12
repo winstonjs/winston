@@ -67,6 +67,7 @@ logger.add(new winston.transports.Console());
 - `Logger.prototype.query`
   - `options.transport` is removed. Use the transport instance on the logger 
     directly.
+- `Logger.paddings` was removed.
 
 ### Exceptions & exception handling
 - `winston.exception` has been removed. Use:
@@ -83,6 +84,7 @@ const exception = winston.ExceptionHandler();
 - `winston.common.pad` was removed.
 - `winston.common.serialized` was removed (use `winston-compat`).
 - `winston.common.log` was removed (use `winston-compat`).
+- `winston.paddings` was removed.
 
 ## Upgrading to `winston.format`
 
