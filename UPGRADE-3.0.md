@@ -1,7 +1,9 @@
 # Upgrading to `winston@3.0.0`
 
-> This document is a **work in progress.** Having trouble upgrading to 
-> `winston@3.0.0`? Open an issue so we can improve this guide! 
+> This document represents a **living guide** on upgrading to `winston@3`.
+> Much attention has gone into the details, but if you are having trouble
+> upgrading to `winston@3.0.0` **PLEASE** open an issue so we can improve this
+> guide! 
 
 - [Breaking changes]
    - [Top-level `winston.*` API]
@@ -25,23 +27,29 @@
 
 ### Transports
 - `winston.transports.Memory` was removed. Use any Node.js `stream.Writeable` with a large `highWaterMark` instance instead.
-- When writing transports use `winston-transport` instead of `winston.Transport`
-- Many formatting options that were previously configurable on transports (e.g. `json`, `raw`, `colorize`, `prettyPrint`, 
-  `timestamp`, `logstash`, `align`) should now be set by adding the appropriate formatter instead.
-  _(See: "Removed `winston.transports.{File,Console,Http}` formatting options" below)_ 
-- In `winston.transports.Console`, output for all log levels is now sent to stdout by default.
+- When writing transports use `winston-transport` instead of
+  `winston.Transport`.
+- Many formatting options that were previously configurable on transports 
+  (e.g. `json`, `raw`, `colorize`, `prettyPrint`, `timestamp`, `logstash`, 
+  `align`) should now be set by adding the appropriate formatter instead.
+  _(See: "Removed `winston.transports.{File,Console,Http}` formatting options"
+  below)_ 
+- In `winston.transports.Console`, output for all log levels are now sent to stdout by default.
+    - `stderrLevels` option now defaults to `[]`.
     - `debugStdout` option has been removed.
-    - `stderrLevels` now defaults to `[]`.
+
 ### `winston.Container` and `winston.loggers`
 - `winston.Container` instances no longer have default `Console` transports
 - `winston.Container.prototype.add` no longer does crazy options parsing. Implementation inspired by [segmentio/winston-logger](https://github.com/segmentio/winston-logger/blob/master/lib/index.js#L20-L43)
 
 ### `winston.Logger`
+- **Do not use** `new winston.Logger(opts)` – it has been removed for
+  improved performance. Use `winston.createLogger(opts)` instead.
 
 - `winston.Logger.log` and level-specific methods (`.info`, `.error`, etc)
-**no longer accepts a callback.** The vast majority of use cases for this
-feature was folks awaiting _all logging_ to complete, not just a single
-logging message. To accomplish this:
+  **no longer accepts a callback.** The vast majority of use cases for this
+  feature was folks awaiting _all logging_ to complete, not just a single
+  logging message. To accomplish this:
 
 ``` js
 logger.log('info', 'some message');
@@ -49,7 +57,8 @@ logger.on('finish', () => process.exit());
 logger.end();
 ```
 
-- `winston.Logger.add` no longer accepts prototypes / classes. Pass **an instance of our transport instead.**
+- `winston.Logger.add` no longer accepts prototypes / classes. Pass
+  **an instance of our transport instead.**
 
 ``` js
 // DON'T DO THIS. It will no longer work
@@ -59,6 +68,8 @@ logger.add(winston.transports.Console);
 logger.add(new winston.transports.Console());
 ```
 
+- `winston.Logger` will no longer do automatic splat interpolation by default.
+  Be sure to use `formats.splat()` to enable this functionality.
 - `winston.Logger` will no longer respond with an error when logging with no
   transports
 - `winston.Logger` will no longer respond with an error if the same transports
@@ -78,8 +89,8 @@ const exception = winston.ExceptionHandler();
 ```
 - `humanReadableUnhandledException` is now the default exception format.
 - `.unhandleExceptions()` will no longer modify transports state, merely just add / remove the `process.on('uncaughtException')` handler.
-  - Call close on any explicit `ExceptionHandlers`.
-  - Set `handleExceptions = false` on all transports.
+   - Call close on any explicit `ExceptionHandlers`.
+   - Set `handleExceptions = false` on all transports.
 
 ### Other minor breaking changes
 - `winston.hash` was removed.
@@ -89,10 +100,12 @@ const exception = winston.ExceptionHandler();
 - `winston.paddings` was removed.
 
 ## Upgrading to `winston.format`
+The biggest issue with `winston@2` and previous major releases was that any
+new formatting options required changes to `winston` itself. All formatting is
+now handled by **formats**. 
 
-The biggest issue with `winston@2` and previous major releases was that any new formatting options required changes to `winston` itself. All formatting is now handled by **formats**. 
-
-Custom formats can now be created with no changes to `winston` core. _We encourage you to consider a custom format before opening an issue._
+Custom formats can now be created with no changes to `winston` core.
+_We encourage you to consider a custom format before opening an issue._
 
 ### Removed `winston.Logger` formatting options
 - The default output format is now `formats.json()`.
@@ -104,7 +117,10 @@ Custom formats can now be created with no changes to `winston` core. _We encoura
 - `formatter`: Use a [custom format].
 - `json`: Use `formats.json()`.
 - `raw`: Use `formats.json()`.
+- `label`: Use `formats.label()`.
+- `logstash`: Use `formats.logstash()`.
 - `prettyPrint`: Use `formats.prettyPrint()` or a [custom format].
+   - `depth` is an option provided to `formats.prettyPrint()`.
 - `colorize`: Use `formats.colorize()`.
 - `timestamp`: Use `formats.timestamp()`.
 - `logstash`: Use `formats.logstash()`.
@@ -118,7 +134,7 @@ formatters and rewriters into a single, new concept:_ **formats**.
 
 #### Filters
 
-If you are looking to upgrade your `filter` behavior please read on. In 
+If you are looking to upgrade your `filter` behavior please read on. In
 `winston@2.x` this **filter** behavior:
 
 ``` js
@@ -170,7 +186,7 @@ logger.log({
 
 #### Rewriters
 
-If you are looking to upgrade your `rewriter` behavior please read on. In 
+If you are looking to upgrade your `rewriter` behavior please read on. In
 `winston@2.x` this **rewriter** behavior:
 
 ``` js
@@ -211,13 +227,16 @@ const logger = winston.createLogger({
 logger.info('transaction ok', { creditCard: 123456789012345 });
 ```
 
-See [examples/format-mutate.js](/examples/format-mutate.js) for a complete end-to-end example that covers both filtering and rewriting behavior in `winston@2.x`.
+See [examples/format-mutate.js](/examples/format-mutate.js) for a complete
+end-to-end example that covers both filtering and rewriting behavior in
+`winston@2.x`.
 
 ## Modularity: `winston-transport`, `logform` and more
 
 As of `winston@3.0.0` the project has been broken out into a few modules:
 
-- [winston-transport]: `Transport` stream implementation & legacy `Transport` wrapper.
+- [winston-transport]: `Transport` stream implementation & legacy `Transport`
+  wrapper.
 - [logform]: All formats exports through `winston.format` 
 - `LEVEL` and `MESSAGE` symbols exposed through [triple-beam].
 - [Shared test suite][abstract-winston-transport] for community transports 
