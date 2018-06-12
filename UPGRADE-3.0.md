@@ -2,7 +2,7 @@
 
 > This document represents a **living guide** on upgrading to `winston@3`.
 > Much attention has gone into the details, but if you are having trouble
-> upgrading to `winston@3.0.0` **PLEASE open an issue so we can improve this
+> upgrading to `winston@3.0.0` **PLEASE** open an issue so we can improve this
 > guide! 
 
 - [Breaking changes]
@@ -43,10 +43,13 @@
 - `winston.Container.prototype.add` no longer does crazy options parsing. Implementation inspired by [segmentio/winston-logger](https://github.com/segmentio/winston-logger/blob/master/lib/index.js#L20-L43)
 
 ### `winston.Logger`
+- **Do not use** `new winston.Logger(opts)` – it has been removed for
+  improved performance. Use `winston.createLogger(opts)` instead.
+
 - `winston.Logger.log` and level-specific methods (`.info`, `.error`, etc)
-**no longer accepts a callback.** The vast majority of use cases for this
-feature was folks awaiting _all logging_ to complete, not just a single
-logging message. To accomplish this:
+  **no longer accepts a callback.** The vast majority of use cases for this
+  feature was folks awaiting _all logging_ to complete, not just a single
+  logging message. To accomplish this:
 
 ``` js
 logger.log('info', 'some message');
@@ -54,7 +57,8 @@ logger.on('finish', () => process.exit());
 logger.end();
 ```
 
-- `winston.Logger.add` no longer accepts prototypes / classes. Pass **an instance of our transport instead.**
+- `winston.Logger.add` no longer accepts prototypes / classes. Pass
+  **an instance of our transport instead.**
 
 ``` js
 // DON'T DO THIS. It will no longer work
@@ -96,9 +100,12 @@ const exception = winston.ExceptionHandler();
 - `winston.paddings` was removed.
 
 ## Upgrading to `winston.format`
-The biggest issue with `winston@2` and previous major releases was that any new formatting options required changes to `winston` itself. All formatting is now handled by **formats**. 
+The biggest issue with `winston@2` and previous major releases was that any
+new formatting options required changes to `winston` itself. All formatting is
+now handled by **formats**. 
 
-Custom formats can now be created with no changes to `winston` core. _We encourage you to consider a custom format before opening an issue._
+Custom formats can now be created with no changes to `winston` core.
+_We encourage you to consider a custom format before opening an issue._
 
 ### Removed `winston.Logger` formatting options
 - The default output format is now `formats.json()`.
@@ -127,7 +134,7 @@ formatters and rewriters into a single, new concept:_ **formats**.
 
 #### Filters
 
-If you are looking to upgrade your `filter` behavior please read on. In 
+If you are looking to upgrade your `filter` behavior please read on. In
 `winston@2.x` this **filter** behavior:
 
 ``` js
@@ -179,7 +186,7 @@ logger.log({
 
 #### Rewriters
 
-If you are looking to upgrade your `rewriter` behavior please read on. In 
+If you are looking to upgrade your `rewriter` behavior please read on. In
 `winston@2.x` this **rewriter** behavior:
 
 ``` js
@@ -228,7 +235,8 @@ end-to-end example that covers both filtering and rewriting behavior in
 
 As of `winston@3.0.0` the project has been broken out into a few modules:
 
-- [winston-transport]: `Transport` stream implementation & legacy `Transport` wrapper.
+- [winston-transport]: `Transport` stream implementation & legacy `Transport`
+  wrapper.
 - [logform]: All formats exports through `winston.format` 
 - `LEVEL` and `MESSAGE` symbols exposed through [triple-beam].
 - [Shared test suite][abstract-winston-transport] for community transports 
