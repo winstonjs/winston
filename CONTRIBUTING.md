@@ -53,7 +53,9 @@ const logger = createLogger({
 You will commonly see this closing `winston@2.x` issues:
 
 ```
-Development `winston@2.x` has ceased. Please consider upgrading to `winston@3.0.0-rc6`. If you feel strongly about this bug please open a PR against the `2.x` branch. Thank you for using `winston`!
+Development `winston@2.x` has ceased. Please consider upgrading to
+`winston@3.0.0`. If you feel strongly about this bug please open a PR against
+the `2.x` branch. Thank you for using `winston`!
 ```
 
 ## Could this be implemented as a format?

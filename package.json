@@ -1,11 +1,12 @@
 {
   "name": "winston",
-  "description": "A multi-transport async logging library for Node.js",
+  "description": "A logger for just about everything.",
   "version": "3.0.0-rc6",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "Jarrett Cruger <jcrugzz@gmail.com>",
-    "Alberto Pose <albertopose@gmail.com>"
+    "Chris Alderson <chrisalderson@protonmail.com>",
+    "David Hyde <dabh@stanford.edu>"
   ],
   "repository": {
     "type": "git",
@@ -13,8 +14,13 @@
   },
   "keywords": [
     "winston",
+    "logger"
     "logging",
+    "logs",
     "sysadmin",
+    "bunyan",
+    "pino",
+    "loglevel",
     "tools",
     "json",
     "stream"
