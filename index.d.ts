@@ -86,7 +86,6 @@ declare namespace winston {
     levels: Config.AbstractConfigSetLevels;
     level: string;
     transports: Transport[];
-    paddings: string[];
     exceptions: ExceptionHandler;
     profilers: object;
     exitOnError: Function | boolean;
@@ -162,7 +161,6 @@ declare namespace winston {
   let configure: (options: LoggerOptions) => void;
   let level: string;
   let exceptions: ExceptionHandler;
-  let paddings: string[];
   let exitOnError: Function | boolean;
   // let default: object;
 }

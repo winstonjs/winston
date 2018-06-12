@@ -73,7 +73,8 @@ The Console transport takes a few simple options:
 
 * __level:__ Level of messages that this transport should log (default: level set on parent logger).
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
-* __eol:__ Line-ending character to use. (default: `os.EOL`).
+* __eol:__ string indicating the end-of-line characters to use (default `os.EOL`)
+* __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `[]`)
 
 ### File Transport
 ``` js
@@ -180,8 +181,6 @@ new log collection as capped, defaults to false.
 * __cappedMax:__ Size of logs capped collection in number of documents.
 * __tryReconnect:__ Will try to reconnect to the database in case of fail during
 initialization. Works only if __db__ is a string. Defaults to false.
-* __decolorize:__ Will remove color attributes from the log entry message,
-defaults to false.
 * __expireAfterSeconds:__ Seconds before the entry is removed. Works only if __capped__ is not set.
 
 *Metadata:* Logged as a native JSON object in 'meta' property.
