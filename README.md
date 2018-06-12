@@ -575,7 +575,7 @@ winston aware of them:
 winston.addColors(myCustomLevels.colors);
 ```
 
-This enables transports with the 'colorize' option set to appropriately color and style 
+This enables loggers using the `colorize` formatter to appropriately color and style 
 the output of custom levels.
 
 Additionally, you can also change background color and font style. 
@@ -605,7 +605,7 @@ winston.format.combine(
   winston.format.json()
 )
 ```
-where `winston.format.json()` is whatever other formatter you want to use.
+where `winston.format.json()` is whatever other formatter you want to use.  The `colorize` formatter must come before any formatters adding text you wish to color.
 
 ## Transports
 
@@ -966,7 +966,6 @@ const winston = require('winston');
 winston.loggers.add('category1', {
   console: {
     level: 'silly',
-    colorize: true,
     label: 'category one'
   },
   file: {
@@ -1007,8 +1006,7 @@ const container = new winston.Container();
 
 container.add('category1', {
   console: {
-    level: 'silly',
-    colorize: true
+    level: 'silly'
   },
   file: {
     filename: '/path/to/some/file'
