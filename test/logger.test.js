@@ -319,6 +319,44 @@ describe('Logger (levels)', function () {
       .add(filterLevelTransport('ok'))
       .log(expected);
   });
+
+  it('sets transports levels', done => {
+    let logger;
+    const transport = new TransportStream({
+      log(obj) {
+        if (obj.level === 'info') {
+          assume(obj).equals(undefined, 'Transport on level info should never be called');
+        }
+
+        assume(obj.message).equals('foo');
+        assume(obj.level).equals('error');
+        assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'error' }));
+        done();
+      }
+    });
+
+    // Begin our test in the next tick after the pipe event is
+    // emitted from the transport.
+    transport.once('pipe', () => setImmediate(() => {
+      const expectedError = { message: 'foo', level: 'error' };
+      const expectedInfo = { message: 'bar', level: 'info' };
+
+      assume(logger.error).is.a('function');
+      assume(logger.info).is.a('function');
+
+      // Set the level
+      logger.level = 'error';
+
+      // Log the messages. "info" should never arrive.
+      logger
+        .log(expectedInfo)
+        .log(expectedError);
+    }));
+
+    logger = winston.createLogger({
+      transports: [transport]
+    });
+  });
 });
 
 describe('Logger (stream semantics)', function () {
