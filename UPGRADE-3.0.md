@@ -100,7 +100,10 @@ Custom formats can now be created with no changes to `winston` core. _We encoura
 - `formatter`: Use a [custom format].
 - `json`: Use `formats.json()`.
 - `raw`: Use `formats.json()`.
+- `label`: Use `formats.label()`.
+- `logstash`: Use `formats.logstash()`.
 - `prettyPrint`: Use `formats.prettyPrint()` or a [custom format].
+   - `depth` is an option provided to `formats.prettyPrint()`.
 - `colorize`: Use `formats.colorize()`.
 - `timestamp`: Use `formats.timestamp()`.
 - `logstash`: Use `formats.logstash()`.
