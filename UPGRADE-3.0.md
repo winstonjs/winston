@@ -26,17 +26,31 @@
 ### Transports
 - `winston.transports.Memory` was removed. Use any Node.js `stream.Writeable` with a large `highWaterMark` instance instead.
 - When writing transports use `winston-transport` instead of `winston.Transport`
-- Many formatting options that were previously configurable on transports (e.g. `json`, `raw`, `colorize`, `prettyPrint`, `timestamp`, `logstash`, `align`) should now be set by adding the appropriate formatter instead.
-
+- Many formatting options that were previously configurable on transports (e.g. `json`, `raw`, `colorize`, `prettyPrint`, 
+  `timestamp`, `logstash`, `align`) should now be set by adding the appropriate formatter instead.
+  _(See: "Removed `winston.transports.{File,Console,Http}` formatting options" below)_ 
+- In `winston.transports.Console`, output for all log levels is now sent to stdout by default.
+    - `debugStdout` option has been removed.
+    - `stderrLevels` now defaults to `[]`.
 ### `winston.Container` and `winston.loggers`
 - `winston.Container` instances no longer have default `Console` transports
 - `winston.Container.prototype.add` no longer does crazy options parsing. Implementation inspired by [segmentio/winston-logger](https://github.com/segmentio/winston-logger/blob/master/lib/index.js#L20-L43)
 
 ### `winston.Logger`
 
+- `winston.Logger.log` and level-specific methods (`.info`, `.error`, etc)
+**no longer accepts a callback.** The vast majority of use cases for this
+feature was folks awaiting _all logging_ to complete, not just a single
+logging message. To accomplish this:
+
+``` js
+logger.log('info', 'some message');
+logger.on('finish', () => process.exit());
+logger.end();
+```
+
 - `winston.Logger.add` no longer accepts prototypes / classes. Pass **an instance of our transport instead.**
 
-**Don't do this**
 ``` js
 // DON'T DO THIS. It will no longer work
 logger.add(winston.transports.Console);

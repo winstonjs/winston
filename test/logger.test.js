@@ -10,11 +10,11 @@
 
 const assume = require('assume');
 const path = require('path');
-const stream = require('stream');
+const stream = require('readable-stream');
 const util = require('util');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
-const { MESSAGE } = require('triple-beam');
+const { MESSAGE, SPLAT } = require('triple-beam');
 const winston = require('../lib/winston');
 const TransportStream = require('winston-transport');
 const format = require('../lib/winston').format;
@@ -45,6 +45,24 @@ describe('Logger', function () {
     assume(logger.level).equals('error');
     assume(logger.exitOnError).equals(false);
     assume(logger._readableState.pipesCount).equals(0);
+  });
+
+  it('new Logger({ levels }) defines custom methods', function () {
+    var myFormat = format(function (info, opts) {
+      return info;
+    })();
+
+    var logger = winston.createLogger({
+      levels: winston.config.syslog.levels,
+      format: myFormat,
+      level: 'error',
+      exitOnError: false,
+      transports: []
+    });
+
+    Object.keys(winston.config.syslog.levels).forEach(level => {
+      assume(logger[level]).is.a('function');
+    })
   });
 
   it('.add({ invalid Transport })', function () {
@@ -301,6 +319,206 @@ describe('Logger (levels)', function () {
       .add(filterLevelTransport('ok'))
       .log(expected);
   });
+
+  it('sets transports levels', done => {
+    let logger;
+    const transport = new TransportStream({
+      log(obj) {
+        if (obj.level === 'info') {
+          assume(obj).equals(undefined, 'Transport on level info should never be called');
+        }
+
+        assume(obj.message).equals('foo');
+        assume(obj.level).equals('error');
+        assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'error' }));
+        done();
+      }
+    });
+
+    // Begin our test in the next tick after the pipe event is
+    // emitted from the transport.
+    transport.once('pipe', () => setImmediate(() => {
+      const expectedError = { message: 'foo', level: 'error' };
+      const expectedInfo = { message: 'bar', level: 'info' };
+
+      assume(logger.error).is.a('function');
+      assume(logger.info).is.a('function');
+
+      // Set the level
+      logger.level = 'error';
+
+      // Log the messages. "info" should never arrive.
+      logger
+        .log(expectedInfo)
+        .log(expectedError);
+    }));
+
+    logger = winston.createLogger({
+      transports: [transport]
+    });
+  });
+});
+
+describe('Logger (stream semantics)', function () {
+  it(`'finish' event awaits transports to emit 'finish'`, function (done) {
+    const transports = [
+      new TransportStream({ log: function () {} }),
+      new TransportStream({ log: function () {} }),
+      new TransportStream({ log: function () {} })
+    ];
+
+    const finished = [];
+    const logger = winston.createLogger({ transports });
+
+    // Assert each transport emits finish
+    transports.forEach((transport, i) => {
+      transport.on('finish', () => finished[i] = true);
+    });
+
+    // Manually end the last transport to simulate mixed
+    // finished state
+    transports[2].end();
+
+    // Assert that all transport 'finish' events have been
+    // emitted when the logger emits 'finish'.
+    logger.on('finish', function () {
+      assume(finished[0]).true();
+      assume(finished[1]).true();
+      assume(finished[2]).true();
+      done();
+    });
+
+    setImmediate(() => logger.end());
+  });
+
+  it(`rethrows errors from user-defined formats`, function () {
+    stdMocks.use();
+    const logger = winston.createLogger( {
+      transports: [new winston.transports.Console()],
+      format: winston.format.printf((info) => {
+        // Set a trap.
+        if (info.message === 'ENDOR') {
+          throw new Error('ITS A TRAP!');
+        }
+
+        return info.message;
+      })
+    });
+
+    // Trigger the trap.  Swallow the error so processing continues.
+    try {
+      logger.info('ENDOR');
+    } catch (err) {
+      assume(err.message).equals('ITS A TRAP!');
+    }
+
+    const expected = [
+      'Now witness the power of the fully armed and operational logger',
+      'Consider the philosophical and metaphysical – BANANA BANANA BANANA',
+      'I was god once. I saw – you were doing well until everyone died.'
+    ];
+
+    expected.forEach(msg => logger.info(msg));
+
+    stdMocks.restore();
+    const actual = stdMocks.flush();
+    assume(actual.stdout).deep.equals(expected.map(msg => `${msg}\n`));
+    assume(actual.stderr).deep.equals([]);
+  });
+});
+
+describe('Logger (winston@2 logging API)', function () {
+  it('.log(level, message)', function (done) {
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.message).equals('Some super awesome log message');
+      assume(info[MESSAGE]).is.a('string');
+      done();
+    });
+
+    logger.log('info', 'Some super awesome log message')
+  });
+
+  it(`.log(level, undefined) creates info with { message: undefined }`, function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals(undefined);
+      done();
+    });
+
+    logger.log('info', undefined);
+  });
+
+  it(`.log(level, null) creates info with { message: null }`, function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals(null);
+      done();
+    });
+
+    logger.log('info', null);
+  });
+
+  it(`.log(level, new Error()) uses Error instance as info`, function (done) {
+    const err = new Error('test');
+    const logger = helpers.createLogger(function (info) {
+      assume(info).instanceOf(Error);
+      assume(info).equals(err);
+      done();
+    });
+
+    logger.log('info', err);
+  });
+
+  it('.log(level, message, meta)', function (done) {
+    var meta = { one: 2 };
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.message).equals('Some super awesome log message');
+      assume(info.one).equals(2);
+      assume(info[MESSAGE]).is.a('string');
+      done();
+    });
+
+    logger.log('info', 'Some super awesome log message', meta);
+  });
+
+  it('.log(level, formatStr, ...splat)', function (done) {
+    const format = winston.format.combine(
+      winston.format.splat(),
+      winston.format.printf(info => `${info.level}: ${info.message}`)
+    );
+
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.message).equals('100% such wow {"much":"javascript"}');
+      assume(info[SPLAT]).deep.equals([100, 'wow', { much: 'javascript' }]);
+      assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"}');
+      done();
+    }, format);
+
+    logger.log('info', '%d%% such %s %j', 100, 'wow', { much: 'javascript' });
+  });
+
+  it('.log(level, formatStr, ...splat, meta)', function (done) {
+    const format = winston.format.combine(
+      winston.format.splat(),
+      winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify(info.meta)}`)
+    );
+
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.message).equals('100% such wow {"much":"javascript"}');
+      assume(info[SPLAT]).deep.equals([100, 'wow', { much: 'javascript' }]);
+      assume(info.meta).deep.equals({ thisIsMeta: true });
+      assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
+      done();
+    }, format);
+
+    logger.log('info', '%d%% such %s %j', 100, 'wow', { much: 'javascript' }, { thisIsMeta: true });
+  });
 });
 
 describe('Logger (logging exotic data types)', function () {
@@ -316,6 +534,20 @@ describe('Logger (logging exotic data types)', function () {
       });
 
       logger.log(err);
+    });
+
+    it(`.info('Hello') and .info('Hello %d') both preserve meta without splat format`, function (done) {
+      const logged = [];
+      const logger = helpers.createLogger(function (info, enc, next) {
+        logged.push(info);
+        assume(info.label).equals('world');
+        next();
+
+        if (logged.length === 2) done();
+      });
+
+      logger.info('Hello', { label: 'world' });
+      logger.info('Hello %d', { label: 'world' });
     });
   });
 

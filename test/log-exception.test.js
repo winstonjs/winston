@@ -6,12 +6,12 @@
  *
  */
 
-var assume = require('assume'),
-    fs = require('fs'),
-    path = require('path'),
-    spawn = require('child_process').spawn,
-    winston = require('../lib/winston'),
-    helpers = require('./helpers');
+const assume = require('assume');
+const fs = require('fs');
+const path = require('path');
+const { spawn } = require('child_process');
+const winston = require('../lib/winston');
+const helpers = require('./helpers');
 
 describe('Logger, ExceptionHandler', function () {
   this.timeout(5000);

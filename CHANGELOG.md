@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## v3.0.0-rc6 / 2018-05-30
+### T-MINUS 6-DAY TO WINSTON@3 EDITION
+
+- **Document that we are pushing for a June 5th, 2018 release of `winston@3.0.0`**
+- [#1287], (@DABH) Added types for Typescript.
+  - [#1335] Typescript: silent is boolean.
+  - [#1323] Add level method to default logger.
+- [#1286], (@ChrisAlderson) Migrate codebase to ES6
+  - [#1324], (@ChrisAlderson) Fix regression introduced by ES6 migration for
+    exception handling.
+  - [#1333], (@ChrisAlderson) Fix removing all loggers from a container.
+- [#1291], [#1294], [#1318], (@indexzero, @ChrisAlderson, @mempf) Improvements
+  to `File` transport core functionality. Fixes [#1194].
+- [#1311], (@ChrisAlderson) Add `eol` option to `Stream` transport.
+- [#1297], (@ChrisAlderson) Move `winston.config` to `triple-beam`. Expose
+  for backwards compatibility.
+- [#1320], (@ChrisAlderson) Enhance tests to run on Windows.
+- Internal project maintenance
+  - Bump to `winston-transport@4.0.0` which may cause incompatibilities if
+    your custom transport does not explicitly require `winston-transport`
+    itself. 
+  - [#1292], (@ChrisAlderson) Add node v10 to TravisCI build matrix.
+  - [#1296], (@indexzero) Improve `UPGRADE-3.0.md`. Add Github Issue Template.
+  - Remove "npm run report" in favor of reports being automatically generate.
+  - Update `logform`, `triple-beam`, and `winston-transport` to latest.
+
+> Special thanks to our newest `winston` core team member – @ChrisAlderson for 
+> helping make `winston@3.0.0` a reality next week!
+
 ## v3.0.0-rc5 / 2018-04-20
 ### UNOFFICIAL NATIONAL HOLIDAY EDITION
 

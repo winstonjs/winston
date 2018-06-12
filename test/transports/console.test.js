@@ -19,7 +19,6 @@ const defaultLevels = winston.config.npm.levels;
 const transports = {
   defaults: new winston.transports.Console(),
   noStderr: new winston.transports.Console({ stderrLevels: [] }),
-  debugStdout: new winston.transports.Console({ debugStdout: true }),
   stderrLevels: new winston.transports.Console({
     stderrLevels: ['info', 'warn']
   }),
@@ -56,7 +55,7 @@ function assertStderrLevels(transport, stderrLevels) {
 
 describe('Console transport', function () {
   describe('with defaults', function () {
-    it('logs all levels (EXCEPT error and debug) to stdout', function () {
+    it('logs all levels to stdout', function () {
       stdMocks.use();
       transports.defaults.levels = defaultLevels;
       Object.keys(defaultLevels)
@@ -74,43 +73,32 @@ describe('Console transport', function () {
       stdMocks.restore();
       var output = stdMocks.flush();
       assume(output.stderr).is.an('array');
-      assume(output.stderr).length(2);
+      assume(output.stderr).length(0);
       assume(output.stdout).is.an('array');
-      assume(output.stdout).length(5);
+      assume(output.stdout).length(7);
     });
 
-    it("should set stderrLevels to ['error', 'debug'] by default", assertStderrLevels(
+    it("should set stderrLevels to [] by default", assertStderrLevels(
       transports.defaults,
-      ['error', 'debug']
+      []
     ));
   });
 
   describe('throws an appropriate error when', function () {
-    it('if both debugStdout and stderrLevels are set { debugStdout, stderrLevels }', function () {
-      assume(function () {
-        let throwing = new winston.transports.Console({
-          stderrLevels: ['foo', 'bar'],
-          debugStdout: true
-        })
-      }).throws(/Cannot set debugStdout and stderrLevels/);
-    });
-
     it("if stderrLevels is set, but not an Array { stderrLevels: 'Not an Array' }", function () {
       assume(function () {
         let throwing = new winston.transports.Console({
-          stderrLevels: 'Not an Array',
-          debugStdout: false
+          stderrLevels: 'Not an Array'
         })
-      }).throws(/Cannot set stderrLevels to type other than Array/);
+      }).throws(/Cannot make set from type other than Array of string elements/);
     });
 
     it("if stderrLevels contains non-string elements { stderrLevels: ['good', /^invalid$/, 'valid']", function () {
       assume(function () {
         let throwing = new winston.transports.Console({
-          stderrLevels: ['good', /^invalid$/, 'valid'],
-          debugStdout: false
+          stderrLevels: ['good', /^invalid$/, 'valid']
         })
-      }).throws(/Cannot have non-string elements in stderrLevels Array/);
+      }).throws(/Cannot make set from type other than Array of string elements/);
     });
   });
 

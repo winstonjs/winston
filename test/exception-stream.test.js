@@ -6,12 +6,12 @@
  *
  */
 
-var assume = require('assume'),
-    stream = require('stream'),
-    path = require('path'),
-    winston = require('../lib/winston'),
-    ExceptionStream = require('../lib/winston/exception-stream'),
-    helpers = require('./helpers');
+const assume = require('assume');
+const Writable = require('readable-stream/writable');
+const path = require('path');
+const winston = require('../lib/winston');
+const ExceptionStream = require('../lib/winston/exception-stream');
+const helpers = require('./helpers');
 
 describe('ExceptionStream', function () {
   it('has expected methods', function () {
@@ -23,7 +23,7 @@ describe('ExceptionStream', function () {
     assume(instance.transport).equals(transport);
     assume(instance._write).is.a('function');
     assume(instance).instanceof(ExceptionStream);
-    assume(instance).inherits(stream.Writable);
+    assume(instance).inherits(Writable);
   });
 
   it('throws without a transport', function () {
