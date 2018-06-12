@@ -99,8 +99,8 @@ logger to use throughout your application if you so choose.
 * [Querying Logs](#querying-logs)
 * [Further Reading](#further-reading)
   * [Using the default logger](#using-the-default-logger)
-  * [Events and Callbacks in `winston`](#events-and-callbacks-in-winston)
-  * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
+  * [Awaiting logs to be written in `winston`](#awaiting-logs-to-be-written-in-winston)
+  * [Working with multiple Loggers in `winston`](#working-with-multiple-loggers-in-winston)
 * [Installation](#installation)
 * [Run Tests](#run-tests)
 
@@ -118,7 +118,7 @@ const levels = {
   verbose: 3, 
   debug: 4, 
   silly: 5 
-}
+};
 ```
 
 ### Creating your own Logger
@@ -603,7 +603,7 @@ To colorize the standard logging level add
 winston.format.combine(
   winston.format.colorize(),
   winston.format.json()
-)
+);
 ```
 where `winston.format.json()` is whatever other formatter you want to use.
 
@@ -915,11 +915,12 @@ winston.configure({
 For more documentation about working with each individual transport supported
 by `winston` see the [`winston` Transports](docs/transports.md) document.
 
-### Events and Callbacks in `winston`
+### Awaiting logs to be written in `winston`
 
-Each instance of winston.Logger is also an instance of an [EventEmitter]. A
-`logged` event will be raised each time a transport successfully logs a
-message:
+Often it is useful to wait for your logs to be written before exiting the
+process. Each instance of `winston.Logger` is also a [Node.js stream]. A
+`finished` event will be raised when all logs have flushed to all transports
+after the stream has been ended.
 
 ``` js
 const transport = new winston.transports.Console();
@@ -927,11 +928,12 @@ const logger = winston.createLogger({
   transports: [transport]
 });
 
-transport.on('logged', function (info) {
-  // `info` log message has now been logged
+transport.on('finished', function (info) {
+  // All `info` log messages has now been logged
 });
 
 logger.info('CHILL WINSTON!', { seriously: true });
+logger.end();
 ```
 
 It is also worth mentioning that the logger also emits an 'error' event which
@@ -1028,8 +1030,8 @@ yarn add winston
 
 ## Run Tests
 
-All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and [`assume`][assume].  They
-can be run with `npm`.
+All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and 
+[`assume`][assume].  They can be run with `npm`.
 
 ``` bash
 npm test
@@ -1047,7 +1049,6 @@ npm test
 [additional transports]: docs/transports.md#additional-transports
 
 [RFC5424]: https://tools.ietf.org/html/rfc5424
-[EventEmitter]: https://nodejs.org/dist/latest/docs/api/events.html#events_class_eventemitter
 [util.format]: https://nodejs.org/dist/latest/docs/api/util.html#util_util_format_format_args
 [mocha]: https://mochajs.org
 [nyc]: https://github.com/istanbuljs/nyc
