@@ -23,7 +23,7 @@
     "async": "^2.6.0",
     "diagnostics": "^1.0.1",
     "is-stream": "^1.1.0",
-    "logform": "^1.7.0",
+    "logform": "^1.9.0",
     "one-time": "0.0.4",
     "readable-stream": "^2.3.6",
     "stack-trace": "0.0.x",
