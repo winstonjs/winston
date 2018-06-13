@@ -130,6 +130,11 @@ declare namespace winston {
   interface Container {
     loggers: object;
     options: object;
+
+    add(id: string, options?: LoggerOptions): Logger;
+    get(id: string, options?: LoggerOptions): Logger;
+    has(id: string): boolean;
+    close(): void;
   }
 
   let version: string;
