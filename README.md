@@ -304,7 +304,7 @@ const logger = createLogger({
 // info: test message my string {}
 logger.log('info', 'test message %s', 'my string');
 
-// info: test message my 123 {}
+// info: test message 123 {}
 logger.log('info', 'test message %d', 123);
 
 // info: test message first second {number: 123}
