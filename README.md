@@ -132,7 +132,7 @@ A logger accepts the following parameters:
 | ------------- | ---------------------- | --------------- |
 | `level`       | `'info'`               | Log only if `info.level` less than or equal to this level  |  
 | `levels`      | `winston.config.npm`   | Levels (and colors) representing log priorities            |
-| `format`      | `winston.formats.json` | Formatting for `info` messages  (see: [Formats])           |
+| `format`      | `winston.format.json`  | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_ | Set of logging targets for `info` messages                 |
 | `exitOnError` | `true`                 | If false, handled exceptions will not cause `process.exit` |
 | `silent`      | `false`                | If true, all logs are suppressed |
