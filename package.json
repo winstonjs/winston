@@ -35,6 +35,7 @@
   "scripts": {
     "test": "vows --spec --isolate"
   },
+  "types": "./index.d.ts",
   "engines": {
     "node": ">= 0.10.0"
   },
