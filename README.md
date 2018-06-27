@@ -319,7 +319,7 @@ simply return a falsey value.
 ``` js
 const { createLogger, format, transports } = require('winston');
 
-// Ignore log messages if the have { private: true }
+// Ignore log messages if they have { private: true }
 const ignorePrivate = format((info, opts) => {
   if (info.private) { return false; }
   return info;
