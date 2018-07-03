@@ -69,7 +69,7 @@ logger.add(new winston.transports.Console());
 ```
 
 - `winston.Logger` will no longer do automatic splat interpolation by default.
-  Be sure to use `formats.splat()` to enable this functionality.
+  Be sure to use `format.splat()` to enable this functionality.
 - `winston.Logger` will no longer respond with an error when logging with no
   transports
 - `winston.Logger` will no longer respond with an error if the same transports
@@ -108,23 +108,23 @@ Custom formats can now be created with no changes to `winston` core.
 _We encourage you to consider a custom format before opening an issue._
 
 ### Removed `winston.Logger` formatting options
-- The default output format is now `formats.json()`.
+- The default output format is now `format.json()`.
 - `filters`: Use a custom `format`. See: [Filters and Rewriters] below.
 - `rewriters`: Use a custom `format`. See: [Filters and Rewriters] below.
 
 ### Removed `winston.transports.{File,Console,Http}` formatting options
 - `stringify`: Use a [custom format].
 - `formatter`: Use a [custom format].
-- `json`: Use `formats.json()`.
-- `raw`: Use `formats.json()`.
-- `label`: Use `formats.label()`.
-- `logstash`: Use `formats.logstash()`.
-- `prettyPrint`: Use `formats.prettyPrint()` or a [custom format].
-   - `depth` is an option provided to `formats.prettyPrint()`.
-- `colorize`: Use `formats.colorize()`.
-- `timestamp`: Use `formats.timestamp()`.
-- `logstash`: Use `formats.logstash()`.
-- `align`: Use `formats.align()`.
+- `json`: Use `format.json()`.
+- `raw`: Use `format.json()`.
+- `label`: Use `format.label()`.
+- `logstash`: Use `format.logstash()`.
+- `prettyPrint`: Use `format.prettyPrint()` or a [custom format].
+   - `depth` is an option provided to `format.prettyPrint()`.
+- `colorize`: Use `format.colorize()`.
+- `timestamp`: Use `format.timestamp()`.
+- `logstash`: Use `format.logstash()`.
+- `align`: Use `format.align()`.
 - `showLevel`: Use a [custom format].
 
 ### Migrating `filters` and `rewriters` to `formats` in `winston@3`
@@ -218,9 +218,9 @@ const maskFormat = winston.format(info => {
 });
 
 const logger = winston.createLogger({
-  format: winston.formats.combine(
+  format: winston.format.combine(
     maskFormat(),
-    winston.formats.json()
+    winston.format.json()
   )
 });
 
