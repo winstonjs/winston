@@ -11,7 +11,7 @@ before_install:
 
 script:
   - npm test
-  - tsc --version ; tsc -p test
+  - ./node_modules/.bin/tsc --version ; ./node_modules/.bin/tsc -p test
 
 matrix:
   allow_failures:
