@@ -12,6 +12,7 @@ const assume = require('assume');
 const path = require('path');
 const stream = require('readable-stream');
 const util = require('util');
+const { EOL } = require('os');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
 const { MESSAGE, SPLAT } = require('triple-beam');
@@ -422,7 +423,7 @@ describe('Logger (stream semantics)', function () {
 
     stdMocks.restore();
     const actual = stdMocks.flush();
-    assume(actual.stdout).deep.equals(expected.map(msg => `${msg}\n`));
+    assume(actual.stdout).deep.equals(expected.map(msg => `${msg}${EOL}`));
     assume(actual.stderr).deep.equals([]);
   });
 });
