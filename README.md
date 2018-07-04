@@ -912,7 +912,7 @@ by `winston` see the [`winston` Transports](docs/transports.md) document.
 
 Often it is useful to wait for your logs to be written before exiting the
 process. Each instance of `winston.Logger` is also a [Node.js stream]. A
-`finished` event will be raised when all logs have flushed to all transports
+`finish` event will be raised when all logs have flushed to all transports
 after the stream has been ended.
 
 ``` js
