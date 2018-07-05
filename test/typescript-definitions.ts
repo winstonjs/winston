@@ -1,6 +1,6 @@
 import * as winston from '../index';
 
-const logger: winston.Logger = winston.createLogger({
+let logger: winston.Logger = winston.createLogger({
     level: 'info',
     format: winston.format.json(),
     transports: [
@@ -26,7 +26,26 @@ const loggerOptions: winston.LoggerOptions = {
         new winston.transports.Console({ level: 'info' }),
     ],
 };
-winston.loggers.add('category', loggerOptions);
-winston.loggers.get('category', loggerOptions);
-winston.loggers.has('category');
+
+// assign the returned values to the logger variable,
+// to make sure that the methods have 'Logger' declared as their return type
+logger = winston.loggers.add('category', loggerOptions);
+logger = winston.loggers.add('category');
+logger = winston.loggers.get('category', loggerOptions);
+logger = winston.loggers.get('category');
+
+const hasLogger: boolean = winston.loggers.has('category');
+winston.loggers.close('category');
 winston.loggers.close();
+
+let container: winston.Container = new winston.Container(loggerOptions);
+logger = container.get('testLogger');
+
+logger = container.loggers.get('testLogger')!;
+
+container.close('testLogger');
+
+const level = container.options.level;
+
+container = new winston.Container();
+logger = container.get('testLogger2');
