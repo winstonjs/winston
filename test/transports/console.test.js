@@ -41,6 +41,21 @@ const transports = {
   })
 };
 
+// /**
+//  * Returns a function that asserts the `transport` has the specified
+//  * `stderrLevels`.
+//  *
+//  * @param  {TransportStream} transport Transport to assert against
+//  * @param  {Array} stderrLevels Set of levels assumed to exist
+//  * @return {function} Assertion function to execute comparison
+//  */
+// function assertStderrLevels(transport, stderrLevels) {
+//   return function () {
+//     assume(JSON.stringify(Object.keys(transport.stderrLevels).sort()))
+//       .equals(JSON.stringify(stderrLevels.sort()));
+//   };
+// }
+
 /**
  * Returns a function that asserts the `transport` has the specified
  * logLevels values in the appropriate logLevelsName member.
