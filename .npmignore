@@ -13,3 +13,5 @@ docs
 docs/*
 .nyc_output/
 .nyc_output/*
+coverage/
+coverage/*
