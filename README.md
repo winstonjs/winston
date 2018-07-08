@@ -130,7 +130,7 @@ A logger accepts the following parameters:
 
 | Name          | Default                |  Description    |
 | ------------- | ---------------------- | --------------- |
-| `level`       | `'info'`               | Log only if `info.level` less than or equal to this level  |  
+| `level`       | `'info'`               | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |  
 | `levels`      | `winston.config.npm`   | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`  | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_ | Set of logging targets for `info` messages                 |
@@ -194,9 +194,10 @@ logger.configure({
 ### Streams, `objectMode`, and `info` objects
 
 In `winston`, both `Logger` and `Transport` instances are treated as
-`objectMode` streams that accept an `info` object. The `info`
-object represents a single log message. The object itself is mutable. Every
-`info` must have at least the `level` and `message` properties:
+[`objectMode`](https://nodejs.org/api/stream.html#stream_object_mode)
+streams that accept an `info` object. The `info` object represents a
+single log message. The object itself is mutable. Every `info` must
+have at least the `level` and `message` properties:
 
 ``` js
 {
