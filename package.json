@@ -50,15 +50,20 @@
     "split2": "^2.1.1",
     "std-mocks": "^1.0.0",
     "through2": "^2.0.0",
-    "winston-compat": "^0.1.1"
+    "winston-compat": "^0.1.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "rimraf": "^2.6.2"
   },
-  "main": "./lib/winston",
+  "main": "./build/winston",
   "types": "./index.d.ts",
   "scripts": {
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
-    "test:mocha": "mocha test/*.test.js test/**/*.test.js"
+    "test:mocha": "mocha test/*.test.js test/**/*.test.js",
+    "build": "./node_modules/.bin/rimraf build && babel lib --out-dir build --ignore node_modules,test,build,examples",
+    "prepublish": "npm run build"
   },
   "engines": {
     "node": ">= 6.4.0"
