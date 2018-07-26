@@ -1,4 +1,5 @@
 var assert = require('assert'),
+    rimraf = require('rimraf'),
     fs = require('fs'),
     path = require('path'),
     winston = require('../../lib/winston'),
@@ -10,40 +11,38 @@ const asyncSeries = require('async/series');
 const { MESSAGE, LEVEL } = require('triple-beam');
 
 
-var maxfilesTransport = null;
+
+//
+// Remove all log fixtures
+//
+function removeFixtures(done) {
+  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testtailrollingfiles*'), done);
+}
+
+
+
+let tailrollTransport = null;
 
 describe('winston/transports/file/tailrolling', function(){
   describe("An instance of the File Transport", function(){
-    it("when delete old test files", function(done){
-        const logDir = path.join(__dirname, '..', 'fixtures', 'logs');
-        const tasks = []
-        fs.readdir(logDir, (err, files) => {
-            if(err && err.code !== 'ENOENT') {
-              return done(err);
-            } 
-            files.filter(f => f.indexOf('testtailrollingfiles') > -1)
-              .forEach(f => {
-                 tasks.push(cb => fs.unlink(path.join(logDir, f), cb))
-               })
-            asyncSeries(tasks, done);
-        });
-    });
+    before(removeFixtures);
+    after(removeFixtures);
 
     it('init logger AFTER cleaning up old files', function(){
-	maxfilesTransport = new winston.transports.File({
+	tailrollTransport = new winston.transports.File({
 	  timestamp: false,
 	  json: false,
 	  filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testtailrollingfiles.log'),
 	  maxsize: 4096,
 	  maxFiles: 3,
 	  tailable: true
-	});
+	})
+        .on('open', console.log)
     });
 
     it("and when passed more files than the maxFiles", function(done){
-          var that = this,
-              created = 0;
-          let loggedTotal = 0
+          let created = 0;
+          let loggedTotal = 0;
    
           function data(ch, kb) {
             return String.fromCharCode(65 + ch).repeat(kb*1024 - 1);
@@ -52,10 +51,10 @@ describe('winston/transports/file/tailrolling', function(){
           function logKbytes(kbytes, txt) {
             const toLog = {};
 	    toLog[MESSAGE] = data(txt, kbytes)
-            maxfilesTransport.log(toLog);
+            tailrollTransport.log(toLog);
           }
 
-          maxfilesTransport.on('logged', function (info) {
+          tailrollTransport.on('logged', function (info) {
             loggedTotal += info[MESSAGE].length + 1
             if (loggedTotal >= 14*1024) { // just over 3 x 4kb files
               return done();
@@ -82,7 +81,7 @@ describe('winston/transports/file/tailrolling', function(){
 
             assert.ok(fs.existsSync(fullpath));
           }
-
+          
           return false;
         });
 
