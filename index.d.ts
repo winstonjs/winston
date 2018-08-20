@@ -45,7 +45,7 @@ declare namespace winston {
   interface Profiler {
     logger: Logger;
     start: Date;
-    done(): boolean;
+    done(info?: any): boolean;
   }
 
   type LogCallback = (error?: any, level?: string, message?: string, meta?: any) => void;
