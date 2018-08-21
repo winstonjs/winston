@@ -50,6 +50,7 @@
     "split2": "^2.1.1",
     "std-mocks": "^1.0.0",
     "through2": "^2.0.0",
+    "vows": "^0.8.2",
     "winston-compat": "^0.1.1"
   },
   "main": "./lib/winston",
