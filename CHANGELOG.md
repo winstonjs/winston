@@ -1,3 +1,8 @@
+## v2.4.4
+### NPMIGNORE IS YOUR FRIEND EDITION
+
+- Backport `.npmignore` fix onto `2.x` – Fixes [#1405].
+
 ## v2.4.3 / 2018-06-12
 ### OMG OMG OMG WINSTON@3.0.0 RELEASE EDITION
 
