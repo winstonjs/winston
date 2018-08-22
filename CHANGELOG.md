@@ -3,7 +3,13 @@
 ## v3.1.0 / 2018-08-22
 ### RELEASES ON A PLANE EDITION
 
-
+- Minor TypeScript fixes [#1362], [#1395], [#1440]
+- Fix minor typos [#1359], [#1363], [#1372], [#1378], [#1390]
+- [#1373], (@revik): Add `consoleWarnLevels` property to console transport options for `console.warn` browser support.
+- [#1394], (@bzoz): Fix tests on Windows.
+- Dependency management
+  - Regenerate `package-lock.json`.
+  - Upgrade to `colors@^1.3.2`.
 
 ## v3.0.0 / 2018-06-12
 ### GET IN THE CHOPPA EDITION
