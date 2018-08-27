@@ -383,7 +383,7 @@ The `exitOnError` option can also be a function to prevent exit on only certain 
 
 ## Logging Levels
 
-Each `level` is given a specific integer priority. The higher the priority the more important the message is considered to be, and the lower the corresponding integer priority.  For example, `npm` logging levels are prioritized from 0 to 5 (highest to lowest):
+Each `level` is given a specific integer priority. The higher the priority the more important the message is considered to be, and the lower the corresponding integer priority. Severity of all levels is assumed to be numerically **ascending** from most important to least important. For example, `npm` logging levels are prioritized from 0 to 5 (highest to lowest):
 
 ``` js
 { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
