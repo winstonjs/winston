@@ -821,9 +821,12 @@ on:
  }, 1000);
 ```
 
-All profile messages are set to 'info' level by default and both message and
-metadata are optional. There are no plans in the Roadmap to make this
-configurable, but we are open to suggestions through new issues!
+All profile messages are set to 'info' level by default, and both message and
+metadata are optional.  For individual profile messages, you can override the default log level by supplying a metadata object with a `level` property:
+
+```js
+logger.profile('test', { level: 'debug' });
+```
 
 ## Querying Logs
 
