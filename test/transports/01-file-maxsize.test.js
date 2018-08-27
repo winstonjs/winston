@@ -23,7 +23,7 @@ function removeFixtures(done) {
 describe('File (maxsize)', function () {
   this.timeout(10000);
 
-  let testDone = false
+  let testDone = false;
   before(removeFixtures);
   after(done => {
     testDone = true;
