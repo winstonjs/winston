@@ -601,6 +601,14 @@ winston.format.combine(
 ```
 where `winston.format.json()` is whatever other formatter you want to use.  The `colorize` formatter must come before any formatters adding text you wish to color.
 
+By default this only colors the logging level. If you want to color the message as well pass an object to the colorize object with an all property set to true:
+```js
+winston.format.combine(
+  winston.format.colorize({all:true}),
+  winston.format.json()
+);
+```
+
 ## Transports
 
 There are several [core transports] included in  `winston`, which leverage the
