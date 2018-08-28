@@ -58,7 +58,7 @@
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
-    "test:mocha": "mocha test/*.test.js test/**/*.test.js"
+    "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit"
   },
   "engines": {
     "node": ">= 6.4.0"
