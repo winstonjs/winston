@@ -7,9 +7,12 @@
 - Fix minor typos [#1359], [#1363], [#1372], [#1378], [#1390]
 - [#1373], (@revik): Add `consoleWarnLevels` property to console transport options for `console.warn` browser support.
 - [#1394], (@bzoz): Fix tests on Windows.
+- [#1447], (@dboshardy): Support transport name option to override default names for built-in transports.
+- [#1420], (@ledbit): Fix file rotation with `tailing: true` (Fixes [#1450], [#1194]).
+- [#1352], (@lutovich): Add `isLevelEnabled(string)` & `isXXXEnabled()` to `Logger` class.
 - Dependency management
   - Regenerate `package-lock.json`.
-  - Upgrade to `colors@^1.3.2`.
+  - Upgrade to `colors@^1.3.2` (Fixes [#1439]).
 
 ## v3.0.0 / 2018-06-12
 ### GET IN THE CHOPPA EDITION
