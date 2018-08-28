@@ -258,19 +258,19 @@ describe('Logger (levels)', function () {
 
   it('default levels', function (done) {
     var logger = winston.createLogger();
-    var expected = { message: 'foo', level: 'info' };
+    var expected = { message: 'foo', level: 'debug' };
 
     function logLevelTransport(level) {
       return new TransportStream({
         level: level,
         log: function (obj) {
-          if (level === 'debug') {
-            assume(obj).equals(undefined, 'Transport on level debug should never be called');
+          if (level === 'info') {
+            assume(obj).equals(undefined, 'Transport on level info should never be called');
           }
 
           assume(obj.message).equals('foo');
-          assume(obj.level).equals('info');
-          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'info' }));
+          assume(obj.level).equals('debug');
+          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'debug' }));
           done();
         }
       });
