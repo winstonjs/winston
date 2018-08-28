@@ -13,6 +13,14 @@
 - Dependency management
   - Regenerate `package-lock.json`.
   - Upgrade to `colors@^1.3.2` (Fixes [#1439]).
+  - Upgrade to `logform@^1.9.1`.
+  - Upgrade to `diagnostics@^1.1.1`.
+  - Upgrade to `@types/node@^10.9.3`.
+  - Upgrade to `assume@^2.1.0`.
+  - Upgrade to `hock@^1.3.3`.
+  - Upgrade to `mocha@^5.2.0`.
+  - Upgrade to `nyc@^13.0.1`.
+  - Upgrade to `split2@^3.0.0`.
 
 ## v3.0.0 / 2018-06-12
 ### GET IN THE CHOPPA EDITION
