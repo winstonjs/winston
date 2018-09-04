@@ -27,9 +27,9 @@
   ],
   "dependencies": {
     "async": "^2.6.0",
-    "diagnostics": "^1.0.1",
+    "diagnostics": "^1.1.1",
     "is-stream": "^1.1.0",
-    "logform": "^1.9.0",
+    "logform": "^1.9.1",
     "one-time": "0.0.4",
     "readable-stream": "^2.3.6",
     "stack-trace": "0.0.x",
@@ -37,17 +37,17 @@
     "winston-transport": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^9.6.6",
+    "@types/node": "^10.9.3",
     "abstract-winston-transport": ">= 0.5.1",
-    "assume": "^2.0.1",
-    "colors": "^1.2.0",
+    "assume": "^2.1.0",
+    "colors": "^1.3.2",
     "cross-spawn-async": "^2.0.0",
     "eslint-config-populist": "^4.1.0",
-    "hock": "^1.3.2",
-    "mocha": "^3.2.0",
-    "nyc": "^11.2.1",
+    "hock": "^1.3.3",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
     "rimraf": "^2.6.2",
-    "split2": "^2.1.1",
+    "split2": "^3.0.0",
     "std-mocks": "^1.0.0",
     "through2": "^2.0.0",
     "winston-compat": "^0.1.1"
@@ -58,7 +58,7 @@
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
-    "test:mocha": "mocha test/*.test.js test/**/*.test.js"
+    "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit"
   },
   "engines": {
     "node": ">= 6.4.0"
