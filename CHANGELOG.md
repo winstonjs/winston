@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v3.0.1 / 2018-09-04
+### NPMIGNORE IS HARD EDITION
+
+- (@DABH) npm ignore scratch folder from CI.
+
 ## v3.0.0 / 2018-06-12
 ### GET IN THE CHOPPA EDITION
 
