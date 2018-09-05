@@ -55,15 +55,15 @@
     "babel-preset-env": "^1.7.0",
     "rimraf": "^2.6.2"
   },
-  "main": "./build/winston",
+  "main": "./dist/winston",
   "types": "./index.d.ts",
   "scripts": {
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
     "test:mocha": "mocha test/*.test.js test/**/*.test.js",
-    "build": "./node_modules/.bin/rimraf build && babel lib --out-dir build --ignore node_modules,test,build,examples",
-    "prepublish": "npm run build"
+    "build": "./node_modules/.bin/rimraf dist && babel lib --out-dir dist --ignore node_modules,test,dist,examples",
+    "prepublishOnly": "npm run build"
   },
   "engines": {
     "node": ">= 6.4.0"
