@@ -380,7 +380,7 @@ Valid Options are as the following:
 * __hideMeta__ Hide MetaData (default: false)
 
 ### Cloudant
-[winston-clodant][33] is a transport for Cloudant NoSQL Db.
+[winston-clodant][34] is a transport for Cloudant NoSQL Db.
 
 ```js
 const winston = require('winston');
@@ -742,4 +742,4 @@ That's why we say it's a logger for just about everything
 [30]: https://cloud.google.com/logging/
 [31]: https://github.com/joelee/winston-spark
 [32]: https://github.com/avens19/winston-sumologic-transport
-[33]: https://github.com/hakanostrom/winston-cloudant
+[34]: https://github.com/hakanostrom/winston-cloudant
