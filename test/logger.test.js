@@ -838,3 +838,33 @@ describe('Logger (profile, startTimer)', function (done) {
     }, 100);
   });
 });
+
+describe('Should bubble transport events', () => {
+  it('error', (done) => {
+    const consoleTransport = new winston.transports.Console();
+    const logger = winston.createLogger({
+      transports: [consoleTransport]
+    });
+
+    logger.on('error', (err, transport) => {
+      assume(err).instanceOf(Error);
+      assume(transport).is.an('object');
+      done();
+    });
+    consoleTransport.emit('error', new Error());
+  });
+
+  it('warn', (done) => {
+    const consoleTransport = new winston.transports.Console();
+    const logger = winston.createLogger({
+      transports: [consoleTransport]
+    });
+
+    logger.on('warn', (err, transport) => {
+      assume(err).instanceOf(Error);
+      assume(transport).is.an('object');
+      done();
+    });
+    consoleTransport.emit('warn', new Error());
+  });
+});
