@@ -7,13 +7,13 @@
  */
 
 var assume = require('assume'),
-    fs = require('fs'),
-    path = require('path'),
-    through = require('through2'),
-    spawn = require('child_process').spawn,
-    stream = require('stream'),
-    util = require('util'),
-    winston = require('../../lib/winston');
+  fs = require('fs'),
+  path = require('path'),
+  through = require('through2'),
+  spawn = require('child_process').spawn,
+  stream = require('stream'),
+  util = require('util'),
+  winston = require('../../lib/winston');
 
 var helpers = exports;
 
@@ -32,9 +32,7 @@ helpers.createLogger = function (write, format) {
 
   return winston.createLogger({
     format,
-    transports: [
-      new winston.transports.Stream({ stream: writeable })
-    ]
+    transports: [new winston.transports.Stream({ stream: writeable })]
   });
 };
 
@@ -64,6 +62,19 @@ helpers.exceptionHandler = function (opts) {
 };
 
 /**
+ * Creates a new RejectionHandler instance with a new
+ * winston.Logger instance with the specified options
+ *
+ * @param {Object} opts Options for the logger associated
+ *                 with the RejectionHandler
+ * @returns {RejectionHandler} A new ExceptionHandler instance
+ */
+helpers.rejectionHandler = function (opts) {
+  var logger = winston.createLogger(opts);
+  return new winston.RejectionHandler(logger);
+};
+
+/**
  * Removes all listeners to `process.on('uncaughtException')`
  * and returns an object that allows you to restore them later.
  *
@@ -84,6 +95,26 @@ helpers.clearExceptions = function () {
 };
 
 /**
+ * Removes all listeners to `process.on('unhandledRejection')`
+ * and returns an object that allows you to restore them later.
+ *
+ * @returns {Object} Facade to restore unhandledRejection handlers.
+ */
+helpers.clearRejections = function () {
+  var listeners = process.listeners('unhandledRejection');
+  process.removeAllListeners('unhandledRejections');
+
+  return {
+    restore: function () {
+      process.removeAllListeners('unhandledRejection');
+      listeners.forEach(function (fn) {
+        process.on('unhandledRejection', fn);
+      });
+    }
+  };
+};
+
+/**
  * Throws an exception with the specified `msg`
  * @param {String} msg Error mesage to use
  */
@@ -92,24 +123,36 @@ helpers.throw = function (msg) {
 };
 
 /**
+ * Causes a Promise rejection with the specified `msg`
+ * @param {String} msg Error mesage to use
+ */
+helpers.reject = function (msg) {
+  return new Promise((resolve, reject) => {
+    reject(msg);
+  });
+};
+
+/**
  * Attempts to unlink the specifyed `filename` ignoring errors
  * @param {String} File Full path to attempt to unlink.
  */
 helpers.tryUnlink = function (filename) {
-  try { fs.unlinkSync(filename); }
-  catch (ex) { }
+  try {
+    fs.unlinkSync(filename);
+  } catch (ex) {}
 };
 
 /**
  * Returns a stream that will emit data for the `filename` if it exists
  * and is capable of being opened.
  * @param  {filename} Full path to attempt to read from.
- * @return {Stream} Stream instance to the contents of the file
+ * @returns {Stream} Stream instance to the contents of the file
  */
 helpers.tryRead = function tryRead(filename) {
   var proxy = through();
   (function inner() {
-    var stream = fs.createReadStream(filename)
+    var stream = fs
+      .createReadStream(filename)
       .once('open', function () {
         stream.pipe(proxy);
       })
@@ -119,7 +162,7 @@ helpers.tryRead = function tryRead(filename) {
         }
         proxy.emit('error', err);
       });
-  })();
+  }());
 
   return proxy;
 };
@@ -192,7 +235,7 @@ helpers.assertLogger = function (logger, level) {
  * Asserts that the script located at `options.script` logs a single exception
  * (conforming to the ExceptionHandler structure) at the specified `options.logfile`.
  * @param  {Object} options Configuration for this test.
- * @return {function} Test macro asserting that `options.script` performs the
+ * @returns {function} Test macro asserting that `options.script` performs the
  *                    expected behavior.
  */
 helpers.assertHandleExceptions = function (options) {
@@ -216,6 +259,44 @@ helpers.assertHandleExceptions = function (options) {
         helpers.assertTrace(data.trace);
         if (options.message) {
           assume(data.message).include('uncaughtException: ' + options.message);
+        }
+
+        done();
+      });
+    });
+  };
+};
+
+/**
+ * Asserts that the script located at `options.script` logs a single rejection
+ * (conforming to the RejectionHandler structure) at the specified `options.logfile`.
+ * @param  {Object} options Configuration for this test.
+ * @returns {function} Test macro asserting that `options.script` performs the
+ *                    expected behavior.
+ */
+helpers.assertHandleRejections = function (options) {
+  return function (done) {
+    var child = spawn('node', [options.script]);
+
+    if (process.env.DEBUG) {
+      child.stdout.pipe(process.stdout);
+      child.stderr.pipe(process.stdout);
+    }
+
+    helpers.tryUnlink(options.logfile);
+    child.on('exit', function () {
+      fs.readFile(options.logfile, function (err, data) {
+        assume(err).equals(null);
+        data = JSON.parse(data);
+
+        assume(data).is.an('object');
+        helpers.assertProcessInfo(data.process);
+        helpers.assertOsInfo(data.os);
+        helpers.assertTrace(data.trace);
+        if (options.message) {
+          assume(data.message).include(
+            'unhandledRejection: ' + options.message
+          );
         }
 
         done();
