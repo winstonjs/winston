@@ -12,3 +12,4 @@ coverage/*
 *.log
 .idea
 *.sw*
+yarn.lock

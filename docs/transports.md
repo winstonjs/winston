@@ -76,6 +76,7 @@ The Console transport takes a few simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __eol:__ string indicating the end-of-line characters to use (default `os.EOL`)
 * __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `[]`)
+* __consoleWarnLevels__ Array of strings containing the levels to log using console.warn or to stderr (in Node.js) instead of stdout, for example `['warn', 'debug']`. (default `[]`)
 
 ### File Transport
 ``` js
@@ -596,7 +597,7 @@ Options:
 
 ### Winlog2 Transport
 
-[winston-winlog2][19] is a Windows Event log transport:
+[winston-winlog2][33] is a Windows Event log transport:
 
 ``` js
 const winston = require('winston');
@@ -742,4 +743,5 @@ That's why we say it's a logger for just about everything
 [30]: https://cloud.google.com/logging/
 [31]: https://github.com/joelee/winston-spark
 [32]: https://github.com/avens19/winston-sumologic-transport
+[33]: https://github.com/peteward44/winston-winlog2
 [34]: https://github.com/hakanostrom/winston-cloudant

@@ -15,3 +15,5 @@ docs/*
 .nyc_output/*
 coverage/
 coverage/*
+scratch
+scratch/*

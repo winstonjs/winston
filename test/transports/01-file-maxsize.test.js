@@ -23,8 +23,12 @@ function removeFixtures(done) {
 describe('File (maxsize)', function () {
   this.timeout(10000);
 
+  let testDone = false;
   before(removeFixtures);
-  after(removeFixtures);
+  after(done => {
+    testDone = true;
+    removeFixtures(done);
+  });
 
   it('should create multiple files correctly when passed more than the maxsize', function (done) {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
@@ -101,6 +105,8 @@ describe('File (maxsize)', function () {
     }
 
     maxsizeTransport.on('open', function (file) {
+      if (testDone) return; // ignore future notifications
+
       const match = file.match(/(\d+)\.log$/);
       const count = match ? match[1] : 0;
 

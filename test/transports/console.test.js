@@ -20,7 +20,10 @@ const transports = {
   defaults: new winston.transports.Console(),
   noStderr: new winston.transports.Console({ stderrLevels: [] }),
   stderrLevels: new winston.transports.Console({
-    stderrLevels: ['info', 'warn']
+    stderrLevels: ['info', 'error']
+  }),
+  consoleWarnLevels: new winston.transports.Console({
+    consoleWarnLevels: ['warn', 'debug']
   }),
   eol: new winston.transports.Console({ eol: 'X' }),
   syslog: new winston.transports.Console({
@@ -40,18 +43,21 @@ const transports = {
 
 /**
  * Returns a function that asserts the `transport` has the specified
- * `stderrLevels`.
+ * logLevels values in the appropriate logLevelsName member.
  *
  * @param  {TransportStream} transport Transport to assert against
- * @param  {Array} stderrLevels Set of levels assumed to exist
+ * @param  {Array} logLevels Set of levels assumed to exist for the specified map
+ * @param  {String} logLevelsName The name of the array/map that holdes the log leveles values (ie: 'stderrLevels', 'consoleWarnLevels')
  * @return {function} Assertion function to execute comparison
  */
-function assertStderrLevels(transport, stderrLevels) {
+function assertLogLevelsValues(transport, logLevels, logLevelsName = 'stderrLevels') {
   return function () {
-    assume(JSON.stringify(Object.keys(transport.stderrLevels).sort()))
-      .equals(JSON.stringify(stderrLevels.sort()));
+    assume(JSON.stringify(Object.keys(transport[logLevelsName]).sort()))
+      .equals(JSON.stringify(logLevels.sort()));
   };
 }
+
+
 
 describe('Console transport', function () {
   describe('with defaults', function () {
@@ -78,9 +84,10 @@ describe('Console transport', function () {
       assume(output.stdout).length(7);
     });
 
-    it("should set stderrLevels to [] by default", assertStderrLevels(
+    it("should set stderrLevels to [] by default", assertLogLevelsValues(
       transports.defaults,
-      []
+      [],
+      'stderrLevels'
     ));
   });
 
@@ -102,9 +109,15 @@ describe('Console transport', function () {
     });
   });
 
-  it("{ stderrLevels: ['info', 'warn'] } logs to them appropriately", assertStderrLevels(
+  it("{ stderrLevels: ['info', 'error'] } logs to them appropriately", assertLogLevelsValues(
     transports.stderrLevels,
-    ['info', 'warn']
+    ['info', 'error'],
+    'stderrLevels'
+  ));
+  it("{ consoleWarnLevels: ['warn', 'debug'] } logs to them appropriately", assertLogLevelsValues(
+    transports.consoleWarnLevels,
+    ['warn', 'debug'],
+    'consoleWarnLevels'
   ));
 
   it('{ eol } adds a custom EOL delimiter', function (done) {
