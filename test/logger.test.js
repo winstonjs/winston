@@ -258,19 +258,19 @@ describe('Logger (levels)', function () {
 
   it('default levels', function (done) {
     var logger = winston.createLogger();
-    var expected = { message: 'foo', level: 'info' };
+    var expected = { message: 'foo', level: 'debug' };
 
     function logLevelTransport(level) {
       return new TransportStream({
         level: level,
         log: function (obj) {
-          if (level === 'debug') {
-            assume(obj).equals(undefined, 'Transport on level debug should never be called');
+          if (level === 'info') {
+            assume(obj).equals(undefined, 'Transport on level info should never be called');
           }
 
           assume(obj.message).equals('foo');
-          assume(obj.level).equals('info');
-          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'info' }));
+          assume(obj.level).equals('debug');
+          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'debug' }));
           done();
         }
       });
@@ -357,6 +357,185 @@ describe('Logger (levels)', function () {
     logger = winston.createLogger({
       transports: [transport]
     });
+  });
+});
+
+describe('Logger (level enabled/disabled)', function () {
+  it('default levels', function () {
+    var logger = winston.createLogger({
+      level: 'verbose',
+      levels: winston.config.npm.levels,
+      transports: [new winston.transports.Console()]
+    });
+
+    assume(logger.isLevelEnabled).is.a('function');
+
+    assume(logger.isErrorEnabled).is.a('function');
+    assume(logger.isWarnEnabled).is.a('function');
+    assume(logger.isInfoEnabled).is.a('function');
+    assume(logger.isVerboseEnabled).is.a('function');
+    assume(logger.isDebugEnabled).is.a('function');
+    assume(logger.isSillyEnabled).is.a('function');
+
+    assume(logger.isLevelEnabled('error')).true();
+    assume(logger.isLevelEnabled('warn')).true();
+    assume(logger.isLevelEnabled('info')).true();
+    assume(logger.isLevelEnabled('verbose')).true();
+    assume(logger.isLevelEnabled('debug')).false();
+    assume(logger.isLevelEnabled('silly')).false();
+
+    assume(logger.isErrorEnabled()).true();
+    assume(logger.isWarnEnabled()).true();
+    assume(logger.isInfoEnabled()).true();
+    assume(logger.isVerboseEnabled()).true();
+    assume(logger.isDebugEnabled()).false();
+    assume(logger.isSillyEnabled()).false();
+  });
+
+  it('default levels, transport override', function () {
+    var transport = new winston.transports.Console();
+    transport.level = 'debug';
+
+    var logger = winston.createLogger({
+      level: 'info',
+      levels: winston.config.npm.levels,
+      transports: [transport]
+    });
+
+    assume(logger.isLevelEnabled).is.a('function');
+
+    assume(logger.isErrorEnabled).is.a('function');
+    assume(logger.isWarnEnabled).is.a('function');
+    assume(logger.isInfoEnabled).is.a('function');
+    assume(logger.isVerboseEnabled).is.a('function');
+    assume(logger.isDebugEnabled).is.a('function');
+    assume(logger.isSillyEnabled).is.a('function');
+
+    assume(logger.isLevelEnabled('error')).true();
+    assume(logger.isLevelEnabled('warn')).true();
+    assume(logger.isLevelEnabled('info')).true();
+    assume(logger.isLevelEnabled('verbose')).true();
+    assume(logger.isLevelEnabled('debug')).true();
+    assume(logger.isLevelEnabled('silly')).false();
+
+    assume(logger.isErrorEnabled()).true();
+    assume(logger.isWarnEnabled()).true();
+    assume(logger.isInfoEnabled()).true();
+    assume(logger.isVerboseEnabled()).true();
+    assume(logger.isDebugEnabled()).true();
+    assume(logger.isSillyEnabled()).false();
+  });
+
+  it('default levels, no transports', function () {
+    var logger = winston.createLogger({
+      level: 'verbose',
+      levels: winston.config.npm.levels,
+      transports: []
+    });
+
+    assume(logger.isLevelEnabled).is.a('function');
+
+    assume(logger.isErrorEnabled).is.a('function');
+    assume(logger.isWarnEnabled).is.a('function');
+    assume(logger.isInfoEnabled).is.a('function');
+    assume(logger.isVerboseEnabled).is.a('function');
+    assume(logger.isDebugEnabled).is.a('function');
+    assume(logger.isSillyEnabled).is.a('function');
+
+    assume(logger.isLevelEnabled('error')).true();
+    assume(logger.isLevelEnabled('warn')).true();
+    assume(logger.isLevelEnabled('info')).true();
+    assume(logger.isLevelEnabled('verbose')).true();
+    assume(logger.isLevelEnabled('debug')).false();
+    assume(logger.isLevelEnabled('silly')).false();
+
+    assume(logger.isErrorEnabled()).true();
+    assume(logger.isWarnEnabled()).true();
+    assume(logger.isInfoEnabled()).true();
+    assume(logger.isVerboseEnabled()).true();
+    assume(logger.isDebugEnabled()).false();
+    assume(logger.isSillyEnabled()).false();
+  });
+
+  it('custom levels', function () {
+    var logger = winston.createLogger({
+      level: 'test',
+      levels: {
+        bad: 0,
+        test: 1,
+        ok: 2
+      },
+      transports: [new winston.transports.Console()]
+    });
+
+    assume(logger.isLevelEnabled).is.a('function');
+
+    assume(logger.isBadEnabled).is.a('function');
+    assume(logger.isTestEnabled).is.a('function');
+    assume(logger.isOkEnabled).is.a('function');
+
+    assume(logger.isLevelEnabled('bad')).true();
+    assume(logger.isLevelEnabled('test')).true();
+    assume(logger.isLevelEnabled('ok')).false();
+
+    assume(logger.isBadEnabled()).true();
+    assume(logger.isTestEnabled()).true();
+    assume(logger.isOkEnabled()).false();
+  });
+
+  it('custom levels, no transports', function () {
+    var logger = winston.createLogger({
+      level: 'test',
+      levels: {
+        bad: 0,
+        test: 1,
+        ok: 2
+      },
+      transports: []
+    });
+
+    assume(logger.isLevelEnabled).is.a('function');
+
+    assume(logger.isBadEnabled).is.a('function');
+    assume(logger.isTestEnabled).is.a('function');
+    assume(logger.isOkEnabled).is.a('function');
+
+    assume(logger.isLevelEnabled('bad')).true();
+    assume(logger.isLevelEnabled('test')).true();
+    assume(logger.isLevelEnabled('ok')).false();
+
+    assume(logger.isBadEnabled()).true();
+    assume(logger.isTestEnabled()).true();
+    assume(logger.isOkEnabled()).false();
+  });
+
+  it('custom levels, transport override', function () {
+    var transport = new winston.transports.Console();
+    transport.level = 'ok';
+
+    var logger = winston.createLogger({
+      level: 'bad',
+      levels: {
+        bad: 0,
+        test: 1,
+        ok: 2
+      },
+      transports: [transport]
+    });
+
+    assume(logger.isLevelEnabled).is.a('function');
+
+    assume(logger.isBadEnabled).is.a('function');
+    assume(logger.isTestEnabled).is.a('function');
+    assume(logger.isOkEnabled).is.a('function');
+
+    assume(logger.isLevelEnabled('bad')).true();
+    assume(logger.isLevelEnabled('test')).true();
+    assume(logger.isLevelEnabled('ok')).true();
+
+    assume(logger.isBadEnabled()).true();
+    assume(logger.isTestEnabled()).true();
+    assume(logger.isOkEnabled()).true();
   });
 });
 
@@ -657,5 +836,35 @@ describe('Logger (profile, startTimer)', function (done) {
         level: 'info'
       });
     }, 100);
+  });
+});
+
+describe('Should bubble transport events', () => {
+  it('error', (done) => {
+    const consoleTransport = new winston.transports.Console();
+    const logger = winston.createLogger({
+      transports: [consoleTransport]
+    });
+
+    logger.on('error', (err, transport) => {
+      assume(err).instanceOf(Error);
+      assume(transport).is.an('object');
+      done();
+    });
+    consoleTransport.emit('error', new Error());
+  });
+
+  it('warn', (done) => {
+    const consoleTransport = new winston.transports.Console();
+    const logger = winston.createLogger({
+      transports: [consoleTransport]
+    });
+
+    logger.on('warn', (err, transport) => {
+      assume(err).instanceOf(Error);
+      assume(transport).is.an('object');
+      done();
+    });
+    consoleTransport.emit('warn', new Error());
   });
 });

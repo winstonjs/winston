@@ -130,7 +130,7 @@ A logger accepts the following parameters:
 
 | Name          | Default                |  Description    |
 | ------------- | ---------------------- | --------------- |
-| `level`       | `'info'`               | Log only if `info.level` less than or equal to this level  |  
+| `level`       | `'info'`               | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |  
 | `levels`      | `winston.config.npm`   | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`  | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_ | Set of logging targets for `info` messages                 |
@@ -194,9 +194,10 @@ logger.configure({
 ### Streams, `objectMode`, and `info` objects
 
 In `winston`, both `Logger` and `Transport` instances are treated as
-`objectMode` streams that accept an `info` object. The `info`
-object represents a single log message. The object itself is mutable. Every
-`info` must have at least the `level` and `message` properties:
+[`objectMode`](https://nodejs.org/api/stream.html#stream_object_mode)
+streams that accept an `info` object. The `info` object represents a
+single log message. The object itself is mutable. Every `info` must
+have at least the `level` and `message` properties:
 
 ``` js
 {
@@ -820,9 +821,12 @@ on:
  }, 1000);
 ```
 
-All profile messages are set to 'info' level by default and both message and
-metadata are optional. There are no plans in the Roadmap to make this
-configurable, but we are open to suggestions through new issues!
+All profile messages are set to 'info' level by default, and both message and
+metadata are optional.  For individual profile messages, you can override the default log level by supplying a metadata object with a `level` property:
+
+```js
+logger.profile('test', { level: 'debug' });
+```
 
 ## Querying Logs
 
