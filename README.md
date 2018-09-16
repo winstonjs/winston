@@ -43,6 +43,7 @@ simplest way to do this is using `winston.createLogger`:
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
+  defaultMeta: {service: 'user-service'},
   transports: [
     //
     // - Write to all logs with level `info` and below to `combined.log` 
@@ -188,6 +189,24 @@ logger.configure({
   transports: [
     new DailyRotateFile(opts)
   ]
+});
+```
+
+### Creating child loggers
+
+You can create child loggers from existing loggers to pass configuration overrides (e. g. different default metadata):
+
+``` js
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.Console(),
+  ]
+});
+
+const childLogger = logger.child({
+  defaultMeta: {
+    req_id: '451'
+  }
 });
 ```
 

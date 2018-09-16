@@ -20,6 +20,7 @@ const winston = require('../lib/winston');
 const TransportStream = require('winston-transport');
 const format = require('../lib/winston').format;
 const helpers = require('./helpers');
+const mockTransport = require('./helpers/mocks/mock-transport');
 
 describe('Logger', function () {
   it('new Logger()', function () {
@@ -867,4 +868,69 @@ describe('Should bubble transport events', () => {
     });
     consoleTransport.emit('warn', new Error());
   });
+});
+
+describe('Should support child loggers', () => {
+    it('copies parameter correctly', () => {
+        const myFormat = format(function (info, opts) {
+            return info;
+        })();
+
+        const logger = winston.createLogger({
+            format: myFormat,
+            level: 'error',
+            exitOnError: false,
+            transports: []
+        });
+
+        const childLogger = logger.child();
+
+        assume(childLogger.format).equals(myFormat);
+        assume(childLogger.level).equals('error');
+        assume(childLogger.exitOnError).equals(false);
+        assume(childLogger._readableState.pipesCount).equals(0);
+    });
+
+    it('overrides parameters correctly', () => {
+        const myFormat = format(function (info, opts) {
+            return info;
+        })();
+
+        const logger = winston.createLogger({
+            format: myFormat,
+            level: 'error',
+            exitOnError: false,
+            transports: []
+        });
+
+        const childLogger = logger.child({level: 'info'});
+
+        assume(childLogger.format).equals(myFormat);
+        assume(childLogger.level).equals('info');
+        assume(childLogger.exitOnError).equals(false);
+        assume(childLogger._readableState.pipesCount).equals(0);
+    });
+
+    it('sets default meta correctly', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('info');
+            assume(msg.message).equals('dummy message');
+            assume(msg.req_id).equals('451');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({
+            defaultMeta: {
+                req_id: '451'
+            }
+        });
+
+        childLogger.info('dummy message');
+    });
 });
