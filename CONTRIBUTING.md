@@ -4,15 +4,14 @@ TL;DR? The `winston` project recently shipped `3.0.0` out of RC and is actively
 working towards the next feature release as it continues to triage issues. 
 
 - [Be kind & actively empathetic to one another](CODE_OF_CONDUCT.md)
-- [What makes up `winston@3.0.0`?](#what-makes-up-winston-3.0.0)
+- [What makes up `winston`?](#what-makes-up-winston)
 - [What about `winston@2.x`?!](#what-about-winston-2.x)
 - [Could this be implemented as a format?](#could-this-be-implemented-as-a-format)
 - [Roadmap](#roadmap)
-  - [Version 3.1.0](#version-310)
 
 Looking for somewhere to help? Checkout the [Roadmap](#roadmap) & help triage open issues! Find an issue that looks like a duplicate? It probably is! Comment on it so we know it's maybe a duplicate 🙏.
 
-## What makes up `winston@3.0.0`?
+## What makes up `winston`?
 
 As of `winston@3.0.0` the project has been broken out into a few modules:
 
@@ -68,11 +67,11 @@ This can be accomplished with using [custom formats](https://github.com/winstonj
 
 # Roadmap
 
-Below is the list of items that make up the roadmap through `3.3.0`. We are actively triaging the open issues, so it is likely a few more critical path items will be added to this list before the next release goes out.
+Below is the list of items that make up the roadmap through `3.4.0`. We are actively triaging the open issues, so it is likely a few more critical path items will be added to this list before the next release goes out.
 
-- [Version 3.1.0](#version-310)
 - [Version 3.2.0](#version-320)
 - [Version 3.3.0](#version-330)
+- [Version 3.4.0](#version-340)
 
 ## Legend
 
@@ -80,14 +79,15 @@ Below is the list of items that make up the roadmap through `3.3.0`. We are acti
 - [x] Finished work.
 - [-] Partially finished or in-progress work. 
 
-## Version `3.1.0`
+## Version `3.2.0`
 
 ### High priority issues (non-blocking)
 - [Browser support](https://github.com/winstonjs/winston/issues/287)
   - [ ] Unit tests for `webpack` & `rollup` 
+  - [ ] Replicate browser-only transpilation for `winston`, `winston-transport`, `triple-beam`.
 - Benchmarking for `File` and `Stream` transports:
    - [x] Benchmarking integration in `pino`.
-   - [ ] Upgrade `pino` to latest `winston`.
+   - [x] Upgrade `pino` to latest `winston`.
    - See: https://github.com/winstonjs/logmark
    - See also: https://github.com/pinojs/pino/pull/232
 - [ ] Move `logged` event into `winston-transport` to remove need for it in each individual Transport written _or remove the `logged` event entirely._
@@ -103,7 +103,7 @@ Below is the list of items that make up the roadmap through `3.3.0`. We are acti
 - [ ] All formats documented in `logform`.
 - [ ] All existing transports documented in `docs/transports.md`.
 
-## Version `3.2.0`
+## Version `3.3.0`
 
 ### Querying, Streaming, Uncaught Exceptions
 - [-] Streaming
@@ -111,7 +111,7 @@ Below is the list of items that make up the roadmap through `3.3.0`. We are acti
 ### Communications / Compatibility
 - [ ] `winstonjs.org` documentation site.
 
-## Version `3.3.0`
+## Version `3.4.0`
 
 ### Querying, Streaming, Uncaught Exceptions
 - [-] Querying
