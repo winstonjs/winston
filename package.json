@@ -52,17 +52,17 @@
     "through2": "^2.0.0",
     "winston-compat": "^0.1.1",
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "rimraf": "^2.6.2"
+    "babel-preset-env": "^1.7.0"
   },
-  "main": "./dist/winston",
+  "main": "./lib/winston",
+  "browser": "./dist/winston",
   "types": "./index.d.ts",
   "scripts": {
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
     "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit",
-    "build": "./node_modules/.bin/rimraf dist && babel lib --out-dir dist --ignore node_modules,test,dist,examples",
+    "build": "./node_modules/.bin/rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
   "engines": {
