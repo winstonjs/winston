@@ -59,7 +59,7 @@ describe('winston/transports/file/tailrolling', function () {
           created++;
         }
         // eslint-disable-next-line max-nested-callbacks
-        setTimeout(() => logKbytes(1, created), 100);
+        setTimeout(() => logKbytes(1, created), 1);
       });
 
       logKbytes(1, created);
