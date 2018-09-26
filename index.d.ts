@@ -80,7 +80,7 @@ declare namespace winston {
     exceptionHandlers?: any;
   }
 
-  interface Logger extends NodeJSStream.Transform {
+  class Logger extends NodeJSStream.Transform {
     silent: boolean;
     format: logform.Format;
     levels: Config.AbstractConfigSetLevels;
@@ -124,7 +124,7 @@ declare namespace winston {
 
     configure(options: LoggerOptions): void;
 
-    new(options?: LoggerOptions): Logger;
+    constructor (options?: LoggerOptions);
   }
 
   interface Container {
