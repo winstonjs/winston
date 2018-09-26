@@ -67,30 +67,27 @@ describe('Logger', function () {
   });
 
   it('new Logger({ levels }) custom methods are not bound to instance', function () {
-
     var logger = winston.createLogger({
       level: 'error',
       exitOnError: false,
       transports: []
     });
 
-    let logs = []
+    let logs = [];
 
     let extendedLogger = Object.create(logger,{
       write:{
         value:function(...args){
-          logs.push(args)
+          logs.push(args);
         }
       }
-    })
+    });
 
-    extendedLogger.log({test:1})
-    extendedLogger.warn({test:2})
+    extendedLogger.log({test:1});
+    extendedLogger.warn({test:2});
 
-    assume(logs[0]||[]).is.eql([{test:1}])
-    assume(logs[1]||[]).is.eql([{message:{test:2},level:'warn'}])
-
-
+    assume(logs[0]||[]).is.eql([{test:1}]);
+    assume(logs[1]||[]).is.eql([{message:{test:2},level:'warn'}]);
   });
 
   it('.add({ invalid Transport })', function () {
