@@ -962,14 +962,18 @@ const winston = require('winston');
 //
 // Configure the logger for `category1`
 //
+const { format } = winston;
+const { combine, label, json } = format;
+
 winston.loggers.add('category1', {
-  console: {
-    level: 'silly',
-    label: 'category one'
-  },
-  file: {
-    filename: '/path/to/some/file'
-  }
+  format: combine(
+    label({ label: 'category one' }),
+    json()
+  ),
+  transports: [
+    new winston.transports.Console({ level: 'silly' }),
+    new winston.transports.File({ filename: 'somefile.log' })
+  ]
 });
 
 //
