@@ -13,3 +13,5 @@ coverage/*
 .idea
 *.sw*
 yarn.lock
+*.tgz
+dist/

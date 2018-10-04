@@ -66,6 +66,30 @@ describe('Logger', function () {
     })
   });
 
+  it('new Logger({ levels }) custom methods are not bound to instance', function () {
+    var logger = winston.createLogger({
+      level: 'error',
+      exitOnError: false,
+      transports: []
+    });
+
+    let logs = [];
+
+    let extendedLogger = Object.create(logger,{
+      write:{
+        value:function(...args){
+          logs.push(args);
+        }
+      }
+    });
+
+    extendedLogger.log({test:1});
+    extendedLogger.warn({test:2});
+
+    assume(logs[0]||[]).is.eql([{test:1}]);
+    assume(logs[1]||[]).is.eql([{message:{test:2},level:'warn'}]);
+  });
+
   it('.add({ invalid Transport })', function () {
     var logger = winston.createLogger();
     assume(function () {
@@ -836,5 +860,35 @@ describe('Logger (profile, startTimer)', function (done) {
         level: 'info'
       });
     }, 100);
+  });
+});
+
+describe('Should bubble transport events', () => {
+  it('error', (done) => {
+    const consoleTransport = new winston.transports.Console();
+    const logger = winston.createLogger({
+      transports: [consoleTransport]
+    });
+
+    logger.on('error', (err, transport) => {
+      assume(err).instanceOf(Error);
+      assume(transport).is.an('object');
+      done();
+    });
+    consoleTransport.emit('error', new Error());
+  });
+
+  it('warn', (done) => {
+    const consoleTransport = new winston.transports.Console();
+    const logger = winston.createLogger({
+      transports: [consoleTransport]
+    });
+
+    logger.on('warn', (err, transport) => {
+      assume(err).instanceOf(Error);
+      assume(transport).is.an('object');
+      done();
+    });
+    consoleTransport.emit('warn', new Error());
   });
 });

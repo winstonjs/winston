@@ -925,7 +925,7 @@ const logger = winston.createLogger({
   transports: [transport]
 });
 
-transport.on('finished', function (info) {
+transport.on('finish', function (info) {
   // All `info` log messages has now been logged
 });
 

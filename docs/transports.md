@@ -35,7 +35,9 @@ there are additional transports written by
   * [Azure Table](#azure-table)
   * [Cassandra](#cassandra-transport)
   * [Cisco Spark](#cisco-spark-transport)
+  * [Cloudant](#Cloudant)
   * [Elasticsearch](#elasticsearch-transport)
+  * [FastFileRotate](#fastfilerotate-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [Graylog2](#graylog2-transport)
   * [Newrelic](#newrelic-transport) (errors only)
@@ -379,6 +381,24 @@ Valid Options are as the following:
 * __level__ Log Level (default: info)
 * __hideMeta__ Hide MetaData (default: false)
 
+### Cloudant
+[winston-clodant][34] is a transport for Cloudant NoSQL Db.
+
+```js
+const winston = require('winston');
+const WinstonCloudant = require('winston-cloudant');
+logger.add(new WinstonCloudant(options));
+```
+
+The Cloudant transport takes the following options:
+
+    url         : Access url including user and password [required]
+    username    : Username for the Cloudant DB instance
+    password    : Password for the Cloudant DB instance
+    host        : Host for the Cloudant DB instance
+    db          : Name of the databasename to put logs in
+    logstash    : Write logs in logstash format
+
 ### Google Stackdriver Transport
 
 [@google-cloud/logging-winston][29] provides a transport to relay your log messages to [Stackdriver Logging][30].
@@ -422,6 +442,23 @@ Log to Elasticsearch in a logstash-like format and
 leverage Kibana to browse your logs.
 
 See: https://github.com/vanthome/winston-elasticsearch.
+
+### FastFileRotate Transport
+
+[fast-file-rotate][35] is a performant file transport providing daily log rotation.
+
+```js
+const FileRotateTransport = require('fast-file-rotate');
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  transports: [
+    new FileRotateTransport({
+      fileName: __dirname + '/console%DATE%.log'
+    })
+  ]
+})
+```
 
 ### Logzio Transport
 
@@ -725,3 +762,5 @@ That's why we say it's a logger for just about everything
 [31]: https://github.com/joelee/winston-spark
 [32]: https://github.com/avens19/winston-sumologic-transport
 [33]: https://github.com/peteward44/winston-winlog2
+[34]: https://github.com/hakanostrom/winston-cloudant
+[35]: https://github.com/SerayaEryn/fast-file-rotate

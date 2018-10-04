@@ -84,9 +84,13 @@ declare namespace winston {
   }
 
   interface Transports {
+    FileTransportOptions: FileTransportOptions;
     File: FileTransportInstance;
+    ConsoleTransportOptions: ConsoleTransportOptions;
     Console: ConsoleTransportInstance;
+    HttpTransportOptions: HttpTransportOptions;
     Http: HttpTransportInstance;
+    StreamTransportOptions: StreamTransportOptions;
     Stream: StreamTransportInstance;
   }
 }
