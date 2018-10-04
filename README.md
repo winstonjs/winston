@@ -980,10 +980,13 @@ winston.loggers.add('category1', {
 // Configure the logger for `category2`
 //
 winston.loggers.add('category2', {
-  couchdb: {
-    host: '127.0.0.1',
-    port: 5984
-  }
+  format: combine(
+    label({ label: 'category two' }),
+    json()
+  ),
+  transports: [
+    new winston.transports.Http({ host: 'localhost', port:8080 })
+  ]
 });
 ```
 
@@ -994,11 +997,13 @@ application_ and access these pre-configured loggers:
 const winston = require('winston');
 
 //
-// Grab your preconfigured logger
+// Grab your preconfigured loggers
 //
 const category1 = winston.loggers.get('category1');
+const category2 = winston.loggers.get('category2');
 
-category1.info('logging from your IoC container-based logger');
+category1.info('logging to file and console transports');
+category2.info('logging to http transport');
 ```
 
 If you prefer to manage the `Container` yourself, you can simply instantiate one:
@@ -1007,14 +1012,22 @@ If you prefer to manage the `Container` yourself, you can simply instantiate one
 const winston = require('winston');
 const container = new winston.Container();
 
+const { format } = winston;
+const { combine, json } = format;
+
 container.add('category1', {
-  console: {
-    level: 'silly'
-  },
-  file: {
-    filename: '/path/to/some/file'
-  }
+  format: combine(
+    label({ label: 'category one' }),
+    json()
+  ),
+  transports: [
+    new winston.transports.Console({ level: 'silly' }),
+    new winston.transports.File({ filename: 'somefile.log' })
+  ]
 });
+
+const category1 = container.get('category1');
+category1.info('logging to file and console transports');
 ```
 
 ## Installation
