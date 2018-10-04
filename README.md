@@ -220,6 +220,8 @@ treated as immutable by all code.
 - `Symbol.for('message'):` complete string message set by "finalizing 
 formats": `json`, `logstash`, `printf`, `prettyPrint`, and `simple`. 
 
+The `prettyPrint` format should not be used in production because it may impact performance negatively and block the event loop.
+
 ## Formats
 
 Formats in `winston` can be accessed from `winston.format`. They are
