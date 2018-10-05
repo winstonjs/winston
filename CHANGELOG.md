@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v3.2.0 / 2018-10-05
+
+- [#1463], (@SerayaEryn) Bubble transport `warn` events up to logger in addition to `error`s
+- Minor TypeScript fixes [#1470], [#1474]
+- [#1418], (@mfrisbey) Precompile ES6 syntax before publishing to npm
+- [#1480], (@SerayaEryn) File tailrolling fix
+- [#1483], (@soldair) Assign log levels to un-bound functions
+- [#1485], (@mpabst) Fixing off-by-one when using both meta and splat
+- Dependency management
+
 ## v3.1.0 / 2018-08-22
 ### RELEASES ON A PLANE EDITION
 
