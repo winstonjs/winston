@@ -958,13 +958,12 @@ ways: through `winston.loggers` and instances of `winston.Container`. In fact,
 
 ``` js
 const winston = require('winston');
+const { format } = winston;
+const { combine, label, json } = format;
 
 //
 // Configure the logger for `category1`
 //
-const { format } = winston;
-const { combine, label, json } = format;
-
 winston.loggers.add('category1', {
   format: combine(
     label({ label: 'category one' }),
@@ -1010,10 +1009,10 @@ If you prefer to manage the `Container` yourself, you can simply instantiate one
 
 ``` js
 const winston = require('winston');
-const container = new winston.Container();
-
 const { format } = winston;
 const { combine, json } = format;
+
+const container = new winston.Container();
 
 container.add('category1', {
   format: combine(
