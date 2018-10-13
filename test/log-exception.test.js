@@ -40,7 +40,7 @@ describe('Logger, ExceptionHandler', function () {
       var logger = winston.createLogger({
         exceptionHandlers: [
           new winston.transports.Console(),
-          new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+          new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log') })
         ]
       });
 
@@ -53,9 +53,9 @@ describe('Logger, ExceptionHandler', function () {
   });
 
   it('Custom exitOnError function does not exit', function (done) {
-    var scriptDir = path.join(__dirname, 'helpers', 'scripts'),
-        child = spawn('node', [path.join(scriptDir, 'exit-on-error.js')]),
-        stdout = [];
+    const scriptDir = path.join(__dirname, 'helpers', 'scripts');
+    const child = spawn('node', [path.join(scriptDir, 'exit-on-error.js')]);
+    const stdout = [];
 
     child.stdout.setEncoding('utf8');
     child.stdout.on('data', function (line) {
