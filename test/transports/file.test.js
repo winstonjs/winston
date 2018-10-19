@@ -109,7 +109,7 @@ describe('File({ stream })', function () {
   });
 });
 
-describe.only('File creation', function () {
+describe('File creation', function () {
 
   var logPath = path.join(__dirname, '..', 'fixtures', 'file', 'file-creation-test.log');
 
@@ -121,14 +121,43 @@ describe.only('File creation', function () {
     }
   });
 
+  it('should create a log file before receiving any logs by default', function (done) {
+      new winston.transports.File({
+          filename: logPath
+      });
+
+      setTimeout(function () {
+          assume(fs.existsSync(logPath)).true();
+          done();
+      }, 0);
+  });
+
   it('should not create a log file before receiving any logs', function (done) {
     new winston.transports.File({
-      filename: logPath
+      filename: logPath,
+      lazy: true
     });
 
     setTimeout(function () {
-        assume(fs.existsSync(logPath)).false();
-        done();
+      assume(fs.existsSync(logPath)).false();
+      done();
+    }, 0);
+  });
+
+
+  it('should create a log file after receiving log', function (done) {
+    var transport = new winston.transports.File({
+      filename: logPath,
+      lazy: true
+    });
+
+    var info = { [MESSAGE]: 'this is my log message' };
+
+    transport.log(info, noop);
+
+    setTimeout(function () {
+      assume(fs.existsSync(logPath)).true();
+      done();
     }, 0);
   });
 });

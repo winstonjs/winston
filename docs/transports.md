@@ -98,6 +98,7 @@ looking for daily log rotation see [DailyRotateFile]
 * __zippedArchive:__ If true, all log files but the current one will be zipped.
 * __options:__ options passed to `fs.createWriteStream` (default `{flags: 'a'}`).
 * __stream:__ **DEPRECATED** The WriteableStream to write output to.
+* __lazy:__ If true, log files will be created on demand, not at the initialization time.
 
 ### Http Transport
 
