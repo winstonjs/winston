@@ -109,6 +109,30 @@ describe('File({ stream })', function () {
   });
 });
 
+describe.only('File creation', function () {
+
+  var logPath = path.join(__dirname, '..', 'fixtures', 'file', 'file-creation-test.log');
+
+  beforeEach(function () {
+    try {
+        fs.unlinkSync(logPath);
+    } catch (ex) {
+        if (ex && ex.code !== 'ENOENT') { return done(ex); }
+    }
+  });
+
+  it('should not create a log file before receiving any logs', function (done) {
+    new winston.transports.File({
+      filename: logPath
+    });
+
+    setTimeout(function () {
+        assume(fs.existsSync(logPath)).false();
+        done();
+    }, 0);
+  });
+});
+
 require('abstract-winston-transport')({
   name: 'File',
   Transport: winston.transports.File,
