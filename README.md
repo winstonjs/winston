@@ -459,7 +459,7 @@ lowest):
 }
 ```
 
-If you do not explicitly define the levels that `winston` should use the
+If you do not explicitly define the levels that `winston` should use, the
 `npm` levels above will be used.
 
 ### Using Logging Levels
