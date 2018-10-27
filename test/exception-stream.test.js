@@ -7,11 +7,10 @@
  */
 
 const assume = require('assume');
-const Writable = require('readable-stream/writable');
+const { Writable } = require('readable-stream');
 const path = require('path');
 const winston = require('../lib/winston');
 const ExceptionStream = require('../lib/winston/exception-stream');
-const helpers = require('./helpers');
 
 describe('ExceptionStream', function () {
   it('has expected methods', function () {
