@@ -152,6 +152,19 @@ logger.log({
 logger.info('Hello again distributed logs');
 ```
 
+At the time this was written, the table below shows you the logging category and numeric index for each level of logging provided by the default `config.npm.levels` choice for the `levels` parameter:
+
+_Logging type, category, numeric index_
+
+```js
+errorLogging   -> "error", numeric index of 0
+warnLogging    -> "warn", numeric index of 1
+infoLogging    -> "info", numeric index of 2
+httpLogging    -> "http", numeric index of 3
+verboseLogging -> "verbose", numeric index of 4
+debugLogging   -> "debug", numeric index of 5
+sillyLogging   -> "silly", numeric index of 6
+```
 You can add or remove transports from the `logger` once it has been provided 
 to you from `winston.createLogger`:
 
