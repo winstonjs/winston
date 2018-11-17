@@ -31,7 +31,7 @@
     "is-stream": "^1.1.0",
     "logform": "^1.9.1",
     "one-time": "0.0.4",
-    "readable-stream": "^2.3.6",
+    "readable-stream": "^3.0.6",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.3.0",
     "winston-transport": "^4.2.0"
