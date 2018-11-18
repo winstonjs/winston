@@ -949,4 +949,26 @@ describe('Should support child loggers', () => {
         const childLogger = logger.child({ service: 'user-service' });
         childLogger.info('dummy message', {req_id: '451'});
     });
+
+    it('non-default take precedence over default meta', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('info');
+            assume(msg.message).equals('dummy message');
+            assume(msg.service).equals('audit-service');
+            assume(msg.req_id).equals('451');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.info('dummy message', {
+          req_id: '451',
+          service: 'audit-service'
+        });
+    });
 });
