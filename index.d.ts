@@ -3,7 +3,7 @@
 
 /// <reference types="node" />
 
-import * as stream from "stream";
+import * as NodeJSStream from "stream";
 
 import * as logform from 'logform';
 import * as Transport from 'winston-transport';
@@ -80,7 +80,7 @@ declare namespace winston {
     exceptionHandlers?: any;
   }
 
-  interface Logger extends stream.Transform {
+  interface Logger extends NodeJSStream.Transform {
     silent: boolean;
     format: logform.Format;
     levels: Config.AbstractConfigSetLevels;

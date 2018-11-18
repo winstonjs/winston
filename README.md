@@ -132,7 +132,7 @@ A logger accepts the following parameters:
 | Name          | Default                |  Description    |
 | ------------- | ---------------------- | --------------- |
 | `level`       | `'info'`               | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |  
-| `levels`      | `winston.config.npm`   | Levels (and colors) representing log priorities            |
+| `levels`      | `winston.config.npm.levels`   | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`  | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_ | Set of logging targets for `info` messages                 |
 | `exitOnError` | `true`                 | If false, handled exceptions will not cause `process.exit` |
@@ -478,7 +478,7 @@ lowest):
 }
 ```
 
-If you do not explicitly define the levels that `winston` should use the
+If you do not explicitly define the levels that `winston` should use, the
 `npm` levels above will be used.
 
 ### Using Logging Levels
@@ -944,7 +944,7 @@ const logger = winston.createLogger({
   transports: [transport]
 });
 
-transport.on('finished', function (info) {
+transport.on('finish', function (info) {
   // All `info` log messages has now been logged
 });
 
@@ -977,28 +977,34 @@ ways: through `winston.loggers` and instances of `winston.Container`. In fact,
 
 ``` js
 const winston = require('winston');
+const { format } = winston;
+const { combine, label, json } = format;
 
 //
 // Configure the logger for `category1`
 //
 winston.loggers.add('category1', {
-  console: {
-    level: 'silly',
-    label: 'category one'
-  },
-  file: {
-    filename: '/path/to/some/file'
-  }
+  format: combine(
+    label({ label: 'category one' }),
+    json()
+  ),
+  transports: [
+    new winston.transports.Console({ level: 'silly' }),
+    new winston.transports.File({ filename: 'somefile.log' })
+  ]
 });
 
 //
 // Configure the logger for `category2`
 //
 winston.loggers.add('category2', {
-  couchdb: {
-    host: '127.0.0.1',
-    port: 5984
-  }
+  format: combine(
+    label({ label: 'category two' }),
+    json()
+  ),
+  transports: [
+    new winston.transports.Http({ host: 'localhost', port:8080 })
+  ]
 });
 ```
 
@@ -1009,27 +1015,37 @@ application_ and access these pre-configured loggers:
 const winston = require('winston');
 
 //
-// Grab your preconfigured logger
+// Grab your preconfigured loggers
 //
 const category1 = winston.loggers.get('category1');
+const category2 = winston.loggers.get('category2');
 
-category1.info('logging from your IoC container-based logger');
+category1.info('logging to file and console transports');
+category2.info('logging to http transport');
 ```
 
 If you prefer to manage the `Container` yourself, you can simply instantiate one:
 
 ``` js
 const winston = require('winston');
+const { format } = winston;
+const { combine, json } = format;
+
 const container = new winston.Container();
 
 container.add('category1', {
-  console: {
-    level: 'silly'
-  },
-  file: {
-    filename: '/path/to/some/file'
-  }
+  format: combine(
+    label({ label: 'category one' }),
+    json()
+  ),
+  transports: [
+    new winston.transports.Console({ level: 'silly' }),
+    new winston.transports.File({ filename: 'somefile.log' })
+  ]
 });
+
+const category1 = container.get('category1');
+category1.info('logging to file and console transports');
 ```
 
 ## Installation
