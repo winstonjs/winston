@@ -37,11 +37,12 @@
     "winston-transport": "^4.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
     "@types/node": "^10.9.3",
     "abstract-winston-transport": ">= 0.5.1",
     "assume": "^2.1.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "colors": "^1.3.2",
     "cross-spawn-async": "^2.0.0",
     "eslint-config-populist": "^4.1.0",
