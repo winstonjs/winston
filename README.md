@@ -194,7 +194,7 @@ logger.configure({
 
 ### Creating child loggers
 
-You can create child loggers from existing loggers to pass configuration overrides (e. g. different default metadata):
+You can create child loggers from existing loggers to pass metadata overrides:
 
 ``` js
 const logger = winston.createLogger({
@@ -203,11 +203,7 @@ const logger = winston.createLogger({
   ]
 });
 
-const childLogger = logger.child({
-  defaultMeta: {
-    req_id: '451'
-  }
-});
+const childLogger = logger.child({ req_id: '451' });
 ```
 
 ### Streams, `objectMode`, and `info` objects

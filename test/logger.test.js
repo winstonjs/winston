@@ -895,46 +895,6 @@ describe('Should bubble transport events', () => {
 });
 
 describe('Should support child loggers', () => {
-    it('copies parameter correctly', () => {
-        const myFormat = format(function (info, opts) {
-            return info;
-        })();
-
-        const logger = winston.createLogger({
-            format: myFormat,
-            level: 'error',
-            exitOnError: false,
-            transports: []
-        });
-
-        const childLogger = logger.child();
-
-        assume(childLogger.format).equals(myFormat);
-        assume(childLogger.level).equals('error');
-        assume(childLogger.exitOnError).equals(false);
-        assume(childLogger._readableState.pipesCount).equals(0);
-    });
-
-    it('overrides parameters correctly', () => {
-        const myFormat = format(function (info, opts) {
-            return info;
-        })();
-
-        const logger = winston.createLogger({
-            format: myFormat,
-            level: 'error',
-            exitOnError: false,
-            transports: []
-        });
-
-        const childLogger = logger.child({level: 'info'});
-
-        assume(childLogger.format).equals(myFormat);
-        assume(childLogger.level).equals('info');
-        assume(childLogger.exitOnError).equals(false);
-        assume(childLogger._readableState.pipesCount).equals(0);
-    });
-
     it('sets default meta for text messages correctly', (done) => {
         const assertFn = ((msg) => {
             assume(msg.level).equals('info');
@@ -949,12 +909,7 @@ describe('Should support child loggers', () => {
             ]
         });
 
-        const childLogger = logger.child({
-            defaultMeta: {
-                req_id: '451'
-            }
-        });
-
+        const childLogger = logger.child({ req_id: '451' });
         childLogger.info('dummy message');
     });
 
@@ -972,12 +927,7 @@ describe('Should support child loggers', () => {
             ]
         });
 
-        const childLogger = logger.child({
-            defaultMeta: {
-                req_id: '451'
-            }
-        });
-
+        const childLogger = logger.child({ req_id: '451' });
         childLogger.info({text: 'dummy'});
     });
 
@@ -996,12 +946,7 @@ describe('Should support child loggers', () => {
             ]
         });
 
-        const childLogger = logger.child({
-            defaultMeta: {
-                service: 'user-service'
-            }
-        });
-
+        const childLogger = logger.child({ service: 'user-service' });
         childLogger.info('dummy message', {req_id: '451'});
     });
 });
