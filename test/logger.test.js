@@ -679,7 +679,7 @@ describe('Logger (winston@2 logging API)', function () {
       assume(info).is.an('object');
       assume(info.level).equals('info');
       assume(info.message).equals('Some super awesome log message');
-      assume(info.one).equals(2);
+      assume(info.meta.one).equals(2);
       assume(info[MESSAGE]).is.a('string');
       done();
     });
@@ -744,7 +744,7 @@ describe('Logger (logging exotic data types)', function () {
       const logged = [];
       const logger = helpers.createLogger(function (info, enc, next) {
         logged.push(info);
-        assume(info.label).equals('world');
+        assume(info.meta.label).equals('world');
         next();
 
         if (logged.length === 2) done();
