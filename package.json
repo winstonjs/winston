@@ -26,10 +26,10 @@
     "stream"
   ],
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^2.6.1",
     "diagnostics": "^1.1.1",
     "is-stream": "^1.1.0",
-    "logform": "^1.9.1",
+    "logform": "^1.10.0",
     "one-time": "0.0.4",
     "readable-stream": "^3.0.6",
     "stack-trace": "0.0.x",
@@ -37,22 +37,23 @@
     "winston-transport": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^10.12.9",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@types/node": "^10.12.10",
     "abstract-winston-transport": ">= 0.5.1",
     "assume": "^2.1.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "colors": "^1.3.2",
-    "cross-spawn-async": "^2.0.0",
+    "cross-spawn-async": "^2.2.5",
     "eslint-config-populist": "^4.1.0",
     "hock": "^1.3.3",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
     "rimraf": "^2.6.2",
     "split2": "^3.0.0",
-    "std-mocks": "^1.0.0",
+    "std-mocks": "^1.0.1",
     "through2": "^3.0.0",
-    "winston-compat": "^0.1.1"
+    "winston-compat": "^0.1.4"
   },
   "main": "./lib/winston",
   "browser": "./dist/winston",
