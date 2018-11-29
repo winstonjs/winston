@@ -193,11 +193,11 @@ winston-mongodb as `handleExceptions` logger according to winston documentation.
 
 ### DailyRotateFile Transport
 
-See [winston-dailyrotatefile].
+See [winston-dailyrotatefile](https://github.com/winstonjs/winston-daily-rotate-file).
 
 ### Syslog Transport
 
-See [winston-syslog].
+See [winston-syslog](https://github.com/winstonjs/winston-syslog).
 
 ## Community Transports
 
