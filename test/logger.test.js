@@ -74,20 +74,20 @@ describe('Logger', function () {
     });
 
     let logs = [];
-
-    let extendedLogger = Object.create(logger,{
-      write:{
-        value:function(...args){
+    let extendedLogger = Object.create(logger, {
+      write: {
+        value: function(...args) {
           logs.push(args);
         }
       }
     });
 
-    extendedLogger.log({test:1});
-    extendedLogger.warn({test:2});
+    extendedLogger.log({ test:1 });
+    extendedLogger.warn({ test:2 });
 
-    assume(logs[0]||[]).is.eql([{test:1}]);
-    assume(logs[1]||[]).is.eql([{message:{test:2},level:'warn'}]);
+    assume(logs.length).is.eql(2);
+    assume(logs[0] || []).is.eql([{ test:1 }]);
+    assume(logs[1] || []).is.eql([{ message: { test:2 }, level: 'warn' }]);
   });
 
   it('.add({ invalid Transport })', function () {
