@@ -976,7 +976,7 @@ describe('Should support child loggers', () => {
         const assertFn = ((msg) => {
             assume(msg.level).equals('error');
             assume(msg.message).equals('dummy error');
-            assume(msg.stack).includes('test/logger.test.js');
+            assume(msg.stack).includes('logger.test.js');
             assume(msg.service).equals('user-service');
             done();
         });
