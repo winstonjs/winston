@@ -971,4 +971,23 @@ describe('Should support child loggers', () => {
           service: 'audit-service'
         });
     });
+
+    it('handles error stacktraces in child loggers correctly', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('error');
+            assume(msg.message).equals('dummy error');
+            assume(msg.stack).includes('test/logger.test.js');
+            assume(msg.service).equals('user-service');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.error(Error('dummy error'));
+    });
 });
