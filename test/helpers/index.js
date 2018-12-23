@@ -29,7 +29,7 @@ helpers.createLogger = function (write, format) {
   return winston.createLogger({
     format,
     transports: [
-        mockTransport.createMockTransport(write)
+      mockTransport.createMockTransport(write)
     ]
   });
 };
