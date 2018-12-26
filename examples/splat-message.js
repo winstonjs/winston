@@ -14,4 +14,5 @@ const meta = {
   message: 'This message is a unique property separate from implicit merging.',
 };
 
-logger.info('logger.info: %j', email);
+logger.info('email.message is hidden', email);
+logger.info('email.message is shown %j', email);
