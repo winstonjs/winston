@@ -235,6 +235,21 @@ treated as immutable by all code.
 - `Symbol.for('message'):` complete string message set by "finalizing 
 formats": `json`, `logstash`, `printf`, `prettyPrint`, and `simple`. 
 
+> **NOTE:** the `message` and `level` properties are considered reserved.
+> Please be aware of this when logging additional metadata objects. For 
+> example the below will suppress the `message` property of the metadata
+> provided:
+>
+> ``` js
+> logger.log('hello', { message: 'will be hidden' });
+> ```
+> 
+> To work around this use the `splat()` format below. e.g.:
+> 
+> ``` js
+> logger.log('hello %j', { message: 'will be shown' });
+> ```
+
 ## Formats
 
 Formats in `winston` can be accessed from `winston.format`. They are
