@@ -20,6 +20,7 @@ const winston = require('../lib/winston');
 const TransportStream = require('winston-transport');
 const format = require('../lib/winston').format;
 const helpers = require('./helpers');
+const mockTransport = require('./helpers/mocks/mock-transport');
 
 describe('Logger', function () {
   it('new Logger()', function () {
@@ -74,20 +75,20 @@ describe('Logger', function () {
     });
 
     let logs = [];
-
-    let extendedLogger = Object.create(logger,{
-      write:{
-        value:function(...args){
+    let extendedLogger = Object.create(logger, {
+      write: {
+        value: function(...args) {
           logs.push(args);
         }
       }
     });
 
-    extendedLogger.log({test:1});
-    extendedLogger.warn({test:2});
+    extendedLogger.log({ test:1 });
+    extendedLogger.warn({ test:2 });
 
-    assume(logs[0]||[]).is.eql([{test:1}]);
-    assume(logs[1]||[]).is.eql([{message:{test:2},level:'warn'}]);
+    assume(logs.length).is.eql(2);
+    assume(logs[0] || []).is.eql([{ test:1 }]);
+    assume(logs[1] || []).is.eql([{ message: { test:2 }, level: 'warn' }]);
   });
 
   it('.add({ invalid Transport })', function () {
@@ -891,4 +892,102 @@ describe('Should bubble transport events', () => {
     });
     consoleTransport.emit('warn', new Error());
   });
+});
+
+describe('Should support child loggers', () => {
+    it('sets default meta for text messages correctly', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('info');
+            assume(msg.message).equals('dummy message');
+            assume(msg.req_id).equals('451');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({ req_id: '451' });
+        childLogger.info('dummy message');
+    });
+
+    it('sets default meta for json messages correctly', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('info');
+            assume(msg.message.text).equals('dummy');
+            assume(msg.req_id).equals('451');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({ req_id: '451' });
+        childLogger.info({text: 'dummy'});
+    });
+
+    it('merges default and non-default meta correctly', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('info');
+            assume(msg.message).equals('dummy message');
+            assume(msg.service).equals('user-service');
+            assume(msg.req_id).equals('451');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.info('dummy message', {req_id: '451'});
+    });
+
+    it('non-default take precedence over default meta', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('info');
+            assume(msg.message).equals('dummy message');
+            assume(msg.service).equals('audit-service');
+            assume(msg.req_id).equals('451');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.info('dummy message', {
+          req_id: '451',
+          service: 'audit-service'
+        });
+    });
+
+    it('handles error stacktraces in child loggers correctly', (done) => {
+        const assertFn = ((msg) => {
+            assume(msg.level).equals('error');
+            assume(msg.message).equals('dummy error');
+            assume(msg.stack).includes('logger.test.js');
+            assume(msg.service).equals('user-service');
+            done();
+        });
+
+        const logger = winston.createLogger({
+            transports: [
+                mockTransport.createMockTransport(assertFn)
+            ]
+        });
+
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.error(Error('dummy error'));
+    });
 });

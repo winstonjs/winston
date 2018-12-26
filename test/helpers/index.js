@@ -6,14 +6,15 @@
  *
  */
 
-var assume = require('assume'),
-  fs = require('fs'),
-  path = require('path'),
-  through = require('through2'),
-  spawn = require('child_process').spawn,
-  stream = require('stream'),
-  util = require('util'),
-  winston = require('../../lib/winston');
+const assume = require('assume'),
+    fs = require('fs'),
+    path = require('path'),
+    through = require('through2'),
+    spawn = require('child_process').spawn,
+    stream = require('stream'),
+    util = require('util'),
+    winston = require('../../lib/winston'),
+    mockTransport = require('./mocks/mock-transport');
 
 var helpers = exports;
 
@@ -25,14 +26,11 @@ var helpers = exports;
  * @returns {Logger} A winston.Logger instance
  */
 helpers.createLogger = function (write, format) {
-  var writeable = new stream.Writable({
-    objectMode: true,
-    write: write
-  });
-
   return winston.createLogger({
     format,
-    transports: [new winston.transports.Stream({ stream: writeable })]
+    transports: [
+        mockTransport.createMockTransport(write)
+    ]
   });
 };
 
