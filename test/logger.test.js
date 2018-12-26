@@ -709,7 +709,7 @@ describe('Logger (winston@2 logging API)', function () {
   it('.log(level, formatStr, ...splat, meta)', function (done) {
     const format = winston.format.combine(
       winston.format.splat(),
-      winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify(info.meta)}`)
+      winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify({ thisIsMeta: info.thisIsMeta })}`)
     );
 
     var logger = helpers.createLogger(function (info) {
@@ -717,7 +717,7 @@ describe('Logger (winston@2 logging API)', function () {
       assume(info.level).equals('info');
       assume(info.message).equals('100% such wow {"much":"javascript"}');
       assume(info[SPLAT]).deep.equals([100, 'wow', { much: 'javascript' }]);
-      assume(info.meta).deep.equals({ thisIsMeta: true });
+      assume(info.thisIsMeta).true();
       assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
       done();
     }, format);
@@ -741,7 +741,33 @@ describe('Logger (logging exotic data types)', function () {
       logger.log(err);
     });
 
-    it(`.info('Hello') and .info('Hello %d') both preserve meta without splat format`, function (done) {
+    it(`.info('Hello') preserve meta without splat format`, function (done) {
+      const logged = [];
+      const logger = helpers.createLogger(function (info, enc, next) {
+        logged.push(info);
+        assume(info.label).equals('world');
+        next();
+
+        if (logged.length === 1) done();
+      });
+
+      logger.info('Hello', { label: 'world' });
+    });
+
+    it(`.info('Hello %d') does not mutate unnecessarily with string interpolation tokens`, function (done) {
+      const logged = [];
+      const logger = helpers.createLogger(function (info, enc, next) {
+        logged.push(info);
+        assume(info.label).equals(undefined);
+        next();
+
+        if (logged.length === 1) done();
+      });
+
+      logger.info('Hello %j', { label: 'world' }, { extra: true });
+    });
+
+    it(`.info('Hello') and .info('Hello %d') preserve meta with splat format`, function (done) {
       const logged = [];
       const logger = helpers.createLogger(function (info, enc, next) {
         logged.push(info);
@@ -749,10 +775,10 @@ describe('Logger (logging exotic data types)', function () {
         next();
 
         if (logged.length === 2) done();
-      });
+      }, format.splat());
 
       logger.info('Hello', { label: 'world' });
-      logger.info('Hello %d', { label: 'world' });
+      logger.info('Hello %d', 100, { label: 'world' });
     });
   });
 
