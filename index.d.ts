@@ -123,6 +123,8 @@ declare namespace winston {
     profile(id: string | number, meta?: LogEntry): Logger;
 
     configure(options: LoggerOptions): void;
+    
+    child(options: Object): Logger;
 
     new(options?: LoggerOptions): Logger;
   }
