@@ -9,15 +9,26 @@
 'use strict';
 
 const assume = require('assume');
-const { MESSAGE, SPLAT } = require('triple-beam');
+const { LEVEL, MESSAGE, SPLAT } = require('triple-beam');
 const winston = require('../../lib/winston');
 const { format } = winston;
 const helpers = require('../helpers');
 
+function assumeErrorInfo(info) {
+  assume(info).is.an('object');
+  assume(info).includes('level');
+  assume(info).includes('message');
+
+  assume(info.level).equals('error');
+  assume(info[LEVEL]).equals('error');
+  assume(info.message).equals('Errors lack .toJSON() lulz');
+  assume(info[MESSAGE]).equals('Errors lack .toJSON() lulz');
+}
+
 describe('format.errors (integration)', function () {
   it('logger.log(level, error)', (done) => {
     const logger = helpers.createLogger(function (info) {
-      console.dir(info);
+      assumeErrorInfo(info);
       done();
     }, format.errors());
 
@@ -36,7 +47,7 @@ describe('format.errors (integration)', function () {
 
   it.only(`Promise.reject().catch(logger.<level>)`, function (done) {
     const logger = helpers.createLogger(function (info) {
-      console.dir(info);
+      assumeErrorInfo(info);
       done();
     }, format.errors());
 
