@@ -9,14 +9,14 @@ const winston = require('../../../lib/winston');
  * @returns {StreamTransportInstance} A transport instance
  */
 function createMockTransport(write) {
-    const writeable = new stream.Writable({
-        objectMode: true,
-        write: write
-    });
+  const writeable = new stream.Writable({
+    objectMode: true,
+    write: write
+  });
 
-    return new winston.transports.Stream({stream: writeable})
+  return new winston.transports.Stream({ stream: writeable })
 }
 
 module.exports = {
-    createMockTransport
+  createMockTransport
 };
