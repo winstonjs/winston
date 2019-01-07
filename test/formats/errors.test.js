@@ -100,11 +100,68 @@ describe('format.errors (integration)', function () {
 
   it('logger.log(level, msg, meta<error>)');
 
-  it.skip('logger.<level>(error)', (done) => {
+  it('logger.<level>(error)', (done) => {
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info);
+      done();
+    }, format.errors());
 
+    logger.info(new Error('Errors lack .toJSON() lulz'));
   });
 
-  it('logger.<level>(error, meta)');
+  it('logger.<level>(error) [custom error properties]', (done) => {
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, {
+        something: true,
+        wut: 'another string'
+      });
+
+      done();
+    }, format.errors());
+
+    const err = new Error('Errors lack .toJSON() lulz');
+    err.something = true;
+    err.wut = 'another string';
+
+    logger.info(err);
+  });
+
+  it('logger.<level>(error, meta)', (done) => {
+    const meta = {
+      thisIsMeta: true,
+      anyValue: 'a string'
+    };
+
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, meta);
+      done();
+    }, format.errors());
+
+    logger.info(new Error('Errors lack .toJSON() lulz'), meta);
+  });
+
+  it('logger.<level>(error, meta) [custom error properties]', (done) => {
+    const meta = {
+      thisIsMeta: true,
+      anyValue: 'a string'
+    };
+
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, Object.assign({
+        something: true,
+        wut: 'another string'
+      }, meta));
+
+      done();
+    }, format.errors());
+
+    const err = new Error('Errors lack .toJSON() lulz');
+    err.something = true;
+    err.wut = 'another string';
+
+    logger.info(err, meta);
+  });
+
   it('logger.<level>(msg, meta<error>)');
 
   it(`Promise.reject().catch(logger.<level>)`, function (done) {
