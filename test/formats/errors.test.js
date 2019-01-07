@@ -45,6 +45,23 @@ describe('format.errors (integration)', function () {
     logger.log('info', new Error('Errors lack .toJSON() lulz'));
   });
 
+  it('logger.log(level, error) [custom error properties]', (done) => {
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, {
+        something: true,
+        wut: 'another string'
+      });
+
+      done();
+    }, format.errors());
+
+    const err = new Error('Errors lack .toJSON() lulz');
+    err.something = true;
+    err.wut = 'another string';
+
+    logger.log('info', err);
+  });
+
   it('logger.log(level, error, meta)', (done) => {
     const meta = {
       thisIsMeta: true,
@@ -57,6 +74,28 @@ describe('format.errors (integration)', function () {
     }, format.errors());
 
     logger.log('info', new Error('Errors lack .toJSON() lulz'), meta);
+  });
+
+  it('logger.log(level, error, meta) [custom error properties]', (done) => {
+    const meta = {
+      thisIsMeta: true,
+      anyValue: 'a string'
+    };
+
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, Object.assign({
+        something: true,
+        wut: 'another string'
+      }, meta));
+
+      done();
+    }, format.errors());
+
+    const err = new Error('Errors lack .toJSON() lulz');
+    err.something = true;
+    err.wut = 'another string';
+
+    logger.log('info', err, meta);
   });
 
   it('logger.log(level, msg, meta<error>)');
@@ -77,6 +116,25 @@ describe('format.errors (integration)', function () {
     new Promise((done, reject) => {
       throw new Error('Errors lack .toJSON() lulz')
     }).catch(logger.error.bind(logger));
+  });
 
+  it(`Promise.reject().catch(logger.<level>) [custom error properties]`, function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, {
+        level: 'error',
+        something: true,
+        wut: 'a string'
+      });
+
+      done();
+    }, format.errors());
+
+    new Promise((done, reject) => {
+      const err = new Error('Errors lack .toJSON() lulz');
+      err.something = true;
+      err.wut = 'a string';
+
+      throw err;
+    }).catch(logger.error.bind(logger));
   });
 });
