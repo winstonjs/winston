@@ -14,40 +14,63 @@ const winston = require('../../lib/winston');
 const { format } = winston;
 const helpers = require('../helpers');
 
-function assumeErrorInfo(info) {
+function assumeExpectedInfo(info, target = {}) {
+  const expected = Object.assign({}, {
+    level: 'info',
+    message: 'Errors lack .toJSON() lulz'
+  }, target);
+
   assume(info).is.an('object');
   assume(info).includes('level');
   assume(info).includes('message');
 
-  assume(info.level).equals('error');
-  assume(info[LEVEL]).equals('error');
-  assume(info.message).equals('Errors lack .toJSON() lulz');
-  assume(info[MESSAGE]).equals('Errors lack .toJSON() lulz');
+  assume(info.level).equals(expected.level);
+  assume(info[LEVEL]).equals(expected.level);
+  assume(info.message).equals(expected.message);
+  assume(info[MESSAGE]).equals(expected.message);
+
+  Object.keys(expected).forEach(key => {
+    if (key === 'level' || key === 'message') return;
+    assume(info[key]).equals(expected[key]);
+  });
 }
 
 describe('format.errors (integration)', function () {
   it('logger.log(level, error)', (done) => {
     const logger = helpers.createLogger(function (info) {
-      assumeErrorInfo(info);
+      assumeExpectedInfo(info);
       done();
     }, format.errors());
 
     logger.log('info', new Error('Errors lack .toJSON() lulz'));
   });
 
-  it('logger.log(level, error, meta)');
+  it('logger.log(level, error, meta)', (done) => {
+    const meta = {
+      thisIsMeta: true,
+      anyValue: 'a string'
+    };
+
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, meta);
+      done();
+    }, format.errors());
+
+    logger.log('info', new Error('Errors lack .toJSON() lulz'), meta);
+  });
+
   it('logger.log(level, msg, meta<error>)');
 
-  it('logger.<level>(error)', (done) => {
+  it.skip('logger.<level>(error)', (done) => {
 
   });
 
   it('logger.<level>(error, meta)');
   it('logger.<level>(msg, meta<error>)');
 
-  it.only(`Promise.reject().catch(logger.<level>)`, function (done) {
+  it(`Promise.reject().catch(logger.<level>)`, function (done) {
     const logger = helpers.createLogger(function (info) {
-      assumeErrorInfo(info);
+      assumeExpectedInfo(info, { level: 'error' });
       done();
     }, format.errors());
 
