@@ -98,7 +98,42 @@ describe('format.errors (integration)', function () {
     logger.log('info', err, meta);
   });
 
-  it('logger.log(level, msg, meta<error>)');
+  it('logger.log(level, msg, meta<error>)', (done) => {
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, {
+        message: 'Caught error: Errors lack .toJSON() lulz'
+      });
+
+      done();
+    }, format.combine(
+      format.errors(),
+      format.printf(info => info.message)
+    ));
+
+    logger.log('info', 'Caught error: ', new Error('Errors lack .toJSON() lulz'));
+  });
+
+  it('logger.log(level, msg, meta<error>) [custom error properties]', (done) => {
+    const err = new Error('Errors lack .toJSON() lulz');
+    err.something = true;
+    err.wut = 'another string';
+
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, {
+        message: 'Caught error: Errors lack .toJSON() lulz',
+        stack: err.stack,
+        something: true,
+        wut: 'another string'
+      });
+
+      done();
+    }, format.combine(
+      format.errors(),
+      format.printf(info => info.message)
+    ));
+
+    logger.log('info', 'Caught error: ', err);
+  });
 
   it('logger.<level>(error)', (done) => {
     const logger = helpers.createLogger(function (info) {
@@ -162,9 +197,44 @@ describe('format.errors (integration)', function () {
     logger.info(err, meta);
   });
 
-  it('logger.<level>(msg, meta<error>)');
+  it('logger.<level>(msg, meta<error>)', (done) => {
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, {
+        message: 'Caught error: Errors lack .toJSON() lulz'
+      });
 
-  it(`Promise.reject().catch(logger.<level>)`, function (done) {
+      done();
+    }, format.combine(
+      format.errors(),
+      format.printf(info => info.message)
+    ));
+
+    logger.info('Caught error: ', new Error('Errors lack .toJSON() lulz'));
+  });
+
+  it('logger.<level>(msg, meta<error>) [custom error properties]', (done) => {
+    const err = new Error('Errors lack .toJSON() lulz');
+    err.something = true;
+    err.wut = 'another string';
+
+    const logger = helpers.createLogger(function (info) {
+      assumeExpectedInfo(info, {
+        message: 'Caught error: Errors lack .toJSON() lulz',
+        stack: err.stack,
+        something: true,
+        wut: 'another string'
+      });
+
+      done();
+    }, format.combine(
+      format.errors(),
+      format.printf(info => info.message)
+    ));
+
+    logger.info('Caught error: ', err);
+  });
+
+  it(`Promise.reject().catch(logger.<level>)`, (done) => {
     const logger = helpers.createLogger(function (info) {
       assumeExpectedInfo(info, { level: 'error' });
       done();
@@ -175,7 +245,7 @@ describe('format.errors (integration)', function () {
     }).catch(logger.error.bind(logger));
   });
 
-  it(`Promise.reject().catch(logger.<level>) [custom error properties]`, function (done) {
+  it(`Promise.reject().catch(logger.<level>) [custom error properties]`, (done) => {
     const logger = helpers.createLogger(function (info) {
       assumeExpectedInfo(info, {
         level: 'error',
