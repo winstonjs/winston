@@ -1,5 +1,5 @@
 /*
- * logger.test.js: Tests for instances of the winston Logger
+ * errors.test.js: E2E Integration tests of `new Error()` handling
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
