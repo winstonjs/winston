@@ -925,7 +925,7 @@ describe('Should support child loggers', () => {
     const assertFn = ((msg) => {
       assume(msg.level).equals('info');
       assume(msg.message).equals('dummy message');
-      assume(msg.req_id).equals('451');
+      assume(msg.requestId).equals('451');
       done();
     });
 
@@ -935,7 +935,7 @@ describe('Should support child loggers', () => {
       ]
     });
 
-    const childLogger = logger.child({ req_id: '451' });
+    const childLogger = logger.child({ requestId: '451' });
     childLogger.info('dummy message');
   });
 
@@ -943,7 +943,7 @@ describe('Should support child loggers', () => {
     const assertFn = ((msg) => {
       assume(msg.level).equals('info');
       assume(msg.message.text).equals('dummy');
-      assume(msg.req_id).equals('451');
+      assume(msg.requestId).equals('451');
       done();
     });
 
@@ -953,7 +953,7 @@ describe('Should support child loggers', () => {
       ]
     });
 
-    const childLogger = logger.child({ req_id: '451' });
+    const childLogger = logger.child({ requestId: '451' });
     childLogger.info({text: 'dummy'});
   });
 
@@ -962,7 +962,7 @@ describe('Should support child loggers', () => {
       assume(msg.level).equals('info');
       assume(msg.message).equals('dummy message');
       assume(msg.service).equals('user-service');
-      assume(msg.req_id).equals('451');
+      assume(msg.requestId).equals('451');
       done();
     });
 
@@ -973,7 +973,7 @@ describe('Should support child loggers', () => {
     });
 
     const childLogger = logger.child({ service: 'user-service' });
-    childLogger.info('dummy message', { req_id: '451' });
+    childLogger.info('dummy message', { requestId: '451' });
   });
 
   it('non-default take precedence over default meta', (done) => {
@@ -981,7 +981,7 @@ describe('Should support child loggers', () => {
       assume(msg.level).equals('info');
       assume(msg.message).equals('dummy message');
       assume(msg.service).equals('audit-service');
-      assume(msg.req_id).equals('451');
+      assume(msg.requestId).equals('451');
       done();
     });
 
@@ -993,7 +993,7 @@ describe('Should support child loggers', () => {
 
     const childLogger = logger.child({ service: 'user-service' });
     childLogger.info('dummy message', {
-      req_id: '451',
+      requestId: '451',
       service: 'audit-service'
     });
   });

@@ -203,7 +203,7 @@ const logger = winston.createLogger({
   ]
 });
 
-const childLogger = logger.child({ req_id: '451' });
+const childLogger = logger.child({ requestId: '451' });
 ```
 
 ### Streams, `objectMode`, and `info` objects
