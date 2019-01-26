@@ -1,14 +1,33 @@
 # CHANGELOG
 
-## v3.2.0 / 2018-10-05
+## v3.2.0 / 2018-01-26
+### SORRY IT TOO SO LONG EDITION
 
-- [#1463], (@SerayaEryn) Bubble transport `warn` events up to logger in addition to `error`s
-- Minor TypeScript fixes [#1470], [#1474]
 - [#1418], (@mfrisbey) Precompile ES6 syntax before publishing to npm
-- [#1480], (@SerayaEryn) File tailrolling fix
-- [#1483], (@soldair) Assign log levels to un-bound functions
-- [#1485], (@mpabst) Fixing off-by-one when using both meta and splat
+  - [#1533], (@kibertoad) Update to Babel 7
+- Edge / Corner cases for Meta, Splat
+  - [#1485], (@mpabst) Fixing off-by-one when using both meta and splat
+- Bug Fixes
+  - [#1463], (@SerayaEryn) Bubble transport `warn` events up to logger in addition to `error`s
+  - [#1480], [#1503], (@SerayaEryn) File tailrolling fix
+  - [#1483], (@soldair) Assign log levels to un-bound functions
+  - [#1513], (@TilaTheHun0) Set maxListeners for Console transport
+  - [#1521], (@jamesbechet) Fix Transform from `readable-stream` using CRA.
+  - [#1434], (@Kouzukii) Fixes logger.query function (regression from `3.0.0`)
+  - [#1526], (@pixtron) Log file without .gz for tailable (Fixes [#1525]).
+- Documentation Updates
+  - [#1410], (@hakanostrom) Add docs reference to transport for Cloudant NoSQL DB
+  - [#1467], (@SeryaEryn) Add fast-file-rotate transport to transport.md
+  - [#1488], (@adamcohen) Fix multi logger documentation
+  - [#1531], (@mapleeit) Add links to transports.
+  - Other small improvements: [#1509]
+- Improved TypeScript support
+  - [#1470], (@jd-carroll) Export all transport options (Fixes [#1469])
+  - [#1474], (@jd-carroll) Correct import to avoid conflict (Fixed [#1472])
 - Dependency management
+  - [#1512], (@SerayaEryn) Add node@11 and disallow failures on node@10
+  - [#1516], (@SerayaEryn) Update `readable-stream` to `v3.0.6`.
+  - [#1534], (@kibertoad) Update `@types/node`, `nyc`, and `through2`.
 
 ## v3.1.0 / 2018-08-22
 ### RELEASES ON A PLANE EDITION
