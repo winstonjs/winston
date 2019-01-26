@@ -8,7 +8,7 @@ A logger for just about everything.
 
 [![Join the chat at https://gitter.im/winstonjs/winston](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/winstonjs/winston?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## winston@3.0.0
+## winston@3.2.0
 
 See the [Upgrade Guide](UPGRADE-3.0.md) for more information. Bug reports and
 PRs welcome!
@@ -34,6 +34,13 @@ ensuring those APIs decoupled from the implementation of transport logging
 (i.e. how the logs are stored / indexed, see: [Adding Custom Transports]) to
 the API that they exposed to the programmer.
 
+## Quick Start
+
+TL;DR? Check out the [quick start example][quick-example] in `./examples/`. 
+There are a number of other examples in [`./examples/*.js`][examples].
+Don't see an example you think should be there? Submit a pull request
+to add it!
+
 ## Usage
 
 The recommended way to use `winston` is to create your own logger. The
@@ -43,7 +50,7 @@ simplest way to do this is using `winston.createLogger`:
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
-  defaultMeta: {service: 'user-service'},
+  defaultMeta: { service: 'user-service' },
   transports: [
     //
     // - Write to all logs with level `info` and below to `combined.log` 
@@ -71,6 +78,10 @@ logger to use throughout your application if you so choose.
 
 ## Table of contents
 
+* [Motivation](#motivation)
+* [Quick Start](#quick-start)
+* [Usage](#usage)
+* [Table of Contents](#table-of-contents)
 * [Logging](#logging)
   * [Creating your logger](#creating-your-own-logger)
   * [Streams, `objectMode`, and `info` objects](#streams-objectmode-and-info-objects)
@@ -129,14 +140,14 @@ const logger = winston.createLogger({
 
 A logger accepts the following parameters:
 
-| Name          | Default                |  Description    |
-| ------------- | ---------------------- | --------------- |
-| `level`       | `'info'`               | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |  
-| `levels`      | `winston.config.npm.levels`   | Levels (and colors) representing log priorities            |
-| `format`      | `winston.format.json`  | Formatting for `info` messages  (see: [Formats])           |
-| `transports`  | `[]` _(No transports)_ | Set of logging targets for `info` messages                 |
-| `exitOnError` | `true`                 | If false, handled exceptions will not cause `process.exit` |
-| `silent`      | `false`                | If true, all logs are suppressed |
+| Name          | Default                     |  Description    |
+| ------------- | --------------------------- | --------------- |
+| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |  
+| `levels`      | `winston.config.npm.levels` | Levels (and colors) representing log priorities            |
+| `format`      | `winston.format.json`       | Formatting for `info` messages  (see: [Formats])           |
+| `transports`  | `[]` _(No transports)_      | Set of logging targets for `info` messages                 |
+| `exitOnError` | `true`                      | If false, handled exceptions will not cause `process.exit` |
+| `silent`      | `false`                     | If true, all logs are suppressed |
 
 The levels provided to `createLogger` will be defined as convenience methods
 on the `logger` returned. 
@@ -210,30 +221,63 @@ const childLogger = logger.child({ requestId: '451' });
 
 In `winston`, both `Logger` and `Transport` instances are treated as
 [`objectMode`](https://nodejs.org/api/stream.html#stream_object_mode)
-streams that accept an `info` object. The `info` object represents a
-single log message. The object itself is mutable. Every `info` must
-have at least the `level` and `message` properties:
+streams that accept an `info` object. 
+
+The `info` parameter provided to a given format represents a single log
+message. The object itself is mutable. Every `info` must have at least the
+`level` and `message` properties:
 
 ``` js
-{
+const info = {
   level: 'info',                 // Level of the logging message  
   message: 'Hey! Log something?' // Descriptive message being logged.
-}
+};
 ```
 
-`winston.format` itself exposes several additional properties:
+Properties **besides level and message** are considered as "`meta`". i.e.:
 
-- `splat`: string interpolation splat for `%d %s`-style messages.
-- `timestamp`: timestamp the message was received.
-- `label`: custom label associated with each message.
+``` js
+const { level, message, ...meta } = info;
+```
+
+Several of the formats in `logform` itself add additional properties:
+
+| Property    | Format added by | Description |
+| ----------- | --------------- | ----------- | 
+| `splat`     | `splat()`       | String interpolation splat for `%d %s`-style messages. |
+| `timestamp` | `timestamp()`   |  timestamp the message was received. |
+| `label`     | `label()`       | Custom label associated with each message. | 
+| `ms`        | `ms()`          | Number of milliseconds since the previous log message. |
 
 As a consumer you may add whatever properties you wish – _internal state is
 maintained by `Symbol` properties:_
 
-- `Symbol.for('level')` _**(READ-ONLY)**:_ equal to `level` property. Is 
-treated as immutable by all code.  
-- `Symbol.for('message'):` complete string message set by "finalizing 
-formats": `json`, `logstash`, `printf`, `prettyPrint`, and `simple`. 
+- `Symbol.for('level')` _**(READ-ONLY)**:_ equal to `level` property.
+  **Is treated as immutable by all code.**
+- `Symbol.for('message'):` complete string message set by "finalizing formats":
+  - `json`
+  - `logstash`
+  - `printf`
+  - `prettyPrint`
+  - `simple`
+- `Symbol.for('splat')`: additional string interpolation arguments. _Used
+  exclusively by `splat()` format._
+
+These Symbols are stored in another package: `triple-beam` so that all
+consumers of `logform` can have the same Symbol reference. i.e.:
+
+``` js
+const { LEVEL, MESSAGE, SPLAT } = require('triple-beam');
+
+console.log(LEVEL === Symbol.for('level'));
+// true
+
+console.log(MESSAGE === Symbol.for('message'));
+// true
+
+console.log(SPLAT === Symbol.for('splat'));
+// true
+```
 
 > **NOTE:** any `{ message }` property in a `meta` object provided will
 > automatically be concatenated to any `msg` already provided: For 
@@ -259,8 +303,8 @@ format your logs, `winston.format.printf` is for you:
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, label, printf } = format;
 
-const myFormat = printf(info => {
-  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
+const myFormat = printf(({ level, message, label, timestamp }) => {
+  return `${timestamp} [${label}] ${level}: ${message}`;
 });
 
 const logger = createLogger({
@@ -274,8 +318,7 @@ const logger = createLogger({
 ```
 
 To see what built-in formats are available and learn more about creating your
-own custom logging formats, see
-[`logform`](https://github.com/winstonjs/logform).
+own custom logging formats, see [`logform`][logform].
 
 ### Combining formats
 
@@ -310,7 +353,7 @@ logger.log({
 ### String interpolation
 
 The `log` method provides the string interpolation using [util.format]. **It
-must be enabled using `format.splat`.**
+must be enabled using `format.splat()`.**
 
 Below is an example that defines a format with string interpolation of
 messages using `format.splat` and then serializes the entire `info` message
@@ -1088,8 +1131,12 @@ npm test
 [mocha]: https://mochajs.org
 [nyc]: https://github.com/istanbuljs/nyc
 [assume]: https://github.com/bigpipe/assume
+[logform]: https://github.com/winstonjs/logform#readme
 
 [Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x 
+
+[quick-example]: https://github.com/winstonjs/winston/blob/master/examples/quick-start.js
+[examples]: https://github.com/winstonjs/winston/tree/master/examples
 
 [Charlie Robbins]: http://github.com/indexzero
 [Jarrett Cruger]: https://github.com/jcrugzz

@@ -13,7 +13,7 @@ Looking for somewhere to help? Checkout the [Roadmap](#roadmap) & help triage op
 
 ## What makes up `winston`?
 
-As of `winston@3.0.0` the project has been broken out into a few modules:
+As of `winston@3` the project has been broken out into a few modules:
 
 - [winston-transport]: `Transport` stream implementation & legacy `Transport` wrapper.
 - [logform]: All formats exports through `winston.format` 
@@ -35,8 +35,8 @@ const logger = createLogger({
   format: combine(
     label({ label: 'right meow!' }),
     timestamp(),
-    printf(nfo => {
-      return `${nfo.timestamp} [${nfo.label}] ${nfo.level}: ${nfo.message}`;
+    printf(({ level, message, lable, timestamp }) => {
+      return `${timestamp} [${label}] ${level}: ${message}`;
     })
   ),
   transports: [new transports.Console()]
@@ -69,9 +69,9 @@ This can be accomplished with using [custom formats](https://github.com/winstonj
 
 Below is the list of items that make up the roadmap through `3.4.0`. We are actively triaging the open issues, so it is likely a few more critical path items will be added to this list before the next release goes out.
 
-- [Version 3.2.0](#version-320)
-- [Version 3.3.0](#version-330)
-- [Version 3.4.0](#version-340)
+- [Version 3.3.0](#version-320)
+- [Version 3.4.0](#version-330)
+- [Version 3.5.0](#version-340)
 
 ## Legend
 
@@ -79,12 +79,14 @@ Below is the list of items that make up the roadmap through `3.4.0`. We are acti
 - [x] Finished work.
 - [-] Partially finished or in-progress work. 
 
-## Version `3.2.0`
+## Version `3.3.0`
 
 ### High priority issues (non-blocking)
+- [ ] Move `File` transport into `winston-file`.
 - [Browser support](https://github.com/winstonjs/winston/issues/287)
   - [ ] Unit tests for `webpack` & `rollup` 
   - [ ] Replicate browser-only transpilation for `winston`, `winston-transport`, `triple-beam`.
+- [-] Full JSDoc coverage
 - Benchmarking for `File` and `Stream` transports:
    - [x] Benchmarking integration in `pino`.
    - [x] Upgrade `pino` to latest `winston`.
@@ -95,15 +97,15 @@ Below is the list of items that make up the roadmap through `3.4.0`. We are acti
 ### Increased code & scenario coverage
 - [-] Replace all `vows`-based tests.
   - [-] `test/transports/*-test.js` 
-- [ ] Code coverage tests above 80% for `winston` _(currently `~72%`)_.
+- [ ] Code coverage tests above 80% for `winston` _(currently `~70%`)_.
   - [-] Core scenarios covered in `abstract-winston-transport`.
+  - [-] Full integration tests for all `logform` transports
 
 ### Communications / Compatibility
 - [ ] `README.md` for `winston-compat`.
-- [ ] All formats documented in `logform`.
-- [ ] All existing transports documented in `docs/transports.md`.
+- [ ] Update all transports documented in `docs/transports.md` for `winston@3`.
 
-## Version `3.3.0`
+## Version `3.4.0`
 
 ### Querying, Streaming, Uncaught Exceptions
 - [-] Streaming
@@ -111,7 +113,7 @@ Below is the list of items that make up the roadmap through `3.4.0`. We are acti
 ### Communications / Compatibility
 - [ ] `winstonjs.org` documentation site.
 
-## Version `3.4.0`
+## Version `3.5.0`
 
 ### Querying, Streaming, Uncaught Exceptions
 - [-] Querying
