@@ -34,6 +34,13 @@ ensuring those APIs decoupled from the implementation of transport logging
 (i.e. how the logs are stored / indexed, see: [Adding Custom Transports]) to
 the API that they exposed to the programmer.
 
+## Quick Start
+
+TL;DR? Check out the [quick start example][quick-example] in `./examples/`. 
+There are a number of other examples in [`./examples/*.js`][examples].
+Don't see an example you think should be there? Submit a pull request
+to add it!
+
 ## Usage
 
 The recommended way to use `winston` is to create your own logger. The
@@ -1090,6 +1097,9 @@ npm test
 [assume]: https://github.com/bigpipe/assume
 
 [Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x 
+
+[quick-example]: https://github.com/winstonjs/winston/blob/master/examples/quick-start.js
+[examples]: https://github.com/winstonjs/winston/tree/master/examples
 
 [Charlie Robbins]: http://github.com/indexzero
 [Jarrett Cruger]: https://github.com/jcrugzz
