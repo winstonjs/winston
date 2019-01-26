@@ -3,6 +3,9 @@
 ## v3.2.0 / 2018-01-26
 ### SORRY IT TOO SO LONG EDITION
 
+> **NOTE:** this was our first release using Github Projects. See the
+> [3.2.0 Release Project](https://github.com/orgs/winstonjs/projects/3).
+
 ### New Features!
 
 - [#1471], (@kibertoad) Implement child loggers.
