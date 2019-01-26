@@ -35,7 +35,7 @@ const logger = createLogger({
   format: combine(
     label({ label: 'right meow!' }),
     timestamp(),
-    printf(({ level, message, lable, timestamp }) => {
+    printf(({ level, message, label, timestamp }) => {
       return `${timestamp} [${label}] ${level}: ${message}`;
     })
   ),
