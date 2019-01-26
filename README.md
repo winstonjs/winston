@@ -79,8 +79,8 @@ logger to use throughout your application if you so choose.
 ## Table of contents
 
 * [Motivation](#motivation)
-* [Usage](#usage)
 * [Quick Start](#quick-start)
+* [Usage](#usage)
 * [Table of Contents](#table-of-contents)
 * [Logging](#logging)
   * [Creating your logger](#creating-your-own-logger)
