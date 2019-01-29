@@ -83,12 +83,12 @@ describe('Logger', function () {
       }
     });
 
-    extendedLogger.log({ test:1 });
-    extendedLogger.warn({ test:2 });
+    extendedLogger.log({ test: 1 });
+    extendedLogger.warn({ test: 2 });
 
     assume(logs.length).is.eql(2);
-    assume(logs[0] || []).is.eql([{ test:1 }]);
-    assume(logs[1] || []).is.eql([{ message: { test:2 }, level: 'warn' }]);
+    assume(logs[0] || []).is.eql([{ test: 1 }]);
+    assume(logs[1] || []).is.eql([{ message: { test: 2 }, level: 'warn' }]);
   });
 
   it('.add({ invalid Transport })', function () {
@@ -1056,5 +1056,15 @@ describe('Should support child loggers & defaultMeta', () => {
 
     const childLogger = logger.child({ service: 'user-service' });
     childLogger.error(Error('dummy error'));
+  });
+
+  it('defaultMeta() autobinds correctly', (done) => {
+    const logger = helpers.createLogger(info => {
+      assume(info.message).equals('test');
+      done();
+    });
+
+    const log = logger.info;
+    log('test');
   });
 });
