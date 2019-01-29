@@ -67,7 +67,7 @@ describe('Logger', function () {
     })
   });
 
-  it('new Logger({ levels }) custom methods are not bound to instance', function () {
+  it('new Logger({ levels }) custom methods are not bound to instance', function (done) {
     var logger = winston.createLogger({
       level: 'error',
       exitOnError: false,
@@ -79,16 +79,27 @@ describe('Logger', function () {
       write: {
         value: function(...args) {
           logs.push(args);
+          if (logs.length === 4) {
+            assume(logs.length).is.eql(4);
+            assume(logs[0]).is.eql([{ test: 1, level: 'info' }]);
+            assume(logs[1]).is.eql([{ test: 2, level: 'warn' }]);
+            assume(logs[2]).is.eql([{ message: 'test3', level: 'info' }])
+            assume(logs[3]).is.eql([{ with: 'meta',
+              test: 4,
+              level: 'warn',
+              message: 'a warning'
+            }]);
+
+            done();
+          }
         }
       }
     });
 
-    extendedLogger.log({ test: 1 });
-    extendedLogger.warn({ test: 2 });
-
-    assume(logs.length).is.eql(2);
-    assume(logs[0] || []).is.eql([{ test: 1 }]);
-    assume(logs[1] || []).is.eql([{ message: { test: 2 }, level: 'warn' }]);
+    extendedLogger.log('info', { test: 1 });
+    extendedLogger.log('warn', { test: 2 });
+    extendedLogger.info('test3');
+    extendedLogger.warn('a warning', { with: 'meta', test: 4 });
   });
 
   it('.add({ invalid Transport })', function () {
