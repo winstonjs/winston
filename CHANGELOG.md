@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v3.2.1 / 2018-01-29
+### UNBOUND PROTOTYPE AD INFINITUM EDITION
+
+- #[1579], (@indexzero)  Fallback to the "root" instance **always** created by
+  `createLogger` for level convenience methods (e.g. `.info()`, `.silly()`).
+  (Fixes [#1577]).
+- [#1539], (@indexzero) Assume message is the empty string when level-helper
+  methods are invoked with no arguments (Fixed [#1501]).
+- [#1583], (@kibertoad) Add typings for defaultMeta (Fixes [#1582])
+- [#1586], (@kibertoad) Update dependencies.
+
 ## v3.2.0 / 2018-01-26
 ### SORRY IT TOO SO LONG EDITION
 
