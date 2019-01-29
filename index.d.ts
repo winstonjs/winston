@@ -76,6 +76,7 @@ declare namespace winston {
     format?: logform.Format;
     level?: string;
     exitOnError?: Function | boolean;
+    defaultMeta?: any;
     transports?: Transport[] | Transport;
     exceptionHandlers?: any;
   }
