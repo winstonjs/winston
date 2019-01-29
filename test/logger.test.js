@@ -281,6 +281,25 @@ describe('Logger (levels)', function () {
     done();
   });
 
+  it('.<level>()', function (done) {
+    var logger = helpers.createLogger(function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.message).is.a('string');
+      assume(info[MESSAGE]).is.a('string');
+      assume(info.message).equals('');
+      assume(info[MESSAGE]).equals(JSON.stringify({
+        level: 'info',
+        message: ''
+      }));
+
+      done();
+    });
+
+    logger.info();
+    logger.info('');
+  });
+
   it('default levels', function (done) {
     var logger = winston.createLogger();
     var expected = { message: 'foo', level: 'debug' };
