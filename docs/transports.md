@@ -724,7 +724,7 @@ In addition to the options accepted by the [riak-js][12] [client][13], the Riak 
 
 ## Find more Transports
 
-There are almost 1000 packages on `npm` when [you search for] `winston`.
+There are more than 1000 packages on `npm` when [you search for] `winston`.
 That's why we say it's a logger for just about everything 
 
 [you search for]: https://www.npmjs.com/search?q=winston
