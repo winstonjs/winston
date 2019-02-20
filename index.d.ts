@@ -70,11 +70,20 @@ declare namespace winston {
     (infoObject: object): Logger;
   }
 
-  interface LoggerOptions {
-    levels?: Config.AbstractConfigSetLevels;
+  type NpmLevels = {
+    error: 0;
+    warn: 1;
+    info: 2;
+    verbose: 3;
+    debug: 4;
+    silly: 5;
+  }
+  
+  interface LoggerOptions<Levels extends Config.AbstractConfigSetLevels = NpmLevels> {
+    levels?: Levels;
     silent?: boolean;
     format?: logform.Format;
-    level?: string;
+    level?: keyof Levels;
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
