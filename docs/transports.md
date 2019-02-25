@@ -254,7 +254,7 @@ Options:
 Alternatively, you may be interested in [winston-cloudwatch][26].
 
 ### Amazon DynamoDB Transport
-The [winston-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
+The [winston-dynamodb][36] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
 
 ``` js
 const winston = require('winston');
@@ -278,7 +278,7 @@ logger.add(new winston.transports.DynamoDB({
 });
 ```
 
-Also supports callbacks for completion when the DynamoDB putItem has been compelted.
+Also supports callbacks for completion when the DynamoDB putItem has been completed.
 
 ### Amazon Kinesis Firehose Transport
 
@@ -766,3 +766,4 @@ That's why we say it's a logger for just about everything
 [33]: https://github.com/peteward44/winston-winlog2
 [34]: https://github.com/hakanostrom/winston-cloudant
 [35]: https://github.com/SerayaEryn/fast-file-rotate
+[36]: https://github.com/inspiredjw/winston-dynamodb
