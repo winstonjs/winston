@@ -16,34 +16,36 @@ there are additional transports written by
 > Additionally there are transports previously maintained by winston
 > contributors that are [looking for maintainers](#looking-for-maintainers). 
 
-* **[Built-in to winston](#winston-core)**
+* **[Built-in to winston](#built-in-to-winston)**
   * [Console](#console-transport)
   * [File](#file-transport)
   * [Http](#http-transport)
   * [Stream](#stream-transport)
 
 * **[Maintained by winston contributors](#maintained-by-winston-contributors)**
-  * [MongoDB](#mongodb-transport)
   * [DailyRotateFile](#dailyrotatefile-transport)
+  * [MongoDB](#mongodb-transport)
   * [Syslog](#syslog-transport)
 
 * **[Community Transports](#community-transports)**
   * [Airbrake](#airbrake-transport)
   * [Amazon CloudWatch](#amazon-cloudwatch-transport)
+  * [Amazon DynamoDB](#amazon-dynamodb-transport)
   * [Amazon Kinesis Firehose](#amazon-kinesis-firehose-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
   * [Azure Table](#azure-table)
   * [Cassandra](#cassandra-transport)
   * [Cisco Spark](#cisco-spark-transport)
-  * [Cloudant](#Cloudant)
+  * [Cloudant](#cloudant)
   * [Elasticsearch](#elasticsearch-transport)
   * [FastFileRotate](#fastfilerotate-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [Graylog2](#graylog2-transport)
-  * [Newrelic](#newrelic-transport) (errors only)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
+  * [Newrelic](#newrelic-transport) (errors only)
+  * [Papertrail](#papertrail-transport)
   * [Pusher](#pusher-transport)
   * [SimpleDB](#simpledb-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
