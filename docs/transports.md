@@ -16,34 +16,36 @@ there are additional transports written by
 > Additionally there are transports previously maintained by winston
 > contributors that are [looking for maintainers](#looking-for-maintainers). 
 
-* **[Built-in to winston](#winston-core)**
+* **[Built-in to winston](#built-in-to-winston)**
   * [Console](#console-transport)
   * [File](#file-transport)
   * [Http](#http-transport)
   * [Stream](#stream-transport)
 
 * **[Maintained by winston contributors](#maintained-by-winston-contributors)**
-  * [MongoDB](#mongodb-transport)
   * [DailyRotateFile](#dailyrotatefile-transport)
+  * [MongoDB](#mongodb-transport)
   * [Syslog](#syslog-transport)
 
 * **[Community Transports](#community-transports)**
   * [Airbrake](#airbrake-transport)
   * [Amazon CloudWatch](#amazon-cloudwatch-transport)
+  * [Amazon DynamoDB](#amazon-dynamodb-transport)
   * [Amazon Kinesis Firehose](#amazon-kinesis-firehose-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
   * [Azure Table](#azure-table)
   * [Cassandra](#cassandra-transport)
   * [Cisco Spark](#cisco-spark-transport)
-  * [Cloudant](#Cloudant)
+  * [Cloudant](#cloudant)
   * [Elasticsearch](#elasticsearch-transport)
   * [FastFileRotate](#fastfilerotate-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [Graylog2](#graylog2-transport)
-  * [Newrelic](#newrelic-transport) (errors only)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
+  * [Newrelic](#newrelic-transport) (errors only)
+  * [Papertrail](#papertrail-transport)
   * [Pusher](#pusher-transport)
   * [SimpleDB](#simpledb-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
@@ -252,7 +254,7 @@ Options:
 Alternatively, you may be interested in [winston-cloudwatch][26].
 
 ### Amazon DynamoDB Transport
-The [winston-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
+The [winston-dynamodb][36] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
 
 ``` js
 const winston = require('winston');
@@ -276,7 +278,7 @@ logger.add(new winston.transports.DynamoDB({
 });
 ```
 
-Also supports callbacks for completion when the DynamoDB putItem has been compelted.
+Also supports callbacks for completion when the DynamoDB putItem has been completed.
 
 ### Amazon Kinesis Firehose Transport
 
@@ -764,3 +766,4 @@ That's why we say it's a logger for just about everything
 [33]: https://github.com/peteward44/winston-winlog2
 [34]: https://github.com/hakanostrom/winston-cloudant
 [35]: https://github.com/SerayaEryn/fast-file-rotate
+[36]: https://github.com/inspiredjw/winston-dynamodb
