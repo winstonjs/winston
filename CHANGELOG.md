@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v3.2.1 / 2018-01-29
+## v3.2.1 / 2019-01-29
 ### UNBOUND PROTOTYPE AD INFINITUM EDITION
 
 - #[1579], (@indexzero)  Fallback to the "root" instance **always** created by
@@ -11,7 +11,7 @@
 - [#1583], (@kibertoad) Add typings for defaultMeta (Fixes [#1582])
 - [#1586], (@kibertoad) Update dependencies.
 
-## v3.2.0 / 2018-01-26
+## v3.2.0 / 2019-01-26
 ### SORRY IT TOO SO LONG EDITION
 
 > **NOTE:** this was our first release using Github Projects. See the
