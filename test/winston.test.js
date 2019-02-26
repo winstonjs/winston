@@ -27,7 +27,7 @@ describe('winston', function () {
 
   it('has expected methods', function () {
     assume(winston.config).is.an('object');
-    ['createLogger', 'add', 'remove', 'clear']
+    ['createLogger', 'add', 'remove', 'clear', 'child']
       .concat(Object.keys(winston.config.npm.levels))
       .forEach(function (key) {
         assume(winston[key]).is.a('function', 'winston.' + key);

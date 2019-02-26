@@ -169,6 +169,7 @@ declare namespace winston {
   let startTimer: () => Profiler;
   let profile: (id: string | number) => Logger;
   let configure: (options: LoggerOptions) => void;
+  let child: (options: Object) => Logger;
   let level: string;
   let exceptions: ExceptionHandler;
   let exitOnError: Function | boolean;
