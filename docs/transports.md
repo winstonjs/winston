@@ -41,6 +41,7 @@ there are additional transports written by
   * [FastFileRotate](#fastfilerotate-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [Graylog2](#graylog2-transport)
+  * [LogDNA](#logdna-transport)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
@@ -462,6 +463,52 @@ const logger = winston.createLogger({
 })
 ```
 
+### LogDNA Transport
+
+[LogDNA Winston][37] is a transport for being able to forward the logs to [LogDNA](https://logdna.com/):
+
+``` js
+const logdnaWinston = require('logdna-winston');
+const winston = require('winston');
+const logger = winston.createLogger({});
+const options = {
+    key: apikey, // the only field required
+    hostname: myHostname,
+    ip: ipAddress,
+    mac: macAddress,
+    app: appName,
+    env: envName,
+    index_meta: true // Defaults to false, when true ensures meta object will be searchable
+};
+
+// Only add this line in order to track exceptions
+options.handleExceptions = true;
+
+logger.add(new logdnaWinston(options));
+
+let meta = {
+    data:'Some information'
+};
+logger.log('info', 'Log from LogDNA Winston', meta);
+logger.log('debug', 'Log from LogDNA Winston', meta);
+logger.log('warn', 'Log from LogDNA winston', meta);
+logger.log('error', 'Log from LogDNAW inston', meta);
+logger.info('Info: Log from LogDNA Winston', meta);
+logger.warn('Warn: Log from LogDNA Winston', meta);
+logger.error('Error: Log from LogDNA Winston', meta);
+```
+
+[LogDNA](https://logdna.com/) features:
+- Powerful Log Management;
+- Easiest Setup & Affordable;
+- Compliant & Secure;
+- Modern, Intuitive Dashboard;
+- Aggregate Logs from Everywhere;
+- Infinite Scalability;
+- Trustworthy and Open Source.
+
+For more information about how to configure the LogDNA Winston transport, visit the [repo](https://github.com/logdna/logdna-winston).
+
 ### Logzio Transport
 
 You can download the logzio transport here : [https://github.com/logzio/winston-logzio](https://github.com/logzio/winston-logzio)  
@@ -767,3 +814,4 @@ That's why we say it's a logger for just about everything
 [34]: https://github.com/hakanostrom/winston-cloudant
 [35]: https://github.com/SerayaEryn/fast-file-rotate
 [36]: https://github.com/inspiredjw/winston-dynamodb
+[37]: https://github.com/logdna/logdna-winston
