@@ -499,13 +499,14 @@ logger.error('Error: Log from LogDNA Winston', meta);
 ```
 
 [LogDNA](https://logdna.com/) features:
-- Powerful Log Management;
-- Easiest Setup & Affordable;
-- Compliant & Secure;
-- Modern, Intuitive Dashboard;
-- Aggregate Logs from Everywhere;
-- Infinite Scalability;
-- Trustworthy and Open Source.
+- Powerful Log Management
+- Easiest Setup
+- Affordable
+- Compliant & Secure
+- Modern, Intuitive Dashboard
+- Aggregate Logs from Everywhere
+- Infinite Scalability
+- Trustworthy and Open Source
 
 For more information about how to configure the LogDNA Winston transport, visit the [repo](https://github.com/logdna/logdna-winston).
 
