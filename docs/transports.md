@@ -490,25 +490,7 @@ let meta = {
     data:'Some information'
 };
 logger.log('info', 'Log from LogDNA Winston', meta);
-logger.log('debug', 'Log from LogDNA Winston', meta);
-logger.log('warn', 'Log from LogDNA winston', meta);
-logger.log('error', 'Log from LogDNAW inston', meta);
-logger.info('Info: Log from LogDNA Winston', meta);
-logger.warn('Warn: Log from LogDNA Winston', meta);
-logger.error('Error: Log from LogDNA Winston', meta);
 ```
-
-[LogDNA](https://logdna.com/) features:
-- Powerful Log Management
-- Easiest Setup
-- Affordable
-- Compliant & Secure
-- Modern, Intuitive Dashboard
-- Aggregate Logs from Everywhere
-- Infinite Scalability
-- Trustworthy and Open Source
-
-For more information about how to configure the LogDNA Winston transport, visit the [repo](https://github.com/logdna/logdna-winston).
 
 ### Logzio Transport
 
