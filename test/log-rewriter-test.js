@@ -96,4 +96,31 @@ vows.describe('winston/logger/rewriter').addBatch({
       }
     }
   }
+}).addBatch({
+  "An instance of winston.Logger": {
+    topic: new (winston.Logger)({transports: [
+      new (winston.transports.Console)({ level: 'info' })
+    ]}),
+    "the addRewriter() method": {
+      topic: function (logger) {
+        logger.rewriters.push(function (level, msg, meta) {
+          return meta;
+        });
+
+        return logger;
+      },
+      "should add the rewriter": function (logger) {
+        assert.equal(helpers.size(logger.rewriters), 1);
+      },
+      "the log() method with undefined last param": {
+        topic: function (logger) {
+          logger.once('logging', this.callback);
+          logger.log('info', 'test message', undefined);
+        },
+        "should run the rewriter with meta as empty object": function (transport, level, msg, meta) {
+          assert.deepEqual(meta, {});
+        }
+      },
+    }
+  }
 }).export(module);
