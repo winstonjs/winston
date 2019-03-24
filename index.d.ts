@@ -124,8 +124,16 @@ declare namespace winston {
     profile(id: string | number, meta?: LogEntry): Logger;
 
     configure(options: LoggerOptions): void;
-    
+
     child(options: Object): Logger;
+
+    isLevelEnabled(level: string): boolean;
+    isErrorEnabled(): boolean;
+    isWarnEnabled(): boolean;
+    isInfoEnabled(): boolean;
+    isVerboseEnabled(): boolean;
+    isDebugEnabled(): boolean;
+    isSillyEnabled(): boolean;
 
     new(options?: LoggerOptions): Logger;
   }

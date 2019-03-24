@@ -49,3 +49,11 @@ const level = container.options.level;
 
 container = new winston.Container();
 logger = container.get('testLogger2');
+
+logger.isLevelEnabled('debug');
+logger.isErrorEnabled();
+logger.isWarnEnabled();
+logger.isInfoEnabled();
+logger.isVerboseEnabled();
+logger.isDebugEnabled();
+logger.isSillyEnabled();
