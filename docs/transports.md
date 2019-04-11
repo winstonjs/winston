@@ -175,9 +175,6 @@ defaults to 'log'.
 * __storeHost:__ Boolean indicating if you want to store machine hostname in
 logs entry, if set to true it populates MongoDB entry with 'hostname' field,
 which stores os.hostname() value.
-* __username:__ The username to use when logging into MongoDB.
-* __password:__ The password to use when logging into MongoDB. If you don't
-supply a username and password it will not use MongoDB authentication.
 * __label:__ Label stored with entry object if defined.
 * __name:__ Transport instance identifier. Useful if you need to create multiple
 MongoDB transports.
