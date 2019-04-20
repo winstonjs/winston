@@ -61,14 +61,14 @@ declare namespace winston {
     (level: string, message: string, meta: any, callback: LogCallback): Logger;
     (level: string, message: string, ...meta: any[]): Logger;
     (entry: LogEntry): Logger;
-    (level: string, message: any)
+    (level: string, message: any): Logger;
   }
 
   interface LeveledLogMethod {
     (message: string, callback: LogCallback): Logger;
     (message: string, meta: any, callback: LogCallback): Logger;
     (message: string, ...meta: any[]): Logger;
-    (message: any)
+    (message: any): Logger;
     (infoObject: object): Logger;
   }
 
