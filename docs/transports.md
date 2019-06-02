@@ -49,6 +49,7 @@ there are additional transports written by
   * [Papertrail](#papertrail-transport)
   * [Pusher](#pusher-transport)
   * [SimpleDB](#simpledb-transport)
+  * [SQLite3](#sqlite3-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
   * [Sumo Logic](#sumo-logic-transport)
   * [Winlog2 Transport](#winlog2-transport)
@@ -629,6 +630,22 @@ The SimpleDB transport takes the following options. All items marked with an ast
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
 
+### SQLite3 Transport
+
+The [winston-better-sqlite3][38] transport uses [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3).
+
+```js
+const wbs = require('winston-better-sqlite3');
+logger.add(new wbs({
+
+    // path to the sqlite3 database file on the disk
+    db: '<name of sqlite3 database file>',
+    
+    // A list of params to log
+    params: ['level', 'message']
+});
+```
+
 ### Sumo Logic Transport
 [winston-sumologic-transport][32] is a transport for Sumo Logic
 
@@ -798,3 +815,5 @@ That's why we say it's a logger for just about everything
 [35]: https://github.com/SerayaEryn/fast-file-rotate
 [36]: https://github.com/inspiredjw/winston-dynamodb
 [37]: https://github.com/logdna/logdna-winston
+[38]: https://github.com/punkish/winston-better-sqlite3
+
