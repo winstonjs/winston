@@ -1,7 +1,6 @@
 
 const { createLogger } = require('../');
 const Transport = require('winston-transport');
-const util = require('util');
 
 //
 // Inherit from `winston-transport` so you can take advantage
