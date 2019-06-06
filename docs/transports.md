@@ -37,6 +37,7 @@ there are additional transports written by
   * [Cassandra](#cassandra-transport)
   * [Cisco Spark](#cisco-spark-transport)
   * [Cloudant](#cloudant)
+  * [Datadog](#datadog-transport)
   * [Elasticsearch](#elasticsearch-transport)
   * [FastFileRotate](#fastfilerotate-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
@@ -401,6 +402,36 @@ The Cloudant transport takes the following options:
     host        : Host for the Cloudant DB instance
     db          : Name of the databasename to put logs in
     logstash    : Write logs in logstash format
+
+### Datadog Transport
+[datadog-winston][38] is a transport to ship your logs to datadog.
+
+```javascript
+var winston = require('winston')
+var DatadogWinston = require('datadog-winston')
+
+var logger = winston.createLogger({
+  // Whatever options you need
+  // Refer https://github.com/winstonjs/winston#creating-your-own-logger
+})
+
+logger.add(
+  new DatadogWinston({
+    apiKey: 'super_secret_datadog_api_key',
+    hostname: 'my_machine',
+    service: 'super_service',
+    ddsource: 'node.js',
+    ddtags: 'foo:bar,boo:baz'
+  })
+)
+```
+
+Options:
+* __apiKey__: Your datadog api key *[required]*
+* __hostname__: The machine/server hostname
+* __service__: The name of the application or service generating the logs
+* __ddsource__: The technology from which the logs originated
+* __ddtags__: Metadata assoicated with the logs
 
 ### Google Stackdriver Transport
 
@@ -798,3 +829,4 @@ That's why we say it's a logger for just about everything
 [35]: https://github.com/SerayaEryn/fast-file-rotate
 [36]: https://github.com/inspiredjw/winston-dynamodb
 [37]: https://github.com/logdna/logdna-winston
+[38]: https://github.com/itsfadnis/datadog-winston
