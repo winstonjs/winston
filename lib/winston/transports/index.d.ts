@@ -55,7 +55,7 @@ declare namespace winston {
     ssl?: any;
     host?: string;
     port?: number;
-    auth?: { username: string; password: string; };
+    auth?: { username?: string | undefined, password?: string | undefined, bearer?: string | undefined };
     path?: string;
     agent?: Agent;
     headers?: object;
@@ -66,7 +66,7 @@ declare namespace winston {
     ssl: boolean;
     host: string;
     port: number;
-    auth?: { username: string, password: string };
+    auth?: { username?: string | undefined, password?: string | undefined, bearer?: string | undefined };
     path: string;
     agent?: Agent | null;
 
