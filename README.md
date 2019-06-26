@@ -280,13 +280,16 @@ console.log(SPLAT === Symbol.for('splat'));
 ```
 
 > **NOTE:** any `{ message }` property in a `meta` object provided will
-> automatically be concatenated to any `msg` already provided: For 
+> automatically be concatenated to any `message` already provided. For
 > example the below will concatenate 'world' onto 'hello':
 >
 > ``` js
 > logger.log('error', 'hello', { message: 'world' });
 > logger.info('hello', { message: 'world' });
 > ```
+>
+> The `{ message }` property of an `Error` with a `stack` will *not* be
+> concatenated to the previous `message`.
 
 ## Formats
 
