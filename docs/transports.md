@@ -51,6 +51,7 @@ there are additional transports written by
   * [Pusher](#pusher-transport)
   * [SimpleDB](#simpledb-transport)
   * [Slack](#slack-transport)
+  * [SQLite3](#sqlite3-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
   * [Sumo Logic](#sumo-logic-transport)
   * [Winlog2 Transport](#winlog2-transport)
@@ -693,6 +694,22 @@ This transport takes the following options:
 * __unfurlMedia__ - Enables or disables [media unfurling.](https://api.slack.com/docs/message-link-unfurling) (Default: false)
 * __mrkdwn__ - Enables or disables [`mrkdwn` formatting](https://api.slack.com/messaging/composing/formatting#basics) within attachments or layout blocks (Default: false)
 
+### SQLite3 Transport
+
+The [winston-better-sqlite3][40] transport uses [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3).
+
+```js
+const wbs = require('winston-better-sqlite3');
+logger.add(new wbs({
+
+    // path to the sqlite3 database file on the disk
+    db: '<name of sqlite3 database file>',
+    
+    // A list of params to log
+    params: ['level', 'message']
+});
+```
+
 ### Sumo Logic Transport
 [winston-sumologic-transport][32] is a transport for Sumo Logic
 
@@ -864,3 +881,4 @@ That's why we say it's a logger for just about everything
 [37]: https://github.com/logdna/logdna-winston
 [38]: https://github.com/itsfadnis/datadog-winston
 [39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
+[40]: https://github.com/punkish/winston-better-sqlite3
