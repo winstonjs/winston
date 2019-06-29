@@ -37,6 +37,7 @@ there are additional transports written by
   * [Cassandra](#cassandra-transport)
   * [Cisco Spark](#cisco-spark-transport)
   * [Cloudant](#cloudant)
+  * [Datadog](#datadog-transport)
   * [Elasticsearch](#elasticsearch-transport)
   * [FastFileRotate](#fastfilerotate-transport)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
@@ -49,6 +50,7 @@ there are additional transports written by
   * [Papertrail](#papertrail-transport)
   * [Pusher](#pusher-transport)
   * [SimpleDB](#simpledb-transport)
+  * [Slack](#slack-transport)
   * [SQLite3](#sqlite3-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
   * [Sumo Logic](#sumo-logic-transport)
@@ -403,6 +405,36 @@ The Cloudant transport takes the following options:
     db          : Name of the databasename to put logs in
     logstash    : Write logs in logstash format
 
+### Datadog Transport
+[datadog-winston][38] is a transport to ship your logs to datadog.
+
+```javascript
+var winston = require('winston')
+var DatadogWinston = require('datadog-winston')
+
+var logger = winston.createLogger({
+  // Whatever options you need
+  // Refer https://github.com/winstonjs/winston#creating-your-own-logger
+})
+
+logger.add(
+  new DatadogWinston({
+    apiKey: 'super_secret_datadog_api_key',
+    hostname: 'my_machine',
+    service: 'super_service',
+    ddsource: 'node.js',
+    ddtags: 'foo:bar,boo:baz'
+  })
+)
+```
+
+Options:
+* __apiKey__: Your datadog api key *[required]*
+* __hostname__: The machine/server hostname
+* __service__: The name of the application or service generating the logs
+* __ddsource__: The technology from which the logs originated
+* __ddtags__: Metadata assoicated with the logs
+
 ### Google Stackdriver Transport
 
 [@google-cloud/logging-winston][29] provides a transport to relay your log messages to [Stackdriver Logging][30].
@@ -630,9 +662,41 @@ The SimpleDB transport takes the following options. All items marked with an ast
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
 
+### Slack Transport
+[winston-slack-webhook-transport][39] is a transport that sends all log messages to the Slack chat service. 
+
+```js
+const winston = require('winston');
+const SlackHook = require('winston-slack-webhook-transport');
+
+const logger = winston.createLogger({
+	level: 'info',
+	transports: [
+		new SlackHook({
+			webhookUrl: 'https://hooks.slack.com/services/xxx/xxx/xxx'
+		})
+	]
+});
+
+logger.info('This should now appear on Slack');
+```
+
+This transport takes the following options: 
+
+* __webhookUrl__ - Slack incoming webhook URL. This can be from a basic integration or a bot. **REQUIRED**
+* __channel__ - Slack channel to post message to.
+* __username__ - Username to post message with.
+* __iconEmoji__ - Status icon to post message with. (interchangeable with __iconUrl__)
+* __iconUrl__ - Status icon to post message with. (interchangeable with __iconEmoji__)
+* __formatter__ - Custom function to format messages with. This function accepts the __info__ object ([see Winston documentation](https://github.com/winstonjs/winston/blob/master/README.md#streams-objectmode-and-info-objects)) and must return an object with at least one of the following three keys: __text__ (string), __attachments__ (array of [attachment objects](https://api.slack.com/docs/message-attachments)), __blocks__ (array of [layout block objects](https://api.slack.com/messaging/composing/layouts)). These will be used to structure the format of the logged Slack message. By default, messages will use the format of `[level]: [message]` with no attachments or layout blocks.
+* __level__ - Level to log. Global settings will apply if this is blank.
+* __unfurlLinks__ - Enables or disables [link unfurling.](https://api.slack.com/docs/message-attachments#unfurling) (Default: false)
+* __unfurlMedia__ - Enables or disables [media unfurling.](https://api.slack.com/docs/message-link-unfurling) (Default: false)
+* __mrkdwn__ - Enables or disables [`mrkdwn` formatting](https://api.slack.com/messaging/composing/formatting#basics) within attachments or layout blocks (Default: false)
+
 ### SQLite3 Transport
 
-The [winston-better-sqlite3][38] transport uses [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3).
+The [winston-better-sqlite3][40] transport uses [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3).
 
 ```js
 const wbs = require('winston-better-sqlite3');
@@ -815,5 +879,6 @@ That's why we say it's a logger for just about everything
 [35]: https://github.com/SerayaEryn/fast-file-rotate
 [36]: https://github.com/inspiredjw/winston-dynamodb
 [37]: https://github.com/logdna/logdna-winston
-[38]: https://github.com/punkish/winston-better-sqlite3
-
+[38]: https://github.com/itsfadnis/datadog-winston
+[39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
+[40]: https://github.com/punkish/winston-better-sqlite3
