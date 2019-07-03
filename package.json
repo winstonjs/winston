@@ -48,7 +48,7 @@
     "eslint-config-populist": "^4.2.0",
     "hock": "^1.3.3",
     "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
+    "nyc": "^14.1.1",
     "rimraf": "^2.6.3",
     "split2": "^3.1.0",
     "std-mocks": "^1.0.1",
