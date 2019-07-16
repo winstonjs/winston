@@ -26,7 +26,7 @@
     "stream"
   ],
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^2.6.3",
     "diagnostics": "^1.1.1",
     "is-stream": "^1.1.0",
     "logform": "^2.1.1",
