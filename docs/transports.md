@@ -658,7 +658,7 @@ logger.add(new Sentry({
 
 This transport takes the following options:
 
-* sentry [Object]
+* __sentry:__ [Object]
   * __dsn:__ Sentry DSN or Data Source Name (default: `process.env.SENTRY_DSN`) **REQUIRED**
   * __environment:__ The application environment (default: `process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV || 'production'`)
   * __serverName:__  The application name
