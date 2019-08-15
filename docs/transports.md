@@ -91,7 +91,7 @@ logger.add(new winston.transports.File(options));
 ```
 
 The File transport supports a variety of file writing options. If you are
-looking for daily log rotation see [DailyRotateFile]
+looking for daily log rotation see [DailyRotateFile](#dailyrotatefile-transport)
 
 * __level:__ Level of messages that this transport should log (default: level set on parent logger).
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
