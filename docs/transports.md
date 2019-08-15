@@ -49,6 +49,7 @@ there are additional transports written by
   * [Newrelic](#newrelic-transport) (errors only)
   * [Papertrail](#papertrail-transport)
   * [Pusher](#pusher-transport)
+  * [Sentry](#sentry-transport)
   * [SimpleDB](#simpledb-transport)
   * [Slack](#slack-transport)
   * [SQLite3](#sqlite3-transport)
@@ -642,6 +643,31 @@ This transport sends the logs to a Pusher app for real time processing and it us
 * __channel__ The channel of the event (default: default)
 * __event__ The event name (default: default)
 
+### Sentry Transport
+[winston-transport-sentry-node][41] is a transport for [Sentry](https://sentry.io/) uses [@sentry/node](https://www.npmjs.com/package/@sentry/node).
+
+```js
+const Sentry = require('winston-transport-sentry-node');
+logger.add(new Sentry({
+  sentry: {
+    dsn: 'https://******@sentry.io/12345',
+  },
+  level: 'info'
+});
+```
+
+This transport takes the following options:
+
+* __sentry:__ [Object]
+  * __dsn:__ Sentry DSN or Data Source Name (default: `process.env.SENTRY_DSN`) **REQUIRED**
+  * __environment:__ The application environment (default: `process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV || 'production'`)
+  * __serverName:__  The application name
+  * __debug:__ Turns debug mode on or off (default: `process.env.SENTRY_DEBUG || false`)
+  * __sampleRate:__ Sample rate as a percentage of events to be sent in the range of 0.0 to 1.0 (default: `1.0`)
+  * __maxBreadcrumbs:__ Total amount of breadcrumbs that should be captured (default: `100`)
+* __level:__ Level of messages that this transport should log
+* __silent:__  Boolean flag indicating whether to suppress output, defaults to false
+
 ### SimpleDB Transport
 
 The [winston-simpledb][15] transport is just as easy:
@@ -882,3 +908,4 @@ That's why we say it's a logger for just about everything
 [38]: https://github.com/itsfadnis/datadog-winston
 [39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
 [40]: https://github.com/punkish/winston-better-sqlite3
+[41]: https://github.com/aandrewww/winston-transport-sentry-node
