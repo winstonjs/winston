@@ -16,6 +16,7 @@ declare namespace winston {
   export import format = logform.format;
   export import config = Config;
   export import transports = Transports;
+  export import Transport = Transport;
 
   interface ExceptionHandler {
     logger: Logger;
