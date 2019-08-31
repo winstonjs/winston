@@ -629,11 +629,6 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 
 [@pauleliet/winston-pg-native](https://github.com/petpano/winston-pg-native) is a PostgresQL transport supporting Winston 3.X.
 
-In addition to writing logs to database, it supports:
-
-* querying of logs with Loggly-like options
-* streaming logs
-
 ### Pusher Transport
 [winston-pusher](https://github.com/meletisf/winston-pusher) is a Pusher transport.
 
