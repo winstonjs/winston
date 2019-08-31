@@ -627,7 +627,7 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 
 ### PostgresQL Transport
 
-[winston-pg-native][https://github.com/ofkindness/winston-pg-native] is a PostgresQL transport.
+[winston-pg-native](https://github.com/ofkindness/winston-pg-native) is a PostgresQL transport.
 
 In addition to writing logs to database, it supports:
 
