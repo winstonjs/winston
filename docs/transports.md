@@ -48,6 +48,7 @@ there are additional transports written by
   * [Mail](#mail-transport)
   * [Newrelic](#newrelic-transport) (errors only)
   * [Papertrail](#papertrail-transport)
+  * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
   * [Sentry](#sentry-transport)
   * [SimpleDB](#simpledb-transport)
@@ -623,6 +624,15 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 * __logFormat:__ a log formatting function with the signature `function(level, message)`, which allows custom formatting of the level or message prior to delivery
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
+
+### PostgresQL Transport
+
+[winston-pg-native][https://github.com/ofkindness/winston-pg-native] is a PostgresQL transport.
+
+In addition to writing logs to database, it supports:
+
+* querying of logs with Loggly-like options
+* streaming logs
 
 ### Pusher Transport
 [winston-pusher](https://github.com/meletisf/winston-pusher) is a Pusher transport.
