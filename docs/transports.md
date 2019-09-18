@@ -40,6 +40,7 @@ there are additional transports written by
   * [Datadog](#datadog-transport)
   * [Elasticsearch](#elasticsearch-transport)
   * [FastFileRotate](#fastfilerotate-transport)
+  * [Google BigQuery](#google-bigquery)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [Graylog2](#graylog2-transport)
   * [LogDNA](#logdna-transport)
@@ -435,6 +436,32 @@ Options:
 * __service__: The name of the application or service generating the logs
 * __ddsource__: The technology from which the logs originated
 * __ddtags__: Metadata assoicated with the logs
+
+### Google BigQuery
+[winston-bigquery][42] is a transport for Google BigQuery.
+
+```js
+import {WinstonBigQuery} from 'winston-bigquery';
+import winston, {format} from 'winston';
+
+const logger = winston.createLogger({
+	transports: [
+		new WinstonBigQuery({
+			tableId: 'winston_logs',
+			datasetId: 'logs'
+		})
+	]
+});
+```
+
+The Google BigQuery takes the following options:
+
+* __datasetId__   	      	    : Your dataset name [required]
+* __tableId__     	  	    : Table name in the datase [required]
+* __applicationCredentials__    : a path to local service worker (useful in dev env) [Optional]
+
+**Pay Attention**, since BQ, unlike some other products, is not a "schema-less" you will need to build the schema in advance.
+read more on the topic on [github][42] or [npmjs.com][43]
 
 ### Google Stackdriver Transport
 
@@ -909,3 +936,6 @@ That's why we say it's a logger for just about everything
 [39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
 [40]: https://github.com/punkish/winston-better-sqlite3
 [41]: https://github.com/aandrewww/winston-transport-sentry-node
+[42]: https://github.com/kaminskypavel/winston-bigquery
+[43]: https://www.npmjs.com/package/winston-bigquery
+
