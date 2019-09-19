@@ -43,6 +43,7 @@ there are additional transports written by
   * [Google BigQuery](#google-bigquery)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [Graylog2](#graylog2-transport)
+  * [Humio](#humio-transport)
   * [LogDNA](#logdna-transport)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
@@ -525,6 +526,23 @@ const logger = winston.createLogger({
 })
 ```
 
+### Humio Transport
+
+[humio-winston][44] is a transport for sending logs to Humio:
+
+``` js
+const winston = require('winston');
+const HumioTransport = require('humio-winston');
+
+const logger = winston.createLogger({
+  transports: [
+    new HumioTransport({
+      ingestToken: '<YOUR HUMIO INGEST TOKEN>',
+    }),
+  ],
+});
+```
+
 ### LogDNA Transport
 
 [LogDNA Winston][37] is a transport for being able to forward the logs to [LogDNA](https://logdna.com/):
@@ -943,4 +961,4 @@ That's why we say it's a logger for just about everything
 [41]: https://github.com/aandrewww/winston-transport-sentry-node
 [42]: https://github.com/kaminskypavel/winston-bigquery
 [43]: https://www.npmjs.com/package/winston-bigquery
-
+[44]: https://github.com/Quintinity/humio-winston
