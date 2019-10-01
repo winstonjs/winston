@@ -788,13 +788,27 @@ describe('Logger (logging exotic data types)', function () {
       const logged = [];
       const logger = helpers.createLogger(function (info, enc, next) {
         logged.push(info);
+        assume(info.extra).equals(true);
         assume(info.label).equals(undefined);
+        next();
+
+        if (logged.length === 1) done();
+      }, format.splat());
+
+      logger.info('Hello %j', { label: 'world' }, { extra: true });
+    });
+
+    it(`.info('Literal "%c"') does not drop meta props when splat formatter not used`, function (done) {
+      const logged = [];
+      const logger = helpers.createLogger(function (info, enc, next) {
+        logged.push(info);
+        assume(info.label).equals('world');
         next();
 
         if (logged.length === 1) done();
       });
 
-      logger.info('Hello %j', { label: 'world' }, { extra: true });
+      logger.info('Literal "%c"', { label: 'world' });
     });
 
     it(`.info('Hello') and .info('Hello %d') preserve meta with splat format`, function (done) {
