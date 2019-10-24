@@ -98,6 +98,7 @@ logger to use throughout your application if you so choose.
 * [Transports]
   * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
   * [Adding Custom Transports](#adding-custom-transports)
+  * [Common Transport options](#common-transport-options)
 * [Exceptions](#exceptions)
   * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
   * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
@@ -743,6 +744,34 @@ module.exports = class YourCustomTransport extends Transport {
 };
 ```
 
+## Common Transport options
+
+As every transport inherits from [winston-transport], therefore it's possible to set
+a custom format and a custom log level on each separately:
+
+``` js
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({
+      filename: 'error.log',
+      level: 'error',
+      format: winston.format.json()
+    }),
+    new transports.Http({
+      level: 'warn',
+      format: winston.format.json()
+    }),
+    new transports.Console({
+      level: 'info',
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      )
+    })
+  ]
+});
+```
+
 ## Exceptions
 
 ### Handling Uncaught Exceptions with winston
@@ -1135,6 +1164,7 @@ npm test
 [nyc]: https://github.com/istanbuljs/nyc
 [assume]: https://github.com/bigpipe/assume
 [logform]: https://github.com/winstonjs/logform#readme
+[winston-transport]: https://github.com/winstonjs/winston-transport
 
 [Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x 
 
