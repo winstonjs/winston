@@ -746,8 +746,8 @@ module.exports = class YourCustomTransport extends Transport {
 
 ## Common Transport options
 
-As every transport inherits from [winston-transport], therefore it's possible to set
-a custom format and a custom log level on each separately:
+As every transport inherits from [winston-transport], it's possible to set
+a custom format and a custom log level on each transport separately:
 
 ``` js
 const logger = winston.createLogger({
