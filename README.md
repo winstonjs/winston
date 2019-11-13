@@ -569,7 +569,7 @@ messages):
 ``` js
 const logger = winston.createLogger({
   levels: winston.config.syslog.levels,
-  transports: [
+  transports: [ 
     new winston.transports.Console({ level: 'error' }),
     new winston.transports.File({
       filename: 'combined.log',
@@ -1109,7 +1109,7 @@ If you prefer to manage the `Container` yourself, you can simply instantiate one
 ``` js
 const winston = require('winston');
 const { format } = winston;
-const { combine, json } = format;
+const { combine, label, json } = format;
 
 const container = new winston.Container();
 
