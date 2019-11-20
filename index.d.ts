@@ -93,6 +93,7 @@ declare namespace winston {
     exceptions: ExceptionHandler;
     profilers: object;
     exitOnError: Function | boolean;
+    defaultMeta?: any;
 
     log: LogMethod;
     add(transport: Transport): Logger;
