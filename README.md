@@ -516,7 +516,7 @@ the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
 }
 ```
 
-Similarly, `npm` logging levels are prioritized from 0 to 5 (highest to
+Similarly, `npm` logging levels are prioritized from 0 to 6 (highest to
 lowest):
 
 ``` js
@@ -524,9 +524,10 @@ lowest):
   error: 0, 
   warn: 1, 
   info: 2, 
-  verbose: 3, 
-  debug: 4, 
-  silly: 5 
+  http: 3,
+  verbose: 4, 
+  debug: 5, 
+  silly: 6 
 }
 ```
 
