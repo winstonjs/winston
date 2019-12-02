@@ -569,7 +569,7 @@ messages):
 ``` js
 const logger = winston.createLogger({
   levels: winston.config.syslog.levels,
-  transports: [ 
+  transports: [
     new winston.transports.Console({ level: 'error' }),
     new winston.transports.File({
       filename: 'combined.log',
