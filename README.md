@@ -1110,7 +1110,7 @@ If you prefer to manage the `Container` yourself, you can simply instantiate one
 ``` js
 const winston = require('winston');
 const { format } = winston;
-const { combine, json } = format;
+const { combine, label, json } = format;
 
 const container = new winston.Container();
 
