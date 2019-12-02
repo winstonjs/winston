@@ -14,6 +14,7 @@ import * as Transports from './lib/winston/transports/index';
 declare namespace winston {
   // Hoisted namespaces from other modules
   export import format = logform.format;
+  export import Logform = logform;
   export import config = Config;
   export import transports = Transports;
 
