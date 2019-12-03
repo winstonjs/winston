@@ -31,7 +31,7 @@ describe('winston/transports/file/rolling', function () {
         maxsize: 4096,
         maxFiles: 3,
         tailable: false
-      })
+      });
     });
 
     it('and when passed more files than the maxFiles', function (done) {
