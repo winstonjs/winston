@@ -20,7 +20,7 @@ const { MESSAGE } = require('triple-beam');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testarchive*'), done);
+  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testarchive*'), {maxBusyTries: 10}, done);
 }
 
 
