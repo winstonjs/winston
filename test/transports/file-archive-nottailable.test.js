@@ -20,7 +20,7 @@ const { MESSAGE } = require('triple-beam');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testarchivenottailable*'), done);
+  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testnottailablearchive*'), done);
 }
 
 
@@ -37,7 +37,7 @@ describe('winston/transports/file/zippedArchive/nottailable', function () {
         json: false,
         zippedArchive: true,
         tailable: false,
-        filename: 'testarchivenottailable.log',
+        filename: 'testnottailablearchive.log',
         dirname: path.join(__dirname, '..', 'fixtures', 'logs'),
         maxsize: 4096,
         maxFiles: 3
@@ -77,7 +77,7 @@ describe('winston/transports/file/zippedArchive/nottailable', function () {
 
     it('should be only 3 files with correct names', function () {
       for (var num = 0; num < 4; num++) {
-        const file = num === 3 ? 'testarchivenottailable3.log' : 'testarchivenottailable' + (num > 0 ? num : '') + '.log.gz';
+        const file = num === 3 ? 'testnottailablearchive3.log' : 'testnottailablearchive' + (num > 0 ? num : '') + '.log.gz';
         const fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
 
         const statFile = function () {
@@ -98,7 +98,7 @@ describe('winston/transports/file/zippedArchive/nottailable', function () {
       for (var num = 1; num < 4; num++) {
         let content;
         const letter = letters[num - 1];
-        const file = num === 3 ? 'testarchivenottailable3.log' : 'testarchivenottailable' + num + '.log.gz';
+        const file = num === 3 ? 'testnottailablearchive3.log' : 'testnottailablearchive' + num + '.log.gz';
         const fileContent = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', file));
 
         if (num !== 3) {
