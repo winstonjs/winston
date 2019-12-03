@@ -20,14 +20,14 @@ const { MESSAGE } = require('triple-beam');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testarchive*'), done);
+  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testarchivenottailable*'), done);
 }
 
 
 let archiveTransport = null;
 
-describe('winston/transports/file/zippedArchive', function () {
-  describe('An instance of the File Transport with tailable true', function () {
+describe('winston/transports/file/zippedArchive/nottailable', function () {
+  describe('An instance of the File Transport with tailable false', function () {
     before(removeFixtures);
     after(removeFixtures);
 
@@ -36,8 +36,8 @@ describe('winston/transports/file/zippedArchive', function () {
         timestamp: true,
         json: false,
         zippedArchive: true,
-        tailable: true,
-        filename: 'testarchive.log',
+        tailable: false,
+        filename: 'testarchivenottailable.log',
         dirname: path.join(__dirname, '..', 'fixtures', 'logs'),
         maxsize: 4096,
         maxFiles: 3
@@ -45,6 +45,7 @@ describe('winston/transports/file/zippedArchive', function () {
     });
 
     it('when created archived files are rolled', function (done) {
+
       let created = 0;
       let loggedTotal = 0;
 
@@ -76,31 +77,31 @@ describe('winston/transports/file/zippedArchive', function () {
 
     it('should be only 3 files with correct names', function () {
       for (var num = 0; num < 4; num++) {
-        const file = !num ? 'testarchive.log' : 'testarchive' + num + '.log.gz';
+        const file = num === 3 ? 'testarchivenottailable3.log' : 'testarchivenottailable' + (num > 0 ? num : '') + '.log.gz';
         const fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
 
-        if (num === 3) {
-          return assert.throws(function () {
-            fs.statSync(fullpath);
-          }, Error);
-        }
-
-        assert.doesNotThrow(function () {
+        const statFile = function () {
           fs.statSync(fullpath);
-        }, Error);
+        };
+
+        if (num === 0) {
+          assert.throws(statFile, Error);
+        } else {
+          assert.doesNotThrow(statFile, Error);
+        }
       }
     });
 
-    it('current file ascii, archives should be zipped', function () {
-      const letters = ['D', 'C', 'B'];
+    it('current file should be ascii, archives should be zipped', function () {
+      const letters = ['B', 'C', 'D'];
 
-      for (var num = 0; num < 3; num++) {
+      for (var num = 1; num < 4; num++) {
         let content;
-        const letter = letters[num];
-        const file = !num ? 'testarchive.log' : 'testarchive' + num + '.log.gz';
+        const letter = letters[num - 1];
+        const file = num === 3 ? 'testarchivenottailable3.log' : 'testarchivenottailable' + num + '.log.gz';
         const fileContent = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', file));
 
-        if (num > 0) {
+        if (num !== 3) {
           // archives should be zipped
           assert.doesNotThrow(function () {
             content = zlib.gunzipSync(fileContent).toString('ascii');
