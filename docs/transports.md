@@ -437,7 +437,7 @@ Options:
 * __hostname__: The machine/server hostname
 * __service__: The name of the application or service generating the logs
 * __ddsource__: The technology from which the logs originated
-* __ddtags__: Metadata assoicated with the logs
+* __ddtags__: Metadata associated with the logs
 
 ### Google BigQuery
 [winston-bigquery][42] is a transport for Google BigQuery.
