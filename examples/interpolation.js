@@ -1,4 +1,4 @@
-var w = require('./');
+var w = require('../');
 
 w.info('Found %s at %s', 'error', new Date());
 w.info('Found %s at %s', 'error', new Error('chill winston'));
