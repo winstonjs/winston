@@ -997,6 +997,9 @@ describe('Should support child loggers & defaultMeta', () => {
     });
 
     const logger = winston.createLogger({
+      defaultMeta: {
+        service: "dummy-service"
+      },
       transports: [
         mockTransport.createMockTransport(assertFn)
       ]
