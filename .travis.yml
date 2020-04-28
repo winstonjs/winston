@@ -1,10 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - "8"
   - "10"
   - "12"
-  - "13"
+  - "14"
 
 before_install:
   - travis_retry npm install
@@ -16,7 +15,7 @@ script:
 
 matrix:
   allow_failures:
-  - node_js: "13"
+  - node_js: "14"
 
 notifications:
   email:
