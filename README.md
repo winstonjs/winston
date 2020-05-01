@@ -47,6 +47,8 @@ The recommended way to use `winston` is to create your own logger. The
 simplest way to do this is using `winston.createLogger`:
 
 ``` js
+const winston = require('winston');	
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
