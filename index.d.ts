@@ -190,4 +190,4 @@ declare namespace winston {
   // let default: object;
 }
 
-export = winston;
+export default winston;
