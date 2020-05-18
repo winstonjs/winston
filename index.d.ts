@@ -191,3 +191,4 @@ declare namespace winston {
 }
 
 export default winston;
+export { winston };
