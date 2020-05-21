@@ -831,11 +831,11 @@ describe('Logger (logging exotic data types)', function () {
       logger.info(null);
     });
 
-    it('.info(new Error()) uses Error instance as info', function (done) {
+    it('.info(new Error()) creates info with {message: err.message, stack: err.stack}', function (done) {
       const err = new Error('test');
       const logger = helpers.createLogger(function (info) {
-        assume(info).instanceOf(Error);
-        assume(info).equals(err);
+        assume(info.message).equal(err.message);
+        assume(info.stack).equals(err.stack);
         done();
       });
 
@@ -1026,6 +1026,135 @@ describe('Should support child loggers & defaultMeta', () => {
       requestId: '451',
       service: 'audit-service'
     });
+  });
+
+  it('child default meta takes precedence over parent default meta with [LEVEL]() call', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('audit-service');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'user-service' },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'audit-service' })
+    childLogger.info('dummy message')
+  });
+
+  it('child default meta takes precedence over parent default meta with log() call', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('audit-service');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'user-service' },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'audit-service' })
+    childLogger.log({
+      level: 'info',
+      message: 'dummy message'
+    })
+  });
+
+  it('child log meta takes precedence over both child & parent default meta with [LEVEL]() call', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('child-service');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'user-service' },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'audit-service' });
+    childLogger.info('dummy message', { service: 'child-service'});
+  });
+
+  it('child log meta takes precedence over both child & parent default meta with log() call', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('child-service');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'user-service' },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'audit-service' });
+    childLogger.log({
+      level: 'info',
+      message: 'dummy message',
+      service: 'child-service'
+    })
+  });
+
+
+  it('child log meta takes precedence over both child & parent default meta even if not present in defaults with [LEVEL]() call', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('child-service');
+      assume(msg.requestId).equals('451');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'user-service' },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'audit-service' });
+    childLogger.info('dummy message', { service: 'child-service', requestId: '451'});
+  });
+
+  it('child log meta takes precedence over both child & parent default meta even if not present in defaults with log() call', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('child-service');
+      assume(msg.requestId).equals('451');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'user-service' },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'audit-service' });
+    childLogger.log({
+      level: 'info',
+      message: 'dummy message',
+      service: 'child-service',
+      requestId: '451'
+    })
   });
 
   it('provided meta take precedence over child meta', (done) => {
