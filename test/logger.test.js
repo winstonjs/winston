@@ -834,7 +834,7 @@ describe('Logger (logging exotic data types)', function () {
     it('.info(new Error()) creates info with {message: err.message, stack: err.stack}', function (done) {
       const err = new Error('test');
       const logger = helpers.createLogger(function (info) {
-        assume(info.message).equal(err.message);
+        assume(info.message).equals(err.message);
         assume(info.stack).equals(err.stack);
         done();
       });
