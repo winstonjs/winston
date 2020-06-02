@@ -46,7 +46,7 @@ declare namespace winston {
 
   interface Profiler {
     logger: Logger;
-    start: Date;
+    start: Number;
     done(info?: any): boolean;
   }
 
