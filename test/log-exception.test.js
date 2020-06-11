@@ -22,7 +22,7 @@ describe('Logger, ExceptionHandler', function () {
 
       helpers.tryUnlink(logFile);
 
-      spawn(process.env.NODE_PATH, [path.join(__dirname, 'helpers', 'scripts', 'unhandle-exceptions.js')])
+      spawn(process.execPath, [path.join(__dirname, 'helpers', 'scripts', 'unhandle-exceptions.js')])
         .on('exit', function () {
           fs.exists(logFile, function (exists) {
             assume(exists).false();
