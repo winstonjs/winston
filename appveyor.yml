@@ -21,6 +21,7 @@ build: off
 test_script:
   - .\node_modules\.bin\tsc --version
   - .\node_modules\.bin\tsc -p test
+  - which node
   - npm run test
 
 notifications:
