@@ -82,6 +82,7 @@ declare namespace winston {
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
+    handleExceptions?: boolean;
     exceptionHandlers?: any;
   }
 
@@ -133,6 +134,14 @@ declare namespace winston {
     configure(options: LoggerOptions): void;
 
     child(options: Object): Logger;
+
+    isLevelEnabled(level: string): boolean;
+    isErrorEnabled(): boolean;
+    isWarnEnabled(): boolean;
+    isInfoEnabled(): boolean;
+    isVerboseEnabled(): boolean;
+    isDebugEnabled(): boolean;
+    isSillyEnabled(): boolean;
 
     new(options?: LoggerOptions): Logger;
   } & {[K in keyof T]: LeveledLogMethod;}
