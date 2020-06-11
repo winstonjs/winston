@@ -62,7 +62,7 @@
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
-    "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit",
+    "test:mocha": "NODE_PATH=$(which node) mocha test/*.test.js test/**/*.test.js --exit",
     "build": "./node_modules/.bin/rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
