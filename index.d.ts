@@ -58,7 +58,7 @@ declare namespace winston {
     [optionName: string]: any;
   }
 
-   interface LogMethod {
+  interface LogMethod {
     (level: string, message: string, callback: LogCallback): Logger;
     (level: string, message: string, meta: any, callback: LogCallback): Logger;
     (level: string, message: string, ...meta: any[]): Logger;
@@ -74,19 +74,40 @@ declare namespace winston {
     (infoObject: object): Logger;
   }
 
-  interface LoggerOptions {
-    levels?: Config.AbstractConfigSetLevels;
+  interface LoggerOptions<T extends Config.AbstractConfigSetLevels = Config.AbstractConfigSetLevels> {
+    levels?: T;
     silent?: boolean;
     format?: logform.Format;
     level?: string;
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
-    handleExceptions?: boolean;
     exceptionHandlers?: any;
   }
 
-  interface Logger extends NodeJSStream.Transform {
+  type DefaulLevels = {
+    // for cli and npm levels
+    error: number;
+    warn: number;
+    help: number;
+    data: number;
+    info: number;
+    debug: number;
+    prompt: number;
+    http: number;
+    verbose: number;
+    input: number;
+    silly: number;
+    
+    // for syslog levels only
+    emerg: number;
+    alert: number;
+    crit: number;
+    warning: number;
+    notice: number;
+  }
+
+  type Logger<T extends Config.AbstractConfigSetLevels = DefaulLevels> = NodeJSStream.Transform & {
     silent: boolean;
     format: logform.Format;
     levels: Config.AbstractConfigSetLevels;
@@ -103,26 +124,6 @@ declare namespace winston {
     clear(): Logger;
     close(): Logger;
 
-    // for cli and npm levels
-    error: LeveledLogMethod;
-    warn: LeveledLogMethod;
-    help: LeveledLogMethod;
-    data: LeveledLogMethod;
-    info: LeveledLogMethod;
-    debug: LeveledLogMethod;
-    prompt: LeveledLogMethod;
-    http: LeveledLogMethod;
-    verbose: LeveledLogMethod;
-    input: LeveledLogMethod;
-    silly: LeveledLogMethod;
-
-    // for syslog levels only
-    emerg: LeveledLogMethod;
-    alert: LeveledLogMethod;
-    crit: LeveledLogMethod;
-    warning: LeveledLogMethod;
-    notice: LeveledLogMethod;
-
     query(options?: QueryOptions, callback?: (err: Error, results: any) => void): any;
     stream(options?: any): NodeJS.ReadableStream;
 
@@ -133,16 +134,8 @@ declare namespace winston {
 
     child(options: Object): Logger;
 
-    isLevelEnabled(level: string): boolean;
-    isErrorEnabled(): boolean;
-    isWarnEnabled(): boolean;
-    isInfoEnabled(): boolean;
-    isVerboseEnabled(): boolean;
-    isDebugEnabled(): boolean;
-    isSillyEnabled(): boolean;
-
     new(options?: LoggerOptions): Logger;
-  }
+  } & {[K in keyof T]: LeveledLogMethod;}
 
   interface Container {
     loggers: Map<string, Logger>;
@@ -162,7 +155,7 @@ declare namespace winston {
   let loggers: Container;
 
   let addColors: (target: Config.AbstractConfigSetColors) => any;
-  let createLogger: (options?: LoggerOptions) => Logger;
+  let createLogger: <T extends Config.AbstractConfigSetLevels = DefaulLevels>(options?: LoggerOptions<T>) => Logger<T>;
 
   // Pass-through npm level methods routed to the default logger.
   let error: LeveledLogMethod;
