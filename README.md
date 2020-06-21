@@ -627,8 +627,8 @@ const myCustomLevels = {
   }
 };
 
-const customLevelLogger = winston.createLogger({ 
-  levels: myCustomLevels.levels 
+const customLevelLogger = winston.createLogger({
+  levels: myCustomLevels.levels
 });
 
 customLevelLogger.foobar('some foobar level-ed message');
@@ -1098,11 +1098,6 @@ you should handle or suppress if you don't want unhandled exceptions:
 // Handle errors
 //
 logger.on('error', function (err) { /* Do Something */ });
-
-//
-// Or just suppress them.
-//
-logger.emitErrs = false;
 ```
 
 ### Working with multiple Loggers in winston
