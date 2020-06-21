@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A logger for just about everything.",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "Jarrett Cruger <jcrugzz@gmail.com>",
