@@ -33,7 +33,7 @@
   },
   "main": "./lib/winston",
   "scripts": {
-    "test": "vows --spec --isolate"
+    "test": "vows --dot-matrix --isolate"
   },
   "types": "./index.d.ts",
   "engines": {
