@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v3.3.2 / 2020-06-22
+
+- [#1814] Use a fork of `diagnostics` published to NPM to avoid git dependency.
+
 ## v3.3.1 / 2020-06-21
 
 - [#1803], [#1807] Fix TypeScript bugs.

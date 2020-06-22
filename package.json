@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "async": "^3.1.0",
-    "diagnostics": "DABH/diagnostics#master",
+    "@dabh/diagnostics": "^2.0.2",
     "is-stream": "^2.0.0",
     "logform": "^2.2.0",
     "one-time": "^1.0.0",
