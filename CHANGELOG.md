@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v3.3.1 / 2020-06-21
+
+- [#1803], [#1807] Fix TypeScript bugs.
+- [#1740] Add space between `info.message` and `meta.message`.
+- [#1813] Avoid indirect storage-engine dependency.
+- [#1810] README updates.
+
 ## v3.3.0 / 2020-06-21
 
 - [#1779] Fix property name in rejection handler.
