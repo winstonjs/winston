@@ -1,3 +1,7 @@
+## v2.4.5
+
+- [#1800] Silence Node.js 14 warning
+
 ## v2.4.4
 ### NPMIGNORE IS YOUR FRIEND EDITION
 
