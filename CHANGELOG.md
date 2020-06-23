@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v3.3.3 / 2020-06-23
+
+- [#1820] Revert [#1807] to resolve breaking changes for Typescript users.
+
 ## v3.3.2 / 2020-06-22
 
 - [#1814] Use a fork of `diagnostics` published to NPM to avoid git dependency.
