@@ -99,7 +99,7 @@ declare namespace winston {
     verbose: number;
     input: number;
     silly: number;
-    
+
     // for syslog levels only
     emerg: number;
     alert: number;
@@ -120,20 +120,20 @@ declare namespace winston {
     defaultMeta?: any;
 
     log: LogMethod;
-    add(transport: Transport): Logger;
-    remove(transport: Transport): Logger;
-    clear(): Logger;
-    close(): Logger;
+    add(transport: Transport): Logger<T>;
+    remove(transport: Transport): Logger<T>;
+    clear(): Logger<T>;
+    close(): Logger<T>;
 
     query(options?: QueryOptions, callback?: (err: Error, results: any) => void): any;
     stream(options?: any): NodeJS.ReadableStream;
 
     startTimer(): Profiler;
-    profile(id: string | number, meta?: LogEntry): Logger;
+    profile(id: string | number, meta?: LogEntry): Logger<T>;
 
     configure(options: LoggerOptions): void;
 
-    child(options: Object): Logger;
+    child(options: Object): Logger<T>;
 
     isLevelEnabled(level: string): boolean;
     isErrorEnabled(): boolean;
@@ -143,7 +143,7 @@ declare namespace winston {
     isDebugEnabled(): boolean;
     isSillyEnabled(): boolean;
 
-    new(options?: LoggerOptions): Logger;
+    new(options?: LoggerOptions): Logger<T>;
   } & {[K in keyof T]: LeveledLogMethod;}
 
   interface Container {
