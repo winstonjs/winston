@@ -86,7 +86,7 @@ declare namespace winston {
     exceptionHandlers?: any;
   }
 
-  type DefaulLevels = {
+  type DefaultLevels = {
     // for cli and npm levels
     error: number;
     warn: number;
@@ -108,10 +108,10 @@ declare namespace winston {
     notice: number;
   }
 
-  type Logger<T extends Config.AbstractConfigSetLevels = DefaulLevels> = NodeJSStream.Transform & {
+  type Logger<T extends Config.AbstractConfigSetLevels = DefaultLevels> = NodeJSStream.Transform & {
     silent: boolean;
     format: logform.Format;
-    levels: Config.AbstractConfigSetLevels;
+    levels: T;
     level: string;
     transports: Transport[];
     exceptions: ExceptionHandler;
@@ -164,7 +164,7 @@ declare namespace winston {
   let loggers: Container;
 
   let addColors: (target: Config.AbstractConfigSetColors) => any;
-  let createLogger: <T extends Config.AbstractConfigSetLevels = DefaulLevels>(options?: LoggerOptions<T>) => Logger<T>;
+  let createLogger: <T extends Config.AbstractConfigSetLevels = DefaultLevels>(options?: LoggerOptions<T>) => Logger<T>;
 
   // Pass-through npm level methods routed to the default logger.
   let error: LeveledLogMethod;
