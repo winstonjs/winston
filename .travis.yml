@@ -13,9 +13,9 @@ script:
   - npm test
   - ./node_modules/.bin/tsc --version ; ./node_modules/.bin/tsc -p test
 
-matrix:
-  allow_failures:
-  - node_js: "14"
+#matrix:
+#  allow_failures:
+#  - node_js: "14"
 
 notifications:
   email:
