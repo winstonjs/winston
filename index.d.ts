@@ -111,7 +111,7 @@ declare namespace winston {
   type Logger<T extends Config.AbstractConfigSetLevels = DefaulLevels> = NodeJSStream.Transform & {
     silent: boolean;
     format: logform.Format;
-    levels: Config.AbstractConfigSetLevels;
+    levels: T;
     level: string;
     transports: Transport[];
     exceptions: ExceptionHandler;
