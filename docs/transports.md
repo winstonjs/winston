@@ -426,7 +426,7 @@ logger.add(
     apiKey: 'super_secret_datadog_api_key',
     hostname: 'my_machine',
     service: 'super_service',
-    ddsource: 'node.js',
+    ddsource: 'nodejs',
     ddtags: 'foo:bar,boo:baz'
   })
 )
