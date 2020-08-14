@@ -36,4 +36,28 @@ describe('Profiler', function () {
       });
     }, 200);
   });
+
+  it('supports hrTime', function(done) {
+    var profiler = new Profiler(
+      {
+        write: function (info) {
+          assume(info).is.an('object'),
+          assume(info.something).equals('ok');
+          assume(info.level).equals('info');
+          assume(info.durationMs).is.a('number');
+          assume(info.message).equals('testing1');
+          done();
+        }
+      },
+      true // This enables hrTime.
+    );
+
+    setTimeout(function () {
+      profiler.done({
+        something: 'ok',
+        level: 'info',
+        message: 'testing1'
+      });
+    }, 200);
+  });
 });

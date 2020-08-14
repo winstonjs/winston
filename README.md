@@ -978,6 +978,21 @@ on:
  }, 1000);
 ```
 
+If you pass `true` to `startTimer()`, the profiling precision will be in
+nanoseconds instead of milliseconds. If `process.hrTime()` is not available,
+it will fall back to regular millisecond precision.
+
+```js
+ // Measures time in nanoseconds:
+ //
+ const profiler = logger.startTimer(true);
+ setTimeout(function () {
+   // `durationMs` will be a decimal number:
+   // {"message":"Logging message","level":"info","durationMs":13.036486}
+   profiler.done({ message: 'Logging message' });
+ }, 1000);
+```
+
 All profile messages are set to 'info' level by default, and both message and
 metadata are optional.  For individual profile messages, you can override the default log level by supplying a metadata object with a `level` property:
 

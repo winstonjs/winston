@@ -126,7 +126,7 @@ declare namespace winston {
     query(options?: QueryOptions, callback?: (err: Error, results: any) => void): any;
     stream(options?: any): NodeJS.ReadableStream;
 
-    startTimer(): Profiler;
+    startTimer(useHrTime?: boolean): Profiler;
     profile(id: string | number, meta?: LogEntry): Logger;
 
     configure(options: LoggerOptions): void;
