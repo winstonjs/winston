@@ -1,17 +1,32 @@
 'use strict';
 
-const winston = require('../');
+const {
+  createLogger,
+  format,
+  transports
+}  = require('../');
 
-//
-// TODO: THIS IS BROKEN & MUST BE FIXED BEFORE 3.0
-// This should output what was previously referred to
-// as "humanReadableUncaughtExceptions" by default.
-//
-const logger = winston.createLogger({
-  format: winston.format.simple(),
-  transports: [
-    new winston.transports.Console({ handleExceptions: true })
-  ]
+const logger = createLogger({
+  format: format.combine(
+    format.simple(),
+    format.json(),
+    format.colorize({
+        all: true,
+    }),
+    format.prettyPrint()
+),
+  
+transports: [
+  new transports.File({
+      filename: "quick-start-combined.log",
+  }),
+],
+exceptionHandlers: [
+  new transports.File({
+      filename: "exceptions.log"
+  }),
+  new transports.Console()
+],
 });
 
 throw new Error('Hello, winston!');
