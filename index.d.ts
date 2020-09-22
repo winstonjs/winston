@@ -83,6 +83,7 @@ declare namespace winston {
     defaultMeta?: any;
     transports?: Transport[] | Transport;
     handleExceptions?: boolean;
+    handleRejections?: boolean;
     exceptionHandlers?: any;
   }
 
