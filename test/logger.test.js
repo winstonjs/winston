@@ -1078,4 +1078,30 @@ describe('Should support child loggers & defaultMeta', () => {
     const log = logger.info;
     log('test');
   });
+
+  it('much loggers share same transport should not emit MaxListenersExceededWarning', function (done) {
+    const transports = [
+      new winston.transports.File({
+        filename: path.join(__dirname, 'fixtures', 'logs', 'filelog2.log')
+      }),
+      new winston.transports.Console()
+    ];
+
+    const warnings = [];
+    const warningListener = (warning) => {
+      warnings.push(warning);
+    };
+
+    process.on('warning', warningListener);
+
+    Array(100).fill().map(() => {
+      return winston.createLogger({ transports });
+    });
+
+    setImmediate(() => {
+      process.removeListener('warning', warningListener);
+      assume(warnings.length).equals(0);
+      done();
+    })
+  });
 });
