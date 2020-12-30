@@ -997,12 +997,16 @@ describe('Should support child loggers & defaultMeta', () => {
     });
 
     const logger = winston.createLogger({
+      defaultMeta: {
+        requestId: '38',
+        service: 'root-service-logger'
+      },
       transports: [
         mockTransport.createMockTransport(assertFn)
       ]
     });
 
-    const childLogger = logger.child({ service: 'user-service' });
+    const childLogger = logger.child({ service: 'user-service', requestId: '154' });
     childLogger.info('dummy message', { requestId: '451' });
   });
 
