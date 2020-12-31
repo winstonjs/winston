@@ -117,7 +117,7 @@ logger to use throughout your application if you so choose.
 ## Logging
 
 Logging levels in `winston` conform to the severity ordering specified by
-[RFC5424]: _severity of all levels is assumed to be numerically **ascending**
+[RFC5424], _severity of all levels is assumed to be numerically **ascending**
 from most important to least important._
 
 ``` js
@@ -497,7 +497,7 @@ console.dir(whisper.transform({
 ## Logging Levels
 
 Logging levels in `winston` conform to the severity ordering specified by
-[RFC5424]: _severity of all levels is assumed to be numerically **ascending**
+[RFC5424], _severity of all levels is assumed to be numerically **ascending**
 from most important to least important._
 
 Each `level` is given a specific integer priority. The higher the priority the
