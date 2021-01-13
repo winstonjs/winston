@@ -82,8 +82,8 @@ declare namespace winston {
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
-    handleExceptions?: boolean;
     exceptionHandlers?: any;
+    rejectionHandlers?: any;
   }
 
   interface Logger extends NodeJSStream.Transform {
