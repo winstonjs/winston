@@ -71,7 +71,7 @@ logger.add(new winston.transports.Console());
 - `winston.Logger` will no longer do automatic splat interpolation by default.
   Be sure to use `format.splat()` to enable this functionality.
 - `winston.Logger` will no longer respond with an error when logging with no
-  transports
+  transports.
 - `winston.Logger` will no longer respond with an error if the same transports
   are added twice.
 - `Logger.prototype.stream`
@@ -107,7 +107,7 @@ now handled by **formats**.
 Custom formats can now be created with no changes to `winston` core.
 _We encourage you to consider a custom format before opening an issue._
 
-### Removed `winston.Logger` formatting options
+### Removed `winston.Logger` formatting options:
 - The default output format is now `format.json()`.
 - `filters`: Use a custom `format`. See: [Filters and Rewriters] below.
 - `rewriters`: Use a custom `format`. See: [Filters and Rewriters] below.
@@ -231,7 +231,7 @@ See [examples/format-mutate.js](/examples/format-mutate.js) for a complete
 end-to-end example that covers both filtering and rewriting behavior in
 `winston@2.x`.
 
-## Modularity: `winston-transport`, `logform` and more
+## Modularity: `winston-transport`, `logform` and more..
 
 As of `winston@3.0.0` the project has been broken out into a few modules:
 
@@ -239,7 +239,7 @@ As of `winston@3.0.0` the project has been broken out into a few modules:
   wrapper.
 - [logform]: All formats exports through `winston.format` 
 - `LEVEL` and `MESSAGE` symbols exposed through [triple-beam].
-- [Shared test suite][abstract-winston-transport] for community transports 
+- [Shared test suite][abstract-winston-transport] for community transports. 
 
 Let's dig in deeper. The example below has been annotated to demonstrate the different packages that compose the example itself:
 
