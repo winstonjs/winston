@@ -1050,6 +1050,25 @@ describe('Should support child loggers & defaultMeta', () => {
     });
   });
 
+  it('child meta take precedence over parent meta', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('child-service');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+      defaultMeta: { service: 'root-service' },
+    });
+
+    const childLogger = logger.child({ service: 'child-service' });
+    childLogger.info('dummy message');
+  });
+
   it('handles error stack traces in child loggers correctly', (done) => {
     const assertFn = ((msg) => {
       assume(msg.level).equals('error');
