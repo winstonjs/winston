@@ -1006,6 +1006,50 @@ describe('Should support child loggers & defaultMeta', () => {
     childLogger.info('dummy message', { requestId: '451' });
   });
 
+  it('deep merges child and provided meta correctly', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.labels.service).equals('user-service');
+      assume(msg.labels.requestId).equals('451');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ labels: { service: 'user-service' } });
+    childLogger.info('dummy message', { labels: { requestId: '451' } });
+  });
+
+  it('deep merges child meta and parent default meta correctly', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.labels.service).equals('user-service');
+      assume(msg.labels.requestId).equals('451');
+      assume(msg.labels.yeet).equals('yeet');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: {
+        labels: {
+          service: 'user-service'
+        }
+      },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ labels: { requestId: '451' } });
+    childLogger.info('dummy message', { labels: { yeet: 'yeet' } });
+  });
+
   it('provided meta take precedence over defaultMeta', (done) => {
     const assertFn = ((msg) => {
       assume(msg.level).equals('info');

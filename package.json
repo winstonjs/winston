@@ -26,9 +26,10 @@
     "stream"
   ],
   "dependencies": {
-    "async": "^3.1.0",
     "@dabh/diagnostics": "^2.0.2",
+    "async": "^3.1.0",
     "is-stream": "^2.0.0",
+    "lodash.merge": "^4.6.2",
     "logform": "^2.2.0",
     "one-time": "^1.0.0",
     "readable-stream": "^3.4.0",
