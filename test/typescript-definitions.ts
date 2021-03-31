@@ -57,3 +57,16 @@ logger.isInfoEnabled();
 logger.isVerboseEnabled();
 logger.isDebugEnabled();
 logger.isSillyEnabled();
+
+// Message type
+logger.log('info', 'string', () => {});
+logger.log('info', 'string', { meta: '1' }, () => {});
+logger.log('info', 'string', { meta: '1' }, { meta: '2' });
+logger.log({ level: 'info', message: 'string' });
+logger.log('info', 'string');
+
+logger.log('info', { message: 'object' }, () => {});
+logger.log('info', { message: 'object' }, { meta: '1' }, () => {});
+logger.log('info', { message: 'object' }, { meta: '1' }, { meta: '2' });
+logger.log({ level: 'info', message: { nested: 'object' } });
+logger.log('info', { message: 'object' });
