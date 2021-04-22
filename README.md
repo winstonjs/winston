@@ -1083,7 +1083,7 @@ const logger = winston.createLogger({
 });
 
 logger.on('finish', function (info) {
-  // All `info` log messages has now been logged
+  // All `info` log messages have now been logged
 });
 
 logger.info('CHILL WINSTON!', { seriously: true });
@@ -1098,6 +1098,26 @@ you should handle or suppress if you don't want unhandled exceptions:
 // Handle errors
 //
 logger.on('error', function (err) { /* Do Something */ });
+```
+
+Note that if you are using the `http` transport, the `finish` event doesn't
+guarantee that the http calls themselves have completed. To ensure this, you
+can use the `flush` function on the transport. This is particularly useful in
+cases where you want to wait for the http calls to complete before allowing
+the process to exit (e.g. a serverless function).
+
+``` js
+const transport = new winston.transports.Http({ host: 'http://myloggingendpoint.com' });
+const logger = winston.createLogger({ transports: [transport] });
+
+logger.on('finish', function (info) {
+  // All `info` log messages have now been sent to the transport
+  // But the transport hasn't necessarily sent the logs to the http endpoint
+});
+
+logger.info('CHILL WINSTON!', { seriously: true });
+await transport.flush();
+// All log messages have been sent to the http endpoint
 ```
 
 ### Working with multiple Loggers in winston
