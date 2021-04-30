@@ -1,10 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - "8"
   - "10"
-  - "11"
   - "12"
+  - "14"
 
 before_install:
   - travis_retry npm install
@@ -14,9 +13,9 @@ script:
   - npm test
   - ./node_modules/.bin/tsc --version ; ./node_modules/.bin/tsc -p test
 
-matrix:
-  allow_failures:
-  - node_js: "12"
+#matrix:
+#  allow_failures:
+#  - node_js: "14"
 
 notifications:
   email:

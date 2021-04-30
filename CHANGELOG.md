@@ -1,5 +1,38 @@
 # CHANGELOG
 
+## v3.3.3 / 2020-06-23
+
+- [#1820] Revert [#1807] to resolve breaking changes for Typescript users.
+
+## v3.3.2 / 2020-06-22
+
+- [#1814] Use a fork of `diagnostics` published to NPM to avoid git dependency.
+
+## v3.3.1 / 2020-06-21
+
+- [#1803], [#1807] Fix TypeScript bugs.
+- [#1740] Add space between `info.message` and `meta.message`.
+- [#1813] Avoid indirect storage-engine dependency.
+- [#1810] README updates.
+
+## v3.3.0 / 2020-06-21
+
+- [#1779] Fix property name in rejection handler.
+- [#1768] Exclude extraneous files from NPM package.
+- [#1364], [#1714] Don't remove transport from logger when transport error
+  occurs.
+- [#1603] Expose `child` property on default logger.
+- [#1777] Allow HTTP transport to pass options to request.
+- [#1662] Add bearer auth capabilities to HTTP transport.
+- [#1612] Remove no-op in file transport.
+- [#1622], [#1623], [#1625] Typescript fixes.
+- (Minor) [#1647], [#1793] Update CI settings.
+- (Minor) [#1600], [#1605], [#1593], [#1610], [#1654], [#1656], [#1661],
+  [#1651], [#1652], [#1677], [#1683], [#1684], [#1700], [#1697], [#1650],
+  [#1705], [#1723], [#1737], [#1733], [#1743], [#1750], [#1754], [#1780],
+  [#1778] README, Transports.md, other docs changes.
+- [#1672], [#1686], [#1772] Update dependencies.
+
 ## v3.2.1 / 2019-01-29
 ### UNBOUND PROTOTYPE AD INFINITUM EDITION
 

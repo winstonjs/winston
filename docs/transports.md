@@ -426,7 +426,7 @@ logger.add(
     apiKey: 'super_secret_datadog_api_key',
     hostname: 'my_machine',
     service: 'super_service',
-    ddsource: 'node.js',
+    ddsource: 'nodejs',
     ddtags: 'foo:bar,boo:baz'
   })
 )
@@ -437,7 +437,7 @@ Options:
 * __hostname__: The machine/server hostname
 * __service__: The name of the application or service generating the logs
 * __ddsource__: The technology from which the logs originated
-* __ddtags__: Metadata assoicated with the logs
+* __ddtags__: Metadata associated with the logs
 
 ### Google BigQuery
 [winston-bigquery][42] is a transport for Google BigQuery.
@@ -697,7 +697,7 @@ This transport sends the logs to a Pusher app for real time processing and it us
 [winston-transport-sentry-node][41] is a transport for [Sentry](https://sentry.io/) uses [@sentry/node](https://www.npmjs.com/package/@sentry/node).
 
 ```js
-const Sentry = require('winston-transport-sentry-node');
+const Sentry = require('winston-transport-sentry-node').default;
 logger.add(new Sentry({
   sentry: {
     dsn: 'https://******@sentry.io/12345',

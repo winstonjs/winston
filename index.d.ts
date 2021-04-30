@@ -14,8 +14,10 @@ import * as Transports from './lib/winston/transports/index';
 declare namespace winston {
   // Hoisted namespaces from other modules
   export import format = logform.format;
+  export import Logform = logform;
   export import config = Config;
   export import transports = Transports;
+  export import transport = Transport;
 
   interface ExceptionHandler {
     logger: Logger;
@@ -44,7 +46,7 @@ declare namespace winston {
 
   interface Profiler {
     logger: Logger;
-    start: Date;
+    start: Number;
     done(info?: any): boolean;
   }
 
@@ -93,6 +95,7 @@ declare namespace winston {
     exceptions: ExceptionHandler;
     profilers: object;
     exitOnError: Function | boolean;
+    defaultMeta?: any;
 
     log: LogMethod;
     add(transport: Transport): Logger;

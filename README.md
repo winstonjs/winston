@@ -55,21 +55,21 @@ const logger = winston.createLogger({
   defaultMeta: { service: 'user-service' },
   transports: [
     //
-    // - Write to all logs with level `info` and below to `combined.log` 
-    // - Write all logs error (and below) to `error.log`.
+    // - Write all logs with level `error` and below to `error.log`
+    // - Write all logs with level `info` and below to `combined.log`
     //
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
 });
 
 //
 // If we're not in production then log to the `console` with the format:
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-// 
+//
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-    format: winston.format.simple()
+    format: winston.format.simple(),
   }));
 }
 ```
@@ -98,9 +98,12 @@ logger to use throughout your application if you so choose.
 * [Transports]
   * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
   * [Adding Custom Transports](#adding-custom-transports)
+  * [Common Transport options](#common-transport-options)
 * [Exceptions](#exceptions)
   * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
   * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
+* [Rejections](#rejections)
+  * [Handling Uncaught Promise Rejections with winston](#handling-uncaught-promise-rejections-with-winston)  
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
 * [Querying Logs](#querying-logs)
@@ -515,7 +518,7 @@ the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
 }
 ```
 
-Similarly, `npm` logging levels are prioritized from 0 to 5 (highest to
+Similarly, `npm` logging levels are prioritized from 0 to 6 (highest to
 lowest):
 
 ``` js
@@ -523,9 +526,10 @@ lowest):
   error: 0, 
   warn: 1, 
   info: 2, 
-  verbose: 3, 
-  debug: 4, 
-  silly: 5 
+  http: 3,
+  verbose: 4, 
+  debug: 5, 
+  silly: 6 
 }
 ```
 
@@ -623,8 +627,8 @@ const myCustomLevels = {
   }
 };
 
-const customLevelLogger = winston.createLogger({ 
-  levels: myCustomLevels.levels 
+const customLevelLogger = winston.createLogger({
+  levels: myCustomLevels.levels
 });
 
 customLevelLogger.foobar('some foobar level-ed message');
@@ -743,6 +747,34 @@ module.exports = class YourCustomTransport extends Transport {
 };
 ```
 
+## Common Transport options
+
+As every transport inherits from [winston-transport], it's possible to set
+a custom format and a custom log level on each transport separately:
+
+``` js
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({
+      filename: 'error.log',
+      level: 'error',
+      format: winston.format.json()
+    }),
+    new transports.Http({
+      level: 'warn',
+      format: winston.format.json()
+    }),
+    new transports.Console({
+      level: 'info',
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      )
+    })
+  ]
+});
+```
+
 ## Exceptions
 
 ### Handling Uncaught Exceptions with winston
@@ -856,6 +888,61 @@ const logger = winston.createLogger({ exitOnError: ignoreEpipe });
 // or, like this:
 //
 logger.exitOnError = ignoreEpipe;
+```
+
+## Rejections
+
+### Handling Uncaught Promise Rejections with winston
+
+With `winston`, it is possible to catch and log `uncaughtRejection` events
+from your process. With your own logger instance you can enable this behavior
+when it's created or later on in your applications lifecycle:
+
+``` js
+const { createLogger, transports } = require('winston');
+
+// Enable rejection handling when you create your logger.
+const logger = createLogger({
+  transports: [
+    new transports.File({ filename: 'combined.log' }) 
+  ],
+  rejectionHandlers: [
+    new transports.File({ filename: 'rejections.log' })
+  ]
+});
+
+// Or enable it later on by adding a transport or using `.rejections.handle`
+const logger = createLogger({
+  transports: [
+    new transports.File({ filename: 'combined.log' }) 
+  ]
+});
+
+// Call rejections.handle with a transport to handle rejections
+logger.rejections.handle(
+  new transports.File({ filename: 'rejections.log' })
+);
+```
+
+If you want to use this feature with the default logger, simply call
+`.rejections.handle()` with a transport instance.
+
+``` js
+//
+// You can add a separate rejection logger by passing it to `.rejections.handle`
+//
+winston.rejections.handle(
+  new winston.transports.File({ filename: 'path/to/rejections.log' })
+);
+
+//
+// Alternatively you can set `handleRejections` to true when adding transports
+// to winston.
+//
+winston.add(new winston.transports.File({
+  filename: 'path/to/combined.log',
+  handleRejections: true
+}));
 ```
 
 ## Profiling
@@ -1011,11 +1098,6 @@ you should handle or suppress if you don't want unhandled exceptions:
 // Handle errors
 //
 logger.on('error', function (err) { /* Do Something */ });
-
-//
-// Or just suppress them.
-//
-logger.emitErrs = false;
 ```
 
 ### Working with multiple Loggers in winston
@@ -1080,7 +1162,7 @@ If you prefer to manage the `Container` yourself, you can simply instantiate one
 ``` js
 const winston = require('winston');
 const { format } = winston;
-const { combine, json } = format;
+const { combine, label, json } = format;
 
 const container = new winston.Container();
 
@@ -1135,6 +1217,7 @@ npm test
 [nyc]: https://github.com/istanbuljs/nyc
 [assume]: https://github.com/bigpipe/assume
 [logform]: https://github.com/winstonjs/logform#readme
+[winston-transport]: https://github.com/winstonjs/winston-transport
 
 [Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x 
 
