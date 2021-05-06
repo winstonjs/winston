@@ -33,6 +33,7 @@ there are additional transports written by
   * [Amazon DynamoDB](#amazon-dynamodb-transport)
   * [Amazon Kinesis Firehose](#amazon-kinesis-firehose-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
+  * [Array](#array-transport)
   * [Azure Table](#azure-table)
   * [Cassandra](#cassandra-transport)
   * [Cisco Spark](#cisco-spark-transport)
@@ -327,6 +328,30 @@ Options:
 * __level:__ lowest level this transport will log. (default: `info`)
 * __json:__ use json instead of a prettier (human friendly) string for meta information in the notification. (default: `false`)
 * __handleExceptions:__ set to true to have this transport handle exceptions. (default: `false`)
+
+### Array Transport
+
+The [winston-array][45] transport writes winston logs directly to javascript Array. This is extremely useful while debugging, reporting, or easily access logs during tests.
+
+``` js
+import ArrayTransport from 'winston-array-transport';
+import { createLogger } from 'winston';
+
+const logs = [];
+const transport  = new ArrayTransport({ array: logs, json: true, level: 'info' });
+
+export const logger = createLogger({
+    transports : [ transport ]
+});
+```
+Next options can be configured while transport creation:
+
+* __name__: Name of a transport, ```ArrayTransport``` by default;
+* __eol__: End of line, ```os.EOL``` by default;
+* __array__: Array, where all logs will be stored (required);
+* __parser__: Function, that will be applied to log messages;
+* __json__: If set to ```true```,  ```JSON.parse``` parser will be used;
+* __limit__: Allows to limit the number of logs to ```n``` last items;
 
 ### Azure Table
 
@@ -962,3 +987,4 @@ That's why we say it's a logger for just about everything
 [42]: https://github.com/kaminskypavel/winston-bigquery
 [43]: https://www.npmjs.com/package/winston-bigquery
 [44]: https://github.com/Quintinity/humio-winston
+[45]: https://github.com/pustovitDmytro/winston-array-transport
