@@ -33,6 +33,20 @@ declare namespace winston {
 
     new(logger: Logger): ExceptionHandler;
   }
+    interface RejectionHandler {
+    logger: Logger;
+    handlers: Map<any, any>;
+    catcher: Function | boolean;
+
+    handle(...transports: Transport[]): void;
+    unhandle(...transports: Transport[]): void;
+    getAllInfo(err: string | Error): object;
+    getProcessInfo(): object;
+    getOsInfo(): object;
+    getTrace(err: Error): object;
+
+    new(logger: Logger): RejectionHandler;
+  }
 
   interface QueryOptions {
     rows?: number;
@@ -83,6 +97,7 @@ declare namespace winston {
     defaultMeta?: any;
     transports?: Transport[] | Transport;
     handleExceptions?: boolean;
+    handleRejections?: boolean;
     exceptionHandlers?: any;
   }
 
@@ -93,6 +108,7 @@ declare namespace winston {
     level: string;
     transports: Transport[];
     exceptions: ExceptionHandler;
+    rejections: RejectionHandler;
     profilers: object;
     exitOnError: Function | boolean;
     defaultMeta?: any;
