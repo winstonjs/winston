@@ -905,9 +905,10 @@ describe('Logger (profile, startTimer)', function (done) {
       assume(info.level).equals('info');
       assume(info.durationMs).is.a('number');
       assume(info.message).equals('testing1');
+      assume(info.service).equals('your-service-name');
       assume(info[MESSAGE]).is.a('string');
       done();
-    });
+    }, null, { service: 'your-service-name' });
 
     var timer = logger.startTimer();
     setTimeout(function () {
