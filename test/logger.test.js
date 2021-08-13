@@ -1050,6 +1050,83 @@ describe('Should support child loggers & defaultMeta', () => {
     });
   });
 
+  it('provided child meta take precedence over parent meta', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('user-service');
+      assume(msg.requestId).equals('123');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'parent-service', requestId: '123', },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'user-service' });
+    childLogger.info('dummy message');
+  });
+
+  it('provided meta takes precedence over child and parent meta', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('audit-service');
+      assume(msg.requestId).equals('456');
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'parent-service', requestId: '123', },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLogger = logger.child({ service: 'user-service', requestId: '456', });
+    childLogger.info('dummy message', {
+      service: 'audit-service'
+    });
+  });
+
+  it('provided meta takes precedence over child and parent meta', (done) => {
+    const assertFn = ((msg) => {
+      assume(msg.level).equals('info');
+      assume(msg.message).equals('dummy message');
+      assume(msg.service).equals('level-3');
+      assume(msg.requestId).equals('789');
+      assume(msg.foo).equals('bar');
+      assume(msg.passedLevel1).equals(true);
+      assume(msg.passedLevel2).equals(true);
+      assume(msg.passedLevel3).equals(true);
+      done();
+    });
+
+    const logger = winston.createLogger({
+      defaultMeta: { service: 'level-1', passedLevel1: true },
+      transports: [
+        mockTransport.createMockTransport(assertFn)
+      ]
+    });
+
+    const childLevel2Logger = logger.child({
+      service: 'level-2',
+      requestId: '456',
+      passedLevel2: true
+    });
+    const childLevel3Logger = childLevel2Logger.child({
+      service: 'level-3',
+      requestId: '789',
+      passedLevel3: true
+    });
+    childLevel3Logger.info('dummy message', {
+      foo: 'bar'
+    });
+  });
+
   it('handles error stack traces in child loggers correctly', (done) => {
     const assertFn = ((msg) => {
       assume(msg.level).equals('error');
