@@ -116,7 +116,7 @@ describe('Logger', function () {
       log: function (info) {
         assume(info.message).equals('foo');
         assume(info.level).equals('info');
-        assume(info[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'info' }));
+        assume(info[MESSAGE]).equals(JSON.stringify({ level: 'info', message: 'foo' }));
         done();
       }
     });
@@ -325,7 +325,7 @@ describe('Logger (levels)', function () {
 
           assume(obj.message).equals('foo');
           assume(obj.level).equals('debug');
-          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'debug' }));
+          assume(obj[MESSAGE]).equals(JSON.stringify({ level: 'debug', message: 'foo' }));
           done();
         }
       });
@@ -360,7 +360,7 @@ describe('Logger (levels)', function () {
 
           assume(obj.message).equals('foo');
           assume(obj.level).equals('test');
-          assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'test' }));
+          assume(obj[MESSAGE]).equals(JSON.stringify({ level: 'test', message: 'foo' }));
           done();
         }
       });
@@ -386,7 +386,7 @@ describe('Logger (levels)', function () {
 
         assume(obj.message).equals('foo');
         assume(obj.level).equals('error');
-        assume(obj[MESSAGE]).equals(JSON.stringify({ message: 'foo', level: 'error' }));
+        assume(obj[MESSAGE]).equals(JSON.stringify({ level: 'error', message: 'foo' }));
         done();
       }
     });
