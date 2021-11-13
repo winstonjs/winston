@@ -18,7 +18,16 @@ declare namespace winston {
   export import config = Config;
   export import transports = Transports;
   export import transport = Transport;
-
+  
+  type Level =
+    | "error"
+    | "warn"
+    | "info"
+    | "http"
+    | "verbose"
+    | "debug"
+    | "silly";
+  
   interface ExceptionHandler {
     logger: Logger;
     handlers: Map<any, any>;
@@ -78,7 +87,7 @@ declare namespace winston {
     levels?: Config.AbstractConfigSetLevels;
     silent?: boolean;
     format?: logform.Format;
-    level?: string;
+    level?: Level;
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
