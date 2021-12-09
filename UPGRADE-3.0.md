@@ -231,13 +231,13 @@ See [examples/format-mutate.js](/examples/format-mutate.js) for a complete
 end-to-end example that covers both filtering and rewriting behavior in
 `winston@2.x`.
 
-## Modularity: `winston-transport`, `logform` and more..
+## Modularity: `winston-transport`, `logform` and more...
 
 As of `winston@3.0.0` the project has been broken out into a few modules:
 
 - [winston-transport]: `Transport` stream implementation & legacy `Transport`
   wrapper.
-- [logform]: All formats exports through `winston.format` 
+- [logform]: All formats exports through `winston.format`. 
 - `LEVEL` and `MESSAGE` symbols exposed through [triple-beam].
 - [Shared test suite][abstract-winston-transport] for community transports. 
 
