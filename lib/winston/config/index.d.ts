@@ -57,6 +57,7 @@ declare namespace winston {
     error: string | string[];
     warn: string | string[];
     info: string | string[];
+    http: string | string[];
     verbose: string | string[];
     debug: string | string[];
     silly: string | string[];
