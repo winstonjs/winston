@@ -29,7 +29,7 @@
     "async": "^3.1.0",
     "@dabh/diagnostics": "^2.0.2",
     "is-stream": "^2.0.0",
-    "logform": "^2.2.0",
+    "logform": "^2.3.0",
     "one-time": "^1.0.0",
     "readable-stream": "^3.4.0",
     "stack-trace": "0.0.x",
