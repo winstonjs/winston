@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v3.3.4 / 2022-01-09
+
+**WARNING:** This release may violate semantic versioning.  The intent of releasing this as 3.3.4 instead of 3.4.0 is to ensure all 3.3.x users get the critical bug fix [#2008] that will otherwise render Winston useless (supply chain attack, not a Winston bug).
+
+Due to the urgency of this release, full release notes are not prepared, but changes mainly consist of package updates and some fixes around handling undefined rejections (so arguably this does not violate semver).
+
 ## v3.3.3 / 2020-06-23
 
 - [#1820] Revert [#1807] to resolve breaking changes for Typescript users.
