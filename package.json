@@ -61,7 +61,7 @@
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
     "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit",
-    "build": "./node_modules/.bin/rimraf dist && babel lib -d dist",
+    "build": "rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
   "engines": {
