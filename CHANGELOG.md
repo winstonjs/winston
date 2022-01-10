@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## v3.4.0 / 2022-01-10
+
+Yesterday's release was done with a higher sense of urgency than usual
+due to vandalism in the `colors` package.
+This release:
+
+ - ties up a loose end by including [#1973] to go with [#1824]
+ - adds a missing http property in NpmConfigSetColors [#2004] (thanks @SimDaSong)
+ - fixes a minor issue in the build/release process [#2014]
+ - pins the version of the testing framework to avoid an issue with a test incorrectly failing [#2017]
+
+The biggest change in this release, motivating the feature-level update, is
+[#2006] Make winston more ESM friendly, thanks to @miguelcobain.
+
+Thanks also to @DABH, @wbt, and @fearphage for contributions and reviews!
+
 ## v3.3.4 / 2022-01-09
 
 Compared to v3.3.3, this version fixes some issues and includes some updates to project infrastructure, 
