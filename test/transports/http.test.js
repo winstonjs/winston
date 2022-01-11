@@ -4,28 +4,20 @@
  * MIT LICENSE
  */
 
-var path = require('path'),
-    http = require('http'),
-    fs = require('fs'),
-    hock = require('hock'),
-    assume = require('assume'),
-    Http = require('../../lib/winston/transports/http'),
-    helpers = require('../helpers');
+const http = require('http');
+const hock = require('hock');
+const assume = require('assume');
+const Http = require('../../lib/winston/transports/http');
 
-var host = '127.0.0.1';
+const host = '127.0.0.1';
+const port = 0;
 
-function mockHttpServer(opts, done) {
-  if (!done && typeof opts === 'function') {
-    done = opts;
-    opts = {};
-  }
+function mockHttpServer(done, expectedLog) {
 
-  var mock = hock.createHock();
-  opts.path = opts.path || 'log';
-  opts.payload = opts.payload || {
-    level: 'info',
-    message: 'hello',
-    meta: {}
+  const mock = hock.createHock();
+  const opts = {
+    path: 'log',
+    payload: expectedLog
   };
 
   mock
@@ -35,43 +27,111 @@ function mockHttpServer(opts, done) {
     .reply(200);
 
   var server = http.createServer(mock.handler);
-  server.listen(0, '0.0.0.0', done);
+  server.listen(port, '0.0.0.0', done);
   return { server, mock };
 }
 
+function assumeError(err) {
+  if (err) {
+    assume(err).falsy();
+  }
+}
+
+function onLogged(context, done) {
+  context.mock.done(function (err) {
+    assumeError(err);
+    done();
+  });
+}
+
 describe('Http({ host, port, path })', function () {
-  var context;
-  var server;
-  beforeEach(function (done) {
-    context = mockHttpServer(done);
-    server = context.server;
-  });
-
-  it('should send logs over HTTP', function (done) {
-    var port = server.address().port;
-    var httpTransport = new Http({
-      host: host,
-      port: port,
-      path: 'log'
-    }).on('error', function (err) {
-      assume(err).falsy();
-    }).on('logged', function () {
-      context.mock.done(function (err) {
-        if (err) { assume(err).falsy(); }
-        done();
-      });
-    });
-
-    httpTransport.log({
-      level: 'info',
-      message: 'hello',
-      meta: {}
-    }, function (err) {
-      if (err) { assume(err).falsy(); }
-    });
-  });
+  let context;
+  let server;
+  const dummyLog = {
+    level: 'info',
+    message: 'hello',
+    meta: {}
+  };
 
   afterEach(function (done) {
     server.close(done.bind(null, null));
   });
+
+  describe('nominal', function () {
+
+    beforeEach(function (done) {
+      context = mockHttpServer(done, dummyLog);
+      server = context.server;
+    });
+
+    it('should send logs over HTTP', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        port: server.address().port,
+        path: 'log'
+      }).on('error', assumeError).on('logged', function () {
+        onLogged(context, done);
+      });
+      httpTransport.log(dummyLog, assumeError);
+    });
+
+  });
+
+  describe('bacth mode: max message', function () {
+
+    beforeEach(function (done) {
+      context = mockHttpServer(done, [dummyLog, dummyLog, dummyLog, dummyLog, dummyLog]);
+      server = context.server;
+    });
+
+    it('test max message reached', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        port: server.address().port,
+        path: 'log',
+        batch: true,
+        batchCount: 5
+      })
+        .on('error', assumeError)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
+
+      httpTransport.log(dummyLog, assumeError);
+      httpTransport.log(dummyLog, assumeError);
+      httpTransport.log(dummyLog, assumeError);
+      httpTransport.log(dummyLog, assumeError);
+      httpTransport.log(dummyLog, assumeError);
+    });
+
+  });
+
+  describe('bacth mode: timeout', function () {
+
+    beforeEach(function (done) {
+      context = mockHttpServer(done, [dummyLog, dummyLog]);
+      server = context.server;
+    });
+
+    it('test timeout reached', function (done) {
+      this.timeout(5000);
+      const httpTransport = new Http({
+        host: host,
+        port: server.address().port,
+        path: 'log',
+        batch: true,
+        batchCount: 5,
+        batchInterval: 2000
+      })
+        .on('error', assumeError)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
+
+      httpTransport.log(dummyLog, assumeError);
+      httpTransport.log(dummyLog, assumeError);
+    });
+
+  });
+
 });

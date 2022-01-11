@@ -122,7 +122,10 @@ The `Http` transport is a generic way to log, query, and stream logs from an arb
 * __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
 * __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
-* __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
+* __ssl:__ (Default: **false**) Value indicating if we should use HTTPS
+* __batch:__ (Default: **false**) Value indicating if batch mode should be used. A batch of logs to send through the HTTP request when one of the batch options is reached: number of elements, or timeout
+* __batchInterval:__ (Default: **5000 ms**) Value indicating the number of milliseconds to wait before sending the HTTP request
+* __batchCount:__ (Default: **10**) Value indicating the number of logs to cumulate before sending the HTTP request
 
 ### Stream Transport
 
