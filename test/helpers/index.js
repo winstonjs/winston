@@ -98,7 +98,7 @@ helpers.clearExceptions = function () {
  */
 helpers.clearRejections = function () {
   var listeners = process.listeners('unhandledRejection');
-  process.removeAllListeners('unhandledRejections');
+  process.removeAllListeners('unhandledRejection');
 
   return {
     restore: function () {
