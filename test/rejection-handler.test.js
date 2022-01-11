@@ -6,7 +6,6 @@
  *
  */
 
-const stream = require('stream');
 const assume = require('assume');
 const mocha = require('mocha');
 const winston = require('../lib/winston');
@@ -38,6 +37,7 @@ describe('UnhandledRejectionHandler', function () {
 
   it('new RejectionHandler()', function () {
     assume(function () {
+      // eslint-disable-next-line no-new
       new winston.RejectionHandler();
     }).throws(/Logger is required/);
   });
@@ -70,21 +70,18 @@ describe('UnhandledRejectionHandler', function () {
 
   it('.handle()', function (done) {
     var existing = helpers.clearRejections();
-    var writeable = new stream.Writable({
-      objectMode: true,
-      write: function (info) {
-        assume(info).is.an('object');
-        assume(info.error).is.an('error');
-        assume(info.error.message).equals('wtf this rejection');
-        assume(info.message).includes('unhandledRejection: wtf this rejection');
-        assume(info.stack).is.a('string');
-        assume(info.process).is.an('object');
-        assume(info.os).is.an('object');
-        assume(info.trace).is.an('array');
+    var writeable = helpers.writeable(function (info) {
+      assume(info).is.an('object');
+      assume(info.error).is.an('error');
+      assume(info.error.message).equals('wtf this rejection');
+      assume(info.message).includes('unhandledRejection: wtf this rejection');
+      assume(info.stack).is.a('string');
+      assume(info.process).is.an('object');
+      assume(info.os).is.an('object');
+      assume(info.trace).is.an('array');
 
-        existing.restore();
-        done();
-      }
+      existing.restore();
+      done();
     });
 
     var transport = new winston.transports.Stream({ stream: writeable });
@@ -93,7 +90,7 @@ describe('UnhandledRejectionHandler', function () {
       transports: [transport]
     });
 
-    assume(handler.catcher).equals(undefined);
+    assume(handler.catcher).is.a('undefined');
 
     transport.handleRejections = true;
     handler.handle();

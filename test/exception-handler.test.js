@@ -6,7 +6,6 @@
  *
  */
 
-const stream = require('stream');
 const assume = require('assume');
 const mocha = require('mocha');
 const winston = require('../lib/winston');
@@ -38,6 +37,7 @@ describe('ExceptionHandler', function () {
 
   it('new ExceptionHandler()', function () {
     assume(function () {
+      // eslint-disable-next-line no-new
       new winston.ExceptionHandler();
     }).throws(/Logger is required/);
   });
@@ -70,21 +70,18 @@ describe('ExceptionHandler', function () {
 
   it('.handle()', function (done) {
     var existing = helpers.clearExceptions();
-    var writeable = new stream.Writable({
-      objectMode: true,
-      write: function (info) {
-        assume(info).is.an('object');
-        assume(info.error).is.an('error');
-        assume(info.error.message).equals('wtf this error');
-        assume(info.message).includes('uncaughtException: wtf this error');
-        assume(info.stack).is.a('string');
-        assume(info.process).is.an('object');
-        assume(info.os).is.an('object');
-        assume(info.trace).is.an('array');
+    var writeable = helpers.writeable(function (info) {
+      assume(info).is.an('object');
+      assume(info.error).is.an('error');
+      assume(info.error.message).equals('wtf this error');
+      assume(info.message).includes('uncaughtException: wtf this error');
+      assume(info.stack).is.a('string');
+      assume(info.process).is.an('object');
+      assume(info.os).is.an('object');
+      assume(info.trace).is.an('array');
 
-        existing.restore();
-        done();
-      }
+      existing.restore();
+      done();
     });
 
     var transport = new winston.transports.Stream({ stream: writeable });
@@ -93,7 +90,7 @@ describe('ExceptionHandler', function () {
       transports: [transport]
     });
 
-    assume(handler.catcher).equals(undefined);
+    assume(handler.catcher).is.a('undefined');
 
     transport.handleExceptions = true;
     handler.handle();
