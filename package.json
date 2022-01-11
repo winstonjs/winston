@@ -38,7 +38,7 @@
     "@babel/cli": "^7.16.7",
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
-    "@types/node": "^16.11.12",
+    "@types/node": "^17.0.8",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
     "colors": "1.4.0",
