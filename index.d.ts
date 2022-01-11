@@ -84,6 +84,7 @@ declare namespace winston {
     transports?: Transport[] | Transport;
     handleExceptions?: boolean;
     exceptionHandlers?: any;
+    rejectionHandlers?: any;
   }
 
   interface Logger extends NodeJSStream.Transform {
