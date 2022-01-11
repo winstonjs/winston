@@ -1,12 +1,10 @@
 {
   "name": "winston",
   "description": "A logger for just about everything.",
-  "version": "3.3.3",
+  "version": "3.4.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
-    "Jarrett Cruger <jcrugzz@gmail.com>",
-    "Chris Alderson <chrisalderson@protonmail.com>",
-    "David Hyde <dabh@stanford.edu>"
+    "David Hyde <dabh@alumni.stanford.edu>"
   ],
   "repository": {
     "type": "git",
@@ -26,33 +24,33 @@
     "stream"
   ],
   "dependencies": {
-    "async": "^3.1.0",
+    "async": "^3.2.3",
     "@dabh/diagnostics": "^2.0.2",
     "is-stream": "^2.0.0",
-    "logform": "^2.2.0",
+    "logform": "^2.3.2",
     "one-time": "^1.0.0",
     "readable-stream": "^3.4.0",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.3.0",
-    "winston-transport": "^4.4.0"
+    "winston-transport": "^4.4.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.3",
-    "@babel/core": "^7.10.3",
-    "@babel/preset-env": "^7.10.3",
-    "@types/node": "^14.0.13",
+    "@babel/cli": "^7.16.7",
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.7",
+    "@types/node": "^17.0.8",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
-    "colors": "^1.4.0",
+    "colors": "1.4.0",
     "cross-spawn-async": "^2.2.5",
     "eslint-config-populist": "^4.2.0",
     "hock": "^1.4.1",
-    "mocha": "^8.0.1",
+    "mocha": "8.1.3",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
-    "split2": "^3.1.1",
+    "split2": "^4.1.0",
     "std-mocks": "^1.0.1",
-    "through2": "^3.0.1",
+    "through2": "^4.0.2",
     "winston-compat": "^0.1.5"
   },
   "main": "./lib/winston",
@@ -63,7 +61,7 @@
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
     "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit",
-    "build": "./node_modules/.bin/rimraf dist && babel lib -d dist",
+    "build": "rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
   "engines": {

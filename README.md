@@ -2,7 +2,9 @@
 
 A logger for just about everything.
 
-[![Version npm](https://img.shields.io/npm/v/winston.svg?style=flat-square)](https://www.npmjs.com/package/winston)[![npm Downloads](https://img.shields.io/npm/dm/winston.svg?style=flat-square)](https://npmcharts.com/compare/winston?minimal=true)[![Build Status](https://img.shields.io/travis/winstonjs/winston/master.svg?style=flat-square)](https://travis-ci.org/winstonjs/winston)[![Dependencies](https://img.shields.io/david/winstonjs/winston.svg?style=flat-square)](https://david-dm.org/winstonjs/winston)
+[![Version npm](https://img.shields.io/npm/v/winston.svg?style=flat-square)](https://www.npmjs.com/package/winston)
+[![npm Downloads](https://img.shields.io/npm/dm/winston.svg?style=flat-square)](https://npmcharts.com/compare/winston?minimal=true)
+[![build status](https://github.com/winstonjs/winston/actions/workflows/ci.yml/badge.svg)](https://github.com/winstonjs/winston/actions/workflows/ci.yml)
 
 [![NPM](https://nodei.co/npm/winston.png?downloads=true&downloadRank=true)](https://nodei.co/npm/winston/)
 
@@ -15,7 +17,7 @@ PRs welcome!
 
 ## Looking for `winston@2.x` documentation?
 
-Please note that the documentation below is for `winston@3`. 
+Please note that the documentation below is for `winston@3`.
 [Read the `winston@2.x` documentation].
 
 ## Motivation
@@ -36,7 +38,7 @@ the API that they exposed to the programmer.
 
 ## Quick Start
 
-TL;DR? Check out the [quick start example][quick-example] in `./examples/`. 
+TL;DR? Check out the [quick start example][quick-example] in `./examples/`.
 There are a number of other examples in [`./examples/*.js`][examples].
 Don't see an example you think should be there? Submit a pull request
 to add it!
@@ -55,8 +57,8 @@ const logger = winston.createLogger({
   defaultMeta: { service: 'user-service' },
   transports: [
     //
-    // - Write all logs with level `error` and below to `error.log`
-    // - Write all logs with level `info` and below to `combined.log`
+    // - Write all logs with importance level of `error` or less to `error.log`
+    // - Write all logs with importance level of `info` or less to `combined.log`
     //
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
     new winston.transports.File({ filename: 'combined.log' }),
@@ -103,7 +105,7 @@ logger to use throughout your application if you so choose.
   * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
   * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
 * [Rejections](#rejections)
-  * [Handling Uncaught Promise Rejections with winston](#handling-uncaught-promise-rejections-with-winston)  
+  * [Handling Uncaught Promise Rejections with winston](#handling-uncaught-promise-rejections-with-winston)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)
 * [Querying Logs](#querying-logs)
@@ -121,7 +123,7 @@ Logging levels in `winston` conform to the severity ordering specified by
 from most important to least important._
 
 ``` js
-const levels = { 
+const levels = {
   error: 0,
   warn: 1,
   info: 2,
@@ -148,7 +150,7 @@ A logger accepts the following parameters:
 
 | Name          | Default                     |  Description    |
 | ------------- | --------------------------- | --------------- |
-| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |  
+| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |
 | `levels`      | `winston.config.npm.levels` | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`       | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_      | Set of logging targets for `info` messages                 |
@@ -156,7 +158,7 @@ A logger accepts the following parameters:
 | `silent`      | `false`                     | If true, all logs are suppressed |
 
 The levels provided to `createLogger` will be defined as convenience methods
-on the `logger` returned. 
+on the `logger` returned.
 
 ``` js
 //
@@ -170,7 +172,7 @@ logger.log({
 logger.info('Hello again distributed logs');
 ```
 
-You can add or remove transports from the `logger` once it has been provided 
+You can add or remove transports from the `logger` once it has been provided
 to you from `winston.createLogger`:
 
 ``` js
@@ -227,7 +229,7 @@ const childLogger = logger.child({ requestId: '451' });
 
 In `winston`, both `Logger` and `Transport` instances are treated as
 [`objectMode`](https://nodejs.org/api/stream.html#stream_object_mode)
-streams that accept an `info` object. 
+streams that accept an `info` object.
 
 The `info` parameter provided to a given format represents a single log
 message. The object itself is mutable. Every `info` must have at least the
@@ -235,7 +237,7 @@ message. The object itself is mutable. Every `info` must have at least the
 
 ``` js
 const info = {
-  level: 'info',                 // Level of the logging message  
+  level: 'info',                 // Level of the logging message
   message: 'Hey! Log something?' // Descriptive message being logged.
 };
 ```
@@ -249,10 +251,10 @@ const { level, message, ...meta } = info;
 Several of the formats in `logform` itself add additional properties:
 
 | Property    | Format added by | Description |
-| ----------- | --------------- | ----------- | 
+| ----------- | --------------- | ----------- |
 | `splat`     | `splat()`       | String interpolation splat for `%d %s`-style messages. |
 | `timestamp` | `timestamp()`   |  timestamp the message was received. |
-| `label`     | `label()`       | Custom label associated with each message. | 
+| `label`     | `label()`       | Custom label associated with each message. |
 | `ms`        | `ms()`          | Number of milliseconds since the previous log message. |
 
 As a consumer you may add whatever properties you wish – _internal state is
@@ -286,7 +288,7 @@ console.log(SPLAT === Symbol.for('splat'));
 ```
 
 > **NOTE:** any `{ message }` property in a `meta` object provided will
-> automatically be concatenated to any `msg` already provided: For 
+> automatically be concatenated to any `msg` already provided: For
 > example the below will concatenate 'world' onto 'hello':
 >
 > ``` js
@@ -387,7 +389,7 @@ logger.log('info', 'test message %s, %s', 'first', 'second', { number: 123 });
 
 ### Filtering `info` Objects
 
-If you wish to filter out a given `info` Object completely when logging then 
+If you wish to filter out a given `info` Object completely when logging then
 simply return a falsey value.
 
 ``` js
@@ -436,7 +438,7 @@ const willNeverThrow = format.combine(
 
 ### Creating custom formats
 
-Formats are prototypal objects (i.e. class instances) that define a single 
+Formats are prototypal objects (i.e. class instances) that define a single
 method: `transform(info, opts)` and return the mutated `info`:
 
 - `info`: an object representing the log message.
@@ -444,11 +446,11 @@ method: `transform(info, opts)` and return the mutated `info`:
 
 They are expected to return one of two things:
 
-- **An `info` Object** representing the modified `info` argument. Object 
-references need not be preserved if immutability is preferred. All current 
-built-in formats consider `info` mutable, but [immutablejs] is being 
+- **An `info` Object** representing the modified `info` argument. Object
+references need not be preserved if immutability is preferred. All current
+built-in formats consider `info` mutable, but [immutablejs] is being
 considered for future releases.
-- **A falsey value** indicating that the `info` argument should be ignored by the 
+- **A falsey value** indicating that the `info` argument should be ignored by the
 caller. (See: [Filtering `info` Objects](#filtering-info-objects)) below.
 
 `winston.format` is designed to be as simple as possible. To define a new
@@ -506,14 +508,14 @@ corresponding integer priority.  For example, as specified exactly in RFC5424
 the `syslog` levels are prioritized from 0 to 7 (highest to lowest).
 
 ```js
-{ 
-  emerg: 0, 
-  alert: 1, 
-  crit: 2, 
-  error: 3, 
-  warning: 4, 
-  notice: 5, 
-  info: 6, 
+{
+  emerg: 0,
+  alert: 1,
+  crit: 2,
+  error: 3,
+  warning: 4,
+  notice: 5,
+  info: 6,
   debug: 7
 }
 ```
@@ -522,14 +524,14 @@ Similarly, `npm` logging levels are prioritized from 0 to 6 (highest to
 lowest):
 
 ``` js
-{ 
-  error: 0, 
-  warn: 1, 
-  info: 2, 
+{
+  error: 0,
+  warn: 1,
+  info: 2,
   http: 3,
-  verbose: 4, 
-  debug: 5, 
-  silly: 6 
+  verbose: 4,
+  debug: 5,
+  silly: 6
 }
 ```
 
@@ -643,10 +645,10 @@ winston aware of them:
 winston.addColors(myCustomLevels.colors);
 ```
 
-This enables loggers using the `colorize` formatter to appropriately color and style 
+This enables loggers using the `colorize` formatter to appropriately color and style
 the output of custom levels.
 
-Additionally, you can also change background color and font style. 
+Additionally, you can also change background color and font style.
 For example,
 ``` js
 baz: 'italic yellow',
@@ -655,7 +657,7 @@ foobar: 'bold red cyanBG'
 
 Possible options are below.
 
-* Font styles: `bold`, `dim`, `italic`, `underline`, `inverse`, `hidden`, 
+* Font styles: `bold`, `dim`, `italic`, `underline`, `inverse`, `hidden`,
   `strikethrough`.
 
 * Font foreground colors: `black`, `red`, `green`, `yellow`, `blue`, `magenta`,
@@ -663,7 +665,7 @@ Possible options are below.
 
 * Background colors: `blackBG`, `redBG`, `greenBG`, `yellowBG`, `blueBG`
   `magentaBG`, `cyanBG`, `whiteBG`
-  
+
 ### Colorizing Standard logging levels
 
 To colorize the standard logging level add
@@ -731,7 +733,7 @@ module.exports = class YourCustomTransport extends Transport {
     //
     // Consume any custom options here. e.g.:
     // - Connection information for databases
-    // - Authentication information for APIs (e.g. loggly, papertrail, 
+    // - Authentication information for APIs (e.g. loggly, papertrail,
     //   logentries, etc.).
     //
   }
@@ -789,7 +791,7 @@ const { createLogger, transports } = require('winston');
 // Enable exception handling when you create your logger.
 const logger = createLogger({
   transports: [
-    new transports.File({ filename: 'combined.log' }) 
+    new transports.File({ filename: 'combined.log' })
   ],
   exceptionHandlers: [
     new transports.File({ filename: 'exceptions.log' })
@@ -799,7 +801,7 @@ const logger = createLogger({
 // Or enable it later on by adding a transport or using `.exceptions.handle`
 const logger = createLogger({
   transports: [
-    new transports.File({ filename: 'combined.log' }) 
+    new transports.File({ filename: 'combined.log' })
   ]
 });
 
@@ -904,7 +906,7 @@ const { createLogger, transports } = require('winston');
 // Enable rejection handling when you create your logger.
 const logger = createLogger({
   transports: [
-    new transports.File({ filename: 'combined.log' }) 
+    new transports.File({ filename: 'combined.log' })
   ],
   rejectionHandlers: [
     new transports.File({ filename: 'rejections.log' })
@@ -914,7 +916,7 @@ const logger = createLogger({
 // Or enable it later on by adding a transport or using `.rejections.handle`
 const logger = createLogger({
   transports: [
-    new transports.File({ filename: 'combined.log' }) 
+    new transports.File({ filename: 'combined.log' })
   ]
 });
 
@@ -1193,7 +1195,7 @@ yarn add winston
 
 ## Run Tests
 
-All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and 
+All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and
 [`assume`][assume].  They can be run with `npm`.
 
 ``` bash
@@ -1219,7 +1221,7 @@ npm test
 [logform]: https://github.com/winstonjs/logform#readme
 [winston-transport]: https://github.com/winstonjs/winston-transport
 
-[Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x 
+[Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x
 
 [quick-example]: https://github.com/winstonjs/winston/blob/master/examples/quick-start.js
 [examples]: https://github.com/winstonjs/winston/tree/master/examples

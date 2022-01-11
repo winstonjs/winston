@@ -53,6 +53,7 @@ there are additional transports written by
   * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
   * [Sentry](#sentry-transport)
+  * [Seq](#seq-transport)
   * [SimpleDB](#simpledb-transport)
   * [Slack](#slack-transport)
   * [SQLite3](#sqlite3-transport)
@@ -721,6 +722,25 @@ This transport takes the following options:
 * __level:__ Level of messages that this transport should log
 * __silent:__  Boolean flag indicating whether to suppress output, defaults to false
 
+### Seq Transport
+
+[winston-seq][45] is a transport that sends structured log events to [Seq](https://datalust.co/seq).
+
+```js
+const { SeqTransport } = require('@datalust/winston-seq');
+logger.add(new SeqTransport({
+  serverUrl: "https://your-seq-server:5341",
+  apiKey: "your-api-key",
+  onError: (e => { console.error(e) }),
+}));
+```
+
+`SeqTransport` is configured with the following options:
+
+* __serverUrl__ - the URL for your Seq server's ingestion
+* __apiKey__ - (optional) The Seq API Key to use
+* __onError__ - Callback to execute when an error occurs within the transport 
+
 ### SimpleDB Transport
 
 The [winston-simpledb][15] transport is just as easy:
@@ -965,3 +985,4 @@ That's why we say it's a logger for just about everything
 [42]: https://github.com/kaminskypavel/winston-bigquery
 [43]: https://www.npmjs.com/package/winston-bigquery
 [44]: https://github.com/Quintinity/humio-winston
+[45]: https://github.com/datalust/winston-seq
