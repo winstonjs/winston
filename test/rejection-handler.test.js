@@ -71,6 +71,7 @@ describe('UnhandledRejectionHandler', function () {
   it('.handle()', function (done) {
     var existing = helpers.clearRejections();
     var writeable = helpers.writeable(function (info) {
+      console.log('in writeable', info);
       assume(info).is.an('object');
       assume(info.error).is.an('error');
       assume(info.error.message).equals('wtf this rejection');
@@ -100,7 +101,14 @@ describe('UnhandledRejectionHandler', function () {
       handler.catcher
     ]);
 
-    helpers.reject('wtf this rejection').then(done());
+    const meh = (e) => console.log('my handler', e);
+    process.on('unhandledRejection', meh);
+    assume(process.listeners('unhandledRejection')).deep.equals([
+      handler.catcher,
+      meh
+    ]);
+
+    process.emit('unhandledRejection', helpers.reject('wtf this rejection'));
   });
 
   it('.getAllInfo(undefined)', function () {
