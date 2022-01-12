@@ -287,7 +287,7 @@ To Configure using environment authentication:
 logger.add(new winston.transports.DynamoDB({
   useEnvironment: true,
   tableName: 'log'
-});
+}));
 ```
 
 Also supports callbacks for completion when the DynamoDB putItem has been completed.
@@ -603,7 +603,7 @@ const Logsene = require('winston-logsene');
 logger.add(new Logsene({
   token: process.env.LOGSENE_TOKEN
   /* other options */
-});
+}));
 ```
 Options:
 * __token__: Logsene Application Token
@@ -707,7 +707,7 @@ logger.add(new Sentry({
     dsn: 'https://******@sentry.io/12345',
   },
   level: 'info'
-});
+}));
 ```
 
 This transport takes the following options:
@@ -806,7 +806,7 @@ logger.add(new wbs({
     
     // A list of params to log
     params: ['level', 'message']
-});
+}));
 ```
 
 ### Sumo Logic Transport
