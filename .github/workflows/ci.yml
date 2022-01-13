@@ -30,5 +30,10 @@ jobs:
         run: npm run lint
       - name: Test
         run: npm test
+      - name: Coveralls
+        if: matrix.node === 16
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: TypeScript Test
         run: npx --package typescript tsc --project test

@@ -5,6 +5,7 @@ A logger for just about everything.
 [![Version npm](https://img.shields.io/npm/v/winston.svg?style=flat-square)](https://www.npmjs.com/package/winston)
 [![npm Downloads](https://img.shields.io/npm/dm/winston.svg?style=flat-square)](https://npmcharts.com/compare/winston?minimal=true)
 [![build status](https://github.com/winstonjs/winston/actions/workflows/ci.yml/badge.svg)](https://github.com/winstonjs/winston/actions/workflows/ci.yml)
+[![coverage status](https://coveralls.io/repos/github/winstonjs/winston/badge.svg?branch=master)](https://coveralls.io/github/winstonjs/winston?branch=master)
 
 [![NPM](https://nodei.co/npm/winston.png?downloads=true&downloadRank=true)](https://nodei.co/npm/winston/)
 
