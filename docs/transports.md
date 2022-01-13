@@ -122,7 +122,10 @@ The `Http` transport is a generic way to log, query, and stream logs from an arb
 * __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
 * __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
-* __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
+* __ssl:__ (Default: **false**) Value indicating if we should use HTTPS
+* __batch:__ (Default: **false**) Value indicating if batch mode should be used. A batch of logs to send through the HTTP request when one of the batch options is reached: number of elements, or timeout
+* __batchInterval:__ (Default: **5000 ms**) Value indicating the number of milliseconds to wait before sending the HTTP request
+* __batchCount:__ (Default: **10**) Value indicating the number of logs to cumulate before sending the HTTP request
 
 ### Stream Transport
 
@@ -284,7 +287,7 @@ To Configure using environment authentication:
 logger.add(new winston.transports.DynamoDB({
   useEnvironment: true,
   tableName: 'log'
-});
+}));
 ```
 
 Also supports callbacks for completion when the DynamoDB putItem has been completed.
@@ -600,7 +603,7 @@ const Logsene = require('winston-logsene');
 logger.add(new Logsene({
   token: process.env.LOGSENE_TOKEN
   /* other options */
-});
+}));
 ```
 Options:
 * __token__: Logsene Application Token
@@ -704,7 +707,7 @@ logger.add(new Sentry({
     dsn: 'https://******@sentry.io/12345',
   },
   level: 'info'
-});
+}));
 ```
 
 This transport takes the following options:
@@ -803,7 +806,7 @@ logger.add(new wbs({
     
     // A list of params to log
     params: ['level', 'message']
-});
+}));
 ```
 
 ### Sumo Logic Transport
