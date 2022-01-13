@@ -2,4 +2,4 @@
 
 ## Reporting a Vulnerability
 
-Please report security issues to dabh@alumni.stanford.edu
+Please report security issues to `npm view yadeep maintainers.email`.
