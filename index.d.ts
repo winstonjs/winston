@@ -33,6 +33,21 @@ declare namespace winston {
 
     new(logger: Logger): ExceptionHandler;
   }
+  
+  interface RejectionHandler {
+    logger: Logger;
+    handlers: Map<any, any>;
+    catcher: Function | boolean;
+
+    handle(...transports: Transport[]): void;
+    unhandle(...transports: Transport[]): void;
+    getAllInfo(err: string | Error): object;
+    getProcessInfo(): object;
+    getOsInfo(): object;
+    getTrace(err: Error): object;
+
+    new(logger: Logger): RejectionHandler;
+  }
 
   interface QueryOptions {
     rows?: number;
@@ -50,20 +65,23 @@ declare namespace winston {
     done(info?: any): boolean;
   }
 
-  type LogCallback = (error?: any, level?: string, message?: string, meta?: any) => void;
+  type level = "error" | "warn" | "info" | "http" | "verbose" | "debug" | "silly";
+
+  type LogCallback = (error?: any, level?: level, message?: string, meta?: any) => void;
+
 
   interface LogEntry {
-    level: string;
+    level: level;
     message: string;
     [optionName: string]: any;
   }
 
    interface LogMethod {
-    (level: string, message: string, callback: LogCallback): Logger;
-    (level: string, message: string, meta: any, callback: LogCallback): Logger;
-    (level: string, message: string, ...meta: any[]): Logger;
+    (level: level, message: string, callback: LogCallback): Logger;
+    (level: level, message: string, meta: any, callback: LogCallback): Logger;
+    (level: level, message: string, ...meta: any[]): Logger;
     (entry: LogEntry): Logger;
-    (level: string, message: any): Logger;
+    (level: level, message: any): Logger;
   }
 
   interface LeveledLogMethod {
@@ -78,10 +96,12 @@ declare namespace winston {
     levels?: Config.AbstractConfigSetLevels;
     silent?: boolean;
     format?: logform.Format;
-    level?: string;
+    level?: level;
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
+    handleExceptions?: boolean;
+    handleRejections?: boolean;
     exceptionHandlers?: any;
     rejectionHandlers?: any;
   }
@@ -90,9 +110,10 @@ declare namespace winston {
     silent: boolean;
     format: logform.Format;
     levels: Config.AbstractConfigSetLevels;
-    level: string;
+    level: level;
     transports: Transport[];
     exceptions: ExceptionHandler;
+    rejections: RejectionHandler;
     profilers: object;
     exitOnError: Function | boolean;
     defaultMeta?: any;
@@ -133,7 +154,7 @@ declare namespace winston {
 
     child(options: Object): Logger;
 
-    isLevelEnabled(level: string): boolean;
+    isLevelEnabled(level: level): boolean;
     isErrorEnabled(): boolean;
     isWarnEnabled(): boolean;
     isInfoEnabled(): boolean;
@@ -158,6 +179,7 @@ declare namespace winston {
 
   let version: string;
   let ExceptionHandler: ExceptionHandler;
+  let RejectionHandler: RejectionHandler;
   let Container: Container;
   let loggers: Container;
 
@@ -184,8 +206,9 @@ declare namespace winston {
   let profile: (id: string | number) => Logger;
   let configure: (options: LoggerOptions) => void;
   let child: (options: Object) => Logger;
-  let level: string;
+  let level: level;
   let exceptions: ExceptionHandler;
+  let rejections: RejectionHandler;
   let exitOnError: Function | boolean;
   // let default: object;
 }

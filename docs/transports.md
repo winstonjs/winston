@@ -53,6 +53,7 @@ there are additional transports written by
   * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
   * [Sentry](#sentry-transport)
+  * [Seq](#seq-transport)
   * [SimpleDB](#simpledb-transport)
   * [Slack](#slack-transport)
   * [SQLite3](#sqlite3-transport)
@@ -121,7 +122,10 @@ The `Http` transport is a generic way to log, query, and stream logs from an arb
 * __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
 * __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
-* __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
+* __ssl:__ (Default: **false**) Value indicating if we should use HTTPS
+* __batch:__ (Default: **false**) Value indicating if batch mode should be used. A batch of logs to send through the HTTP request when one of the batch options is reached: number of elements, or timeout
+* __batchInterval:__ (Default: **5000 ms**) Value indicating the number of milliseconds to wait before sending the HTTP request
+* __batchCount:__ (Default: **10**) Value indicating the number of logs to cumulate before sending the HTTP request
 
 ### Stream Transport
 
@@ -283,7 +287,7 @@ To Configure using environment authentication:
 logger.add(new winston.transports.DynamoDB({
   useEnvironment: true,
   tableName: 'log'
-});
+}));
 ```
 
 Also supports callbacks for completion when the DynamoDB putItem has been completed.
@@ -599,7 +603,7 @@ const Logsene = require('winston-logsene');
 logger.add(new Logsene({
   token: process.env.LOGSENE_TOKEN
   /* other options */
-});
+}));
 ```
 Options:
 * __token__: Logsene Application Token
@@ -703,7 +707,7 @@ logger.add(new Sentry({
     dsn: 'https://******@sentry.io/12345',
   },
   level: 'info'
-});
+}));
 ```
 
 This transport takes the following options:
@@ -717,6 +721,25 @@ This transport takes the following options:
   * __maxBreadcrumbs:__ Total amount of breadcrumbs that should be captured (default: `100`)
 * __level:__ Level of messages that this transport should log
 * __silent:__  Boolean flag indicating whether to suppress output, defaults to false
+
+### Seq Transport
+
+[winston-seq][45] is a transport that sends structured log events to [Seq](https://datalust.co/seq).
+
+```js
+const { SeqTransport } = require('@datalust/winston-seq');
+logger.add(new SeqTransport({
+  serverUrl: "https://your-seq-server:5341",
+  apiKey: "your-api-key",
+  onError: (e => { console.error(e) }),
+}));
+```
+
+`SeqTransport` is configured with the following options:
+
+* __serverUrl__ - the URL for your Seq server's ingestion
+* __apiKey__ - (optional) The Seq API Key to use
+* __onError__ - Callback to execute when an error occurs within the transport 
 
 ### SimpleDB Transport
 
@@ -783,7 +806,7 @@ logger.add(new wbs({
     
     // A list of params to log
     params: ['level', 'message']
-});
+}));
 ```
 
 ### Sumo Logic Transport
@@ -962,3 +985,4 @@ That's why we say it's a logger for just about everything
 [42]: https://github.com/kaminskypavel/winston-bigquery
 [43]: https://www.npmjs.com/package/winston-bigquery
 [44]: https://github.com/Quintinity/humio-winston
+[45]: https://github.com/datalust/winston-seq

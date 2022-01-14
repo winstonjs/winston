@@ -106,6 +106,12 @@ describe('UnhandledRejectionHandler', function () {
     helpers.reject('wtf this rejection').then(done());
   });
 
+  it('.getAllInfo(undefined)', function () {
+    var handler = helpers.rejectionHandler();
+    // eslint-disable-next-line no-undefined
+    handler.getAllInfo(undefined);
+  });
+
   after(function () {
     //
     // Restore normal `runTest` functionality

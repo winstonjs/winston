@@ -1,5 +1,35 @@
 # CHANGELOG
 
+## v3.4.0 / 2022-01-10
+
+Yesterday's release was done with a higher sense of urgency than usual
+due to vandalism in the `colors` package.
+This release:
+
+ - ties up a loose end by including [#1973] to go with [#1824]
+ - adds a missing http property in NpmConfigSetColors [#2004] (thanks @SimDaSong)
+ - fixes a minor issue in the build/release process [#2014]
+ - pins the version of the testing framework to avoid an issue with a test incorrectly failing [#2017]
+
+The biggest change in this release, motivating the feature-level update, is
+[#2006] Make winston more ESM friendly, thanks to @miguelcobain.
+
+Thanks also to @DABH, @wbt, and @fearphage for contributions and reviews!
+
+## v3.3.4 / 2022-01-09
+
+Compared to v3.3.3, this version fixes some issues and includes some updates to project infrastructure, 
+such as replacing Travis with Github CI and dependabot configuration. 
+There have also been several relatively minor improvements to documentation, and incorporation of some updated dependencies.  
+Dependency updates include a critical bug fix [#2008] in response to self-vandalism by the author of a dependency.
+
+- [#1964] Added documentation for how to use a new externally maintained [Seq](https://datalust.co/seq) transport.
+- [#1712] Add default metadata when calling log with string level and message.
+- [#1824] Unbind event listeners on close
+- [#1961] Handle undefined rejections
+- [#1878] Correct boolean evaluation of empty-string value for eol option
+- [#1977] Improved consistency of object parameters for better test reliability
+
 ## v3.3.3 / 2020-06-23
 
 - [#1820] Revert [#1807] to resolve breaking changes for Typescript users.
