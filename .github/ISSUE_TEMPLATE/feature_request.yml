@@ -1,7 +1,7 @@
 name: Would you like to see a feature implemented?
 description: Request a new feature for Winston
 title: "[Feature Request]: "
-labels: ["Feature", "Needs Investigation"]
+labels: ["Feature Request", "Needs Investigation"]
 body:
   - type: markdown # Form Header
     attributes:
