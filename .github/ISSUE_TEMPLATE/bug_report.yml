@@ -41,11 +41,11 @@ body:
       description: >
         Can be found by running the following: `node -v`
   - type: input # Last Known Working Version
-      attributes:
-        label: If this worked in a previous version of Winston, which was it?
-        placeholder: v3.0.0
-        description: >
-          If known, otherwise please leave blank.
+    attributes:
+      label: If this worked in a previous version of Winston, which was it?
+      placeholder: v3.0.0
+      description: >
+        If known, otherwise please leave blank.
   - type: markdown # Details Section Header
     attributes:
       value: |
