@@ -64,7 +64,7 @@ describe('Logger', function () {
 
     Object.keys(winston.config.syslog.levels).forEach(level => {
       assume(logger[level]).is.a('function');
-    })
+    });
   });
 
   it('new Logger({ levels }) custom methods are not bound to instance', function (done) {
@@ -74,16 +74,16 @@ describe('Logger', function () {
       transports: []
     });
 
-    let logs = [];
-    let extendedLogger = Object.create(logger, {
+    const logs = [];
+    const extendedLogger = Object.create(logger, {
       write: {
-        value: function(...args) {
+        value: function (...args) {
           logs.push(args);
           if (logs.length === 4) {
             assume(logs.length).is.eql(4);
             assume(logs[0]).is.eql([{ test: 1, level: 'info' }]);
             assume(logs[1]).is.eql([{ test: 2, level: 'warn' }]);
-            assume(logs[2]).is.eql([{ message: 'test3', level: 'info' }])
+            assume(logs[2]).is.eql([{ message: 'test3', level: 'info' }]);
             assume(logs[3]).is.eql([{ with: 'meta',
               test: 4,
               level: 'warn',
@@ -160,7 +160,7 @@ describe('Logger', function () {
 
   it('.configure({ transports, format })', function () {
     var logger = winston.createLogger(),
-        format = logger.format;
+      format = logger.format;
 
     assume(logger.transports.length).equals(0);
 
@@ -177,7 +177,7 @@ describe('Logger', function () {
   it('.remove() [transport not added]', function () {
     var transports = [
       new winston.transports.Console(),
-      new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log') })
     ];
 
     var logger = winston.createLogger({ transports: transports })
@@ -193,7 +193,7 @@ describe('Logger', function () {
   it('.remove() [TransportStream]', function () {
     var transports = [
       new winston.transports.Console(),
-      new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+      new winston.transports.File({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log') })
     ];
 
     var logger = winston.createLogger({ transports: transports });
@@ -211,7 +211,7 @@ describe('Logger', function () {
     assume(logger.transports.length).equals(0);
   });
 
-  it ('.clear() [transports]', function () {
+  it('.clear() [transports]', function () {
     var logger = winston.createLogger({
       transports: [new winston.transports.Console()]
     });
@@ -343,9 +343,9 @@ describe('Logger (levels)', function () {
   it('custom levels', function (done) {
     var logger = winston.createLogger({
       levels: {
-        bad:  0,
+        bad: 0,
         test: 1,
-        ok:   2
+        ok: 2
       }
     });
 
@@ -628,7 +628,7 @@ describe('Logger (stream semantics)', function () {
 
   it(`rethrows errors from user-defined formats`, function () {
     stdMocks.use();
-    const logger = winston.createLogger( {
+    const logger = winston.createLogger({
       transports: [new winston.transports.Console()],
       format: winston.format.printf((info) => {
         // Set a trap.
@@ -672,7 +672,7 @@ describe('Logger (winston@2 logging API)', function () {
       done();
     });
 
-    logger.log('info', 'Some super awesome log message')
+    logger.log('info', 'Some super awesome log message');
   });
 
   it(`.log(level, undefined) creates info with { message: undefined }`, function (done) {
@@ -810,6 +810,27 @@ describe('Logger (logging exotic data types)', function () {
       logger.info('Hello', { label: 'world' });
       logger.info('Hello %d', 100, { label: 'world' });
     });
+
+    it('does not modify objects passed as messages', () => {
+      const logger = winston.createLogger();
+      const msg = {
+        name: 'BadRequest',
+        message: 'This is a test',
+        code: 400,
+        className: 'bad-request',
+        data: {
+          foo: 'bar'
+        },
+        errors: {}
+      };
+      const originalMsg = { ...msg };
+      logger.info(msg);
+      assume(msg).deep.equals(originalMsg);
+
+      // NOTE: We test both info() and log() because they are two separate code paths.
+      logger.log('info', msg);
+      assume(msg).deep.equals(originalMsg);
+    });
   });
 
   describe('.info', function () {
@@ -871,7 +892,7 @@ describe('Logger (profile, startTimer)', function (done) {
       logger.profile('testing1', {
         something: 'ok',
         level: 'info'
-      })
+      });
     }, 100);
   });
 
@@ -894,7 +915,7 @@ describe('Logger (profile, startTimer)', function (done) {
       logger.profile('testing2', {
         something: 'ok',
         level: 'info'
-      })
+      });
     }, 100);
   });
 
