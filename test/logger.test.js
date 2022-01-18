@@ -68,38 +68,33 @@ describe('Logger', function () {
   });
 
   it('new Logger({ levels }) custom methods are not bound to instance', function (done) {
-    var logger = winston.createLogger({
-      level: 'error',
-      exitOnError: false,
-      transports: []
-    });
 
-    let logs = [];
-    let extendedLogger = Object.create(logger, {
-      write: {
-        value: function(...args) {
-          logs.push(args);
-          if (logs.length === 4) {
-            assume(logs.length).is.eql(4);
-            assume(logs[0]).is.eql([{ test: 1, level: 'info' }]);
-            assume(logs[1]).is.eql([{ test: 2, level: 'warn' }]);
-            assume(logs[2]).is.eql([{ message: 'test3', level: 'info' }])
-            assume(logs[3]).is.eql([{ with: 'meta',
-              test: 4,
-              level: 'warn',
-              message: 'a warning'
-            }]);
+    var expected = [
+      { test: 1, level: 'info' },
+      { test: 2, level: 'warn' },
+      { message: 'test3', level: 'info' },
+      { with: 'meta',
+        test: 4,
+        level: 'warn',
+        message: 'a warning'
+      }
+    ];
 
-            done();
-          }
-        }
+    var i = 0;
+    var logger = helpers.createLogger(function (chunk, encoding, next) {
+      assume(i).is.lessThan(expected.length);
+      assume(chunk).is.eql(expected[i]);
+      i++;
+      next();
+      if (i === expected.length) {
+        done();
       }
     });
 
-    extendedLogger.log('info', { test: 1 });
-    extendedLogger.log('warn', { test: 2 });
-    extendedLogger.info('test3');
-    extendedLogger.warn('a warning', { with: 'meta', test: 4 });
+    logger.log('info', { test: 1 });
+    logger.log('warn', { test: 2 });
+    logger.info('test3');
+    logger.warn('a warning', { with: 'meta', test: 4 });
   });
 
   it('.add({ invalid Transport })', function () {
