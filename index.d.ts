@@ -69,6 +69,7 @@ declare namespace winston {
 
   type LogCallback = (error?: any, level?: level, message?: string, meta?: any) => void;
 
+  type ChildMergeFunc = (overrideMetadata: Object, currentMetadata: Object) => Object;
 
   interface LogEntry {
     level: level;
@@ -152,7 +153,7 @@ declare namespace winston {
 
     configure(options: LoggerOptions): void;
 
-    child(options: Object): Logger;
+    child(options: Object, mergeFunc?: ChildMergeFunc): Logger;
 
     isLevelEnabled(level: level): boolean;
     isErrorEnabled(): boolean;
