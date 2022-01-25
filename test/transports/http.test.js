@@ -8,6 +8,7 @@ const http = require('http');
 const hock = require('hock');
 const assume = require('assume');
 const Http = require('../../lib/winston/transports/http');
+const stringifyJson = require('safe-stable-stringify');
 
 const host = '127.0.0.1';
 const port = 0;
@@ -134,4 +135,32 @@ describe('Http({ host, port, path })', function () {
 
   });
 
+  describe('circular structure', function () {
+    const circularLog = {
+      level: 'error',
+      message: 'hello',
+      meta: {}
+    };
+
+    circularLog.self = circularLog;
+
+    beforeEach(function (done) {
+      context = mockHttpServer(done, stringifyJson(circularLog));
+      server = context.server;
+    });
+
+    it('should be able to handle options with circular structure', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        port: server.address().port,
+        path: 'log'
+      })
+        .on('error', assumeError)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
+
+      httpTransport.log(circularLog, assumeError);
+    });
+  });
 });
