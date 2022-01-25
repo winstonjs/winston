@@ -24,8 +24,9 @@
     "stream"
   ],
   "dependencies": {
-    "async": "^3.2.3",
     "@dabh/diagnostics": "^2.0.2",
+    "async": "^3.2.3",
+    "fast-safe-stringify": "^2.1.1",
     "is-stream": "^2.0.0",
     "logform": "^2.3.2",
     "one-time": "^1.0.0",
