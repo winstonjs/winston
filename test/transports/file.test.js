@@ -1,5 +1,7 @@
 'use strict';
 
+const os = require('os');
+const { execFile } = require('child_process');
 const path = require('path');
 const winston = require('../../');
 const helpers = require('../helpers');
@@ -12,6 +14,27 @@ function noop() {};
 
 describe('File({ filename })', function () {
   this.timeout(10 * 1000);
+
+  it('should flush when logger.end() invoked and process.exit immediately', (done) => {
+    const logPath = path.join(__dirname, '../fixtures/logs/logger-end-and-process-exit.log');
+    const scriptPath = path.join(__dirname, '../helpers/scripts/logger-end-and-process-exit.js');
+
+    try {
+      // eslint-disable-next-line no-sync
+      fs.unlinkSync(logPath);
+    } catch (err) {
+      // ignore err
+    }
+
+    execFile('node', [scriptPath], (err) => {
+      if (err) return done(err);
+      fs.readFile(logPath, { encoding: 'utf8' }, (err, content) => {
+        if (err) return done(err);
+        assume(content).equals('{"seriously":true,"level":"info","message":"CHILL WINSTON!"}' + os.EOL);
+        done();
+      });
+    });
+  });
 
   it('should write to the file when logged to with expected object', function (done) {
     var filename = path.join(__dirname, '..', 'fixtures', 'file', 'simple.log');
