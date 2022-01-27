@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## v3.5.0 / 2022-01-27
+
+This release includes the following, in sequence by first merge in group:
+
+Feature updates:
+ -	Support batch mode in HTTP Transport (Issue #1970, PR #1998, thanks @BBE78!)
+
+Patch-level updates:
+ -	Bump dependency versions (thanks @dependabot & @DABH!)
+    -	Bump @types/node from 16.11.12 to 17.0.8 (PR #2009)
+    -	Bump @babel/preset-env from 7.16.7 to 7.16.8 (#2036)
+    -	Bump @types/node from 17.0.8 to 17.0.9 (#2035)
+    -	Bump @babel/cli from 7.16.7 to 7.16.8 (#2034)
+    -	Bump @types/node from 17.0.9 to 17.0.10 (#2042)
+    -	Bump @babel/core from 7.16.7 to 7.16.12 (#2041)
+    -	Bump @babel/preset-env from 7.16.8 to 7.16.11 (#2040)
+ -	Fixing documentation syntax errors in transports code examples (#1916; thanks @romanzaycev!)
+ -	Fix missing type declarations, especially for `.rejections`
+ (#1842, #1929, #2021; thanks @vanflux, @svaj, @glensc, & others!)
+ -	More narrowly typing the “level” string (#1896, thanks @yonas-g!)
+ -	Using a safer `stringify`, e.g. to avoid issues from circular structures, in the http transport
+ (#2043, thanks @karlwir!)
+
+Updates to the repo & project which don’t actually affect the running code:
+ -	Add a channel for reporting security vulnerabilities (#2024, thanks @JamieSlome!)
+ -	Add coverage tracking in CI & documentation (#2025 and #2028, thanks @fearphage!)
+ -	Update issue templates (#2030 and #2031, thanks @Maverick1872!)
+ -	Remove gitter link from README.md (#2027, thanks @DABH!)
+
+Thanks also to maintainers @DABH, @fearphage, @Maverick1872, and @wbt for issue/PR shepherding
+and help across multiple parts of the release!
+If somebody got missed in the list of thanks, please forgive the accidental oversight
+and/or feel free to open a PR on this changelog.
+
 ## v3.4.0 / 2022-01-10
 
 Yesterday's release was done with a higher sense of urgency than usual
