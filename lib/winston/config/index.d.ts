@@ -4,86 +4,26 @@
 /// <reference types="node" />
 
 declare namespace winston {
-  interface AbstractConfigSetLevels {
-    [key: string]: number;
-  }
+  type AbstractConfigSetLevels<L extends string = string> = Record<L, number>;
 
-  interface AbstractConfigSetColors {
-    [key: string]: string | string[];
-  }
+  type AbstractConfigSetColors<L extends string = string> = Record<L, string|string[]>;
 
   interface AbstractConfigSet {
     levels: AbstractConfigSetLevels;
     colors: AbstractConfigSetColors;
   }
 
-  interface CliConfigSetLevels extends AbstractConfigSetLevels {
-    error: number;
-    warn: number;
-    help: number;
-    data: number;
-    info: number;
-    debug: number;
-    prompt: number;
-    verbose: number;
-    input: number;
-    silly: number;
-  }
+  type CliLevels = 'data'|'debug'|'error'|'info'|'input'|'help'|'prompt'|'silly'|'verbose'|'warn';
+  type CliConfigSetLevels = AbstractConfigSetLevels<CliLevels>;
+  type CliConfigSetColors = AbstractConfigSetColors<CliLevels>;
 
-  interface CliConfigSetColors extends AbstractConfigSetColors {
-    error: string | string[];
-    warn: string | string[];
-    help: string | string[];
-    data: string | string[];
-    info: string | string[];
-    debug: string | string[];
-    prompt: string | string[];
-    verbose: string | string[];
-    input: string | string[];
-    silly: string | string[];
-  }
+  type NpmLevels = 'debug'|'error'|'http'|'info'|'silly'|'verbose'|'warn';
+  type NpmConfigSetLevels = AbstractConfigSetLevels<NpmLevels>;
+  type NpmConfigSetColors = AbstractConfigSetColors<NpmLevels>;
 
-  interface NpmConfigSetLevels extends AbstractConfigSetLevels {
-    error: number;
-    warn: number;
-    info: number;
-    http: number;
-    verbose: number;
-    debug: number;
-    silly: number;
-  }
-
-  interface NpmConfigSetColors extends AbstractConfigSetColors {
-    error: string | string[];
-    warn: string | string[];
-    info: string | string[];
-    http: string | string[];
-    verbose: string | string[];
-    debug: string | string[];
-    silly: string | string[];
-  }
-
-  interface SyslogConfigSetLevels extends AbstractConfigSetLevels {
-    emerg: number;
-    alert: number;
-    crit: number;
-    error: number;
-    warning: number;
-    notice: number;
-    info: number;
-    debug: number;
-  }
-
-  interface SyslogConfigSetColors extends AbstractConfigSetColors {
-    emerg: string | string[];
-    alert: string | string[];
-    crit: string | string[];
-    error: string | string[];
-    warning: string | string[];
-    notice: string | string[];
-    info: string | string[];
-    debug: string | string[];
-  }
+  type SyslogLevels = 'alert'|'crit'|'debug'|'emerg'|'error'|'info'|'notice'|'warning';
+  type SyslogConfigSetLevels = AbstractConfigSetLevels<SyslogLevels>;
+  type SyslogConfigSetColors = AbstractConfigSetColors<SyslogLevels>;
 
   interface Config {
     allColors: AbstractConfigSetColors;

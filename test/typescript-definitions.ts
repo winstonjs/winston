@@ -57,3 +57,52 @@ logger.isInfoEnabled();
 logger.isVerboseEnabled();
 logger.isDebugEnabled();
 logger.isSillyEnabled();
+
+logger.error('error');
+logger.warn('warn');
+logger.info('info');
+logger.http('http');
+logger.verbose('verbose');
+logger.debug('debug');
+logger.silly('silly');
+// @ts-expect-error
+logger.notExists('notExists')
+
+const syslogLogger = winston.createLogger({
+    level: 'notice',
+    levels: {
+        emerg: 0,
+        alert: 1,
+        crit: 2,
+        error: 3,
+        warning: 4,
+        notice: 5,
+        info: 6,
+        debug: 7
+    },
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console({ level: 'info' }),
+    ],
+});
+
+syslogLogger.emerg('emerg');
+syslogLogger.alert('alert');
+syslogLogger.crit('crit');
+syslogLogger.error('error');
+syslogLogger.warning('warning');
+syslogLogger.notice('notice');
+syslogLogger.info('info');
+syslogLogger.debug('debug');
+// @ts-expect-error
+syslogLogger.warn('warn') // using npm-level
+
+// Assign loglevel from a string #2047
+const stringLevel = 'test'
+winston.createLogger({
+    level: stringLevel,
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console({ level: 'info' }),
+    ],
+});
