@@ -11,7 +11,7 @@ const assert = require('assert');
 const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
-const winston = require('../../lib/winston');
+const winston = require('../../../../lib/winston');
 
 const { MESSAGE } = require('triple-beam');
 

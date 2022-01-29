@@ -13,8 +13,8 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('../../lib/winston'),
-    helpers = require('../helpers');
+    winston = require('../../../../lib/winston'),
+    helpers = require('../../../helpers');
 
 var maxfilesTransport = new winston.transports.File({
   timestamp: false,

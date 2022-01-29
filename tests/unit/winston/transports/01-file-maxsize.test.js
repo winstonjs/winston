@@ -9,7 +9,7 @@ const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const assume = require('assume');
-const winston = require('../../');
+const winston = require('../../../../index');
 
 const MESSAGE = Symbol.for('message');
 

@@ -10,8 +10,8 @@ const assume = require('assume');
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
-const winston = require('../lib/winston');
-const helpers = require('./helpers');
+const winston = require('../../../lib/winston');
+const helpers = require('../../helpers');
 
 describe('Logger, ExceptionHandler', function () {
   this.timeout(5000);

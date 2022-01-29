@@ -12,9 +12,9 @@ const fs = require('fs');
 const os  = require('os');
 const path = require('path');
 const assume = require('assume');
-const helpers = require('../helpers');
+const helpers = require('../../../helpers');
 const split = require('split2');
-const winston = require('../../lib/winston');
+const winston = require('../../../../lib/winston');
 
 describe('File (stress)', function () {
   this.timeout(30 * 1000);

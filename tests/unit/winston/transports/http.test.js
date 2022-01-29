@@ -7,7 +7,7 @@
 const http = require('http');
 const hock = require('hock');
 const assume = require('assume');
-const Http = require('../../lib/winston/transports/http');
+const Http = require('../../../../lib/winston/transports/http');
 
 const host = '127.0.0.1';
 const port = 0;

@@ -9,8 +9,8 @@
 const assume = require('assume');
 const { Writable } = require('readable-stream');
 const path = require('path');
-const winston = require('../lib/winston');
-const ExceptionStream = require('../lib/winston/exception-stream');
+const winston = require('../../../lib/winston');
+const ExceptionStream = require('../../../lib/winston/exception-stream');
 
 describe('ExceptionStream', function () {
   it('has expected methods', function () {

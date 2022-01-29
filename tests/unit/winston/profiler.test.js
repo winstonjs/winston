@@ -7,7 +7,7 @@
  */
 
 const assume = require('assume');
-const Profiler = require('../lib/winston/profiler');
+const Profiler = require('../../../lib/winston/profiler');
 
 describe('Profiler', function () {
   it('new Profiler()', function () {

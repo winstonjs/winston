@@ -9,8 +9,8 @@
 const stream = require('stream');
 const assume = require('assume');
 const mocha = require('mocha');
-const winston = require('../lib/winston');
-const helpers = require('./helpers');
+const winston = require('../../../lib/winston');
+const helpers = require('../../helpers');
 
 //
 // This is an awful and fragile hack that

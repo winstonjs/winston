@@ -9,8 +9,8 @@
 const assume = require('assume');
 const fs = require('fs');
 const path = require('path');
-const winston = require('../lib/winston');
-const tailFile = require('../lib/winston/tail-file');
+const winston = require('../../../lib/winston');
+const tailFile = require('../../../lib/winston/tail-file');
 const { Stream } = require('readable-stream');
 
 //

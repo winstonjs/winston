@@ -1,8 +1,8 @@
 'use strict';
 
 const path = require('path');
-const winston = require('../../');
-const helpers = require('../helpers');
+const winston = require('../../../../index');
+const helpers = require('../../../helpers');
 const fs = require('fs');
 const { MESSAGE } = require('triple-beam');
 const split = require('split2');

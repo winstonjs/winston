@@ -16,16 +16,16 @@ const { EOL } = require('os');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
 const { MESSAGE, SPLAT } = require('triple-beam');
-const winston = require('../lib/winston');
+const winston = require('../../../lib/winston');
 const TransportStream = require('winston-transport');
-const format = require('../lib/winston').format;
-const helpers = require('./helpers');
-const mockTransport = require('./helpers/mocks/mock-transport');
+const format = require('../../../lib/winston').format;
+const helpers = require('../../helpers');
+const mockTransport = require('../../helpers/mocks/mock-transport');
 
 
 describe('Logger', function () {
-  describe('Logger', function () {
-    it('new Logger()', function () {
+  describe('createLogger()', function () {
+    it('should build a logger with default values', function () {
       var logger = winston.createLogger();
       assume(logger).is.an('object');
       assume(isStream(logger.format));

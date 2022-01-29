@@ -3,7 +3,7 @@
 const fs = require('fs');
 const assert = require('assert');
 const path = require('path');
-const winston = require('../../lib/winston');
+const winston = require('../../../../lib/winston');
 
 /* eslint-disable no-sync */
 

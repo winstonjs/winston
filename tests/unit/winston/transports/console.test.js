@@ -11,8 +11,8 @@
 const path = require('path');
 const assume = require('assume');
 const { LEVEL, MESSAGE } = require('triple-beam');
-const winston = require('../../lib/winston');
-const helpers = require('../helpers');
+const winston = require('../../../../lib/winston');
+const helpers = require('../../../helpers');
 const stdMocks = require('std-mocks');
 
 const defaultLevels = winston.config.npm.levels;

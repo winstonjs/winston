@@ -1,4 +1,4 @@
-const winston = require('../../lib/winston');
+const winston = require('../../../../lib/winston');
 const assume = require('assume');
 
 // https://github.com/winstonjs/winston/issues/1364
