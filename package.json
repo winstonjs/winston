@@ -61,7 +61,7 @@
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
     "test:coverage": "nyc --reporter=text --reporter lcov npm run test",
-    "test": "mocha tests/*.test.js tests/**/*.test.js --exit",
+    "test": "mocha test/*.test.js test/**/*.test.js --exit",
     "build": "rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
