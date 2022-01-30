@@ -28,11 +28,11 @@ jobs:
         run: npm clean-install
       - name: Lint
         run: npm run lint
-      - name: Test Coverage
-        run: npm run test:coverage
       - name: Integration Tests
         run: npm run test:integration
-      - name: Coveralls
+      - name: Test Coverage
+        run: npm run test:coverage
+      - name: Report test coverage to Coveralls.io
         if: matrix.node == '16'
         uses: coverallsapp/github-action@master
         with:
