@@ -26,7 +26,7 @@ const mockTransport = require('../../helpers/mocks/mock-transport');
 describe('Logger Instance', function () {
   describe('Configuration', function () {
     it('.configure()', function () {
-      var logger = winston.createLogger({
+      let logger = winston.createLogger({
         transports: [new winston.transports.Console()]
       });
 
@@ -39,7 +39,7 @@ describe('Logger Instance', function () {
     });
 
     it('.configure({ transports })', function () {
-      var logger = winston.createLogger();
+      let logger = winston.createLogger();
 
       assume(logger.transports.length).equals(0);
 
@@ -52,7 +52,7 @@ describe('Logger Instance', function () {
     });
 
     it('.configure({ transports, format })', function () {
-      var logger = winston.createLogger(),
+      let logger = winston.createLogger(),
           format = logger.format;
 
       assume(logger.transports.length).equals(0);
@@ -71,16 +71,16 @@ describe('Logger Instance', function () {
   describe('Transports', function() {
     describe('add', function () {
       it('should throw error when adding an invalid transport', function () {
-        var logger = winston.createLogger();
+        let logger = winston.createLogger();
         assume(function () {
           logger.add(5);
         }).throws(/invalid transport/i);
       });
 
       it('should add the expected transport', function (done) {
-        var logger = winston.createLogger();
-        var expected = {message: 'foo', level: 'info'};
-        var transport = new TransportStream({
+        let logger = winston.createLogger();
+        let expected = {message: 'foo', level: 'info'};
+        let transport = new TransportStream({
           log: function (info) {
             assume(info.message).equals('foo');
             assume(info.level).equals('info');
@@ -119,12 +119,12 @@ describe('Logger Instance', function () {
 
     describe('remove', function () {
       it('should do nothing if transport was not added', function () {
-        var transports = [
+        let transports = [
           new winston.transports.Console(),
           new winston.transports.File({filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log')})
         ];
 
-        var logger = winston.createLogger({transports: transports})
+        let logger = winston.createLogger({transports: transports})
             .remove(new winston.transports.Console());
 
         assume(logger.transports.length).equals(2);
@@ -135,12 +135,12 @@ describe('Logger Instance', function () {
       });
 
       it('should remove transport when matching one is found', function () {
-        var transports = [
+        let transports = [
           new winston.transports.Console(),
           new winston.transports.File({filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log')})
         ];
 
-        var logger = winston.createLogger({transports: transports});
+        let logger = winston.createLogger({transports: transports});
 
         assume(logger.transports.length).equals(2);
         logger.remove(transports[0]);
@@ -173,14 +173,14 @@ describe('Logger Instance', function () {
 
     describe('clear', function () {
       it('should do nothing when no transports exist', function () {
-        var logger = winston.createLogger();
+        let logger = winston.createLogger();
         assume(logger.transports.length).equals(0);
         logger.clear();
         assume(logger.transports.length).equals(0);
       });
 
       it('should remove all transports', function () {
-        var logger = winston.createLogger({
+        let logger = winston.createLogger({
           transports: [new winston.transports.Console()]
         });
 
@@ -192,8 +192,8 @@ describe('Logger Instance', function () {
 
     describe('stream', function () {
       it('should return a log stream for all transports', function () {
-        var logger = winston.createLogger();
-        var outStream = logger.stream();
+        let logger = winston.createLogger();
+        let outStream = logger.stream();
 
         assume(isStream(outStream)).true();
       });
@@ -203,20 +203,20 @@ describe('Logger Instance', function () {
   describe('Log Levels', function () {
     it('report unknown levels', function (done) {
       stdMocks.use();
-      var logger = helpers.createLogger(function (info) {
+      let logger = helpers.createLogger(function (info) {
       });
-      var expected = {message: 'foo', level: 'bar'};
+      let expected = {message: 'foo', level: 'bar'};
       logger.log(expected);
 
       stdMocks.restore();
-      var output = stdMocks.flush();
+      let output = stdMocks.flush();
 
       assume(output.stderr).deep.equals(['[winston] Unknown logger level: bar\n']);
       done();
     });
 
     it('.<level>()', function (done) {
-      var logger = helpers.createLogger(function (info) {
+      let logger = helpers.createLogger(function (info) {
         assume(info).is.an('object');
         assume(info.level).equals('info');
         assume(info.message).is.a('string');
@@ -235,8 +235,8 @@ describe('Logger Instance', function () {
     });
 
     it('default levels', function (done) {
-      var logger = winston.createLogger();
-      var expected = {message: 'foo', level: 'debug'};
+      let logger = winston.createLogger();
+      let expected = {message: 'foo', level: 'debug'};
 
       function logLevelTransport(level) {
         return new TransportStream({
@@ -264,7 +264,7 @@ describe('Logger Instance', function () {
     });
 
     it('custom levels', function (done) {
-      var logger = winston.createLogger({
+      let logger = winston.createLogger({
         levels: {
           bad: 0,
           test: 1,
@@ -272,7 +272,7 @@ describe('Logger Instance', function () {
         }
       });
 
-      var expected = {message: 'foo', level: 'test'};
+      let expected = {message: 'foo', level: 'test'};
 
       function filterLevelTransport(level) {
         return new TransportStream({
@@ -340,7 +340,7 @@ describe('Logger Instance', function () {
 
     describe('Log Levels Enabled', function () {
       it('default levels', function () {
-        var logger = winston.createLogger({
+        let logger = winston.createLogger({
           level: 'verbose',
           levels: winston.config.npm.levels,
           transports: [new winston.transports.Console()]
@@ -371,10 +371,10 @@ describe('Logger Instance', function () {
       });
 
       it('default levels, transport override', function () {
-        var transport = new winston.transports.Console();
+        let transport = new winston.transports.Console();
         transport.level = 'debug';
 
-        var logger = winston.createLogger({
+        let logger = winston.createLogger({
           level: 'info',
           levels: winston.config.npm.levels,
           transports: [transport]
@@ -405,7 +405,7 @@ describe('Logger Instance', function () {
       });
 
       it('default levels, no transports', function () {
-        var logger = winston.createLogger({
+        let logger = winston.createLogger({
           level: 'verbose',
           levels: winston.config.npm.levels,
           transports: []
@@ -436,7 +436,7 @@ describe('Logger Instance', function () {
       });
 
       it('custom levels', function () {
-        var logger = winston.createLogger({
+        let logger = winston.createLogger({
           level: 'test',
           levels: {
             bad: 0,
@@ -462,7 +462,7 @@ describe('Logger Instance', function () {
       });
 
       it('custom levels, no transports', function () {
-        var logger = winston.createLogger({
+        let logger = winston.createLogger({
           level: 'test',
           levels: {
             bad: 0,
@@ -488,10 +488,10 @@ describe('Logger Instance', function () {
       });
 
       it('custom levels, transport override', function () {
-        var transport = new winston.transports.Console();
+        let transport = new winston.transports.Console();
         transport.level = 'ok';
 
-        var logger = winston.createLogger({
+        let logger = winston.createLogger({
           level: 'bad',
           levels: {
             bad: 0,
@@ -626,11 +626,10 @@ describe('Logger Instance', function () {
   })
 
   describe('Profiling', function () {
-    // todo(maverick1872): refine tests
-    it('profile(id, info)', function (done) {
-      var logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object'),
-            assume(info.something).equals('ok');
+    it('ending profiler with object argument should be included in output', function (done) {
+      let logger = helpers.createLogger(function (info) {
+        assume(info).is.an('object');
+        assume(info.something).equals('ok');
         assume(info.level).equals('info');
         assume(info.durationMs).is.a('number');
         assume(info.message).equals('testing1');
@@ -647,10 +646,11 @@ describe('Logger Instance', function () {
       }, 100);
     });
 
-    it('profile(id, callback) ignores callback', function (done) {
-      var logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object'),
-            assume(info.something).equals('ok');
+    // TODO: Revisit if this is a valid test
+    it('calling profile with a callback function should not make a difference', function (done) {
+      let logger = helpers.createLogger(function (info) {
+        assume(info).is.an('object');
+        assume(info.something).equals('ok');
         assume(info.level).equals('info');
         assume(info.durationMs).is.a('number');
         assume(info.message).equals('testing2');
@@ -669,14 +669,11 @@ describe('Logger Instance', function () {
         })
       }, 100);
     });
-  });
 
-  describe('Start Timer', function () {
-    // todo(maverick1872): refine tests
-    it('startTimer()', function (done) {
-      var logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object'),
-            assume(info.something).equals('ok');
+    it('should stop a timer when `done` is called on it', function (done) {
+      let logger = helpers.createLogger(function (info) {
+        assume(info).is.an('object');
+        assume(info.something).equals('ok');
         assume(info.level).equals('info');
         assume(info.durationMs).is.a('number');
         assume(info.message).equals('testing1');
@@ -684,7 +681,7 @@ describe('Logger Instance', function () {
         done();
       });
 
-      var timer = logger.startTimer();
+      let timer = logger.startTimer();
       setTimeout(function () {
         timer.done({
           message: 'testing1',
@@ -695,6 +692,7 @@ describe('Logger Instance', function () {
     });
   });
 
+  // TODO: Revisit to improve these
   describe('Logging non-primitive data types', function () {
     describe('.log', function () {
       it(`.log(new Error()) uses Error instance as info`, function (done) {
@@ -781,10 +779,10 @@ describe('Logger Instance', function () {
         logger.info(err);
       });
 
+      // TODO: This test needs finished or removed
       it.skip(`.info('any string', new Error())`, function (done) {
         const err = new Error('test');
         const logger = helpers.createLogger(function (info) {
-          // TODO (indexzero): assert this works.
           done();
         });
 
@@ -793,7 +791,7 @@ describe('Logger Instance', function () {
     });
   });
 
-  describe('Child Loggers', function () {
+  describe('Metadata Precedence', function () {
     describe('Should support child loggers & defaultMeta', () => {
       it('sets child meta for text messages correctly', (done) => {
         const assertFn = ((msg) => {
@@ -925,97 +923,99 @@ describe('Logger Instance', function () {
     });
   });
 
-  describe('Winston V2 usage API', function () {
-    it('.log(level, message)', function (done) {
-      var logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object');
-        assume(info.level).equals('info');
-        assume(info.message).equals('Some super awesome log message');
-        assume(info[MESSAGE]).is.a('string');
-        done();
+  describe('Backwards Compatability', function () {
+    describe('Winston V2 Log', function () {
+      it('.log(level, message)', function (done) {
+        let logger = helpers.createLogger(function (info) {
+          assume(info).is.an('object');
+          assume(info.level).equals('info');
+          assume(info.message).equals('Some super awesome log message');
+          assume(info[MESSAGE]).is.a('string');
+          done();
+        });
+
+        logger.log('info', 'Some super awesome log message')
       });
 
-      logger.log('info', 'Some super awesome log message')
-    });
+      it(`.log(level, undefined) creates info with { message: undefined }`, function (done) {
+        const logger = helpers.createLogger(function (info) {
+          assume(info.message).equals(undefined);
+          done();
+        });
 
-    it(`.log(level, undefined) creates info with { message: undefined }`, function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals(undefined);
-        done();
+        logger.log('info', undefined);
       });
 
-      logger.log('info', undefined);
-    });
+      it(`.log(level, null) creates info with { message: null }`, function (done) {
+        const logger = helpers.createLogger(function (info) {
+          assume(info.message).equals(null);
+          done();
+        });
 
-    it(`.log(level, null) creates info with { message: null }`, function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals(null);
-        done();
+        logger.log('info', null);
       });
 
-      logger.log('info', null);
-    });
+      it(`.log(level, new Error()) uses Error instance as info`, function (done) {
+        const err = new Error('test');
+        const logger = helpers.createLogger(function (info) {
+          assume(info).instanceOf(Error);
+          assume(info).equals(err);
+          done();
+        });
 
-    it(`.log(level, new Error()) uses Error instance as info`, function (done) {
-      const err = new Error('test');
-      const logger = helpers.createLogger(function (info) {
-        assume(info).instanceOf(Error);
-        assume(info).equals(err);
-        done();
+        logger.log('info', err);
       });
 
-      logger.log('info', err);
-    });
+      it('.log(level, message, meta)', function (done) {
+        let meta = {one: 2};
+        let logger = helpers.createLogger(function (info) {
+          assume(info).is.an('object');
+          assume(info.level).equals('info');
+          assume(info.message).equals('Some super awesome log message');
+          assume(info.one).equals(2);
+          assume(info[MESSAGE]).is.a('string');
+          done();
+        });
 
-    it('.log(level, message, meta)', function (done) {
-      var meta = {one: 2};
-      var logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object');
-        assume(info.level).equals('info');
-        assume(info.message).equals('Some super awesome log message');
-        assume(info.one).equals(2);
-        assume(info[MESSAGE]).is.a('string');
-        done();
+        logger.log('info', 'Some super awesome log message', meta);
       });
 
-      logger.log('info', 'Some super awesome log message', meta);
-    });
+      it('.log(level, formatStr, ...splat)', function (done) {
+        const format = winston.format.combine(
+            winston.format.splat(),
+            winston.format.printf(info => `${info.level}: ${info.message}`)
+        );
 
-    it('.log(level, formatStr, ...splat)', function (done) {
-      const format = winston.format.combine(
-          winston.format.splat(),
-          winston.format.printf(info => `${info.level}: ${info.message}`)
-      );
+        let logger = helpers.createLogger(function (info) {
+          assume(info).is.an('object');
+          assume(info.level).equals('info');
+          assume(info.message).equals('100% such wow {"much":"javascript"}');
+          assume(info[SPLAT]).deep.equals([100, 'wow', {much: 'javascript'}]);
+          assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"}');
+          done();
+        }, format);
 
-      var logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object');
-        assume(info.level).equals('info');
-        assume(info.message).equals('100% such wow {"much":"javascript"}');
-        assume(info[SPLAT]).deep.equals([100, 'wow', {much: 'javascript'}]);
-        assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"}');
-        done();
-      }, format);
+        logger.log('info', '%d%% such %s %j', 100, 'wow', {much: 'javascript'});
+      });
 
-      logger.log('info', '%d%% such %s %j', 100, 'wow', {much: 'javascript'});
-    });
+      it('.log(level, formatStr, ...splat, meta)', function (done) {
+        const format = winston.format.combine(
+            winston.format.splat(),
+            winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify({thisIsMeta: info.thisIsMeta})}`)
+        );
 
-    it('.log(level, formatStr, ...splat, meta)', function (done) {
-      const format = winston.format.combine(
-          winston.format.splat(),
-          winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify({thisIsMeta: info.thisIsMeta})}`)
-      );
+        let logger = helpers.createLogger(function (info) {
+          assume(info).is.an('object');
+          assume(info.level).equals('info');
+          assume(info.message).equals('100% such wow {"much":"javascript"}');
+          assume(info[SPLAT]).deep.equals([100, 'wow', {much: 'javascript'}]);
+          assume(info.thisIsMeta).true();
+          assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
+          done();
+        }, format);
 
-      var logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object');
-        assume(info.level).equals('info');
-        assume(info.message).equals('100% such wow {"much":"javascript"}');
-        assume(info[SPLAT]).deep.equals([100, 'wow', {much: 'javascript'}]);
-        assume(info.thisIsMeta).true();
-        assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
-        done();
-      }, format);
-
-      logger.log('info', '%d%% such %s %j', 100, 'wow', {much: 'javascript'}, {thisIsMeta: true});
+        logger.log('info', '%d%% such %s %j', 100, 'wow', {much: 'javascript'}, {thisIsMeta: true});
+      });
     });
   });
 });
