@@ -1,0 +1,67 @@
+name: Have you encountered an issue?
+description: Report an issue with Winston.
+title: "[Bug]: "
+labels: ["Bug", "Needs Investigation"]
+body:
+  - type: markdown # Form Header
+    attributes:
+      value: >-
+        This issue form is for reporting bugs only! Please help us reduce duplicate issues by searching through both
+        open and closed issues though. It only takes 5 minutes and helps us with housekeeping. :)
+  - type: textarea # Problem Definition
+    validations:
+      required: true
+    attributes:
+      label: The problem
+      description: >-
+        Please provide a clear and concise description of the problem you've encountered and what the your
+        expected behavior was.
+  - type: markdown # Environment Section Header
+    attributes:
+      value: |
+        ## Environment
+  - type: input # Affected Version Input
+    id: winston-version
+    validations:
+      required: true
+    attributes:
+      label: What version of Winston presents the issue?
+      placeholder: v3.4.0
+      description: >
+        Can be found by running one of the following (depending on your package manager of choice):
+        - `npm list winston`
+        - `yarn list --pattern winston`
+  - type: input # Affected Version Input
+    id: node-version
+    validations:
+      required: true
+    attributes:
+      label: What version of Node are you using?
+      placeholder: v16.8.0
+      description: >
+        Can be found by running the following: `node -v`
+  - type: input # Last Known Working Version
+    attributes:
+      label: If this worked in a previous version of Winston, which was it?
+      placeholder: v3.0.0
+      description: >
+        If known, otherwise please leave blank.
+  - type: markdown # Details Section Header
+    attributes:
+      value: |
+        # Details
+  - type: textarea # Minimum Working Example Input
+    attributes:
+      label: Minimum Working Example
+      description: |
+        If you can, providing an MWE to reproduce the issue you're encountering can greatly speed up
+        investigation into the issue by one of our maintainers, or anyone else in the community who's looking 
+        to get involved.
+        
+        This can be as simple as a script, a link to a repo, etc.
+      render: yaml
+  - type: textarea # Additional Information
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us that you feel will be valuable, please use the field below.

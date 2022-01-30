@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A logger for just about everything.",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "David Hyde <dabh@alumni.stanford.edu>"
@@ -24,12 +24,13 @@
     "stream"
   ],
   "dependencies": {
-    "async": "^3.2.3",
     "@dabh/diagnostics": "^2.0.2",
+    "async": "^3.2.3",
     "is-stream": "^2.0.0",
     "logform": "^2.3.2",
     "one-time": "^1.0.0",
     "readable-stream": "^3.4.0",
+    "safe-stable-stringify": "^2.3.1",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.3.0",
     "winston-transport": "^4.4.2"
