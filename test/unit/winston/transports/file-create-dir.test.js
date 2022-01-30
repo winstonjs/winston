@@ -11,7 +11,7 @@ describe('winston/transports/file/createLogDir', function () {
   const logDir = path.resolve(__dirname, '../../../fixtures/temp_logs');
 
   beforeEach(function () {
-    fs.rmdirSync(logDir);
+    fs.rmSync(logDir, {recursive: true, force: true})
   });
 
   it('should create directory if it does not exist', function () {

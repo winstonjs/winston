@@ -22,7 +22,7 @@ describe('File (stress)', function () {
   const fileStressLogFile = path.resolve(__dirname, '../../../fixtures/logs/file-stress-test.log');
   beforeEach(function () {
     try {
-      fs.unlinkSync(logPath);
+      fs.unlinkSync(fileStressLogFile);
     } catch (ex) {
       if (ex && ex.code !== 'ENOENT') { return done(ex); }
     }
@@ -47,7 +47,7 @@ describe('File (stress)', function () {
     setTimeout(function () {
       clearInterval(interval);
 
-      helpers.tryRead(logPath)
+      helpers.tryRead(fileStressLogFile)
         .on('error', function (err) {
           assume(err).false();
           logger.close();
@@ -90,7 +90,7 @@ describe('File (stress)', function () {
     setTimeout(function () {
       clearInterval(interval);
 
-      helpers.tryRead(logPath)
+      helpers.tryRead(fileStressLogFile)
         .on('error', function (err) {
           assume(err).false();
           logger.close();
@@ -130,7 +130,7 @@ describe('File (stress)', function () {
     msgs.forEach(msg => logger.info(msg));
 
     setTimeout(function () {
-      helpers.tryRead(logPath)
+      helpers.tryRead(fileStressLogFile)
         .on('error', function (err) {
           assume(err).false();
           logger.close();

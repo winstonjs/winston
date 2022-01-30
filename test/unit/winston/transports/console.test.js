@@ -139,6 +139,7 @@ require('abstract-winston-transport')({
   Transport: winston.transports.Console
 });
 
+// TODO(invalid-test): test is no longer valid as we don't have the vows dependency anymore
 // vows.describe('winston/transports/console').addBatch({
 //   "An instance of the Console Transport": {
 //     "with syslog levels": {

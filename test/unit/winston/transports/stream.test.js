@@ -4,7 +4,7 @@ const path = require('path');
 const writeable = require('../../../helpers').writeable;
 const { MESSAGE } = require('triple-beam');
 const os = require('os');
-const winston = require('../../../../index');
+const winston = require('../../../../lib/winston');
 const split = require('split2');
 const assume = require('assume');
 
