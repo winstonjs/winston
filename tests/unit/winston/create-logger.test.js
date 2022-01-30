@@ -2,6 +2,7 @@ const winston = require("../../../lib/winston");
 const assume = require("assume");
 const isStream = require("is-stream");
 const {format} = require("../../../lib/winston");
+const TransportStream = require("winston-transport");
 
 describe('Create Logger', function () {
     it('should build a logger with default values', function () {
@@ -10,6 +11,26 @@ describe('Create Logger', function () {
         assume(isStream(logger.format));
         assume(logger.level).equals('info');
         assume(logger.exitOnError).equals(true);
+    });
+
+    it('new Logger({ silent: true })', function (done) {
+        const neverLogTo = new TransportStream({
+            log: function (info) {
+                assume(false).true('TransportStream was improperly written to');
+            }
+        });
+
+        var logger = winston.createLogger({
+            transports: [neverLogTo],
+            silent: true
+        });
+
+        logger.log({
+            level: 'info',
+            message: 'This should be ignored'
+        });
+
+        setImmediate(() => done());
     });
 
     it('new Logger({ parameters })', function () {
