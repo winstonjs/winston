@@ -60,8 +60,10 @@
   "scripts": {
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "pretest": "npm run lint",
-    "test:coverage": "nyc --reporter=text --reporter lcov npm run test",
-    "test": "mocha test/*.test.js test/**/*.test.js --exit",
+    "test": "mocha test/unit/**/*.test.js test/integration/**/*.test.js --exit",
+    "test:coverage": "nyc --reporter=text --reporter lcov npm run test:unit",
+    "test:unit": "mocha test/unit/**/*.test.js --exit",
+    "test:integration": "mocha test/integration/**/*.test.js --exit",
     "build": "rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },

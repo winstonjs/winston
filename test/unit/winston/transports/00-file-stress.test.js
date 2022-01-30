@@ -19,7 +19,7 @@ const winston = require('../../../../lib/winston');
 describe('File (stress)', function () {
   this.timeout(30 * 1000);
 
-  const logPath = path.resolve(__dirname, '../fixtures/logs/file-stress-test.log');
+  const fileStressLogFile = path.resolve(__dirname, '../../../fixtures/logs/file-stress-test.log');
   beforeEach(function () {
     try {
       fs.unlinkSync(logPath);
@@ -31,7 +31,7 @@ describe('File (stress)', function () {
   it('should handle a high volume of writes', function (done) {
     const logger = winston.createLogger({
       transports: [new winston.transports.File({
-        filename: logPath
+        filename: fileStressLogFile
       })]
     });
 
@@ -70,7 +70,7 @@ describe('File (stress)', function () {
   it('should handle a high volume of large writes', function (done) {
     const logger = winston.createLogger({
       transports: [new winston.transports.File({
-        filename: logPath
+        filename: fileStressLogFile
       })]
     });
 
@@ -114,7 +114,7 @@ describe('File (stress)', function () {
   it('should handle a high volume of large writes synchronous', function (done) {
     const logger = winston.createLogger({
       transports: [new winston.transports.File({
-        filename: logPath
+        filename: fileStressLogFile
       })]
     });
 

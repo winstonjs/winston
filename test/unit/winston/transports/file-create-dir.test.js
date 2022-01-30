@@ -8,7 +8,7 @@ const winston = require('../../../../lib/winston');
 /* eslint-disable no-sync */
 
 describe('winston/transports/file/createLogDir', function () {
-  const logDir = path.resolve(__dirname, '../fixtures/temp_logs');
+  const logDir = path.resolve(__dirname, '../../../fixtures/temp_logs');
 
   beforeEach(function () {
     fs.rmdirSync(logDir);

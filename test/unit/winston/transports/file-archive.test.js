@@ -12,6 +12,7 @@ const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const winston = require('../../../../lib/winston');
+const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
 
 const { MESSAGE } = require('triple-beam');
 
@@ -19,7 +20,7 @@ const { MESSAGE } = require('triple-beam');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testarchive*'), done);
+  rimraf(path.join(testLogFixturesPath, 'testarchive*'), done);
 }
 
 
@@ -37,7 +38,7 @@ describe('winston/transports/file/zippedArchive', function () {
         zippedArchive: true,
         tailable: true,
         filename: 'testarchive.log',
-        dirname: path.join(__dirname, '..', 'fixtures', 'logs'),
+        dirname: testLogFixturesPath,
         maxsize: 4096,
         maxFiles: 3
       });
@@ -76,7 +77,7 @@ describe('winston/transports/file/zippedArchive', function () {
     it('should be only 3 files called testarchive.log, testarchive1.log.gz and testarchive2.log.gz', function () {
       for (var num = 0; num < 4; num++) {
         const file = !num ? 'testarchive.log' : 'testarchive' + num + '.log.gz';
-        const fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
+        const fullpath = path.join(testLogFixturesPath, file);
 
         if (num === 3) {
           return assert.throws(function () {

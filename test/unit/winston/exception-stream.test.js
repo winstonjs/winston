@@ -11,10 +11,11 @@ const { Writable } = require('readable-stream');
 const path = require('path');
 const winston = require('../../../lib/winston');
 const ExceptionStream = require('../../../lib/winston/exception-stream');
+const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 describe('ExceptionStream', function () {
   it('has expected methods', function () {
-    var filename = path.join(__dirname, 'fixtures', 'logs', 'exception-stream.log');
+    var filename = path.join(testLogFixturesPath, 'exception-stream.log');
     var transport = new winston.transports.File({ filename });
     var instance = new ExceptionStream(transport);
 

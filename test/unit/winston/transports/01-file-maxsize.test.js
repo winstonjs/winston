@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const assume = require('assume');
 const winston = require('../../../../index');
+const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
 
 const MESSAGE = Symbol.for('message');
 
@@ -17,7 +18,7 @@ const MESSAGE = Symbol.for('message');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize*'), done);
+  rimraf(path.join(testLogFixturesPath, 'testmaxsize*'), done);
 }
 
 describe('File (maxsize)', function () {
@@ -35,7 +36,7 @@ describe('File (maxsize)', function () {
     const maxsizeTransport = new winston.transports.File({
       level: 'info',
       format: winston.format.printf(info => info.message),
-      filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize.log'),
+      filename: path.join(testLogFixturesPath, 'testmaxsize.log'),
       maxsize: 4096
     })
 

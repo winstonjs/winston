@@ -4,6 +4,7 @@ const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const winston = require('../../../../lib/winston');
+const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
 
 const { MESSAGE } = require('triple-beam');
 
@@ -11,7 +12,7 @@ const { MESSAGE } = require('triple-beam');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(__dirname, '..', 'fixtures', 'logs', 'testtailrollingfiles*'), done);
+  rimraf(path.join(testLogFixturesPath, 'testtailrollingfiles*'), done);
 }
 
 
@@ -27,7 +28,7 @@ describe('winston/transports/file/tailrolling', function () {
       tailrollTransport = new winston.transports.File({
         timestamp: false,
         json: false,
-        filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testtailrollingfiles.log'),
+        filename: path.join(testLogFixturesPath, 'testtailrollingfiles.log'),
         maxsize: 4096,
         maxFiles: 3,
         tailable: true
@@ -68,7 +69,7 @@ describe('winston/transports/file/tailrolling', function () {
     it('should be 3 log files, base to maxFiles - 1', function () {
       for (var num = 0; num < 4; num++) {
         const file = !num ? 'testtailrollingfiles.log' : 'testtailrollingfiles' + num + '.log';
-        const fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
+        const fullpath = path.join(testLogFixturesPath, file);
 
         if (num === 3) {
           return assert.ok(!fs.existsSync(fullpath));
@@ -83,7 +84,7 @@ describe('winston/transports/file/tailrolling', function () {
     it('should have files in correct order', function () {
       ['D', 'C', 'B'].forEach(function (letter, i) {
         const file = !i ? 'testtailrollingfiles.log' : 'testtailrollingfiles' + i + '.log';
-        let content = fs.readFileSync(path.join(__dirname, '..', 'fixtures', 'logs', file), 'ascii');
+        let content = fs.readFileSync(path.join(testLogFixturesPath, file), 'ascii');
         content = content.replace(/\s+/g, '');
 
         assert(content.match(new RegExp(letter, 'g'))[0].length, content.length);

@@ -21,7 +21,7 @@ const TransportStream = require('winston-transport');
 const format = require('../../../lib/winston').format;
 const helpers = require('../../helpers');
 const mockTransport = require('../../helpers/mocks/mock-transport');
-
+const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 describe('Logger Instance', function () {
   describe('Configuration', function () {
@@ -97,12 +97,12 @@ describe('Logger Instance', function () {
         let transports = [
           new winston.transports.File({
             name: 'filelog-info.log',
-            filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
+            filename: path.join(testLogFixturesPath, 'filelog-info.log'),
             level: 'info'
           }),
           new winston.transports.File({
             name: 'filelog-error.log',
-            filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
+            filename: path.join(testLogFixturesPath, 'filelog-error.log'),
             level: 'error'
           })
         ];
@@ -121,7 +121,7 @@ describe('Logger Instance', function () {
       it('should do nothing if transport was not added', function () {
         let transports = [
           new winston.transports.Console(),
-          new winston.transports.File({filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log')})
+          new winston.transports.File({filename: path.join(testLogFixturesPath, 'filelog.log')})
         ];
 
         let logger = winston.createLogger({transports: transports})
@@ -137,7 +137,7 @@ describe('Logger Instance', function () {
       it('should remove transport when matching one is found', function () {
         let transports = [
           new winston.transports.Console(),
-          new winston.transports.File({filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log')})
+          new winston.transports.File({filename: path.join(testLogFixturesPath, 'filelog.log')})
         ];
 
         let logger = winston.createLogger({transports: transports});
@@ -152,12 +152,12 @@ describe('Logger Instance', function () {
         let transports = [
           new winston.transports.File({
             name: 'filelog-info.log',
-            filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
+            filename: path.join(testLogFixturesPath, 'filelog-info.log'),
             level: 'info'
           }),
           new winston.transports.File({
             name: 'filelog-error.log',
-            filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
+            filename: path.join(testLogFixturesPath, 'filelog-error.log'),
             level: 'error'
           })
         ];

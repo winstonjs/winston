@@ -1,5 +1,5 @@
 /*
- * file-maxfiles-test.js: Tests for instances of the File transport setting the max file size,
+ * file-maxfiles.test.js: Tests for instances of the File transport setting the max file size,
  * and setting a number for max files created.
  * maxSize * maxFiles = total storage used by winston.
  *
@@ -15,11 +15,12 @@ var assert = require('assert'),
     vows = require('vows'),
     winston = require('../../../../lib/winston'),
     helpers = require('../../../helpers');
+const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
 
 var maxfilesTransport = new winston.transports.File({
   timestamp: false,
   json: false,
-  filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles.log'),
+  filename: path.join(testLogFixturesPath, 'testmaxfiles.log'),
   maxsize: 4096,
   maxFiles: 3
 });
@@ -34,7 +35,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
     },
     "when delete old test files": {
       topic: function () {
-        exec('rm -rf ' + path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles*'), this.callback);
+        exec('rm -rf ' + path.join(testLogFixturesPath, 'testmaxfiles*'), this.callback);
       },
       "and when passed more files than the maxFiles": {
         topic: function () {
@@ -69,7 +70,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
         "should be only 3 files called 5.log, 4.log and 3.log": function () {
           for (var num = 0; num < 6; num++) {
             var file = !num ? 'testmaxfiles.log' : 'testmaxfiles' + num + '.log',
-                fullpath = path.join(__dirname, '..', 'fixtures', 'logs', file);
+                fullpath = path.join(testLogFixturesPath, file);
 
             // There should be no files with that name
             if (num >= 0 && num < 3) {
@@ -87,8 +88,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
         "should have the correct content": function () {
           ['D', 'E', 'F'].forEach(function (name, inx) {
             var counter = inx + 3,
-                logsDir = path.join(__dirname, '..', 'fixtures', 'logs'),
-                content = fs.readFileSync(path.join(logsDir, 'testmaxfiles' + counter + '.log'), 'utf-8');
+                content = fs.readFileSync(path.join(testLogFixturesPath, 'testmaxfiles' + counter + '.log'), 'utf-8');
             // The content minus the 7 characters added by winston
             assert.lengthOf(content.match(new RegExp(name, 'g')), 4068);
           });
