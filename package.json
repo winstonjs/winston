@@ -59,10 +59,10 @@
   "types": "./index.d.ts",
   "scripts": {
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
-    "test": "mocha './test/**/*.test.js' --recursive --exit",
+    "test": "mocha './test/**/*.test.js'",
     "test:coverage": "nyc npm run test:unit",
-    "test:unit": "mocha './test/unit/**/*.test.js' --recursive --exit",
-    "test:integration": "mocha './test/integration/**/*.test.js' --recursive --exit",
+    "test:unit": "mocha './test/unit/**/*.test.js'",
+    "test:integration": "mocha './test/integration/**/*.test.js'",
     "build": "rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
