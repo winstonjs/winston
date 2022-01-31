@@ -830,347 +830,698 @@ describe('Logger Instance', () => {
     });
     
     describe('Single logger instance', () => {
-      it('should log to passed array correctly when using the `inMemory` transport', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info"},
-          {message: "I'm a test", level: "warn"}
-        ];
+      describe('When logging with [LEVEL]() methods', () => {
+        it('should log to passed array correctly when using the `inMemory` transport', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info"},
+            {message: "I'm a test", level: "warn"}
+          ];
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)]
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+
+          logger.info("some message");
+          logger.warn("I'm a test");
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message");
-        logger.warn("I'm a test");
-        assume(actualOutput).eqls(expectedOutput);
-      })
+        it('should include default metadata defined on the logger instance', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", defaultMeta: true},
+          ];
 
-      it('should include default metadata defined on the logger instance', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", defaultMeta: true},
-        ];
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {defaultMeta: true}
+          });
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {defaultMeta: true}
+          logger.info("some message");
+
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message");
+        it('should include metadata log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", logMeta: true},
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+          });
 
-      it('should include metadata log specific metadata', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", logMeta: true},
-        ];
+          logger.info("some message", {logMeta: true});
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message", {logMeta: true});
+        it('should include both default metadata & log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", defaultMeta: true, logMeta: true},
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {defaultMeta: true}
+          });
 
-      it('should include both default metadata & log specific metadata', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", defaultMeta: true, logMeta: true},
-        ];
+          logger.info("some message", {logMeta: true});
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {defaultMeta: true}
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message", {logMeta: true});
+        it('should include override default metadata with log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", defaultMeta: false},
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {defaultMeta: true}
+          });
 
-      it('should include override default metadata with log specific metadata', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", defaultMeta: false},
-        ];
+          logger.info("some message", {defaultMeta: false});
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {defaultMeta: true}
+          assume(actualOutput).eqls(expectedOutput);
+        });
+      });
+
+      describe('When logging with log() method', () => {
+        it('should log to passed array correctly when using the `inMemory` transport', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info"},
+            {message: "I'm a test", level: "warn"}
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+
+          logger.log({level: 'info', message: "some message"});
+          logger.log({level: 'warn', message: "I'm a test"});
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message", {defaultMeta: false});
+        it('should include default metadata defined on the logger instance', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", defaultMeta: true},
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {defaultMeta: true}
+          });
+
+          logger.log({level: 'info', message: "some message"});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include metadata log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", logMeta: true},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+          });
+
+          logger.log({level: 'info', message: "some message", logMeta: true});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include both default metadata & log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", defaultMeta: true, logMeta: true},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {defaultMeta: true}
+          });
+
+          logger.log({level: 'info', message: "some message", logMeta: true});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include override default metadata with log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", defaultMeta: false},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {defaultMeta: true}
+          });
+
+          logger.log({level: 'info', message: "some message", defaultMeta: false});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+      });
     });
 
     describe('Multiple logger instances', () => {
-      it('should log to passed array correctly when using the `inMemory` transport', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info"},
-          {message: "I'm a test", level: "warn"}
-        ];
+      describe('When logging with [LEVEL]() methods', () => {
+        it('should log to passed array correctly when using the `inMemory` transport', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info"},
+            {message: "I'm a test", level: "warn"}
+          ];
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)]
-        });
-        const logger2 = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)]
-        });
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
 
-        logger.info("some message");
-        logger2.warn("I'm a test");
-        assume(actualOutput).eqls(expectedOutput);
-      })
-
-      it('should include default metadata defined on all logger instances', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "logger1"},
-          {message: "some message", level: "info", loggerName: "logger2"},
-        ];
-
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "logger1"}
-        });
-        const logger2 = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "logger2"}
+          logger.info("some message");
+          logger2.warn("I'm a test");
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message");
-        logger2.info("some message");
+        it('should include default metadata defined on all logger instances', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "logger1"},
+            {message: "some message", level: "info", loggerName: "logger2"},
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger1"}
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger2"}
+          });
 
-      it('should include metadata log specific metadata', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", logMetadata: true},
-          {message: "some message", level: "info", logMetadata: false},
-        ];
+          logger.info("some message");
+          logger2.info("some message");
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)]
-        });
-        const logger2 = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)]
-        });
-
-        logger.info("some message", {logMetadata: true});
-        logger2.info("some message", {logMetadata: false});
-
-        assume(actualOutput).eqls(expectedOutput);
-      })
-
-      it('should include both default metadata & log specific metadata', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "logger1", logMetadata: true},
-          {message: "some message", level: "info", loggerName: "logger2", logMetadata: false},
-        ];
-
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "logger1"}
-        });
-        const logger2 = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "logger2"}
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message", {logMetadata: true});
-        logger2.info("some message", {logMetadata: false});
+        it('should include metadata log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", logMetadata: true},
+            {message: "some message", level: "info", logMetadata: false},
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
 
-      it('should include overridden default metadata with log specific metadata', () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "logger1-override"},
-          {message: "some message", level: "info", loggerName: "logger2-override"},
-        ];
+          logger.info("some message", {logMetadata: true});
+          logger2.info("some message", {logMetadata: false});
 
-        const logger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "logger1"}
-        });
-        const logger2 = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "logger2"}
+          assume(actualOutput).eqls(expectedOutput);
         });
 
-        logger.info("some message", {loggerName: "logger1-override"});
-        logger2.info("some message", {loggerName: "logger2-override"});
+        it('should include both default metadata & log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "logger1", logMetadata: true},
+            {message: "some message", level: "info", loggerName: "logger2", logMetadata: false},
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger1"}
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger2"}
+          });
+
+          logger.info("some message", {logMetadata: true});
+          logger2.info("some message", {logMetadata: false});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include overridden default metadata with log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "logger1-override"},
+            {message: "some message", level: "info", loggerName: "logger2-override"},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger1"}
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger2"}
+          });
+
+          logger.info("some message", {loggerName: "logger1-override"});
+          logger2.info("some message", {loggerName: "logger2-override"});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+      });
+
+      describe('When logging with log() method', () => {
+        it('should log to passed array correctly when using the `inMemory` transport', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info"},
+            {message: "I'm a test", level: "warn"}
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+
+          logger.log({level: 'info', message: "some message"});
+          logger2.log({level: 'warn', message: "I'm a test"});
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include default metadata defined on all logger instances', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "logger1"},
+            {message: "some message", level: "info", loggerName: "logger2"},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger1"}
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger2"}
+          });
+
+          logger.log({level: 'info', message: "some message"});
+          logger2.log({level: 'info', message: "some message"});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include metadata log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", logMetadata: true},
+            {message: "some message", level: "info", logMetadata: false},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)]
+          });
+
+          logger.log({level: 'info', message: "some message", logMetadata: true});
+          logger2.log({level: 'info', message: "some message", logMetadata: false});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include both default metadata & log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "logger1", logMetadata: true},
+            {message: "some message", level: "info", loggerName: "logger2", logMetadata: false},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger1"}
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger2"}
+          });
+
+          logger.log({level: 'info', message: "some message", logMetadata: true});
+          logger2.log({level: 'info', message: "some message", logMetadata: false});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it('should include overridden default metadata with log specific metadata', () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "logger1-override"},
+            {message: "some message", level: "info", loggerName: "logger2-override"},
+          ];
+
+          const logger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger1"}
+          });
+          const logger2 = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "logger2"}
+          });
+
+          logger.log({level: 'info', message: "some message", loggerName: "logger1-override"});
+          logger2.log({level: 'info', message: "some message", loggerName: "logger2-override"});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+      });
     });
 
     describe('Single child logger instance', () => {
-      it("should inherit the parent's default metadata", () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "root"}, // root logger
-          {message: "some message", level: "info", loggerName: "root"}, // child logger
-        ];
+      describe('When logging with [LEVEL]() methods', () => {
+        it("should inherit the parent's default metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "root"}, // child logger
+          ];
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "root"}
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child();
+
+          rootLogger.info("some message");
+          childLogger.info("some message");
+
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger = rootLogger.child();
 
-        rootLogger.info("some message");
-        childLogger.info("some message")
+        it("should include both the parent's & child's default metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "root", isChild: true}, // child logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({isChild: true});
+
+          rootLogger.info("some message");
+          childLogger.info("some message");
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it("should override the parent's default metadata with the child's default metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "child"}, // child logger
+          ];
+
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({loggerName: "child"});
+
+          rootLogger.info("some message");
+          childLogger.info("some message");
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it("should override the parent's default metadata without affecting the parent", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "child"}, // child logger
+            {message: "some message", level: "info", loggerName: "child-override"}, // child logger overridden
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+          ];
+
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({loggerName: "child"});
+
+          childLogger.info("some message");
+          childLogger.info("some message", {loggerName: "child-override"});
+          rootLogger.info("some message");
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it("should override the parent's default metadata with the log specific metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "child"}, // child logger
+          ];
+
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child();
+
+          rootLogger.info("some message");
+          childLogger.info("some message", {loggerName: "child"});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it("should override the child's default metadata with the log specific metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "root", isChild: null}, // child logger
+          ];
+
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({isChild: true});
+
+          rootLogger.info("some message");
+          childLogger.info("some message", {isChild: null});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
+        it("should override both the parent's & child's default metadata with the log specific metadata",
+            () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "child", isChild: null}, // child logger
+          ];
+
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({isChild: true});
+
+          rootLogger.info("some message");
+          childLogger.info("some message", {loggerName: "child", isChild: null});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
       });
 
-      it("should include both the parent's & child's default metadata", () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "root"}, // root logger
-          {message: "some message", level: "info", loggerName: "root", isChild: true}, // child logger
-        ];
+      describe('When logging with log() method', () => {
+        it("should inherit the parent's default metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "root"}, // child logger
+          ];
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "root"}
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child();
+
+          rootLogger.log({level: 'info', message: "some message"});
+          childLogger.log({level: 'info', message: "some message"});
+
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger = rootLogger.child({isChild: true});
 
-        rootLogger.info("some message");
-        childLogger.info("some message")
+        it("should include both the parent's & child's default metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "root", isChild: true}, // child logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      });
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({isChild: true});
 
-      it("should override the parent's default metadata with the child's default metadata", () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "root"}, // root logger
-          {message: "some message", level: "info", loggerName: "child"}, // child logger
-        ];
+          rootLogger.log({level: 'info', message: "some message"});
+          childLogger.log({level: 'info', message: "some message"});
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "root"}
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger = rootLogger.child({loggerName: "child"});
 
-        rootLogger.info("some message");
-        childLogger.info("some message")
+        it("should override the parent's default metadata with the child's default metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "child"}, // child logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      });
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({loggerName: "child"});
 
-      it("should override the parent's default metadata without affecting the parent", () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "child"}, // child logger
-          {message: "some message", level: "info", loggerName: "child-override"}, // child logger overridden
-          {message: "some message", level: "info", loggerName: "root"}, // root logger
-        ];
+          rootLogger.log({level: 'info', message: "some message"});
+          childLogger.log({level: 'info', message: "some message"});
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "root"}
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger = rootLogger.child({loggerName: "child"});
 
-        childLogger.info("some message")
-        childLogger.info("some message", {loggerName: "child-override"})
-        rootLogger.info("some message");
+        it("should override the parent's default metadata without affecting the parent", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "child"}, // child logger
+            {message: "some message", level: "info", loggerName: "child-override"}, // child logger overridden
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      });
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({loggerName: "child"});
 
-      it("should override the parent's default metadata with the log specific metadata", () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "root"}, // root logger
-          {message: "some message", level: "info", loggerName: "child"}, // child logger
-        ];
+          childLogger.log({level: 'info', message: "some message"});
+          childLogger.log({level: 'info', message: "some message", loggerName: "child-override"});
+          rootLogger.log({level: 'info', message: "some message"});
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "root"}
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger = rootLogger.child();
 
-        rootLogger.info("some message");
-        childLogger.info("some message", {loggerName: "child"})
+        it("should override the parent's default metadata with the log specific metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "child"}, // child logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      });
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child();
 
-      it("should override the child's default metadata with the log specific metadata", () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "root"}, // root logger
-          {message: "some message", level: "info", loggerName: "root", isChild: null}, // child logger
-        ];
+          rootLogger.log({level: 'info', message: "some message"});
+          childLogger.log({level: 'info', message: "some message", loggerName: "child"});
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "root"}
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger = rootLogger.child({isChild: true});
 
-        rootLogger.info("some message");
-        childLogger.info("some message", {isChild: null})
+        it("should override the child's default metadata with the log specific metadata", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "root", isChild: null}, // child logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      });
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({isChild: true});
 
-      it("should override both the parent's & child's default metadata with the log specific metadata",
-          () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerName: "root"}, // root logger
-          {message: "some message", level: "info", loggerName: "child", isChild: null}, // child logger
-        ];
+          rootLogger.log({level: 'info', message: "some message"});
+          childLogger.log({level: 'info', message: "some message", isChild: null});
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerName: "root"}
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger = rootLogger.child({isChild: true});
 
-        rootLogger.info("some message");
-        childLogger.info("some message", {loggerName: "child", isChild: null})
+        it("should override both the parent's & child's default metadata with the log specific metadata",
+            () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerName: "root"}, // root logger
+            {message: "some message", level: "info", loggerName: "child", isChild: null}, // child logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerName: "root"}
+          });
+          const childLogger = rootLogger.child({isChild: true});
+
+          rootLogger.log({level: 'info', message: "some message"});
+          childLogger.log({level: 'info', message: "some message", loggerName: "child", isChild: null});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
       });
     });
 
     describe('Multiple child logger instances', () => {
-      it("should have independent default metadata that overrides the parent's", () => {
-        const expectedOutput = [
-          {message: "some message", level: "info", loggerInfo: {name: "root", isChild: false}}, // root logger
-          {message: "some message", level: "info", loggerInfo: {name: "child1", isChild: true}}, // child1 logger
-          {message: "some message", level: "info", loggerInfo: {name: "child1-override", isChild: false}}, // child1 logger override
-          {message: "some message", level: "info", loggerInfo: {name: "child2", isChild: true}}, // child2 logger
-          {message: "some message", level: "info", loggerInfo: {name: "child2-override", isChild: false}}, // child2 logger override
-          {message: "some message", level: "info", loggerInfo: {name: "child3", isChild: true}}, // child3 logger
-          {message: "some message", level: "info", loggerInfo: {name: "child3-override", isChild: false}}, // child3 logger override
-          {message: "some message", level: "info", loggerInfo: {name: "root", isChild: false}}, // root logger
-        ];
+      describe('When logging with [LEVEL]() methods', () => {
+        it("should have independent default metadata that overrides the parent's", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerInfo: {name: "root", isChild: false}}, // root logger
+            {message: "some message", level: "info", loggerInfo: {name: "child1", isChild: true}}, // child1 logger
+            {message: "some message", level: "info", loggerInfo: {name: "child1-override", isChild: false}}, // child1 logger override
+            {message: "some message", level: "info", loggerInfo: {name: "child2", isChild: true}}, // child2 logger
+            {message: "some message", level: "info", loggerInfo: {name: "child2-override", isChild: false}}, // child2 logger override
+            {message: "some message", level: "info", loggerInfo: {name: "child3", isChild: true}}, // child3 logger
+            {message: "some message", level: "info", loggerInfo: {name: "child3-override", isChild: false}}, // child3 logger override
+            {message: "some message", level: "info", loggerInfo: {name: "root", isChild: false}}, // root logger
+          ];
 
-        const rootLogger = winston.createLogger({
-          transports: [mockTransports.inMemory(actualOutput)],
-          defaultMeta: {loggerInfo: {name: "root", isChild: false}}
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerInfo: {name: "root", isChild: false}}
+          });
+          const childLogger1 = rootLogger.child({loggerInfo: {name: "child1", isChild: true}});
+          const childLogger2 = rootLogger.child({loggerInfo: {name: "child2", isChild: true}});
+          const childLogger3 = rootLogger.child({loggerInfo: {name: "child3", isChild: true}});
+
+          rootLogger.info("some message");
+          childLogger1.info("some message")
+          childLogger1.info("some message", {loggerInfo: {name: "child1-override", isChild: false}})
+          childLogger2.info("some message")
+          childLogger2.info("some message", {loggerInfo: {name: "child2-override", isChild: false}})
+          childLogger3.info("some message")
+          childLogger3.info("some message", {loggerInfo: {name: "child3-override", isChild: false}})
+          rootLogger.info("some message")
+
+          assume(actualOutput).eqls(expectedOutput);
         });
-        const childLogger1 = rootLogger.child({loggerInfo: {name: "child1", isChild: true}});
-        const childLogger2 = rootLogger.child({loggerInfo: {name: "child2", isChild: true}});
-        const childLogger3 = rootLogger.child({loggerInfo: {name: "child3", isChild: true}});
+      });
 
-        rootLogger.info("some message");
-        childLogger1.info("some message")
-        childLogger1.info("some message", {loggerInfo: {name: "child1-override", isChild: false}})
-        childLogger2.info("some message")
-        childLogger2.info("some message", {loggerInfo: {name: "child2-override", isChild: false}})
-        childLogger3.info("some message")
-        childLogger3.info("some message", {loggerInfo: {name: "child3-override", isChild: false}})
-        rootLogger.info("some message")
+      describe('When logging with log() method', () => {
+        it("should have independent default metadata that overrides the parent's", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", loggerInfo: {name: "root", isChild: false}}, // root logger
+            {message: "some message", level: "info", loggerInfo: {name: "child1", isChild: true}}, // child1 logger
+            {message: "some message", level: "info", loggerInfo: {name: "child1-override", isChild: false}}, // child1 logger override
+            {message: "some message", level: "info", loggerInfo: {name: "child2", isChild: true}}, // child2 logger
+            {message: "some message", level: "info", loggerInfo: {name: "child2-override", isChild: false}}, // child2 logger override
+            {message: "some message", level: "info", loggerInfo: {name: "child3", isChild: true}}, // child3 logger
+            {message: "some message", level: "info", loggerInfo: {name: "child3-override", isChild: false}}, // child3 logger override
+            {message: "some message", level: "info", loggerInfo: {name: "root", isChild: false}}, // root logger
+          ];
 
-        assume(actualOutput).eqls(expectedOutput);
-      })
-    })
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {loggerInfo: {name: "root", isChild: false}}
+          });
+          const childLogger1 = rootLogger.child({loggerInfo: {name: "child1", isChild: true}});
+          const childLogger2 = rootLogger.child({loggerInfo: {name: "child2", isChild: true}});
+          const childLogger3 = rootLogger.child({loggerInfo: {name: "child3", isChild: true}});
+
+          rootLogger.log({level: 'info', message: "some message"});
+          childLogger1.log({level: 'info', message: "some message"});
+          childLogger1.log({level: 'info', message: "some message", loggerInfo: {name: "child1-override", isChild: false}});
+          childLogger2.log({level: 'info', message: "some message"});
+          childLogger2.log({level: 'info', message: "some message", loggerInfo: {name: "child2-override", isChild: false}});
+          childLogger3.log({level: 'info', message: "some message"});
+          childLogger3.log({level: 'info', message: "some message", loggerInfo: {name: "child3-override", isChild: false}});
+          rootLogger.log({level: 'info', message: "some message"});
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+      });
+    });
   });
 
   describe('Backwards Compatability', () => {
