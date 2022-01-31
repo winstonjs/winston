@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v3.5.1 / 2022-01-31
+
+This release reverts the changes made in PR #1896 which added stricter typing to the available log levels,
+and inadvertently broke use of custom levels with TypeScript (Issue #2047). Apologies for that!
+
 ## v3.5.0 / 2022-01-27
 
 This release includes the following, in sequence by first merge in group:
