@@ -65,23 +65,20 @@ declare namespace winston {
     done(info?: any): boolean;
   }
 
-  type level = "error" | "warn" | "info" | "http" | "verbose" | "debug" | "silly";
-
-  type LogCallback = (error?: any, level?: level, message?: string, meta?: any) => void;
-
+  type LogCallback = (error?: any, level?: string, message?: string, meta?: any) => void;
 
   interface LogEntry {
-    level: level;
+    level: string;
     message: string;
     [optionName: string]: any;
   }
 
    interface LogMethod {
-    (level: level, message: string, callback: LogCallback): Logger;
-    (level: level, message: string, meta: any, callback: LogCallback): Logger;
-    (level: level, message: string, ...meta: any[]): Logger;
+    (level: string, message: string, callback: LogCallback): Logger;
+    (level: string, message: string, meta: any, callback: LogCallback): Logger;
+    (level: string, message: string, ...meta: any[]): Logger;
     (entry: LogEntry): Logger;
-    (level: level, message: any): Logger;
+    (level: string, message: any): Logger;
   }
 
   interface LeveledLogMethod {
@@ -96,7 +93,7 @@ declare namespace winston {
     levels?: Config.AbstractConfigSetLevels;
     silent?: boolean;
     format?: logform.Format;
-    level?: level;
+    level?: string;
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
@@ -110,7 +107,7 @@ declare namespace winston {
     silent: boolean;
     format: logform.Format;
     levels: Config.AbstractConfigSetLevels;
-    level: level;
+    level: string;
     transports: Transport[];
     exceptions: ExceptionHandler;
     rejections: RejectionHandler;
@@ -154,7 +151,7 @@ declare namespace winston {
 
     child(options: Object): Logger;
 
-    isLevelEnabled(level: level): boolean;
+    isLevelEnabled(level: string): boolean;
     isErrorEnabled(): boolean;
     isWarnEnabled(): boolean;
     isInfoEnabled(): boolean;
@@ -206,7 +203,7 @@ declare namespace winston {
   let profile: (id: string | number) => Logger;
   let configure: (options: LoggerOptions) => void;
   let child: (options: Object) => Logger;
-  let level: level;
+  let level: string;
   let exceptions: ExceptionHandler;
   let rejections: RejectionHandler;
   let exitOnError: Function | boolean;
