@@ -60,7 +60,7 @@
   "scripts": {
     "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
     "test": "mocha './test/**/*.test.js' --recursive --exit",
-    "test:coverage": "nyc --reporter=text --reporter lcov npm run test:unit",
+    "test:coverage": "nyc npm run test:unit",
     "test:unit": "mocha './test/unit/**/*.test.js' --recursive --exit",
     "test:integration": "mocha './test/integration/**/*.test.js' --recursive --exit",
     "build": "rimraf dist && babel lib -d dist",

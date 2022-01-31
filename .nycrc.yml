@@ -1,3 +1,6 @@
+reporter:
+  - text
+  - lcov
 check-coverage: true
 branches: 61.51
 lines: 70.85
