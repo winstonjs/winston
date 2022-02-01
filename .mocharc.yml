@@ -1,2 +1,4 @@
-recursive: false
+exclude:
+  - test/helpers/scripts/*.js
 exit: true
+recursive: true
