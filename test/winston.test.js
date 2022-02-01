@@ -9,8 +9,21 @@
 const { format } = require('util');
 const assume = require('assume');
 const winston = require('../lib/winston');
+const stdMocks = require("std-mocks");
 
 describe('winston', function () {
+  it('data level works', function () {
+    const log = winston.createLogger({
+      transports: [new winston.transports.Console()],
+      levels: winston.config.cli.levels,
+      format: winston.format.cli(),
+    });
+    stdMocks.use();
+    log.data('test message');
+    const output = stdMocks.flush();
+    const line = output.stdout[0];
+    assume(line).equal('\x1B[90mdata\x1B[39m:test message\n');
+  });
 
   it('winston.transports', function () {
     assume(winston.transports).is.an('object');
