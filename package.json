@@ -44,7 +44,8 @@
     "assume": "^2.2.0",
     "colors": "1.4.0",
     "cross-spawn-async": "^2.2.5",
-    "eslint-config-populist": "^4.2.0",
+    "eslint": "^8.8.0",
+    "@dabh/eslint-config-populist": "^5.0.0",
     "hock": "^1.4.1",
     "mocha": "8.1.3",
     "nyc": "^15.1.0",
@@ -58,7 +59,7 @@
   "browser": "./dist/winston",
   "types": "./index.d.ts",
   "scripts": {
-    "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
+    "lint": "eslint lib/*.js lib/winston/*.js lib/winston/**/*.js --resolve-plugins-relative-to ./node_modules/@dabh/eslint-config-populist",
     "pretest": "npm run lint",
     "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
     "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit",
