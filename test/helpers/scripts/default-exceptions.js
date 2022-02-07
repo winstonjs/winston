@@ -8,10 +8,11 @@
 
 var path = require('path'),
     winston = require('../../../lib/winston');
+const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 winston.exceptions.handle([
   new winston.transports.File({
-    filename: path.join(__dirname, '..', '..', 'fixtures', 'logs', 'default-exception.log'),
+    filename: path.join(testLogFixturesPath, 'default-exception.log'),
     handleExceptions: true
   })
 ]);

@@ -9,9 +9,10 @@
 const assume = require('assume');
 const fs = require('fs');
 const path = require('path');
-const winston = require('../lib/winston');
-const tailFile = require('../lib/winston/tail-file');
+const winston = require('../../../lib/winston');
+const tailFile = require('../../../lib/winston/tail-file');
 const { Stream } = require('readable-stream');
+const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 //
 // Test helper that performs writes to a specific log file
@@ -60,7 +61,7 @@ describe('tailFile', function () {
   });
 
   it('returns a stream that emits "line" for every line', function (done) {
-    var tailable = path.join(__dirname, 'fixtures', 'logs', 'common-tail-file.log');
+    var tailable = path.join(testLogFixturesPath, 'common-tail-file.log');
     var expected = 0;
     //
     // Performs the actual tail and asserts it.

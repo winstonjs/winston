@@ -1,12 +1,13 @@
 'use strict';
 
 const path = require('path');
-const winston = require('../../');
-const helpers = require('../helpers');
+const winston = require('../../../../lib/winston');
+const helpers = require('../../../helpers');
 const fs = require('fs');
 const { MESSAGE } = require('triple-beam');
 const split = require('split2');
 const assume = require('assume');
+const testFileFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'file');
 
 function noop() {};
 
@@ -14,7 +15,7 @@ describe('File({ filename })', function () {
   this.timeout(10 * 1000);
 
   it('should write to the file when logged to with expected object', function (done) {
-    var filename = path.join(__dirname, '..', 'fixtures', 'file', 'simple.log');
+    var filename = path.join(testFileFixturesPath, 'simple.log');
     var transport = new winston.transports.File({
       filename: filename
     });
@@ -96,7 +97,7 @@ describe('File({ filename })', function () {
 describe('File({ stream })', function () {
   it('should display the deprecation notice');
   it('should write to the stream when logged to with expected object', function (done) {
-    var streamfile = path.join(__dirname, '..', 'fixtures', 'file', 'simple-stream.log');
+    var streamfile = path.join(testFileFixturesPath, 'simple-stream.log');
     var stream = fs.createWriteStream(streamfile);
     var streamTransport = new winston.transports.File({
       stream: stream
@@ -113,7 +114,7 @@ require('abstract-winston-transport')({
   name: 'File',
   Transport: winston.transports.File,
   construct: {
-    filename: path.join(__dirname, '..', 'fixtures', 'file', 'abstract.log')
+    filename: path.join(testFileFixturesPath, 'abstract.log')
   },
   after(opts, done) {
     const abstractFile = opts.construct.filename;

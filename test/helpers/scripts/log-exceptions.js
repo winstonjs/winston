@@ -8,11 +8,12 @@
 
 var path = require('path'),
     winston = require('../../../lib/winston');
+const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 var logger = winston.createLogger({
   transports: [
     new winston.transports.File({
-      filename: path.join(__dirname, '..', '..', 'fixtures', 'logs', 'exception.log'),
+      filename: path.join(testLogFixturesPath, 'exception.log'),
       handleExceptions: true
     })
   ]

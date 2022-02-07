@@ -7,7 +7,7 @@
  */
 
 const assume = require('assume');
-const winston = require('../lib/winston');
+const winston = require('../../../lib/winston');
 
 describe('Container', function () {
   describe('no transports', function () {

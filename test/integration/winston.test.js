@@ -8,7 +8,7 @@
 
 const { format } = require('util');
 const assume = require('assume');
-const winston = require('../lib/winston');
+const winston = require('../../lib/winston');
 
 describe('winston', function () {
 
@@ -35,7 +35,7 @@ describe('winston', function () {
   });
 
   it('exposes version', function () {
-    assume(winston.version).equals(require('../package').version);
+    assume(winston.version).equals(require('../../package.json').version);
   });
 
   it('abstract-winston-logger');

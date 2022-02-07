@@ -10,9 +10,9 @@
 
 const assume = require('assume');
 const { LEVEL, MESSAGE, SPLAT } = require('triple-beam');
-const winston = require('../../lib/winston');
+const winston = require('../../../lib/winston');
 const { format } = winston;
-const helpers = require('../helpers');
+const helpers = require('../../helpers');
 
 function assumeExpectedInfo(info, target = {}) {
   const expected = Object.assign({}, {

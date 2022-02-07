@@ -15,11 +15,11 @@ const util = require('util');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
 const { MESSAGE } = require('triple-beam');
-const winston = require('../lib/winston');
-const LegacyTransport = require('./helpers/mocks/legacy-transport');
-const LegacyMixedTransport = require('./helpers/mocks/legacy-mixed-transport');
+const winston = require('../../../lib/winston');
+const LegacyTransport = require('../../helpers/mocks/legacy-transport');
+const LegacyMixedTransport = require('../../helpers/mocks/legacy-mixed-transport');
 const TransportStream = require('winston-transport');
-const helpers = require('./helpers');
+const helpers = require('../../helpers');
 
 /*
  * Assumes that the `TransportClass` with the given { name, displayName }

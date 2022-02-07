@@ -12,17 +12,17 @@ const fs = require('fs');
 const os  = require('os');
 const path = require('path');
 const assume = require('assume');
-const helpers = require('../helpers');
+const helpers = require('../../../helpers');
 const split = require('split2');
-const winston = require('../../lib/winston');
+const winston = require('../../../../lib/winston');
 
 describe('File (stress)', function () {
   this.timeout(30 * 1000);
 
-  const logPath = path.resolve(__dirname, '../fixtures/logs/file-stress-test.log');
+  const fileStressLogFile = path.resolve(__dirname, '../../../fixtures/logs/file-stress-test.log');
   beforeEach(function () {
     try {
-      fs.unlinkSync(logPath);
+      fs.unlinkSync(fileStressLogFile);
     } catch (ex) {
       if (ex && ex.code !== 'ENOENT') { return done(ex); }
     }
@@ -31,7 +31,7 @@ describe('File (stress)', function () {
   it('should handle a high volume of writes', function (done) {
     const logger = winston.createLogger({
       transports: [new winston.transports.File({
-        filename: logPath
+        filename: fileStressLogFile
       })]
     });
 
@@ -47,7 +47,7 @@ describe('File (stress)', function () {
     setTimeout(function () {
       clearInterval(interval);
 
-      helpers.tryRead(logPath)
+      helpers.tryRead(fileStressLogFile)
         .on('error', function (err) {
           assume(err).false();
           logger.close();
@@ -70,7 +70,7 @@ describe('File (stress)', function () {
   it('should handle a high volume of large writes', function (done) {
     const logger = winston.createLogger({
       transports: [new winston.transports.File({
-        filename: logPath
+        filename: fileStressLogFile
       })]
     });
 
@@ -90,7 +90,7 @@ describe('File (stress)', function () {
     setTimeout(function () {
       clearInterval(interval);
 
-      helpers.tryRead(logPath)
+      helpers.tryRead(fileStressLogFile)
         .on('error', function (err) {
           assume(err).false();
           logger.close();
@@ -114,7 +114,7 @@ describe('File (stress)', function () {
   it('should handle a high volume of large writes synchronous', function (done) {
     const logger = winston.createLogger({
       transports: [new winston.transports.File({
-        filename: logPath
+        filename: fileStressLogFile
       })]
     });
 
@@ -130,7 +130,7 @@ describe('File (stress)', function () {
     msgs.forEach(msg => logger.info(msg));
 
     setTimeout(function () {
-      helpers.tryRead(logPath)
+      helpers.tryRead(fileStressLogFile)
         .on('error', function (err) {
           assume(err).false();
           logger.close();

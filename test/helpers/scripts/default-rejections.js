@@ -8,17 +8,11 @@
 
 var path = require("path"),
   winston = require("../../../lib/winston");
+const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 winston.rejections.handle([
   new winston.transports.File({
-    filename: path.join(
-      __dirname,
-      "..",
-      "..",
-      "fixtures",
-      "logs",
-      "default-rejection.log"
-    ),
+    filename: path.join(testLogFixturesPath, "default-rejection.log"),
     handleRejections: true
   })
 ]);
