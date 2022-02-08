@@ -25,7 +25,7 @@ const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs')
 
 describe('Logger Instance', function () {
   describe('Configuration', function () {
-      it('.configure()', function () {
+    it('.configure()', function () {
       let logger = winston.createLogger({
         transports: [new winston.transports.Console()]
       });
