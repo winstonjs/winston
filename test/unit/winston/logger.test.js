@@ -1209,6 +1209,27 @@ describe('Logger Instance', function () {
           assume(actualOutput).eqls(expectedOutput);
         });
 
+        it("should not reflect changes to the parent's metadata if it changes after the child is created", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", label: "parent"}, // child logger
+            {message: "some message", level: "info", label: "parent"}, // child logger
+          ];
+
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {label: "parent"}
+          });
+          const childLogger = rootLogger.child();
+
+          childLogger.info("some message");
+          rootLogger.defaultMeta = {
+            defaultMeta: {label: "updatedLabel"}
+          };
+          childLogger.info("some message");
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
         it("should include both the parent's & child's default metadata", () => {
           const expectedOutput = [
             {message: "some message", level: "info", loggerName: "root"}, // root logger
