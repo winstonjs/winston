@@ -24,6 +24,12 @@ const mockTransports = require('../../helpers/mocks/mock-transport');
 const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 describe('Logger Instance', function () {
+  let actualOutput = [];
+
+  beforeEach(() => {
+    actualOutput = [];
+  });
+
   describe('Configuration', function () {
     it('.configure()', function () {
       let logger = winston.createLogger({
@@ -670,15 +676,10 @@ describe('Logger Instance', function () {
       }, 100);
     });
 
-    it('should stop a timer when `done` is called on it', function (done) {
-      let logger = helpers.createLogger(function (info) {
-        assume(info).is.an('object');
-        assume(info.something).equals('ok');
-        assume(info.level).equals('info');
-        assume(info.durationMs).is.a('number');
-        assume(info.message).equals('testing1');
-        assume(info[MESSAGE]).is.a('string');
-        done();
+    it('should stop a profiler instance generated via `startTimer()` when `done()` is called on it', function (done) {
+      const logger = winston.createLogger({
+        transports: [mockTransports.inMemory(actualOutput)],
+        defaultMeta: {rootLogger: true}
       });
 
       let timer = logger.startTimer();
@@ -688,6 +689,14 @@ describe('Logger Instance', function () {
           something: 'ok',
           level: 'info'
         });
+        assume(actualOutput).is.length(1);
+        assume(actualOutput[0]).contains('durationMs');
+        assume(actualOutput[0].durationMs).is.a('number');
+        assume(actualOutput[0].message).equals('testing1');
+        assume(actualOutput[0].level).equals('info');
+        assume(actualOutput[0].something).equals('ok');
+        assume(actualOutput[0].rootLogger).is.true();
+        done()
       }, 100);
     });
   });
@@ -823,12 +832,6 @@ describe('Logger Instance', function () {
   });
 
   describe('Metadata Precedence', () => {
-    let actualOutput = [];
-
-    beforeEach(() => {
-      actualOutput = [];
-    });
-    
     describe('Single logger instance', () => {
       describe('When logging with [LEVEL]() methods', () => {
         it('should log to passed array correctly when using the `inMemory` transport', () => {
