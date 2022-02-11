@@ -8,6 +8,14 @@ body:
       value: |
         This issue form is for requesting features only! Please help us reduce duplicate issues by searching through both
         open and closed issues though. It only takes 5 minutes and helps us with housekeeping. :)
+  - type: textarea # Search Terms
+    validations:
+      required: true
+    attributes:
+      label: 🔎 Search Terms
+      description: >-
+        What search terms did you use when trying to find an existing feature request, looking in both open and closed issues?
+        List them here so people in the future can find this one more easily.
   - type: textarea # Feature Definition
     validations:
       required: true
