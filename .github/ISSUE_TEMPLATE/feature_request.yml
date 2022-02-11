@@ -6,13 +6,20 @@ body:
   - type: markdown # Form Header
     attributes:
       value: |
-        This issue form is for requesting features only! Please help us reduce duplicate issues by searching through both
-        open and closed issues though. It only takes 5 minutes and helps us with housekeeping. :)
+        This issue form is for requesting features only!
+  - type: input # Search Terms
+    validations:
+      required: true
+    attributes:
+      label: 🔎 Search Terms
+      description: >-
+        What search terms did you use when trying to find an existing feature request, looking in both open and closed issues?
+        List them here so people in the future can find this one more easily.
   - type: textarea # Feature Definition
     validations:
       required: true
     attributes:
-      label: The problem
+      label: The vision
       description: >-
         Please provide a clear and concise description of the feature you would like to see implemented.
   - type: markdown # Feature Details Section
