@@ -8,7 +8,7 @@ body:
       value: >-
         This issue form is for reporting bugs only! Please help us reduce duplicate issues by searching through both
         open and closed issues though. It only takes 5 minutes and helps us with housekeeping. :)
-  - type: textarea # Search Terms
+  - type: input # Search Terms
     validations:
       required: true
     attributes:
