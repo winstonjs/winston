@@ -19,7 +19,7 @@ body:
     validations:
       required: true
     attributes:
-      label: The problem
+      label: The vision
       description: >-
         Please provide a clear and concise description of the feature you would like to see implemented.
   - type: markdown # Feature Details Section
