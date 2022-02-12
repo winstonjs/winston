@@ -42,7 +42,7 @@
     "@types/node": "^17.0.8",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
-    "colors": "1.4.0",
+    "@colors/colors": "1.5.0",
     "cross-spawn-async": "^2.2.5",
     "eslint": "^8.8.0",
     "@dabh/eslint-config-populist": "^5.0.0",
