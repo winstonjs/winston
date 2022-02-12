@@ -2,7 +2,6 @@
   "extends": "@dabh/eslint-config-populist",
   "rules": {
     "one-var": ["error", { "var": "never", "let": "never", "const": "never" }],
-    "linebreak-style": ["error", "windows"],
     "strict": 0
   },
   "parserOptions": {
