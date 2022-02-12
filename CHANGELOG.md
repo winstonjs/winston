@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v3.6.0 / 2022-02-12
+
+- [#2057] Fix potential memory leak by not waiting for `process.nextTick` before clearing pending callbacks (thanks @smashah!)
+- [#2071] Update to `logform` 2.4.0, which includes changes such as new options for `JsonOptions` and some typo fixes regarding levels
+- Various other dependencies are updated, tests are reorganized and cleaned up, etc. (thanks @wbt, @Maverick1872, @fearphage!)
+
 ## v3.5.1 / 2022-01-31
 
 This release reverts the changes made in PR #1896 which added stricter typing to the available log levels,
