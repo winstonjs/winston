@@ -59,7 +59,7 @@ body:
 
         This can be as simple as a script, a link to a repo, etc.
         If using a script please wrap with triple backticks and language. EG:
-        ```javascript
+        ` ```javascript `
   - type: textarea # Additional Information
     attributes:
       label: Additional information
