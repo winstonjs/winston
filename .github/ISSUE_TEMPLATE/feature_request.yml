@@ -23,7 +23,6 @@ body:
       label: Use case
       description: |
         If you desire you can provide use cases for the requested feature.
-      render: yaml
   - type: textarea # Additional Information
     attributes:
       label: Additional information

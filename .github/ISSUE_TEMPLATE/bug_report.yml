@@ -13,7 +13,7 @@ body:
     attributes:
       label: The problem
       description: >-
-        Please provide a clear and concise description of the problem you've encountered and what the your
+        Please provide a clear and concise description of the problem you've encountered and what the
         expected behavior was.
   - type: markdown # Environment Section Header
     attributes:
@@ -58,7 +58,10 @@ body:
         to get involved.
 
         This can be as simple as a script, a link to a repo, etc.
-      render: yaml
+        If using a script please wrap with triple backticks and language. EG:
+        ```javascript
+        const winston.createLogger();
+        ```
   - type: textarea # Additional Information
     attributes:
       label: Additional information
