@@ -7,14 +7,6 @@ body:
     attributes:
       value: |
         This issue form is for requesting features only!
-  - type: input # Search Terms
-    validations:
-      required: true
-    attributes:
-      label: 🔎 Search Terms
-      description: >-
-        What search terms did you use when trying to find an existing feature request, looking in both open and closed issues?
-        List them here so people in the future can find this one more easily.
   - type: textarea # Feature Definition
     validations:
       required: true
@@ -37,3 +29,11 @@ body:
       label: Additional information
       description: >
         If you have any additional information for us that you feel will be valuable, please use the field below.
+  - type: input # Search Terms
+    validations:
+      required: true
+    attributes:
+      label: 🔎 Search Terms
+      description: >-
+        What search terms did you use when trying to find an existing feature request, looking in both open and closed issues?
+        List them here so people in the future can find this one more easily.
