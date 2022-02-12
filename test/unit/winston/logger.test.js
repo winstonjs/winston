@@ -208,31 +208,26 @@ describe('Logger Instance', function () {
     });
 
     describe('Multiple Transports', function () {
-      it.skip('should log the same thing to every configured transport', function () {
-        winston.add(new Winston.transports.Console({
-          format: Winston.format.combine(
-            Winston.format(info => {
-                info.message = info.message + "Console";
-                return info;
-              })(),
-            Winston.format.splat(), Winston.format.simple(), Winston.format(info => {
-            // console.log(info); // meta is there!
-            return info;
-          })()),
-          handleExceptions: true
-        }));
-        Winston.add(new Winston.transports.File({
-          filename: "test.log",
-          format: Winston.format.combine(Winston.format(info => {
-            // console.log(info); // meta is gone :(! and so is SPLAT only a array of length 1
-            return info;
-          })(), Winston.format.splat(), Winston.format.simple())
-        }));
+      it('should log the same thing to every configured transport', function () {
+        console.log('Reproduction of Issue #1430');
+        this.skip();
+        const transport1Output = [];
+        const transport2Output = [];
+        const customFormat = winston.format.combine(
+          winston.format.splat(),
+          winston.format.printf((info) => JSON.stringify(info))
+        );
 
+        const logger = winston.createLogger();
+
+        logger.add(mockTransports.inMemory(transport1Output, {format: customFormat}));
+        logger.add(mockTransports.inMemory(transport2Output, {format: customFormat}));
 
         for (let index = 0; index < 10; index++) {
-          Winston.error("test %s" + index, "blub", "metainfo");
+          logger.info("test %s" + index, "blub", "metainfo");
         }
+
+        assume(transport1Output).eqls(transport2Output);
       });
     });
   });
@@ -819,14 +814,20 @@ describe('Logger Instance', function () {
         logger.info(err);
       });
 
-      // TODO: This test needs finished or removed
-      it.skip(`.info('any string', new Error())`, function (done) {
+      it(`.info('any string', new Error())`, function () {
+        console.log(`The current result of this log statement results in the error message being concatenated with \
+the log message provided.\nThis behavior needs to be verified if it's intentional IMO`)
+        this.skip();
         const err = new Error('test');
-        const logger = helpers.createLogger(function (info) {
-          done();
+        const logger = winston.createLogger({
+          transports: [mockTransports.inMemory(levelOutput)]
         });
 
-        logger.info(err);
+        logger.info('test message!', err);
+
+        assume(levelOutput[0].level).eqls("info");
+        assume(levelOutput[0].message).eqls("test message! test");
+        assume(levelOutput[0].stack).exists("stack trace must exist");
       });
     });
   });

@@ -24,7 +24,7 @@ function createMockTransport(write) {
  * @param array Array to be used to store the "written" chunks
  * @returns {winston.transports.Stream}
  */
-function inMemory(array) {
+function inMemory(array, options = {}) {
   const memoryStream = new Writable({
     objectMode: true,
     write: (chunk, encoding, next) => {
@@ -32,7 +32,7 @@ function inMemory(array) {
       next()
     }
   });
-  return new winston.transports.Stream({stream: memoryStream})
+  return new winston.transports.Stream({stream: memoryStream, ...options})
 }
 
 module.exports = {
