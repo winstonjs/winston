@@ -1364,6 +1364,27 @@ describe('Logger Instance', function () {
           assume(actualOutput).eqls(expectedOutput);
         });
 
+        it("should not reflect changes to the parent's metadata if it changes after the child is created", () => {
+          const expectedOutput = [
+            {message: "some message", level: "info", label: "parent"}, // child logger
+            {message: "some message", level: "info", label: "parent"}, // child logger
+          ];
+
+          const rootLogger = winston.createLogger({
+            transports: [mockTransports.inMemory(actualOutput)],
+            defaultMeta: {label: "parent"}
+          });
+          const childLogger = rootLogger.child();
+
+          childLogger.log("info", "some message");
+          rootLogger.defaultMeta = {
+            defaultMeta: {label: "updatedLabel"}
+          };
+          childLogger.log("info", "some message");
+
+          assume(actualOutput).eqls(expectedOutput);
+        });
+
         it("should include both the parent's & child's default metadata", () => {
           const expectedOutput = [
             {message: "some message", level: "info", loggerName: "root"}, // root logger
@@ -1547,6 +1568,27 @@ describe('Logger Instance', function () {
       });
     });
   });
+
+  describe('Metadata application with formats', () => {
+    describe('Printf Format', () => {
+      it('should result in equivalent messages when using log() and [LEVEL]()', () => {
+        const logger = winston.createLogger({
+          level: "debug",
+          defaultMeta: { id: 'APP', service: 'Authentication' },
+          format: winston.format.combine(
+              winston.format.printf(
+                  info => `${info.service} - ${info.level}: [${info.id}] ${info.message}`
+              )
+          ),
+          transports: [mockTransports.inMemory(actualOutput)]
+        });
+
+        logger.info("This is my info");
+        logger.log("info", "This is my info");
+        assume(actualOutput[0][MESSAGE]).eqls(actualOutput[1][MESSAGE]);
+      });
+    });
+  })
 
   describe('Backwards Compatability', function () {
     describe('Winston V2 Log', function () {
