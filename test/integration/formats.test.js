@@ -8,7 +8,7 @@
 
 var path = require('path'),
     assume = require('assume'),
-    colors = require('colors/safe'),
+    colors = require('@colors/colors/safe'),
     spawn = require('cross-spawn-async'),
     winston = require('../../lib/winston'),
     helpers = require('../helpers');
