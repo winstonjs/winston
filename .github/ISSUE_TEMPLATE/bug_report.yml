@@ -60,8 +60,6 @@ body:
         This can be as simple as a script, a link to a repo, etc.
         If using a script please wrap with triple backticks and language. EG:
         ```javascript
-        const winston.createLogger();
-        ```
   - type: textarea # Additional Information
     attributes:
       label: Additional information
