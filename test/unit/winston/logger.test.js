@@ -863,6 +863,54 @@ the log message provided.\nThis behavior needs to be verified if it's intentiona
     });
   });
 
+  describe('Metadata with non-primitive data types', function() {
+    it('should support a Map', function() {
+      const expectedOutput = [
+        {level: "info", message: "test message", someMap: new Map([["val1","c"], ["val2", "b"]])}
+      ];
+
+      const logger1 = winston.createLogger({
+        transports: [mockTransports.inMemory(levelOutput)]
+      });
+      const logger2 = winston.createLogger({
+        transports: [mockTransports.inMemory(logOutput)]
+      });
+      const logMeta = {
+        someMap: new Map([["val1","a"], ["val2", "b"], ["val1","c"]])
+      };
+
+      logger1.info("test message", logMeta);
+      logger2.info({level: "info", message: "test message", ...logMeta});
+
+      assume(levelOutput).eqls(logOutput);
+      assume(expectedOutput).eqls(levelOutput);
+      assume(expectedOutput).eqls(logOutput);
+    });
+
+    it('should support a Set', function() {
+      const expectedOutput = [
+        {level: "info", message: "test message", someSet: new Set(["a", "b"])}
+      ]
+
+      const logger1 = winston.createLogger({
+        transports: [mockTransports.inMemory(levelOutput)]
+      });
+      const logger2 = winston.createLogger({
+        transports: [mockTransports.inMemory(logOutput)]
+      });
+      const logMeta = {
+        someSet: new Set(["a","b", "a"])
+      };
+
+      logger1.info("test message", logMeta);
+      logger2.info({level: "info", message: "test message", ...logMeta});
+
+      assume(levelOutput).eqls(logOutput);
+      assume(expectedOutput).eqls(levelOutput);
+      assume(expectedOutput).eqls(logOutput);
+    });
+  });
+
   describe('Metadata Precedence', () => {
     describe('Single logger instance', () => {
       it('should log to passed array correctly when using the `inMemory` transport', () => {
