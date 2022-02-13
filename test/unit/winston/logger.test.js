@@ -10,8 +10,6 @@
 
 const assume = require('assume');
 const path = require('path');
-const stream = require('readable-stream');
-const util = require('util');
 const { EOL } = require('os');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');

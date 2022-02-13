@@ -1,7 +1,6 @@
 const stream = require('stream')
 const winston = require('../../../lib/winston');
 const {Writable} = require("stream");
-const {output} = require("./legacy-transport");
 
 /**
  * Returns a new Winston transport instance which will invoke
