@@ -14,7 +14,7 @@ body:
       label: 🔎 Search Terms
       description: >-
         What search terms did you use when trying to find an existing bug report, looking in both open and closed issues?
-        List them here so people in the future can find this one more easily.
+        List them here (comma seperated) so people in the future can find this one more easily.
   - type: textarea # Problem Definition
     validations:
       required: true
