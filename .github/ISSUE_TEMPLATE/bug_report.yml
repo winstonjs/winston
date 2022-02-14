@@ -13,7 +13,7 @@ body:
     attributes:
       label: 🔎 Search Terms
       description: >-
-        What search terms did you use when trying to find an existing feature request, looking in both open and closed issues?
+        What search terms did you use when trying to find an existing bug report, looking in both open and closed issues?
         List them here so people in the future can find this one more easily.
   - type: textarea # Problem Definition
     validations:
