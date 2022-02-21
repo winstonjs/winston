@@ -936,16 +936,16 @@ the log message provided.\nThis behavior needs to be verified if it's intentiona
 
       it('should include default metadata defined on the logger instance', () => {
         const expectedOutput = [
-          {message: "some message", level: "info", defaultMeta: true},
+          {message: "some message", level: "info", isRoot: true},
         ];
 
         const logger1 = winston.createLogger({
           transports: [mockTransports.inMemory(levelOutput)],
-          defaultMeta: {defaultMeta: true}
+          defaultMeta: {isRoot: true}
         });
         const logger2 = winston.createLogger({
           transports: [mockTransports.inMemory(logOutput)],
-          defaultMeta: {defaultMeta: true}
+          defaultMeta: {isRoot: true}
         });
 
         logger1.info("some message");
@@ -978,16 +978,16 @@ the log message provided.\nThis behavior needs to be verified if it's intentiona
 
       it('should include both default metadata & log specific metadata', () => {
         const expectedOutput = [
-          {message: "some message", level: "info", defaultMeta: true, logMeta: true},
+          {message: "some message", level: "info", isRoot: true, logMeta: true},
         ];
 
         const logger1 = winston.createLogger({
           transports: [mockTransports.inMemory(levelOutput)],
-          defaultMeta: {defaultMeta: true}
+          defaultMeta: {isRoot: true}
         });
         const logger2 = winston.createLogger({
           transports: [mockTransports.inMemory(logOutput)],
-          defaultMeta: {defaultMeta: true}
+          defaultMeta: {isRoot: true}
         });
 
         logger1.info("some message", {logMeta: true});
@@ -998,22 +998,22 @@ the log message provided.\nThis behavior needs to be verified if it's intentiona
         assume(expectedOutput).eqls(logOutput);
       });
 
-      it('should include override default metadata with log specific metadata', () => {
+      it('should override default metadata with log specific metadata', () => {
         const expectedOutput = [
-          {message: "some message", level: "info", defaultMeta: false},
+          {message: "some message", level: "info", isRoot: false},
         ];
 
         const logger1 = winston.createLogger({
           transports: [mockTransports.inMemory(levelOutput)],
-          defaultMeta: {defaultMeta: true}
+          defaultMeta: {isRoot: true}
         });
         const logger2 = winston.createLogger({
           transports: [mockTransports.inMemory(logOutput)],
-          defaultMeta: {defaultMeta: true}
+          defaultMeta: {isRoot: true}
         });
 
-        logger1.info("some message", {defaultMeta: false});
-        logger2.log({level: "info", message: "some message", defaultMeta: false});
+        logger1.info("some message", {isRoot: false});
+        logger2.log({level: "info", message: "some message", isRoot: false});
 
         assume(levelOutput).eqls(logOutput);
         assume(expectedOutput).eqls(levelOutput);
@@ -1083,7 +1083,7 @@ the log message provided.\nThis behavior needs to be verified if it's intentiona
         assume(expectedOutput).eqls(logOutput);
       });
 
-      it('should include metadata log specific metadata', () => {
+      it('should include log specific metadata', () => {
         const expectedOutput = [
           {message: "some message", level: "info", logMetadata: true},
           {message: "some message", level: "info", logMetadata: false},
