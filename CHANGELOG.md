@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v3.7.0 / 2022-03-30
+
+Feature-level updates:
+- [#1989] Fix: resolve issues with metadata and the associated overriding behavior (thanks @maverick1872, @wbt, @DABH, @fearphage and issue reporters)
+
+Patch-level updates:
+- [#2075] Fix: add missing types for batching options for HTTP Transport (thanks @KylinDC)
+- Various dependencies updated, quality of life & maintainability changes, etc
+
 ## v3.6.0 / 2022-02-12
 
 - [#2057] Fix potential memory leak by not waiting for `process.nextTick` before clearing pending callbacks (thanks @smashah!)
@@ -63,9 +72,9 @@ Thanks also to @DABH, @wbt, and @fearphage for contributions and reviews!
 
 ## v3.3.4 / 2022-01-09
 
-Compared to v3.3.3, this version fixes some issues and includes some updates to project infrastructure, 
-such as replacing Travis with Github CI and dependabot configuration. 
-There have also been several relatively minor improvements to documentation, and incorporation of some updated dependencies.  
+Compared to v3.3.3, this version fixes some issues and includes some updates to project infrastructure,
+such as replacing Travis with Github CI and dependabot configuration.
+There have also been several relatively minor improvements to documentation, and incorporation of some updated dependencies.
 Dependency updates include a critical bug fix [#2008] in response to self-vandalism by the author of a dependency.
 
 - [#1964] Added documentation for how to use a new externally maintained [Seq](https://datalust.co/seq) transport.
@@ -133,7 +142,7 @@ Dependency updates include a critical bug fix [#2008] in response to self-vandal
 - [#1418], (@mfrisbey) Precompile ES6 syntax before publishing to npm.
   - [#1533], (@kibertoad) Update to Babel 7.
 - [#1562], (@indexzero) [fix] Better handling of `new Error(string)`
-  throughout the pipeline(s). (Fixes [#1338], [#1486]). 
+  throughout the pipeline(s). (Fixes [#1338], [#1486]).
 
 ### Bug Fixes
 
@@ -146,14 +155,14 @@ Dependency updates include a critical bug fix [#2008] in response to self-vandal
 - [#1521], (@jamesbechet) Fix Transform from `readable-stream` using CRA.
 - [#1434], (@Kouzukii) Fixes logger.query function (regression from `3.0.0`)
 - [#1526], (@pixtron) Log file without .gz for tailable (Fixes [#1525]).
-- [#1559], (@eubnara) Fix typo related to `exitOnError`. 
+- [#1559], (@eubnara) Fix typo related to `exitOnError`.
 - [#1556], (@adoyle-h) Support to create log directory if it doesn't exist
   for FileTransport.
 
 #### New `splat` behavior
 
-- [#1552], (@indexzero) Consistent handling of meta with (and without) 
-  interpolation in `winston` and `logform`. 
+- [#1552], (@indexzero) Consistent handling of meta with (and without)
+  interpolation in `winston` and `logform`.
 - [#1499], (@DABH) Provide all of `SPLAT` to formats (Fixes [#1485]).
 - [#1485], (@mpabst) Fixing off-by-one when using both meta and splat.
 
@@ -183,7 +192,7 @@ logger.info(
   'Let us %s for %j',   // message
   'objects',           // used for %s
   { label: 'sure' },   // used for %j
-  'lol', ['ok', 'why'] // Multiple additional meta values 
+  'lol', ['ok', 'why'] // Multiple additional meta values
 );
 
 // winston < 3.2.0 && logform@1.x behavior:
@@ -293,13 +302,13 @@ logger.info(
 - Internal project maintenance
   - Bump to `winston-transport@4.0.0` which may cause incompatibilities if
     your custom transport does not explicitly require `winston-transport`
-    itself. 
+    itself.
   - [#1292], (@ChrisAlderson) Add node v10 to TravisCI build matrix.
   - [#1296], (@indexzero) Improve `UPGRADE-3.0.md`. Add Github Issue Template.
   - Remove "npm run report" in favor of reports being automatically generate.
   - Update `logform`, `triple-beam`, and `winston-transport` to latest.
 
-> Special thanks to our newest `winston` core team member – @ChrisAlderson for 
+> Special thanks to our newest `winston` core team member – @ChrisAlderson for
 > helping make `winston@3.0.0` a reality next week!
 
 ## v3.0.0-rc5 / 2018-04-20
@@ -308,7 +317,7 @@ logger.info(
 - [#1281] Use `Buffer.alloc` and `Buffer.from` instead of `new Buffer`.
 - Better browser support
   - [#1142] Move common tailFile to a separate file
-  - [#1279] Use feature detection to be safer for browser usage. 
+  - [#1279] Use feature detection to be safer for browser usage.
 - MOAR Docs!
   - **Document that we are pushing for a May 29th, 2018 release of `winston@3.0.0`**
   - **Add David Hyde as official contributor.**
@@ -321,8 +330,8 @@ logger.info(
   - [#1273] Add example using multiple formats.
   - [#1250] Add an example illustrating the "finish" event for AWS Lambda scenarios.
   - Use simple format to better show that `humanReadableUnhandledException` is now the default message format.
-  - Add example to illustrate that example code from winston-transport 
-    `README.md` is correct. 
+  - Add example to illustrate that example code from winston-transport
+    `README.md` is correct.
 - Update `devDependencies`
   - Bump `assume` to `^2.0.1`.
   - Bump `winston-compat` to `^0.1.1`.
@@ -339,12 +348,12 @@ require('winston-transport').TransportStream;
   - [#1145], (@Jasu) Replace `isstream` with `is-stream` to make stream detection work in browser.
   - [#1146], (@Jasu) Rename query to different than function name, to support Babel 6.26.
 - Better Typescript support in all supporting libraries
-  - `logform@1.4.1` 
+  - `logform@1.4.1`
 - Update documentation
   - (@indexzero) Correct link to upgrade guide. Fixes #1255.
   - [#1258], (@morenoh149) Document how to colorize levels. Fixes #1135.
   - [#1246], (@KlemenPlazar) Update colors argument when adding custom colors
-  - Update `CONTRIBUTING.md` 
+  - Update `CONTRIBUTING.md`
   - [#1239], (@dabh) Add changelog entries for `v3.0.0-rc3`
   - Add example showing that `{ level }` can be deleted from info objects because `Symbol.for('level')` is what `winston` uses internally. Fixes #1184.
 
@@ -365,7 +374,7 @@ require('winston-transport').TransportStream;
 - [#1197], (@indexzero) Roadmap & guidelines for contributors.
 - [#1100] Require the package.json by its full name.
 - [#1149] Updates `async` to latest (`2.6.0`)
-- [#1228], (@mcollina) Always pass a function to `fs.close`. 
+- [#1228], (@mcollina) Always pass a function to `fs.close`.
 - Minor fixes to docs & examples: [#1177], [#1182], [#1208], [#1198], [#1165], [#1110], [#1117], [#1097], [#1155], [#1084], [#1141], [#1210], [#1223].
 
 ## v3.0.0-rc1 / 2017-10-19
