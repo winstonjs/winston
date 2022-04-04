@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.7.2 / 2022-04-04
+This change reverts what should have been the feature-level update in 3.7.0 due to issue #2103 showing this to be breaking, unintentionally.
+
 ## v3.7.1 / 2022-04-04
 This change includes some minor updates to package-lock.json resolving npm audit failures: one in [ansi-regex](https://github.com/advisories/GHSA-93q8-gq69-wqmw) and another in [minimist](https://github.com/advisories/GHSA-xvch-5gv4-984h).
 
@@ -644,4 +647,3 @@ function filter (level, msg, meta, inst) {
   * Multi-line values for conditional returns are not allowed
   * Added acceptance of `stringify` option
   * Fixed padding for log levels
-
