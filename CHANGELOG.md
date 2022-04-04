@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.7.1 / 2022-04-04
+This change includes some minor updates to package-lock.json resolving npm audit failures: one in [ansi-regex](https://github.com/advisories/GHSA-93q8-gq69-wqmw) and another in [minimist](https://github.com/advisories/GHSA-xvch-5gv4-984h).
+
 ## v3.7.0 / 2022-03-30
 
 Feature-level updates:
