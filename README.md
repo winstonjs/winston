@@ -1091,12 +1091,13 @@ logger.info('CHILL WINSTON!', { seriously: true });
 logger.end();
 ```
 
-It is also worth mentioning that the logger also emits an 'error' event which
+It is also worth mentioning that the logger also emits an 'error' event
+if an error occurs within the logger itself which
 you should handle or suppress if you don't want unhandled exceptions:
 
 ``` js
 //
-// Handle errors
+// Handle errors originating in the logger itself
 //
 logger.on('error', function (err) { /* Do Something */ });
 ```
