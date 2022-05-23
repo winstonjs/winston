@@ -21,7 +21,8 @@ describe('winston', function () {
   });
 
   it('has expected initial state', function () {
-    assume(winston.default.transports).deep.equals([]);
+    assume(winston.default.transports.length).equals(1);
+    assume(winston.default.transports[0].name).equals('console');
     assume(winston.level).equals('info');
   });
 
