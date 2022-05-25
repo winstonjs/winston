@@ -77,7 +77,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 You may also log directly via the default logger exposed by
 `require('winston')`, but this merely intended to be a convenient shared
-logger to use throughout your application if you so choose. And default logger don't have any transports by default, your need add transports by yourself, otherwise you may encounter memory issue.
+logger to use throughout your application if you so choose. And default logger don't have any transports by default, you need add transports by yourself, otherwise you may encounter memory issue.
 
 ## Table of contents
 
