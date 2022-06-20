@@ -41,7 +41,7 @@
     "@babel/preset-env": "^7.16.7",
     "@colors/colors": "1.5.0",
     "@dabh/eslint-config-populist": "^5.0.0",
-    "@types/node": "^17.0.17",
+    "@types/node": "^18.0.0",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
     "cross-spawn-async": "^2.2.5",
