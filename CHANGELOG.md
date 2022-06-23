@@ -1,4 +1,25 @@
 # CHANGELOG
+## [v3.8.0](https://github.com/winstonjs/winston/compare/v3.7.2...v3.8.0) / 2022-06-23
+### Added functionality
+* Add the stringify replacer option to the HTTP transport by @domiins in https://github.com/winstonjs/winston/pull/2155
+
+### Dependency updates by @dependabot + CI autotesting
+* Bump @babel/core from 7.17.8 to 7.18.5
+* Bump eslint from 8.12.0 to 8.18.0
+* Bump @types/node from 17.0.23 to 18.0.0
+* Bump @babel/preset-env from 7.16.11 to 7.18.2
+* Bump @babel/cli from 7.17.6 to 7.17.10
+
+### Updates facilitating repo maintenance & enhancing documentation
+* Explicitly note that the Contributing.md file is out of date
+* Add instructions for publishing updated version by @wbt (docs/publishing.md)
+* Prettier Config File by @jeanpierrecarvalho in https://github.com/winstonjs/winston/pull/2092
+* Readme update to explain origin of errors for handling (#2120)
+* update documentation for #2114 by @zizifn in https://github.com/winstonjs/winston/pull/2138
+* enhance message for logs with no transports #2114 by @zizifn in https://github.com/winstonjs/winston/pull/2139
+* Added a new Community Transport option to the list: Worker Thread based async Console Transport by @arpad1337 in https://github.com/winstonjs/winston/pull/2140
+
+Thanks especially to new contributors @zizifn, @arpad1337, @domiins, & @jeanpierrecarvalho!
 
 ## v3.7.2 / 2022-04-04
 This change reverts what should have been the feature-level update in 3.7.0 due to issue #2103 showing this to be breaking, unintentionally.
