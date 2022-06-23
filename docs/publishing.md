@@ -9,7 +9,7 @@ The release process here mostly follows along with the [vbump script](https://gi
 1. Paste the contents of the changelog for this release in the 'Describe this release' box.
 1. Check to make sure you've caught everything using GitHub's compare tool ([example here](https://github.com/winstonjs/winston/compare/v3.6.0...master)).
 1. Update the changelog. It's nice to thank the contributors here.  It's nice to organize this by which changes would merit which level of semver bump, and especially call out any breaking changes (major-version-number) concisely at the start.
-1. **Update the version number in package.json and package-lock.json**, bumping as appropriate for [semver](https://semver.org/) based on the most significant position change trigger from the changelog you just wrote/reviewed.  Do not miss this step!
+1. **Update the version number in package.json and package-lock.json**, bumping as appropriate for [semver](https://semver.org/) based on the most significant position change trigger from the changelog you just wrote/reviewed.  Do not miss this step! Also note there are two places in package-lock where this ges updated: at the top level and under the empty-string entry of packages.
 1. Update the tag and version number on the Draft a New Release page, with the same number (which might've changed while drafting changelog notes).
 1. Make sure your local master branch is up to date.
 1. Make sure all the lint checks and tests pass, beyond what the CI might've told you.
