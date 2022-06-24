@@ -19,8 +19,8 @@ declare namespace winston {
   export import transports = Transports;
   export import transport = Transport;
 
-  interface ExceptionHandler {
-    logger: Logger;
+  interface ExceptionHandler<L extends string = Config.NpmLevels> {
+    logger: Logger<L>;
     handlers: Map<any, any>;
     catcher: Function | boolean;
 
@@ -31,11 +31,11 @@ declare namespace winston {
     getOsInfo(): object;
     getTrace(err: Error): object;
 
-    new(logger: Logger): ExceptionHandler;
+    new(logger: Logger<L>): ExceptionHandler<L>;
   }
   
-  interface RejectionHandler {
-    logger: Logger;
+  interface RejectionHandler<L extends string = Config.NpmLevels> {
+    logger: Logger<L>;
     handlers: Map<any, any>;
     catcher: Function | boolean;
 
@@ -46,7 +46,7 @@ declare namespace winston {
     getOsInfo(): object;
     getTrace(err: Error): object;
 
-    new(logger: Logger): RejectionHandler;
+    new(logger: Logger<L>): RejectionHandler<L>;
   }
 
   interface QueryOptions {
@@ -59,26 +59,27 @@ declare namespace winston {
     fields: any;
   }
 
-  interface Profiler {
-    logger: Logger;
+  interface Profiler<L extends string = Config.NpmLevels> {
+    logger: Logger<L>;
     start: Number;
     done(info?: any): boolean;
   }
 
-  type LogCallback = (error?: any, level?: string, message?: string, meta?: any) => void;
+  type LogCallback = <L extends string = Config.NpmLevels>(error?: any, level?: L, message?: string, meta?: any) => void;
 
-  interface LogEntry {
-    level: string;
+
+  interface LogEntry<L extends string = Config.NpmLevels> {
+    level: L;
     message: string;
     [optionName: string]: any;
   }
 
-   interface LogMethod {
-    (level: string, message: string, callback: LogCallback): Logger;
-    (level: string, message: string, meta: any, callback: LogCallback): Logger;
-    (level: string, message: string, ...meta: any[]): Logger;
-    (entry: LogEntry): Logger;
-    (level: string, message: any): Logger;
+   interface LogMethod<L extends string = Config.NpmLevels> {
+    (level: L, message: string, callback: LogCallback): Logger<L>;
+    (level: L, message: string, meta: any, callback: LogCallback): Logger<L>;
+    (level: L, message: string, ...meta: any[]): Logger<L>;
+    (entry: LogEntry<L>): Logger<L>;
+    (level: L, message: any): Logger<L>;
   }
 
   interface LeveledLogMethod {
@@ -89,8 +90,8 @@ declare namespace winston {
     (infoObject: object): Logger;
   }
 
-  interface LoggerOptions {
-    levels?: Config.AbstractConfigSetLevels;
+  interface LoggerOptions<L extends string = Config.NpmLevels> {
+    levels?: Config.AbstractConfigSetLevels<L>;
     silent?: boolean;
     format?: logform.Format;
     level?: string;
@@ -100,58 +101,38 @@ declare namespace winston {
     handleExceptions?: boolean;
     handleRejections?: boolean;
     exceptionHandlers?: any;
-    rejectionHandlers?: any;
+    RejectionHandlers?: any;
   }
 
-  interface Logger extends NodeJSStream.Transform {
+  type Logger<L extends string = Config.NpmLevels> = Record<L, LeveledLogMethod> & NodeJSStream.Transform & {
     silent: boolean;
     format: logform.Format;
-    levels: Config.AbstractConfigSetLevels;
-    level: string;
+    levels: Config.AbstractConfigSetLevels<L>;
+    level: L;
     transports: Transport[];
-    exceptions: ExceptionHandler;
-    rejections: RejectionHandler;
+    exceptions: ExceptionHandler<L>;
+    rejections: RejectionHandler<L>;
     profilers: object;
     exitOnError: Function | boolean;
     defaultMeta?: any;
 
-    log: LogMethod;
-    add(transport: Transport): Logger;
-    remove(transport: Transport): Logger;
-    clear(): Logger;
-    close(): Logger;
-
-    // for cli and npm levels
-    error: LeveledLogMethod;
-    warn: LeveledLogMethod;
-    help: LeveledLogMethod;
-    data: LeveledLogMethod;
-    info: LeveledLogMethod;
-    debug: LeveledLogMethod;
-    prompt: LeveledLogMethod;
-    http: LeveledLogMethod;
-    verbose: LeveledLogMethod;
-    input: LeveledLogMethod;
-    silly: LeveledLogMethod;
-
-    // for syslog levels only
-    emerg: LeveledLogMethod;
-    alert: LeveledLogMethod;
-    crit: LeveledLogMethod;
-    warning: LeveledLogMethod;
-    notice: LeveledLogMethod;
+    log: LogMethod<L>;
+    add(transport: Transport): Logger<L>;
+    remove(transport: Transport): Logger<L>;
+    clear(): Logger<L>;
+    close(): Logger<L>;
 
     query(options?: QueryOptions, callback?: (err: Error, results: any) => void): any;
     stream(options?: any): NodeJS.ReadableStream;
 
-    startTimer(): Profiler;
-    profile(id: string | number, meta?: LogEntry): Logger;
+    startTimer(): Profiler<L>;
+    profile(id: string | number, meta?: LogEntry<L>): Logger<L>;
 
     configure(options: LoggerOptions): void;
 
-    child(options: Object): Logger;
+    child(options: Object): Logger<L>;
 
-    isLevelEnabled(level: string): boolean;
+    isLevelEnabled(level: L): boolean;
     isErrorEnabled(): boolean;
     isWarnEnabled(): boolean;
     isInfoEnabled(): boolean;
@@ -159,19 +140,19 @@ declare namespace winston {
     isDebugEnabled(): boolean;
     isSillyEnabled(): boolean;
 
-    new(options?: LoggerOptions): Logger;
-  }
+    new(options?: LoggerOptions<L>): Logger<L>;
+  };
 
-  interface Container {
-    loggers: Map<string, Logger>;
-    options: LoggerOptions;
+  interface Container<L extends string = Config.NpmLevels> {
+    loggers: Map<string, Logger<L>>;
+    options: LoggerOptions<L>;
 
-    add(id: string, options?: LoggerOptions): Logger;
-    get(id: string, options?: LoggerOptions): Logger;
+    add(id: string, options?: LoggerOptions): Logger<L>;
+    get(id: string, options?: LoggerOptions): Logger<L>;
     has(id: string): boolean;
     close(id?: string): void;
 
-    new(options?: LoggerOptions): Container;
+    new(options?: LoggerOptions<L>): Container<L>;
   }
 
   let version: string;
@@ -181,7 +162,7 @@ declare namespace winston {
   let loggers: Container;
 
   let addColors: (target: Config.AbstractConfigSetColors) => any;
-  let createLogger: (options?: LoggerOptions) => Logger;
+  let createLogger: <L extends string = Config.NpmLevels>(options?: LoggerOptions<L>) => Logger<L>;
 
   // Pass-through npm level methods routed to the default logger.
   let error: LeveledLogMethod;
@@ -203,7 +184,7 @@ declare namespace winston {
   let profile: (id: string | number) => Logger;
   let configure: (options: LoggerOptions) => void;
   let child: (options: Object) => Logger;
-  let level: string;
+  let level: Config.NpmLevels;
   let exceptions: ExceptionHandler;
   let rejections: RejectionHandler;
   let exitOnError: Function | boolean;

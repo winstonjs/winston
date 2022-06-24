@@ -22,6 +22,7 @@
     "noEmit": true
   },
   "files": [
+    "typescript-config-definitions.ts",
     "typescript-definitions.ts"
   ]
 }
