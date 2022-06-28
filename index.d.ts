@@ -3,7 +3,7 @@
 
 /// <reference types="node" />
 
-import * as NodeJSStream from "stream";
+import * as NodeJSStream from 'stream';
 
 import * as logform from 'logform';
 import * as Transport from 'winston-transport';
@@ -19,7 +19,7 @@ declare namespace winston {
   export import transports = Transports;
   export import transport = Transport;
 
-  interface ExceptionHandler {
+  class ExceptionHandler {
     logger: Logger;
     handlers: Map<any, any>;
     catcher: Function | boolean;
@@ -33,8 +33,8 @@ declare namespace winston {
 
     new(logger: Logger): ExceptionHandler;
   }
-  
-  interface RejectionHandler {
+
+  class RejectionHandler {
     logger: Logger;
     handlers: Map<any, any>;
     catcher: Function | boolean;
@@ -55,17 +55,22 @@ declare namespace winston {
     start?: number;
     from?: Date;
     until?: Date;
-    order?: "asc" | "desc";
+    order?: 'asc' | 'desc';
     fields: any;
   }
 
-  interface Profiler {
+  class Profiler {
     logger: Logger;
     start: Number;
     done(info?: any): boolean;
   }
 
-  type LogCallback = (error?: any, level?: string, message?: string, meta?: any) => void;
+  type LogCallback = (
+    error?: any,
+    level?: string,
+    message?: string,
+    meta?: any
+  ) => void;
 
   interface LogEntry {
     level: string;
@@ -73,7 +78,7 @@ declare namespace winston {
     [optionName: string]: any;
   }
 
-   interface LogMethod {
+  interface LogMethod {
     (level: string, message: string, callback: LogCallback): Logger;
     (level: string, message: string, meta: any, callback: LogCallback): Logger;
     (level: string, message: string, ...meta: any[]): Logger;
@@ -103,7 +108,7 @@ declare namespace winston {
     rejectionHandlers?: any;
   }
 
-  interface Logger extends NodeJSStream.Transform {
+  class Logger extends NodeJSStream.Transform {
     silent: boolean;
     format: logform.Format;
     levels: Config.AbstractConfigSetLevels;
@@ -141,7 +146,10 @@ declare namespace winston {
     warning: LeveledLogMethod;
     notice: LeveledLogMethod;
 
-    query(options?: QueryOptions, callback?: (err: Error, results: any) => void): any;
+    query(
+      options?: QueryOptions,
+      callback?: (err: Error, results: any) => void
+    ): any;
     stream(options?: any): NodeJS.ReadableStream;
 
     startTimer(): Profiler;
@@ -162,7 +170,7 @@ declare namespace winston {
     new(options?: LoggerOptions): Logger;
   }
 
-  interface Container {
+  class Container {
     loggers: Map<string, Logger>;
     options: LoggerOptions;
 
@@ -175,9 +183,6 @@ declare namespace winston {
   }
 
   let version: string;
-  let ExceptionHandler: ExceptionHandler;
-  let RejectionHandler: RejectionHandler;
-  let Container: Container;
   let loggers: Container;
 
   let addColors: (target: Config.AbstractConfigSetColors) => any;
@@ -194,7 +199,10 @@ declare namespace winston {
 
   // Other pass-through methods routed to the default logger.
   let log: LogMethod;
-  let query: (options?: QueryOptions, callback?: (err: Error, results: any) => void) => any;
+  let query: (
+    options?: QueryOptions,
+    callback?: (err: Error, results: any) => void
+  ) => any;
   let stream: (options?: any) => NodeJS.ReadableStream;
   let add: (transport: Transport) => Logger;
   let remove: (transport: Transport) => Logger;
