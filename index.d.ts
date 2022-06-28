@@ -20,6 +20,7 @@ declare namespace winston {
   export import transport = Transport;
 
   class ExceptionHandler {
+    constructor(logger: Logger);
     logger: Logger;
     handlers: Map<any, any>;
     catcher: Function | boolean;
@@ -30,11 +31,10 @@ declare namespace winston {
     getProcessInfo(): object;
     getOsInfo(): object;
     getTrace(err: Error): object;
-
-    new(logger: Logger): ExceptionHandler;
   }
 
   class RejectionHandler {
+    constructor(logger: Logger);
     logger: Logger;
     handlers: Map<any, any>;
     catcher: Function | boolean;
@@ -45,8 +45,6 @@ declare namespace winston {
     getProcessInfo(): object;
     getOsInfo(): object;
     getTrace(err: Error): object;
-
-    new(logger: Logger): RejectionHandler;
   }
 
   interface QueryOptions {
@@ -109,6 +107,8 @@ declare namespace winston {
   }
 
   class Logger extends NodeJSStream.Transform {
+    constructor(options?: LoggerOptions);
+
     silent: boolean;
     format: logform.Format;
     levels: Config.AbstractConfigSetLevels;
@@ -166,8 +166,6 @@ declare namespace winston {
     isVerboseEnabled(): boolean;
     isDebugEnabled(): boolean;
     isSillyEnabled(): boolean;
-
-    new(options?: LoggerOptions): Logger;
   }
 
   class Container {
@@ -179,7 +177,7 @@ declare namespace winston {
     has(id: string): boolean;
     close(id?: string): void;
 
-    new(options?: LoggerOptions): Container;
+    constructor(options?: LoggerOptions);
   }
 
   let version: string;
