@@ -1,4 +1,13 @@
 # CHANGELOG
+
+## [v3.8.1](https://github.com/winstonjs/winston/compare/v3.8.0...v3.8.1)
+
+### Patch-level changes
+* Update types to match in-code definitions in https://github.com/winstonjs/winston/pull/2157; thanks to new contributor @flappyBug
+
+### Dependency updates by @dependabot + CI autotesting
+* Bump logform from 2.4.0 to 2.4.1 in https://github.com/winstonjs/winston/pull/2156
+* Bump async from 3.2.3 to 3.2.4 in https://github.com/winstonjs/winston/pull/2147
 ## [v3.8.0](https://github.com/winstonjs/winston/compare/v3.7.2...v3.8.0) / 2022-06-23
 ### Added functionality
 * Add the stringify replacer option to the HTTP transport by @domiins in https://github.com/winstonjs/winston/pull/2155
