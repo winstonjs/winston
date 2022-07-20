@@ -1,7 +1,10 @@
+## v2.4.7
+
+- Update lodash packages to fix audit failures
+
 ## v2.4.6
 
 - [#2112] Update async dependency to address https://security.snyk.io/vuln/SNYK-JS-ASYNC-2441827
-- Update lodash packages to fix audit failures
 
 ## v2.4.5
 
