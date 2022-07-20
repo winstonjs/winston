@@ -1,5 +1,6 @@
 ## v2.4.6
 
+- [#2130] Update async dependency for node 4 compatibility
 - [#2112] Update async dependency to address https://security.snyk.io/vuln/SNYK-JS-ASYNC-2441827
 
 ## v2.4.5
