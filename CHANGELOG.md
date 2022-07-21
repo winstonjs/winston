@@ -2,6 +2,7 @@
 
 - [#2130] Update async dependency for node 4 compatibility
 - Update lodash packages to fix audit failures
+=======
 
 ## v2.4.6
 
