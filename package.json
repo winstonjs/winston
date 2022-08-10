@@ -55,7 +55,7 @@
     "through2": "^4.0.2",
     "winston-compat": "^0.1.5"
   },
-  "main": "./lib/winston",
+  "main": "./lib/winston.js",
   "browser": "./dist/winston",
   "types": "./index.d.ts",
   "scripts": {
