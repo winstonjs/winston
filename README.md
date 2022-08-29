@@ -152,7 +152,7 @@ A logger accepts the following parameters:
 
 | Name          | Default                     |  Description    |
 | ------------- | --------------------------- | --------------- |
-| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |
+| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) is less than or equal to this level  |
 | `levels`      | `winston.config.npm.levels` | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`       | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_      | Set of logging targets for `info` messages                 |
@@ -456,7 +456,7 @@ considered for future releases.
 caller. (See: [Filtering `info` Objects](#filtering-info-objects)) below.
 
 `winston.format` is designed to be as simple as possible. To define a new
-format simple pass it a `transform(info, opts)` function to get a new
+format, simply pass it a `transform(info, opts)` function to get a new
 `Format`.
 
 The named `Format` returned can be used to create as many copies of the given
