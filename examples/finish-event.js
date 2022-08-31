@@ -9,9 +9,7 @@ const winston = require('../');
 // **AND** all data has been flushed (i.e. all your logs have been written).
 //
 const logger = winston.createLogger({
-  transports: [
-    new winston.transports.Console()
-  ]
+  transports: [new winston.transports.Console()]
 });
 
 process.on('exit', function () {
@@ -22,7 +20,7 @@ logger.on('finish', function () {
   console.log('Your logger is done logging');
 });
 
-logger.log('info', 'Hello, this is a raw logging event',   { 'foo': 'bar' });
-logger.log('info', 'Hello, this is a raw logging event 2', { 'foo': 'bar' });
+logger.log('info', 'Hello, this is a raw logging event', { foo: 'bar' });
+logger.log('info', 'Hello, this is a raw logging event 2', { foo: 'bar' });
 
 logger.end();

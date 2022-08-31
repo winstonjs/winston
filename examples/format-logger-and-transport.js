@@ -3,10 +3,7 @@ const winston = require('../');
 const { createLogger, format, transports } = winston;
 
 const logger = createLogger({
-  format: format.combine(
-    format.timestamp(),
-    format.simple()
-  ),
+  format: format.combine(format.timestamp(), format.simple()),
   transports: [
     new transports.Console({
       format: format.combine(
@@ -19,7 +16,7 @@ const logger = createLogger({
       stream: fs.createWriteStream('./example.log')
     })
   ]
-})
+});
 
 logger.log({
   level: 'info',

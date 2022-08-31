@@ -10,7 +10,14 @@ const fs = require('fs');
 const path = require('path');
 const assume = require('assume');
 const winston = require('../../../../lib/winston');
-const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 const MESSAGE = Symbol.for('message');
 
@@ -38,7 +45,7 @@ describe('File (maxsize)', function () {
       format: winston.format.printf(info => info.message),
       filename: path.join(testLogFixturesPath, 'testmaxsize.log'),
       maxsize: 4096
-    })
+    });
 
     //
     // Have to wait for `fs.stats` to be done in `maxsizeTransport.open()`.
@@ -61,7 +68,10 @@ describe('File (maxsize)', function () {
         try {
           stats = fs.statSync(file);
         } catch (ex) {
-          assume(stats).is.an('object', `${file} failed to open: ${ex.message}`);
+          assume(stats).is.an(
+            'object',
+            `${file} failed to open: ${ex.message}`
+          );
         }
 
         const text = fs.readFileSync(file, 'utf8');

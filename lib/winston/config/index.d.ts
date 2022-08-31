@@ -87,9 +87,9 @@ declare namespace winston {
 
   interface Config {
     allColors: AbstractConfigSetColors;
-    cli: { levels: CliConfigSetLevels, colors: CliConfigSetColors };
-    npm: { levels: NpmConfigSetLevels, colors: NpmConfigSetColors };
-    syslog: { levels: SyslogConfigSetLevels, colors: SyslogConfigSetColors };
+    cli: { levels: CliConfigSetLevels; colors: CliConfigSetColors };
+    npm: { levels: NpmConfigSetLevels; colors: NpmConfigSetColors };
+    syslog: { levels: SyslogConfigSetLevels; colors: SyslogConfigSetColors };
 
     addColors(colors: AbstractConfigSetColors): void;
   }

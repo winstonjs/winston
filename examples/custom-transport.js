@@ -1,4 +1,3 @@
-
 const { createLogger } = require('../');
 const Transport = require('winston-transport');
 
@@ -27,10 +26,10 @@ class CustomTransport extends Transport {
 
     callback();
   }
-};
+}
 
 const transport = new CustomTransport();
-transport.on('logged', (info) => {
+transport.on('logged', info => {
   // Verification that log was called on your transport
   console.log(`Logging! It's happening!`, info);
 });
@@ -40,4 +39,4 @@ const logger = createLogger({
   transports: [transport]
 });
 
-logger.info('hello')
+logger.info('hello');

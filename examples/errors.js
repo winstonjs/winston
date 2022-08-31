@@ -2,13 +2,8 @@ const { createLogger, format, transports } = require('../');
 const { combine, errors, json } = format;
 
 const logger = createLogger({
-  format: combine(
-    errors({ stack: true }),
-    json()
-  ),
-  transports: [
-    new transports.Console(),
-  ]
+  format: combine(errors({ stack: true }), json()),
+  transports: [new transports.Console()]
 });
 
 logger.warn(new Error('Error passed as info'));

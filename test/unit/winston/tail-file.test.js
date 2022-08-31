@@ -12,7 +12,13 @@ const path = require('path');
 const winston = require('../../../lib/winston');
 const tailFile = require('../../../lib/winston/tail-file');
 const { Stream } = require('readable-stream');
-const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 //
 // Test helper that performs writes to a specific log file
@@ -52,7 +58,6 @@ function logOnInterval(opts, done) {
   });
 }
 
-
 describe('tailFile', function () {
   this.timeout(10 * 1000);
   it('is a function', function () {
@@ -76,13 +81,16 @@ describe('tailFile', function () {
       });
     }
 
-    logOnInterval({
-      file: tailable,
-      open: startTailFile,
-      timeout: 5000
-    }, function (err, actual) {
-      assume(expected).equals(actual.write);
-      done();
-    });
+    logOnInterval(
+      {
+        file: tailable,
+        open: startTailFile,
+        timeout: 5000
+      },
+      function (err, actual) {
+        assume(expected).equals(actual.write);
+        done();
+      }
+    );
   });
 });

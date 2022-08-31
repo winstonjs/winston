@@ -20,9 +20,7 @@ const myCustomLevels = {
 const customLevelLogger = winston.createLogger({
   level: 'foobar',
   levels: myCustomLevels.levels,
-  transports: [
-    new winston.transports.Console()
-  ]
+  transports: [new winston.transports.Console()]
 });
 
 customLevelLogger.foobar('some foobar level-ed message');

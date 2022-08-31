@@ -15,9 +15,7 @@ const logger = winston.createLogger({
     })(),
     winston.format.json()
   ),
-  transports: [
-    new winston.transports.Console()
-  ]
+  transports: [new winston.transports.Console()]
 });
 
 logger.info('my message', { reason: 'whatever', promise: 'whenever' });

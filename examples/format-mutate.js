@@ -37,9 +37,7 @@ const logger = winston.createLogger({
     maskFormat(),
     winston.format.json()
   ),
-  transports: [
-    new winston.transports.Console()
-  ]
+  transports: [new winston.transports.Console()]
 });
 
 logger.info('transaction ok', { creditCard: 123456789012345 });

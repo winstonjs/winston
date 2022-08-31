@@ -18,9 +18,7 @@ const logger = createLogger({
     //
     // format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
   ),
-  transports: [
-    new transports.Console()
-  ]
+  transports: [new transports.Console()]
 });
 
 logger.info('Hello there. How are you?');

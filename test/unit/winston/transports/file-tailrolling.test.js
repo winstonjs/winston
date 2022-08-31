@@ -4,7 +4,14 @@ const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const winston = require('../../../../lib/winston');
-const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 const { MESSAGE } = require('triple-beam');
 
@@ -14,8 +21,6 @@ const { MESSAGE } = require('triple-beam');
 function removeFixtures(done) {
   rimraf(path.join(testLogFixturesPath, 'testtailrollingfiles*'), done);
 }
-
-
 
 let tailrollTransport = null;
 
@@ -32,8 +37,7 @@ describe('winston/transports/file/tailrolling', function () {
         maxsize: 4096,
         maxFiles: 3,
         tailable: true
-      })
-        .on('open', console.log); // eslint-disable-line no-console
+      }).on('open', console.log); // eslint-disable-line no-console
     });
 
     it('and when passed more files than the maxFiles', function (done) {
@@ -46,13 +50,14 @@ describe('winston/transports/file/tailrolling', function () {
 
       function logKbytes(kbytes, txt) {
         const toLog = {};
-	      toLog[MESSAGE] = data(txt, kbytes);
+        toLog[MESSAGE] = data(txt, kbytes);
         tailrollTransport.log(toLog);
       }
 
       tailrollTransport.on('logged', function (info) {
         loggedTotal += info[MESSAGE].length + 1;
-        if (loggedTotal >= 14 * 1024) { // just over 3 x 4kb files
+        if (loggedTotal >= 14 * 1024) {
+          // just over 3 x 4kb files
           return done();
         }
 
@@ -68,7 +73,9 @@ describe('winston/transports/file/tailrolling', function () {
 
     it('should be 3 log files, base to maxFiles - 1', function () {
       for (var num = 0; num < 4; num++) {
-        const file = !num ? 'testtailrollingfiles.log' : 'testtailrollingfiles' + num + '.log';
+        const file = !num
+          ? 'testtailrollingfiles.log'
+          : 'testtailrollingfiles' + num + '.log';
         const fullpath = path.join(testLogFixturesPath, file);
 
         if (num === 3) {
@@ -83,11 +90,19 @@ describe('winston/transports/file/tailrolling', function () {
 
     it('should have files in correct order', function () {
       ['D', 'C', 'B'].forEach(function (letter, i) {
-        const file = !i ? 'testtailrollingfiles.log' : 'testtailrollingfiles' + i + '.log';
-        let content = fs.readFileSync(path.join(testLogFixturesPath, file), 'ascii');
+        const file = !i
+          ? 'testtailrollingfiles.log'
+          : 'testtailrollingfiles' + i + '.log';
+        let content = fs.readFileSync(
+          path.join(testLogFixturesPath, file),
+          'ascii'
+        );
         content = content.replace(/\s+/g, '');
 
-        assert(content.match(new RegExp(letter, 'g'))[0].length, content.length);
+        assert(
+          content.match(new RegExp(letter, 'g'))[0].length,
+          content.length
+        );
       });
     });
   });

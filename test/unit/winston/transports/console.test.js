@@ -35,7 +35,7 @@ const transports = {
       beta: 1,
       gamma: 2,
       delta: 3,
-      epsilon: 4,
+      epsilon: 4
     },
     stderrLevels: ['delta', 'epsilon']
   })
@@ -50,31 +50,33 @@ const transports = {
  * @param  {String} logLevelsName The name of the array/map that holdes the log leveles values (ie: 'stderrLevels', 'consoleWarnLevels')
  * @return {function} Assertion function to execute comparison
  */
-function assertLogLevelsValues(transport, logLevels, logLevelsName = 'stderrLevels') {
+function assertLogLevelsValues(
+  transport,
+  logLevels,
+  logLevelsName = 'stderrLevels'
+) {
   return function () {
-    assume(JSON.stringify(Object.keys(transport[logLevelsName]).sort()))
-      .equals(JSON.stringify(logLevels.sort()));
+    assume(JSON.stringify(Object.keys(transport[logLevelsName]).sort())).equals(
+      JSON.stringify(logLevels.sort())
+    );
   };
 }
-
-
 
 describe('Console transport', function () {
   describe('with defaults', function () {
     it('logs all levels to stdout', function () {
       stdMocks.use();
       transports.defaults.levels = defaultLevels;
-      Object.keys(defaultLevels)
-        .forEach(function (level) {
-          const info = {
-            [LEVEL]: level,
-            message: `This is level ${level}`,
-            level
-          };
+      Object.keys(defaultLevels).forEach(function (level) {
+        const info = {
+          [LEVEL]: level,
+          message: `This is level ${level}`,
+          level
+        };
 
-          info[MESSAGE] = JSON.stringify(info);
-          transports.defaults.log(info);
-        });
+        info[MESSAGE] = JSON.stringify(info);
+        transports.defaults.log(info);
+      });
 
       stdMocks.restore();
       var output = stdMocks.flush();
@@ -84,11 +86,10 @@ describe('Console transport', function () {
       assume(output.stdout).length(7);
     });
 
-    it("should set stderrLevels to [] by default", assertLogLevelsValues(
-      transports.defaults,
-      [],
-      'stderrLevels'
-    ));
+    it(
+      'should set stderrLevels to [] by default',
+      assertLogLevelsValues(transports.defaults, [], 'stderrLevels')
+    );
   });
 
   describe('throws an appropriate error when', function () {
@@ -96,29 +97,39 @@ describe('Console transport', function () {
       assume(function () {
         let throwing = new winston.transports.Console({
           stderrLevels: 'Not an Array'
-        })
-      }).throws(/Cannot make set from type other than Array of string elements/);
+        });
+      }).throws(
+        /Cannot make set from type other than Array of string elements/
+      );
     });
 
     it("if stderrLevels contains non-string elements { stderrLevels: ['good', /^invalid$/, 'valid']", function () {
       assume(function () {
         let throwing = new winston.transports.Console({
           stderrLevels: ['good', /^invalid$/, 'valid']
-        })
-      }).throws(/Cannot make set from type other than Array of string elements/);
+        });
+      }).throws(
+        /Cannot make set from type other than Array of string elements/
+      );
     });
   });
 
-  it("{ stderrLevels: ['info', 'error'] } logs to them appropriately", assertLogLevelsValues(
-    transports.stderrLevels,
-    ['info', 'error'],
-    'stderrLevels'
-  ));
-  it("{ consoleWarnLevels: ['warn', 'debug'] } logs to them appropriately", assertLogLevelsValues(
-    transports.consoleWarnLevels,
-    ['warn', 'debug'],
-    'consoleWarnLevels'
-  ));
+  it(
+    "{ stderrLevels: ['info', 'error'] } logs to them appropriately",
+    assertLogLevelsValues(
+      transports.stderrLevels,
+      ['info', 'error'],
+      'stderrLevels'
+    )
+  );
+  it(
+    "{ consoleWarnLevels: ['warn', 'debug'] } logs to them appropriately",
+    assertLogLevelsValues(
+      transports.consoleWarnLevels,
+      ['warn', 'debug'],
+      'consoleWarnLevels'
+    )
+  );
 
   it('{ eol } adds a custom EOL delimiter', function (done) {
     stdMocks.use();
@@ -126,7 +137,7 @@ describe('Console transport', function () {
       stdMocks.restore();
 
       var output = stdMocks.flush(),
-          line   = output.stdout[0];
+        line = output.stdout[0];
 
       assume(line).equal('info: testing. 1 2 3...X');
       done();

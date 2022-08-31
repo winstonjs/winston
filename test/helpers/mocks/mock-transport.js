@@ -1,4 +1,4 @@
-const stream = require('stream')
+const stream = require('stream');
 const winston = require('../../../lib/winston');
 
 /**
@@ -14,7 +14,7 @@ function createMockTransport(write) {
     write: write
   });
 
-  return new winston.transports.Stream({ stream: writeable })
+  return new winston.transports.Stream({ stream: writeable });
 }
 
 module.exports = {

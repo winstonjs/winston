@@ -2,7 +2,7 @@
 
 const winston = require('../');
 
-const logger = module.exports = winston.createLogger({
+const logger = (module.exports = winston.createLogger({
   transports: [new winston.transports.Console()],
   format: winston.format.combine(
     winston.format(function dynamicContent(info, opts) {
@@ -11,6 +11,6 @@ const logger = module.exports = winston.createLogger({
     })(),
     winston.format.simple()
   )
-});
+}));
 
 logger.log('info', 'This is an information message.');

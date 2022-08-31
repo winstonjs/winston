@@ -38,7 +38,9 @@ function assumeAcceptsLegacy({ displayName, name, TransportClass }) {
       assume(logger._readableState.pipesCount).equals(1);
       assume(logger._readableState.pipes.transport).is.an('object');
       assume(logger._readableState.pipes.transport).equals(transport);
-      assume(output.stderr.join('')).to.include(`${name} is a legacy winston transport. Consider upgrading`);
+      assume(output.stderr.join('')).to.include(
+        `${name} is a legacy winston transport. Consider upgrading`
+      );
     });
 
     it(`.add(${name}) multiple`, function () {
@@ -60,10 +62,7 @@ function assumeAcceptsLegacy({ displayName, name, TransportClass }) {
     });
 
     it('.remove() [LegacyTransportStream]', function () {
-      var transports = [
-        new winston.transports.Console(),
-        new TransportClass()
-      ];
+      var transports = [new winston.transports.Console(), new TransportClass()];
 
       const logger = winston.createLogger({ transports: transports });
       assume(logger.transports.length).equals(2);
@@ -87,7 +86,7 @@ describe('Logger (legacy API)', function () {
 
     deprecated.forEach(function (opts) {
       assume(function () {
-        var logger = winston.createLogger(opts)
+        var logger = winston.createLogger(opts);
       }).throws(/Use a custom/);
     });
   });

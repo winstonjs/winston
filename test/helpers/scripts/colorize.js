@@ -15,9 +15,7 @@ var format = winston.format.combine(
 
 var logger = winston.createLogger({
   format: format,
-  transports: [
-    new winston.transports.Console()
-  ]
+  transports: [new winston.transports.Console()]
 });
 
 logger.info('Simply a test');

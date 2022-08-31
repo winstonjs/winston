@@ -2,13 +2,8 @@
 
 const { createLogger, format, transports } = require('../');
 const logger = createLogger({
-  format: format.combine(
-    format.splat(),
-    format.simple()
-  ),
-  transports: [
-    new transports.Console()
-  ]
+  format: format.combine(format.splat(), format.simple()),
+  transports: [new transports.Console()]
 });
 
 // info: test message my string {}
@@ -25,6 +20,5 @@ logger.info('Found %s at %s', 'error', new Date());
 logger.info('Found %s at %s', 'error', new Error('chill winston'));
 logger.info('Found %s at %s', 'error', /WUT/);
 logger.info('Found %s at %s', 'error', true);
-logger.info('Found %s at %s', 'error', 100.00);
+logger.info('Found %s at %s', 'error', 100.0);
 logger.info('Found %s at %s', 'error', ['1, 2, 3']);
-

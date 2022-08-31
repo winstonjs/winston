@@ -8,9 +8,7 @@ const filePath = path.join(__dirname, 'winston.log');
 const stream = fs.createWriteStream(filePath);
 
 const logger = winston.createLogger({
-  transports: [
-    new winston.transports.Stream({ stream })
-  ]
+  transports: [new winston.transports.Stream({ stream })]
 });
 
 setTimeout(() => {

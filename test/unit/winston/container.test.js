@@ -54,16 +54,22 @@ describe('Container', function () {
 
     it('.get(some-logger)', function () {
       all.someLogger = container.get('some-logger');
-      assume(all.someLogger._readableState.pipes).instanceOf(winston.transports.Http);
+      assume(all.someLogger._readableState.pipes).instanceOf(
+        winston.transports.Http
+      );
       assume(all.someLogger._readableState.pipes).equals(transports[0]);
     });
 
     it('.get(some-other-logger)', function () {
       all.someOtherLogger = container.get('some-other-logger');
 
-      assume(all.someOtherLogger._readableState.pipes).instanceOf(winston.transports.Http);
+      assume(all.someOtherLogger._readableState.pipes).instanceOf(
+        winston.transports.Http
+      );
       assume(all.someOtherLogger._readableState.pipes).equals(transports[0]);
-      assume(all.someOtherLogger._readableState.pipes).equals(all.someLogger._readableState.pipes);
+      assume(all.someOtherLogger._readableState.pipes).equals(
+        all.someLogger._readableState.pipes
+      );
     });
   });
 });
