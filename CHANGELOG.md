@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## [v3.8.2](https://github.com/winstonjs/winston/compare/v3.8.1...v3.8.2)
+### Patch-level changes
+* Add `.js` to main entry point in package.json in https://github.com/winstonjs/winston/pull/2177; thanks to new contributor @rumanbsl
+* Small grammatical fixes in README.md in https://github.com/winstonjs/winston/pull/2183; thanks to new contributor @mikebarr24
+* Move colors to non-dev dependencies by @wbt in https://github.com/winstonjs/winston/pull/2190
+
+### Dependency updates by @dependabot + CI autotesting
+* Bump @babel/preset-env from 7.18.2 to 7.19.0 in https://github.com/winstonjs/winston/pull/2189
+* Bump @babel/cli from 7.17.10 to 7.18.10 in https://github.com/winstonjs/winston/pull/2173
+* Bump eslint from 8.18.0 to 8.23.0 in https://github.com/winstonjs/winston/pull/2184
+* Bump @babel/core from 7.18.5 to 7.19.0 in https://github.com/winstonjs/winston/pull/2192
+* Bump logform from 2.4.1 to 2.4.2 in https://github.com/winstonjs/winston/pull/2191
+
 ## [v3.8.1](https://github.com/winstonjs/winston/compare/v3.8.0...v3.8.1)
 
 ### Patch-level changes
