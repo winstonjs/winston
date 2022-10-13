@@ -24,9 +24,11 @@
     "stream"
   ],
   "dependencies": {
-    "@dabh/diagnostics": "^2.0.2",
     "@colors/colors": "1.5.0",
+    "@dabh/diagnostics": "^2.0.2",
     "async": "^3.2.3",
+    "from": "^0.1.7",
+    "fs-reverse-modern": "^1.0.0",
     "is-stream": "^2.0.0",
     "logform": "^2.4.0",
     "one-time": "^1.0.0",
