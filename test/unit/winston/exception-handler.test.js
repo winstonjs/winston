@@ -106,6 +106,12 @@ describe('ExceptionHandler', function () {
     helpers.throw('wtf this error');
   });
 
+  it('.getAllInfo(undefined)', function () {
+    var handler = helpers.exceptionHandler();
+    // eslint-disable-next-line no-undefined
+    handler.getAllInfo(undefined);
+  });
+
   after(function () {
     //
     // Restore normal `runTest` functionality
