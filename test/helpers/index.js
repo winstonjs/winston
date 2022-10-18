@@ -7,14 +7,14 @@
  */
 
 const assume = require('assume'),
-    fs = require('fs'),
-    path = require('path'),
-    through = require('through2'),
-    spawn = require('child_process').spawn,
-    stream = require('stream'),
-    util = require('util'),
-    winston = require('../../lib/winston'),
-    mockTransport = require('./mocks/mock-transport');
+  fs = require('fs'),
+  path = require('path'),
+  through = require('through2'),
+  spawn = require('child_process').spawn,
+  stream = require('stream'),
+  util = require('util'),
+  winston = require('../../lib/winston'),
+  mockTransport = require('./mocks/mock-transport');
 
 var helpers = exports;
 
@@ -28,9 +28,7 @@ var helpers = exports;
 helpers.createLogger = function (write, format) {
   return winston.createLogger({
     format,
-    transports: [
-      mockTransport.createMockTransport(write)
-    ]
+    transports: [mockTransport.createMockTransport(write)]
   });
 };
 
@@ -160,7 +158,7 @@ helpers.tryRead = function tryRead(filename) {
         }
         proxy.emit('error', err);
       });
-  }());
+  })();
 
   return proxy;
 };

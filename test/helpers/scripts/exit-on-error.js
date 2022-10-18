@@ -7,8 +7,14 @@
  */
 
 var path = require('path'),
-    winston = require('../../../lib/winston');
-const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
+  winston = require('../../../lib/winston');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 winston.exitOnError = function (err) {
   process.stdout.write(err.message);

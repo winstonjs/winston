@@ -6,14 +6,20 @@
  *
  */
 
-var path = require("path"),
-  winston = require("../../../lib/winston");
-const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
+var path = require('path'),
+  winston = require('../../../lib/winston');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 var logger = winston.createLogger({
   transports: [
     new winston.transports.File({
-      filename: path.join(testLogFixturesPath, "rejections.log"),
+      filename: path.join(testLogFixturesPath, 'rejections.log'),
       handleRejections: true
     })
   ]
@@ -21,6 +27,6 @@ var logger = winston.createLogger({
 
 logger.rejections.handle();
 
-setTimeout(function() {
-  Promise.reject(new Error("OH NOES! It rejected!"));
+setTimeout(function () {
+  Promise.reject(new Error('OH NOES! It rejected!'));
 }, 1000);

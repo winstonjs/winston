@@ -26,12 +26,11 @@ const logger = createLogger({
 // with the colorized simple format.
 //
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new transports.Console({
-    format: format.combine(
-      format.colorize(),
-      format.simple()
-    )
-  }));
+  logger.add(
+    new transports.Console({
+      format: format.combine(format.colorize(), format.simple())
+    })
+  );
 }
 
 // ***************
@@ -83,7 +82,7 @@ logger.info('Found %s at %s', 'error', new Date());
 logger.info('Found %s at %s', 'error', new Error('chill winston'));
 logger.info('Found %s at %s', 'error', /WUT/);
 logger.info('Found %s at %s', 'error', true);
-logger.info('Found %s at %s', 'error', 100.00);
+logger.info('Found %s at %s', 'error', 100.0);
 logger.info('Found %s at %s', 'error', ['1, 2, 3']);
 
 // ***************

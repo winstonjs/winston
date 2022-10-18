@@ -7,13 +7,14 @@ const logger = winston.createLogger({
     return JSON.stringify(info)
       .replace(/\{/g, '< wow ')
       .replace(/\:/g, ' such ')
-      .replace(/\}/g, ' >')
+      .replace(/\}/g, ' >');
   }),
-  transports: [
-    new winston.transports.Console(),
-  ]
+  transports: [new winston.transports.Console()]
 });
 
-logger.info('Hello, this is a logging event with a custom pretty print',  { 'foo': 'bar' });
-logger.info('Hello, this is a logging event with a custom pretty print2', { 'foo': 'bar' });
-
+logger.info('Hello, this is a logging event with a custom pretty print', {
+  foo: 'bar'
+});
+logger.info('Hello, this is a logging event with a custom pretty print2', {
+  foo: 'bar'
+});

@@ -11,7 +11,6 @@ const assume = require('assume');
 const winston = require('../../lib/winston');
 
 describe('winston', function () {
-
   it('winston.transports', function () {
     assume(winston.transports).is.an('object');
     assume(winston.Transport).is.a('function');

@@ -12,7 +12,14 @@ const rimraf = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const winston = require('../../../../lib/winston');
-const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 const { MESSAGE } = require('triple-beam');
 
@@ -22,7 +29,6 @@ const { MESSAGE } = require('triple-beam');
 function removeFixtures(done) {
   rimraf(path.join(testLogFixturesPath, 'testarchive*'), done);
 }
-
 
 let archiveTransport = null;
 
@@ -60,7 +66,8 @@ describe('winston/transports/file/zippedArchive', function () {
 
       archiveTransport.on('logged', function (info) {
         loggedTotal += info[MESSAGE].length + 1;
-        if (loggedTotal >= 14 * 1024) { // just over 3 x 4kb files
+        if (loggedTotal >= 14 * 1024) {
+          // just over 3 x 4kb files
           return done();
         }
 

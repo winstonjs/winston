@@ -10,7 +10,9 @@ const defaultLevels = winston.createLogger({
 
 function logAllLevels() {
   Object.keys(winston.config.npm.levels).forEach(level => {
-    defaultLevels[level](`is logged when logger.level="${defaultLevels.level}"`);
+    defaultLevels[level](
+      `is logged when logger.level="${defaultLevels.level}"`
+    );
   });
 }
 

@@ -30,16 +30,14 @@ const config = {
 
 winston.addColors(config.colors);
 
-const logger = module.exports = winston.createLogger({
+const logger = (module.exports = winston.createLogger({
   levels: config.levels,
   format: winston.format.combine(
     winston.format.colorize(),
     winston.format.simple()
   ),
-  transports: [
-    new winston.transports.Console()
-  ],
+  transports: [new winston.transports.Console()],
   level: 'custom'
-});
+}));
 
-logger.custom('hello')
+logger.custom('hello');

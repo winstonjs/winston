@@ -4,7 +4,7 @@ const fs = require('fs');
 const assert = require('assert');
 const path = require('path');
 const winston = require('../../../../lib/winston');
-const rimraf = require("rimraf");
+const rimraf = require('rimraf');
 
 /* eslint-disable no-sync */
 
@@ -12,12 +12,12 @@ describe('winston/transports/file/createLogDir', function () {
   const logDir = path.resolve(__dirname, '../../../fixtures/temp_logs');
 
   beforeEach(function () {
-    rimraf(logDir, (err) => {
-      if (err){
-        console.log('Error encountered when removing `temp_logs` dir')
+    rimraf(logDir, err => {
+      if (err) {
+        console.log('Error encountered when removing `temp_logs` dir');
         console.log(err);
       }
-    })
+    });
   });
 
   it('should create directory if it does not exist', function () {

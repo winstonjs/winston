@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
 const events = require('events');
-const util = require('util')
+const util = require('util');
 const Transport = require('winston-compat').Transport;
 
 //
@@ -11,13 +11,13 @@ const Transport = require('winston-compat').Transport;
 // for persisting log messages and metadata to a memory array of messages
 // and conforming to the old winston transport API.
 //
-const Legacy = module.exports = function Legacy(options) {
+const Legacy = (module.exports = function Legacy(options) {
   options = options || {};
   Transport.call(this, options);
 
   this.silent = options.silent;
   this.output = { error: [], write: [] };
-};
+});
 
 //
 // Inherit from `winston.Transport`.

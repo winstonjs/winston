@@ -6,12 +6,14 @@ let { format } = winston;
  * properties.
  */
 function rest(info) {
-  return JSON.stringify(Object.assign({}, info, {
-    level: undefined,
-    message: undefined,
-    splat: undefined,
-    label: undefined
-  }));
+  return JSON.stringify(
+    Object.assign({}, info, {
+      level: undefined,
+      message: undefined,
+      splat: undefined,
+      label: undefined
+    })
+  );
 }
 
 let logger = winston.createLogger({
@@ -22,25 +24,15 @@ let logger = winston.createLogger({
   )
 });
 
-logger.log(
-  'info',
-  'any message',
-  {
-    label: 'label!',
-    extra: true
-  }
-);
+logger.log('info', 'any message', {
+  label: 'label!',
+  extra: true
+});
 
-logger.log(
-  'info',
-  'let\'s %s some %s',
-  'interpolate',
-  'splat parameters',
-  {
-    label: 'label!',
-    extra: true
-  }
-);
+logger.log('info', "let's %s some %s", 'interpolate', 'splat parameters', {
+  label: 'label!',
+  extra: true
+});
 
 logger.log(
   'info',
@@ -70,17 +62,6 @@ logger.log(
 const terr = new Error('lol please stop doing this');
 terr.label = 'error';
 terr.extra = true;
-logger.log(
-  'info',
-  'any message',
-  terr
-);
+logger.log('info', 'any message', terr);
 
-logger.log(
-  'info',
-  'let\'s %s some %s',
-  'interpolate',
-  'splat parameters',
-  terr
-);
-
+logger.log('info', "let's %s some %s", 'interpolate', 'splat parameters', terr);

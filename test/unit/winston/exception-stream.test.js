@@ -11,7 +11,13 @@ const { Writable } = require('readable-stream');
 const path = require('path');
 const winston = require('../../../lib/winston');
 const ExceptionStream = require('../../../lib/winston/exception-stream');
-const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 describe('ExceptionStream', function () {
   it('has expected methods', function () {
@@ -31,5 +37,5 @@ describe('ExceptionStream', function () {
       var stream = new ExceptionStream();
       stream._write({ exception: true });
     }).throws('ExceptionStream requires a TransportStream instance.');
-  })
+  });
 });

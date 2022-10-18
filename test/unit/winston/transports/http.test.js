@@ -14,7 +14,6 @@ const host = '127.0.0.1';
 const port = 0;
 
 function mockHttpServer(done, expectedLog) {
-
   const mock = hock.createHock();
   const opts = {
     path: 'log',
@@ -59,7 +58,6 @@ describe('Http({ host, port, path })', function () {
   });
 
   describe('nominal', function () {
-
     beforeEach(function (done) {
       context = mockHttpServer(done, dummyLog);
       server = context.server;
@@ -70,18 +68,24 @@ describe('Http({ host, port, path })', function () {
         host: host,
         port: server.address().port,
         path: 'log'
-      }).on('error', assumeError).on('logged', function () {
-        onLogged(context, done);
-      });
+      })
+        .on('error', assumeError)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
       httpTransport.log(dummyLog, assumeError);
     });
-
   });
 
   describe('bacth mode: max message', function () {
-
     beforeEach(function (done) {
-      context = mockHttpServer(done, [dummyLog, dummyLog, dummyLog, dummyLog, dummyLog]);
+      context = mockHttpServer(done, [
+        dummyLog,
+        dummyLog,
+        dummyLog,
+        dummyLog,
+        dummyLog
+      ]);
       server = context.server;
     });
 
@@ -104,11 +108,9 @@ describe('Http({ host, port, path })', function () {
       httpTransport.log(dummyLog, assumeError);
       httpTransport.log(dummyLog, assumeError);
     });
-
   });
 
   describe('bacth mode: timeout', function () {
-
     beforeEach(function (done) {
       context = mockHttpServer(done, [dummyLog, dummyLog]);
       server = context.server;
@@ -132,7 +134,6 @@ describe('Http({ host, port, path })', function () {
       httpTransport.log(dummyLog, assumeError);
       httpTransport.log(dummyLog, assumeError);
     });
-
   });
 
   describe('circular structure', function () {
