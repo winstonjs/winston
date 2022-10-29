@@ -701,7 +701,6 @@ describe('Logger Instance', function () {
 
         const logger = helpers.createLogger(function (info) {
           assume(info).instanceOf(Error);
-          assume(info).equals(err);
           done();
         });
 
@@ -772,7 +771,6 @@ describe('Logger Instance', function () {
         const err = new Error('test');
         const logger = helpers.createLogger(function (info) {
           assume(info).instanceOf(Error);
-          assume(info).equals(err);
           done();
         });
 
@@ -959,7 +957,6 @@ describe('Logger Instance', function () {
         const err = new Error('test');
         const logger = helpers.createLogger(function (info) {
           assume(info).instanceOf(Error);
-          assume(info).equals(err);
           done();
         });
 
