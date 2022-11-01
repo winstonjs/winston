@@ -969,7 +969,7 @@ setTimeout(function () {
 }, 1000);
 ```
 
-Also you can start a timer and keep a reference that you can call `.done()``
+Also you can start a timer and keep a reference that you can call `.done()`
 on:
 
 ``` js
