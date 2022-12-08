@@ -10,8 +10,15 @@ on:
       - main
       - master
 
+permissions:
+  contents: read #  to fetch code (actions/checkout)
+
 jobs:
   Tests:
+    permissions:
+      contents: read #  to fetch code (actions/checkout)
+      checks: write #  to create new checks (coverallsapp/github-action)
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
