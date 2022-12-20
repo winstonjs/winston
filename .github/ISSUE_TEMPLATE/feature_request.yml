@@ -1,0 +1,38 @@
+name: Would you like to see a feature implemented?
+description: Request a new feature for Winston
+title: "[Feature Request]: "
+labels: ["Feature Request", "Needs Investigation"]
+body:
+  - type: markdown # Form Header
+    attributes:
+      value: |
+        This issue form is for requesting features only!
+  - type: input # Search Terms
+    validations:
+      required: true
+    attributes:
+      label: 🔎 Search Terms
+      description: >-
+        What search terms did you use when trying to find an existing feature request, looking in both open and closed issues?
+        List them here (comma seperated) so people in the future can find this one more easily.
+  - type: textarea # Feature Definition
+    validations:
+      required: true
+    attributes:
+      label: The vision
+      description: >-
+        Please provide a clear and concise description of the feature you would like to see implemented.
+  - type: markdown # Feature Details Section
+    attributes:
+      value: |
+        # Details
+  - type: textarea # Use Case Input
+    attributes:
+      label: Use case
+      description: |
+        If you desire you can provide use cases for the requested feature.
+  - type: textarea # Additional Information
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us that you feel will be valuable, please use the field below.

@@ -24,6 +24,8 @@
 - `winston.Logger` has been replaced with `winston.createLogger`.
 - `winston.setLevels` has been removed. Levels are frozen at the time of Logger creation.
 - Setting the level on the default `winston` logger no longer sets the level on the transports associated with the default `winston` logger.
+- The default logger exposed by `require('winston')` no longer has default `Console` transports, 
+and leaving it without transports may cause a high memory usage issue.
 
 ### Transports
 - `winston.transports.Memory` was removed. Use any Node.js `stream.Writeable` with a large `highWaterMark` instance instead.
@@ -39,7 +41,8 @@
     - `debugStdout` option has been removed.
 
 ### `winston.Container` and `winston.loggers`
-- `winston.Container` instances no longer have default `Console` transports
+- `winston.Container` instances no longer have default `Console` transports.
+Failing to add any transports may cause a high memory usage issue.
 - `winston.Container.prototype.add` no longer does crazy options parsing. Implementation inspired by [segmentio/winston-logger](https://github.com/segmentio/winston-logger/blob/master/lib/index.js#L20-L43)
 
 ### `winston.Logger`

@@ -1,4 +1,5 @@
 # CONTRIBUTING
+PLEASE NOTE: This document has not been updated in a while and is out of date, but contents are retained as some may still be useful.
 
 TL;DR? The `winston` project recently shipped `3.0.0` out of RC and is actively
 working towards the next feature release as it continues to triage issues. 

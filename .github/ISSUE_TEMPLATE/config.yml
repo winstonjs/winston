@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Have a formatting issue or feature request?
+    url: https://github.com/winstonjs/logform/issues/new/choose
+    about: Please search and report @ WinstonJS/Logform
+  - name: Need help using Winston?
+    url: https://stackoverflow.com/questions/tagged/winston
+    about: Please look on StackOverflow first to see if someone has already answered your question.

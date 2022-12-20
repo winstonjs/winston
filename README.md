@@ -5,10 +5,9 @@ A logger for just about everything.
 [![Version npm](https://img.shields.io/npm/v/winston.svg?style=flat-square)](https://www.npmjs.com/package/winston)
 [![npm Downloads](https://img.shields.io/npm/dm/winston.svg?style=flat-square)](https://npmcharts.com/compare/winston?minimal=true)
 [![build status](https://github.com/winstonjs/winston/actions/workflows/ci.yml/badge.svg)](https://github.com/winstonjs/winston/actions/workflows/ci.yml)
+[![coverage status](https://coveralls.io/repos/github/winstonjs/winston/badge.svg?branch=master)](https://coveralls.io/github/winstonjs/winston?branch=master)
 
 [![NPM](https://nodei.co/npm/winston.png?downloads=true&downloadRank=true)](https://nodei.co/npm/winston/)
-
-[![Join the chat at https://gitter.im/winstonjs/winston](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/winstonjs/winston?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## winston@3
 
@@ -79,6 +78,9 @@ if (process.env.NODE_ENV !== 'production') {
 You may also log directly via the default logger exposed by
 `require('winston')`, but this merely intended to be a convenient shared
 logger to use throughout your application if you so choose.
+Note that the default logger doesn't have any transports by default.
+You need add transports by yourself, and leaving the default logger without any
+transports may produce a high memory usage issue.
 
 ## Table of contents
 
@@ -150,7 +152,7 @@ A logger accepts the following parameters:
 
 | Name          | Default                     |  Description    |
 | ------------- | --------------------------- | --------------- |
-| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |
+| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) is less than or equal to this level  |
 | `levels`      | `winston.config.npm.levels` | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`       | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_      | Set of logging targets for `info` messages                 |
@@ -454,7 +456,7 @@ considered for future releases.
 caller. (See: [Filtering `info` Objects](#filtering-info-objects)) below.
 
 `winston.format` is designed to be as simple as possible. To define a new
-format simple pass it a `transform(info, opts)` function to get a new
+format, simply pass it a `transform(info, opts)` function to get a new
 `Format`.
 
 The named `Format` returned can be used to create as many copies of the given
@@ -967,7 +969,7 @@ setTimeout(function () {
 }, 1000);
 ```
 
-Also you can start a timer and keep a reference that you can call `.done()``
+Also you can start a timer and keep a reference that you can call `.done()`
 on:
 
 ``` js
@@ -1092,12 +1094,13 @@ logger.info('CHILL WINSTON!', { seriously: true });
 logger.end();
 ```
 
-It is also worth mentioning that the logger also emits an 'error' event which
+It is also worth mentioning that the logger also emits an 'error' event
+if an error occurs within the logger itself which
 you should handle or suppress if you don't want unhandled exceptions:
 
 ``` js
 //
-// Handle errors
+// Handle errors originating in the logger itself
 //
 logger.on('error', function (err) { /* Do Something */ });
 ```

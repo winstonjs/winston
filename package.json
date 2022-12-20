@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A logger for just about everything.",
-  "version": "3.3.4",
+  "version": "3.8.2",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "David Hyde <dabh@alumni.stanford.edu>"
@@ -24,26 +24,28 @@
     "stream"
   ],
   "dependencies": {
-    "async": "^3.2.3",
     "@dabh/diagnostics": "^2.0.2",
+    "@colors/colors": "1.5.0",
+    "async": "^3.2.3",
     "is-stream": "^2.0.0",
-    "logform": "^2.3.2",
+    "logform": "^2.4.0",
     "one-time": "^1.0.0",
     "readable-stream": "^3.4.0",
+    "safe-stable-stringify": "^2.3.1",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.3.0",
-    "winston-transport": "^4.4.2"
+    "winston-transport": "^4.5.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.7",
-    "@babel/core": "^7.16.7",
+    "@babel/cli": "^7.17.0",
+    "@babel/core": "^7.17.2",
     "@babel/preset-env": "^7.16.7",
-    "@types/node": "^16.11.12",
+    "@dabh/eslint-config-populist": "^5.0.0",
+    "@types/node": "^18.0.0",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
-    "colors": "1.4.0",
     "cross-spawn-async": "^2.2.5",
-    "eslint-config-populist": "^4.2.0",
+    "eslint": "^8.9.0",
     "hock": "^1.4.1",
     "mocha": "8.1.3",
     "nyc": "^15.1.0",
@@ -53,19 +55,20 @@
     "through2": "^4.0.2",
     "winston-compat": "^0.1.5"
   },
-  "main": "./lib/winston",
+  "main": "./lib/winston.js",
   "browser": "./dist/winston",
   "types": "./index.d.ts",
   "scripts": {
-    "lint": "populist lib/*.js lib/winston/*.js lib/winston/**/*.js",
-    "pretest": "npm run lint",
-    "test": "nyc --reporter=text --reporter lcov npm run test:mocha",
-    "test:mocha": "mocha test/*.test.js test/**/*.test.js --exit",
+    "lint": "eslint lib/*.js lib/winston/*.js lib/winston/**/*.js --resolve-plugins-relative-to ./node_modules/@dabh/eslint-config-populist",
+    "test": "mocha",
+    "test:coverage": "nyc npm run test:unit",
+    "test:unit": "mocha test/unit",
+    "test:integration": "mocha test/integration",
     "build": "rimraf dist && babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
   "engines": {
-    "node": ">= 6.4.0"
+    "node": ">= 12.0.0"
   },
   "license": "MIT"
 }

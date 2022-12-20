@@ -59,6 +59,10 @@ declare namespace winston {
     path?: string;
     agent?: Agent;
     headers?: object;
+    batch?: boolean;
+    batchInterval?: number;
+    batchCount?: number;
+    replacer?: (key: string, value: any) => any;
   }
 
   interface HttpTransportInstance extends Transport {

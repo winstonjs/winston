@@ -1,4 +1,4 @@
-name: CI
+name: CI Checks
 
 on:
   pull_request:
@@ -10,8 +10,15 @@ on:
       - main
       - master
 
+permissions:
+  contents: read #  to fetch code (actions/checkout)
+
 jobs:
-  unit-tests:
+  Tests:
+    permissions:
+      contents: read #  to fetch code (actions/checkout)
+      checks: write #  to create new checks (coverallsapp/github-action)
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,15 +27,22 @@ jobs:
           - 14
           - 16
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
       - name: Install Dependencies
         run: npm clean-install
       - name: Lint
         run: npm run lint
-      - name: Test
-        run: npm test
+      - name: Integration Tests
+        run: npm run test:integration
+      - name: Test Coverage
+        run: npm run test:coverage
+      - name: Report test coverage to Coveralls.io
+        if: matrix.node == '16'
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: TypeScript Test
         run: npx --package typescript tsc --project test

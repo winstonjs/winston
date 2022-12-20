@@ -10,11 +10,11 @@ There are several [core transports](#built-in-to-winston) included in `winston`
 that leverage the built-in networking and file I/O offered by Node.js core. In
 addition, there are transports which are [actively supported by winston
 contributors](#maintained-by-winston-contributors). And last (but not least)
-there are additional transports written by 
+there are additional transports written by
 [members of the community](#community-transports).
 
 > Additionally there are transports previously maintained by winston
-> contributors that are [looking for maintainers](#looking-for-maintainers). 
+> contributors that are [looking for maintainers](#looking-for-maintainers).
 
 * **[Built-in to winston](#built-in-to-winston)**
   * [Console](#console-transport)
@@ -59,6 +59,7 @@ there are additional transports written by
   * [SQLite3](#sqlite3-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
   * [Sumo Logic](#sumo-logic-transport)
+  * [Worker Thread based async Console transport](#worker-thread-based-async-console-transport)
   * [Winlog2 Transport](#winlog2-transport)
 
 * **[Looking for maintainers](#looking-for-maintainers)**
@@ -122,7 +123,10 @@ The `Http` transport is a generic way to log, query, and stream logs from an arb
 * __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
 * __path:__ (Default: **/**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
-* __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
+* __ssl:__ (Default: **false**) Value indicating if we should use HTTPS
+* __batch:__ (Default: **false**) Value indicating if batch mode should be used. A batch of logs to send through the HTTP request when one of the batch options is reached: number of elements, or timeout
+* __batchInterval:__ (Default: **5000 ms**) Value indicating the number of milliseconds to wait before sending the HTTP request
+* __batchCount:__ (Default: **10**) Value indicating the number of logs to cumulate before sending the HTTP request
 
 ### Stream Transport
 
@@ -144,7 +148,7 @@ The Stream transport takes a few simple options:
 
 ## Maintained by winston contributors
 
-Starting with `winston@0.3.0` an effort was made to remove any transport which added additional dependencies to `winston`. At the time there were several transports already in `winston` which will have slowly waned in usage. The 
+Starting with `winston@0.3.0` an effort was made to remove any transport which added additional dependencies to `winston`. At the time there were several transports already in `winston` which will have slowly waned in usage. The
 following transports are **actively maintained by members of the winston Github
 organization.**
 
@@ -284,7 +288,7 @@ To Configure using environment authentication:
 logger.add(new winston.transports.DynamoDB({
   useEnvironment: true,
   tableName: 'log'
-});
+}));
 ```
 
 Also supports callbacks for completion when the DynamoDB putItem has been completed.
@@ -575,9 +579,9 @@ logger.log('info', 'Log from LogDNA Winston', meta);
 
 ### Logzio Transport
 
-You can download the logzio transport here : [https://github.com/logzio/winston-logzio](https://github.com/logzio/winston-logzio)  
+You can download the logzio transport here : [https://github.com/logzio/winston-logzio](https://github.com/logzio/winston-logzio)
 
-*Basic Usage*  
+*Basic Usage*
 ```js
 const winston = require('winston');
 const Logzio = require('winston-logzio');
@@ -600,7 +604,7 @@ const Logsene = require('winston-logsene');
 logger.add(new Logsene({
   token: process.env.LOGSENE_TOKEN
   /* other options */
-});
+}));
 ```
 Options:
 * __token__: Logsene Application Token
@@ -704,7 +708,7 @@ logger.add(new Sentry({
     dsn: 'https://******@sentry.io/12345',
   },
   level: 'info'
-});
+}));
 ```
 
 This transport takes the following options:
@@ -736,7 +740,7 @@ logger.add(new SeqTransport({
 
 * __serverUrl__ - the URL for your Seq server's ingestion
 * __apiKey__ - (optional) The Seq API Key to use
-* __onError__ - Callback to execute when an error occurs within the transport 
+* __onError__ - Callback to execute when an error occurs within the transport
 
 ### SimpleDB Transport
 
@@ -759,7 +763,7 @@ The SimpleDB transport takes the following options. All items marked with an ast
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
 
 ### Slack Transport
-[winston-slack-webhook-transport][39] is a transport that sends all log messages to the Slack chat service. 
+[winston-slack-webhook-transport][39] is a transport that sends all log messages to the Slack chat service.
 
 ```js
 const winston = require('winston');
@@ -777,7 +781,7 @@ const logger = winston.createLogger({
 logger.info('This should now appear on Slack');
 ```
 
-This transport takes the following options: 
+This transport takes the following options:
 
 * __webhookUrl__ - Slack incoming webhook URL. This can be from a basic integration or a bot. **REQUIRED**
 * __channel__ - Slack channel to post message to.
@@ -800,10 +804,10 @@ logger.add(new wbs({
 
     // path to the sqlite3 database file on the disk
     db: '<name of sqlite3 database file>',
-    
+
     // A list of params to log
     params: ['level', 'message']
-});
+}));
 ```
 
 ### Sumo Logic Transport
@@ -820,7 +824,28 @@ Options:
 * __url__: The Sumo Logic HTTP collector URL
 
 ### SSE transport with KOA 2
-[winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.    
+[winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.
+
+### Worker Thread based async Console transport
+
+[winston-console-transport-in-worker][46]
+
+```typescript
+import * as winston from 'winston';
+import { ConsoleTransportInWorker } from '@rpi1337/winston-console-transport-in-worker';
+
+...
+
+export const logger: winston.Logger = winston.createLogger({
+    format: combine(timestamp(), myFormat),
+    level: Level.INFO,
+    transports: [new ConsoleTransportInWorker()],
+});
+```
+
+The `ConsoleTransportInWorker` is a subclass of `winston.transports.Console` therefore accepting the same options as the `Console` transport.
+
+TypeScript supported.
 
 ### Winlog2 Transport
 
@@ -840,7 +865,7 @@ The winlog2 transport uses the following options:
 
 ## Looking for maintainers
 
-These transports are part of the `winston` Github organization but are 
+These transports are part of the `winston` Github organization but are
 actively seeking new maintainers. Interested in getting involved? Open an
 issue on `winston` to get the conversation started!
 
@@ -934,7 +959,7 @@ In addition to the options accepted by the [riak-js][12] [client][13], the Riak 
 ## Find more Transports
 
 There are more than 1000 packages on `npm` when [you search for] `winston`.
-That's why we say it's a logger for just about everything 
+That's why we say it's a logger for just about everything
 
 [you search for]: https://www.npmjs.com/search?q=winston
 [0]: https://nodejs.org/api/stream.html#stream_class_stream_writable
@@ -983,3 +1008,4 @@ That's why we say it's a logger for just about everything
 [43]: https://www.npmjs.com/package/winston-bigquery
 [44]: https://github.com/Quintinity/humio-winston
 [45]: https://github.com/datalust/winston-seq
+[46]: https://github.com/arpad1337/winston-console-transport-in-worker
