@@ -1,0 +1,75 @@
+name: "Create release PR"
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "What branch should SDK be built from?"
+        required: true
+        default: "develop"
+        type: string
+      versionType:
+        description: "What kind of version bump is this?"
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+      dryRun:
+        description: "Should publish be a dry run?"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  version-bump:
+    name: Bump version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Bump version (${{ inputs.versionType }})
+        if: ${{ !startsWith(inputs.versionType, 'pre') }}
+        run: |
+          ACTOR_ID=$(curl -X GET ${{ github.api_url }}/users/${{ github.actor }} | jq -r '.id')
+          ACTOR_EMAIL="$ACTOR_ID+${{ github.actor }}@users.noreply.github.com"
+          ACTOR_NAME=$(curl -X GET ${{ github.api_url }}/users/${{ github.actor }} | jq -r '.name')
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c-7)
+          VERSION=$(npm version ${{ inputs.versionType }} ${{ startsWith(inputs.versionType, 'pre') && '--preid=ci-$SHORT_SHA' || '' }} --no-git-tag-version)
+
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          git commit -m "Bumping SDK - ${{ env.VERSION }}" -m "" -m "" -m "Co-authored-by: $ACTOR_NAME <$ACTOR_EMAIL>"
+
+      - name: Publish package ${{ inputs.dryRun && '(Dry Run)' || '' }}
+        if: ${{ startsWith(inputs.versionType, 'pre') }}
+        run: npm publish ${{ inputs.dryRun && '--dry-run' || '' }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Open Pull Request
+        if: ${{ !inputs.dryRun && !startsWith(inputs.versionType, 'pre') }}
+        uses: peter-evans/create-pull-request@v4
+        with:
+          delete-branch: true
+          branch: "release/sdk/${{ env.VERSION }}"
+          title: "Release SDK: ${{ env.VERSION }}"
+          labels: "SDK, Release, Automated"

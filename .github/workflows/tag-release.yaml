@@ -1,0 +1,59 @@
+name: "Tag & Publish Release"
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  tag-commit:
+    name: Tag release commit
+    if: ${{ github.event.pull_request.merged == true }} 
+    env:
+      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+    runs-on: ubuntu-latest
+    outputs:
+      TAG: ${{ steps.tag-operation.outputs.TAG_NAME }}
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+           
+      - name: Tag commit with version 
+        id: tag-operation
+        if: ${{ contains( env.PR_BRANCH, 'release/sdk' )}}
+        run: |
+          echo "TAG_NAME=sdk-${PR_BRANCH##*/}" >> $GITHUB_OUTPUT
+          git tag ${{ env.TAG_NAME }}
+          git push origin ${{ env.TAG_NAME }}
+
+  create-release:
+    needs: tag-commit
+    name: Create Release
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ needs.tag-commit.outputs.TAG }}
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        
+      - name: Create release from tag
+        uses: ncipollo/release-action@v1.12.0
+        with: 
+          makeLatest: true
+          tag: ${{ env.TAG }}
+          name: ${{ env.TAG }}
+          generateReleaseNotes: true
+
+  publish-version:
+    needs: tag-commit
+    name: Publish Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Publish package  
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        # run: npm publish 
+        run: echo "publishing new version" 
