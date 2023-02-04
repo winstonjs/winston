@@ -1,0 +1,71 @@
+name: "Tag Release Commit"
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  was_merged:
+    name: Was PR Merged?
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.merge_check.outputs.result }}
+    env:
+      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - id: merge_check
+        run: echo "result=${{ github.event.pull_request.merged == true }}" >> $GITHUB_OUTPUT
+
+  is_release:
+    name: Is PR a release?
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.merge_check.outputs.result }}
+    env:
+      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - id: merge_check
+        run: echo "result=${{ contains( env.PR_BRANCH, 'release') }}" >> $GITHUB_OUTPUT
+
+  tag-merge-commit:
+    name: Tag release merge commit
+    needs:
+      - was_merged
+      - is_release
+    if: ${{ needs.was_merged.outputs.result == 'true' }} && ${{ needs.is_release.result == 'true' }}
+    env:
+      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+      ACTOR_ID: ${{ github.event.pull_request.merged_by.id }}
+      MERGE_AT: ${{ github.event.pull_request.merged_at }}
+      MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.BOT_PAT }}
+
+      - name: Tag commit with version
+        env:
+          ACTOR: ${{ github.actor }}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          ACTOR_INFO=$(gh api /users/$ACTOR)
+          ACTOR_ID=$(echo $ACTOR_INFO | jq -r '.id')
+          ACTOR_EMAIL="$ACTOR_ID+$ACTOR@users.noreply.github.com"
+          ACTOR_NAME=$(echo $ACTOR_INFO | jq -r '.name')
+          TAG_NAME=release-sdk-${PR_BRANCH##*/}
+
+          git config --global user.name 'xirr-9000'
+          git config --global user.email '51422590+xirr-9000@users.noreply.github.com'
+
+          git tag -a $TAG_NAME \
+            -m "Automated Release $TAG_NAME" \
+            -m "" \
+            -m "" \
+            -m "Merged By: $ACTOR_NAME <$ACTOR_EMAIL>" \
+            -m "Merged At: $MERGED_AT" $MERGE_COMMIT_SHA
+          git push origin $TAG_NAME

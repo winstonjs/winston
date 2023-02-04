@@ -1,0 +1,90 @@
+name: "Create Release PR"
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "What branch should the SDK be built from?"
+        required: true
+        default: "main"
+        type: string
+      versionType:
+        description: "What kind of version bump is this?"
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+      dryRun:
+        description: "Should publish be a dry run?"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  generate-sdk:
+    name: Generate SDK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.BOT_PAT}}
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+        # Commit version if it's not a pre-release version
+      - name: Commit OpenApi JSON and version bump
+        if: ${{ !startsWith(inputs.versionType, 'pre') }}
+        env:
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          ACTOR: ${{ github.actor }}
+        run: |
+          ACTOR_INFO=$(gh api /users/$ACTOR)
+          ACTOR_ID=$(echo $ACTOR_INFO | jq -r '.id')
+          ACTOR_EMAIL="$ACTOR_ID+$ACTOR@users.noreply.github.com"
+          ACTOR_NAME=$(echo $ACTOR_INFO | jq -r '.name')
+
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c-7)
+          VERSION=$(npm version ${{ inputs.versionType }} ${{ startsWith(inputs.versionType, 'pre') && '--preid=ci-$SHORT_SHA' || '' }} --no-git-tag-version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+          git config --global user.name ''
+          git config --global user.email ''
+          git add
+          git commit -m "Bumping Package - $VERSION" \
+           -m "" \
+           -m "" \
+           -m "Co-authored-by: $ACTOR_NAME <$ACTOR_EMAIL>"
+
+        # If version bump is a pre-release just go ahead and publish (dry run or otherwise)
+      - name: Publish pre-release package ${{ inputs.dryRun && '(Dry Run)' || '' }}
+        if: ${{ startsWith(inputs.versionType, 'pre') }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: npm publish ${{ inputs.dryRun && '--dry-run' || '' }}
+
+        # If version bump is not a pre-release and not a dry run, create release PR for human review
+      - name: Open Pull Request
+        if: ${{ !inputs.dryRun && !startsWith(inputs.versionType, 'pre') }}
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.BOT_PAT }}
+          delete-branch: true
+          branch: "release/${{ env.VERSION }}"
+          title: "Release: ${{ env.VERSION }}"
+          labels: "release, automated"

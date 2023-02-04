@@ -1,0 +1,41 @@
+name: "Generate & Ship Release #ShipIt"
+
+on:
+  push:
+    tags:
+      - release-**
+jobs:
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Create release from tag
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          makeLatest: false
+          generateReleaseNotes: false
+
+  publish-sdk-version:
+    name: Publish SDK Version
+    if: contains(github.ref, 'sdk')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.BOT_PAT}}
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Prepare for publish
+        run: npm ci
+
+      - name: Publish package
+        run: npm publish
