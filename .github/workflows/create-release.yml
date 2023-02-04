@@ -6,7 +6,7 @@ on:
       branch:
         description: "What branch should the SDK be built from?"
         required: true
-        default: "main"
+        default: "master"
         type: string
       versionType:
         description: "What kind of version bump is this?"

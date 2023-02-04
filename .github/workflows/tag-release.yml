@@ -5,7 +5,7 @@ on:
     types:
       - closed
     branches:
-      - main
+      - master
 
 jobs:
   was_merged:
