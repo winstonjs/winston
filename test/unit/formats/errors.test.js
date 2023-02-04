@@ -1,4 +1,6 @@
 /*
+      - main
+      - main
  * errors.test.js: E2E Integration tests of `new Error()` handling
  *
  * (C) 2010 Charlie Robbins
