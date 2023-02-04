@@ -33,7 +33,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install Dependencies
-        run: npm clean-install
+        run: npm ci --ignore-scripts
 
       - name: Lint
         run: npm run lint

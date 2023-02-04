@@ -48,7 +48,7 @@ jobs:
         run: npm ci --ignore-scripts
 
         # Commit version if it's not a pre-release version
-      - name: Commit OpenApi JSON and version bump
+      - name: Commit version bump
         if: ${{ !startsWith(inputs.versionType, 'pre') }}
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -72,6 +72,7 @@ jobs:
            -m "Co-authored-by: $ACTOR_NAME <$ACTOR_EMAIL>"
 
         # If version bump is a pre-release just go ahead and publish (dry run or otherwise)
+        # Do we have any interest in tagging pre-release versions?
       - name: Publish pre-release package ${{ inputs.dryRun && '(Dry Run)' || '' }}
         if: ${{ startsWith(inputs.versionType, 'pre') }}
         env:
@@ -79,7 +80,7 @@ jobs:
         run: npm publish ${{ inputs.dryRun && '--dry-run' || '' }}
 
         # If version bump is not a pre-release and not a dry run, create release PR for human review
-      - name: Open Pull Request
+      - name: Open Release PR
         if: ${{ !inputs.dryRun && !startsWith(inputs.versionType, 'pre') }}
         uses: peter-evans/create-pull-request@v4
         with:

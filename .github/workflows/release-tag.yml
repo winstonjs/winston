@@ -15,11 +15,11 @@ jobs:
       - name: Create release from tag
         uses: ncipollo/release-action@v1.12.0
         with:
-          makeLatest: false
-          generateReleaseNotes: false
+          makeLatest: true
+          generateReleaseNotes: true
 
   publish-sdk-version:
-    name: Publish SDK Version
+    name: Publish Version
     if: contains(github.ref, 'sdk')
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +35,7 @@ jobs:
           cache: 'npm'
 
       - name: Prepare for publish
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Publish package
         run: npm publish
