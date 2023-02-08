@@ -13,9 +13,9 @@ on:
         required: true
         type: choice
         options:
-          - major
-          - minor
-          - patch
+#          - major
+#          - minor
+#          - patch
           - premajor
           - preminor
           - prepatch
