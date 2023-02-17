@@ -35,7 +35,7 @@ jobs:
     needs:
       - was_merged
       - is_release
-    if: ${{ needs.was_merged.outputs.result == 'true' }} && ${{ needs.is_release.result == 'true' }}
+    if: ${{ needs.was_merged.outputs.result }} && ${{ needs.is_release.result }}
     env:
       PR_BRANCH: ${{ github.event.pull_request.head.ref }}
       ACTOR_ID: ${{ github.event.pull_request.merged_by.id }}
@@ -43,25 +43,32 @@ jobs:
       MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
     runs-on: ubuntu-latest
     steps:
+      - name: Get Auth Token
+        uses: tibdex/github-app-token@v1
+        id: get_auth_token
+        with: 
+          app_id: ${{ vars.RELEASE_OPS_APP_ID }}
+          private_key: ${{ secrets.RELEASE_OPS_PRIVATE_KEY }}
+    
       - name: Checkout Source
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.BOT_PAT }}
+          token: ${{ steps.get_auth_token.outputs.token }}
 
       - name: Tag commit with version
         env:
+          GH_TOKEN: ${{ steps.get_auth_token.outputs.token }}
           ACTOR: ${{ github.actor }}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
           ACTOR_INFO=$(gh api /users/$ACTOR)
           ACTOR_ID=$(echo $ACTOR_INFO | jq -r '.id')
           ACTOR_EMAIL="$ACTOR_ID+$ACTOR@users.noreply.github.com"
           ACTOR_NAME=$(echo $ACTOR_INFO | jq -r '.name')
-          TAG_NAME=release-sdk-${PR_BRANCH##*/}
+          TAG_NAME=release-${PR_BRANCH##*/}
 
-          git config --global user.name ''
-          git config --global user.email ''
-
+          git config --global user.name 'release-ops[bot]'
+          git config --global user.email 'release-ops[bot]@users.noreply.github.com'
+          
           git tag -a $TAG_NAME \
             -m "Automated Release $TAG_NAME" \
             -m "" \

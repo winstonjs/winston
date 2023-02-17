@@ -18,9 +18,8 @@ jobs:
           makeLatest: true
           generateReleaseNotes: true
 
-  publish-sdk-version:
+  publish-version:
     name: Publish Version
-    if: contains(github.ref, 'sdk')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
@@ -28,14 +27,15 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.BOT_PAT}}
         with:
           node-version: 16
-          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+          scope: ${{ vars.NPM_SCOPE }} # If this is not an organization I have to specify this.
 
       - name: Prepare for publish
         run: npm ci --ignore-scripts
 
       - name: Publish package
-        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: npm publish --access public

@@ -3,23 +3,22 @@ name: "Create Release PR"
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: "What branch should the SDK be built from?"
-        required: true
-        default: "master"
-        type: string
       versionType:
         description: "What kind of version bump is this?"
         required: true
         type: choice
         options:
-#          - major
-#          - minor
-#          - patch
+          - major
+          - minor
+          - patch
           - premajor
           - preminor
           - prepatch
           - prerelease
+      baseBranch:
+        description: "What base branch should be used for this release?" 
+        required: false
+        type: string
       dryRun:
         description: "Should publish be a dry run?"
         required: false
@@ -27,65 +26,88 @@ on:
         type: boolean
 
 jobs:
-  generate-sdk:
-    name: Generate SDK
+  create-release:
+    name: Create Release
     runs-on: ubuntu-latest
+    env: 
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      ACTOR: ${{ github.actor }}
     steps:
-      - name: Checkout Source
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.branch }}
+      - name: Get Auth Token
+        uses: tibdex/github-app-token@v1
+        id: get_auth_token
+        with: 
+          app_id: ${{ vars.RELEASE_OPS_APP_ID }}
+          private_key: ${{ secrets.RELEASE_OPS_PRIVATE_KEY }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Define job env vars
         env:
-          NODE_AUTH_TOKEN: ${{secrets.BOT_PAT}}
-        with:
-          node-version: 16
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-
-        # Commit version if it's not a pre-release version
-      - name: Commit version bump
-        if: ${{ !startsWith(inputs.versionType, 'pre') }}
-        env:
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          ACTOR: ${{ github.actor }}
+          GH_TOKEN: ${{ steps.get_auth_token.outputs.token }}
         run: |
-          ACTOR_INFO=$(gh api /users/$ACTOR)
+          isPR=$(gh api repos/${{ github.repository }}/pulls | jq -r '${{ format('.[].head.ref=="{0}"', inputs.baseBranch) }} // false' )
+          ACTOR_INFO=$(gh api /users/${{ env.ACTOR }})
           ACTOR_ID=$(echo $ACTOR_INFO | jq -r '.id')
           ACTOR_EMAIL="$ACTOR_ID+$ACTOR@users.noreply.github.com"
           ACTOR_NAME=$(echo $ACTOR_INFO | jq -r '.name')
 
+          echo "HAS_PR=$isPR" >> $GITHUB_ENV
+          echo "ACTOR_NAME=$ACTOR_NAME" >> $GITHUB_ENV
+          echo "ACTOR_EMAIL=$ACTOR_EMAIL" >> $GITHUB_ENV
+    
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.get_auth_token.outputs.token }}
+          ref: ${{ inputs.baseBranch || env.DEFAULT_BRANCH }} 
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: 'https://registry.npmjs.org'
+          scope: ${{ vars.NPM_SCOPE }} # If this is not an organization I have to specify this.
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Bump Version (${{ inputs.versionType }})
+        run: |
           SHORT_SHA=$(echo ${{ github.sha }} | cut -c-7)
-          VERSION=$(npm version ${{ inputs.versionType }} ${{ startsWith(inputs.versionType, 'pre') && '--preid=ci-$SHORT_SHA' || '' }} --no-git-tag-version)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          VERSION=$(npm version ${{ inputs.versionType }} ${{ startsWith(inputs.versionType, 'pre') && '--preid=RC' || '' }} --no-git-tag-version)
+          echo "VERSION=${VERSION%-*}" >> $GITHUB_ENV
+          echo "RC_VERSION=${VERSION#*-}" >> $GITHUB_ENV
+          echo "FULL_VERSION=$VERSION" >> $GITHUB_ENV
 
-          git config --global user.name ''
-          git config --global user.email ''
-          git add
-          git commit -m "Bumping Package - $VERSION" \
-           -m "" \
-           -m "" \
-           -m "Co-authored-by: $ACTOR_NAME <$ACTOR_EMAIL>"
+      - name: Commit changes
+        id: commit-version-bump
+        uses: EndBug/add-and-commit@v9.1.1
+        with: 
+          author_name: ${{ env.ACTOR_NAME }}
+          author_email: ${{ env.ACTOR_EMAIL }}
+          committer_name: "release-ops[bot]"
+          committer_email: "124938743+release-ops[bot]@users.noreply.github.com"
+          message: "Bumping Package - ${{ env.FULL_VERSION }}"
+          push: ${{ env.HAS_PR == 'true' }} # Update existing release branch if available and this is a pre release variant, aka new release candidate
 
-        # If version bump is a pre-release just go ahead and publish (dry run or otherwise)
-        # Do we have any interest in tagging pre-release versions?
-      - name: Publish pre-release package ${{ inputs.dryRun && '(Dry Run)' || '' }}
-        if: ${{ startsWith(inputs.versionType, 'pre') }}
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: npm publish ${{ inputs.dryRun && '--dry-run' || '' }}
-
-        # If version bump is not a pre-release and not a dry run, create release PR for human review
+      # If version bump is not a pre-release and not a dry run, create release PR for human review
       - name: Open Release PR
-        if: ${{ !inputs.dryRun && !startsWith(inputs.versionType, 'pre') }}
+        id: create-pr
+        if: ${{ env.HAS_PR == 'false' && !inputs.dryRun && inputs.versionType != 'prerelease' }}
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.BOT_PAT }}
+          token: ${{ steps.get_auth_token.outputs.token }}
           delete-branch: true
           branch: "release/${{ env.VERSION }}"
           title: "Release: ${{ env.VERSION }}"
           labels: "release, automated"
+          author: "${{ env.ACTOR_NAME }} <${{ env.ACTOR_EMAIL }}>"
+          committer: "release-ops[bot] <124938743+release-ops[bot]@users.noreply.github.com>"
+          commit-message: "Bumping Package - ${{ env.FULL_VERSION }}"
+          draft: ${{ startsWith(inputs.versionType, 'pre') }}
+
+      # If a version bump was pushed or a new release pr was created, publish the new variant as long as it's not an official release
+      - name: Publish pre-release package ${{ inputs.dryRun && '(Dry Run)' || '' }}
+        if: ${{ startsWith(inputs.versionType, 'pre') && (steps.create-pr.outputs.pull-request-operation == 'created' || steps.commit-version-bump.outputs.pushed == 'true') }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: npm publish --access public ${{ inputs.dryRun && '--dry-run' || '' }} --tag RC
