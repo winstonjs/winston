@@ -12,14 +12,14 @@ const Transport = require('../../../').Transport;
 // and conforming to the old winston transport API, **BUT** INHERITS FROM
 // THE MODERN WINSTON TRANSPORT.
 //
-module.exports = class LegacyMixed extends Transport {
+class LegacyMixed extends Transport {
   constructor(options = {}) {
     super(options);
 
     //
     // Expose the name of this Transport on the prototype
     //
-    module.exports.prototype.name = 'legacy-mixed-test';
+    this.name = 'legacy-mixed-test';
 
     this.silent = options.silent;
     this.output = { error: [], write: [] };
@@ -50,3 +50,5 @@ module.exports = class LegacyMixed extends Transport {
     callback(null, true);
   }
 };
+
+module.exports = LegacyMixed;

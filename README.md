@@ -729,7 +729,7 @@ const util = require('util');
 // Inherit from `winston-transport` so you can take advantage
 // of the base functionality and `.exceptions.handle()`.
 //
-module.exports = class YourCustomTransport extends Transport {
+class YourCustomTransport extends Transport {
   constructor(opts) {
     super(opts);
     //
@@ -749,6 +749,8 @@ module.exports = class YourCustomTransport extends Transport {
     callback();
   }
 };
+
+module.exports = YourCustomTransport;
 ```
 
 ## Common Transport options
