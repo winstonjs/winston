@@ -31,7 +31,7 @@ function isCorrectFormat(filename) {
   return new Date(time).getTime() > 0;
 }
 
-describe.only('winston/transports/file/rotationFormat', function () {
+describe('winston/transports/file/rotationFormat', function () {
   this.timeout(10000);
 
   let testDone = false;
