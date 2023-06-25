@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A logger for just about everything.",
-  "version": "3.8.1",
+  "version": "3.9.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "David Hyde <dabh@alumni.stanford.edu>"
@@ -25,6 +25,7 @@
   ],
   "dependencies": {
     "@dabh/diagnostics": "^2.0.2",
+    "@colors/colors": "1.5.0",
     "async": "^3.2.3",
     "is-stream": "^2.0.0",
     "logform": "^2.4.0",
@@ -39,9 +40,8 @@
     "@babel/cli": "^7.17.0",
     "@babel/core": "^7.17.2",
     "@babel/preset-env": "^7.16.7",
-    "@colors/colors": "1.5.0",
     "@dabh/eslint-config-populist": "^5.0.0",
-    "@types/node": "^18.0.0",
+    "@types/node": "^20.3.1",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
     "cross-spawn-async": "^2.2.5",
@@ -68,7 +68,7 @@
     "prepublishOnly": "npm run build"
   },
   "engines": {
-    "node": ">= 12.0.0"
+    "node": ">= 16.0.0"
   },
   "license": "MIT"
 }
