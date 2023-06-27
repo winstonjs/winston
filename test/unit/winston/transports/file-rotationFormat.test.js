@@ -106,7 +106,6 @@ describe('winston/transports/file/rotationFormat', function () {
       //
       const filler = fillWith.shift();
       fillWith.push(filler);
-      console.log(filler, fillWith);
 
       //
       //
