@@ -27,7 +27,6 @@ function removeFixtures(done) {
 // Validate Filename according to rotation
 function isCorrectFormat(filename) {
   let time = filename.split('rotation')[1].split('.')[0];
-  console.log(time);
   return new Date(time).getTime() > 0;
 }
 
@@ -69,7 +68,6 @@ describe('winston/transports/file/rotationFormat', function () {
     //
     function assumeFilesCreated() {
       files.map(function (file, i) {
-        console.log(i, file);
         let stats;
         try {
           stats = fs.statSync(file);
@@ -99,7 +97,6 @@ describe('winston/transports/file/rotationFormat', function () {
     // Log the specified kbytes to the transport
     //
     function logKbytes(kbytes) {
-      console.log('Loging kbytes');
       //
       // Shift the next fill char off the array then push it back
       // to rotate the chars.
@@ -124,7 +121,6 @@ describe('winston/transports/file/rotationFormat', function () {
     }
 
     rotationTransport.on('open', function (file) {
-      console.log('Opening Transport');
 
       if (testDone) return; // ignore future notifications
       const match = file.match(/(\d+)\.log$/);

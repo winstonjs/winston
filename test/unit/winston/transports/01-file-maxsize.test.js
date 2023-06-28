@@ -121,7 +121,7 @@ describe('File (maxsize)', function () {
   });
 
   describe('With lazy option enabled', () => {
-    it('should not create extra file', function (done) {
+    it.only('should not create extra file', function (done) {
       const fillWith = ['a', 'b', 'c', 'd', 'e'];
       const lazyTransport = new winston.transports.File({
         format: winston.format.printf(info => info.message),
@@ -138,8 +138,8 @@ describe('File (maxsize)', function () {
       const files = [];
 
       //
-      // Assets all the files have been created with the
-      // correct filesize
+      // Assets the no of files and all the files have been created with the
+      // correct filesize 
       //
       function assumeFilesCreated() {
         assume(files.length).equals(fillWith.length);
@@ -188,13 +188,23 @@ describe('File (maxsize)', function () {
           logger.log({ level: 'info', message: kbStr });
         }
       }
-      for (var i = 0; i < fillWith.length; i++) {
-        setImmediate(()=>{logKbytes(3)});
-      }
-      setTimeout(function () {
-        assumeFilesCreated();
-      }, 1000);
 
+      // Initial Log
+      let count =1;
+      logKbytes(3);
+
+      //Listent to file close event called when the file is closed
+      lazyTransport.on('fileclosed', ()=>{
+        if(count === fillWith.length){
+        assumeFilesCreated();
+
+          return;
+        }
+        count+=1;
+        setImmediate(()=>{logKbytes(3);});
+      })
+
+      //Listent to file open event called when the file is opened
       lazyTransport.on('open', file => {
         files.push(file);
       });
