@@ -121,7 +121,7 @@ describe('File (maxsize)', function () {
   });
 
   describe('With lazy option enabled', () => {
-    it.only('should not create extra file', function (done) {
+    it('should not create extra file', function (done) {
       const fillWith = ['a', 'b', 'c', 'd', 'e'];
       const lazyTransport = new winston.transports.File({
         format: winston.format.printf(info => info.message),
