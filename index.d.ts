@@ -104,6 +104,7 @@ declare namespace winston {
     handleRejections?: boolean;
     exceptionHandlers?: any;
     rejectionHandlers?: any;
+    excludeSplatFromMessage?: boolean;
   }
 
   class Logger extends NodeJSStream.Transform {
