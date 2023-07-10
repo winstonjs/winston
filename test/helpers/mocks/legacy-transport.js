@@ -11,7 +11,7 @@ const Transport = require('winston-compat').Transport;
 // for persisting log messages and metadata to a memory array of messages
 // and conforming to the old winston transport API.
 //
-const Legacy = module.exports = function Legacy(options) {
+const Legacy = function Legacy(options) {
   options = options || {};
   Transport.call(this, options);
 
@@ -53,3 +53,5 @@ Legacy.prototype.log = function (level, msg, meta, callback) {
   this.emit('logged');
   callback(null, true);
 };
+
+module.exports = Legacy;
