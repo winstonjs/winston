@@ -193,7 +193,7 @@ describe('File (maxsize)', function () {
       let count =1;
       logKbytes(3);
 
-      //Listent to file close event called when the file is closed
+      // Listen to file close event called when the file is closed
       lazyTransport.on('fileclosed', ()=>{
         if(count === fillWith.length){
         assumeFilesCreated();
