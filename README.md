@@ -765,11 +765,11 @@ const logger = winston.createLogger({
       level: 'error',
       format: winston.format.json()
     }),
-    new transports.Http({
+    new winston.transports.Http({
       level: 'warn',
       format: winston.format.json()
     }),
-    new transports.Console({
+    new winston.transports.Console({
       level: 'info',
       format: winston.format.combine(
         winston.format.colorize(),

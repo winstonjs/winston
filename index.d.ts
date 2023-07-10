@@ -153,7 +153,7 @@ declare namespace winston {
     stream(options?: any): NodeJS.ReadableStream;
 
     startTimer(): Profiler;
-    profile(id: string | number, meta?: LogEntry): this;
+    profile(id: string | number, meta?: Record<string, any>): this;
 
     configure(options: LoggerOptions): void;
 
