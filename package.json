@@ -25,10 +25,10 @@
   ],
   "dependencies": {
     "@dabh/diagnostics": "^2.0.2",
-    "@colors/colors": "1.5.0",
+    "@colors/colors": "1.6.0",
     "async": "^3.2.3",
     "is-stream": "^2.0.0",
-    "logform": "^2.4.0",
+    "logform": "^2.5.1",
     "one-time": "^1.0.0",
     "readable-stream": "^3.4.0",
     "safe-stable-stringify": "^2.3.1",
