@@ -152,7 +152,7 @@ A logger accepts the following parameters:
 
 | Name          | Default                     |  Description    |
 | ------------- | --------------------------- | --------------- |
-| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) less than or equal to this level  |
+| `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) is less than or equal to this level  |
 | `levels`      | `winston.config.npm.levels` | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`       | Formatting for `info` messages  (see: [Formats])           |
 | `transports`  | `[]` _(No transports)_      | Set of logging targets for `info` messages                 |
@@ -226,6 +226,7 @@ const logger = winston.createLogger({
 
 const childLogger = logger.child({ requestId: '451' });
 ```
+> `.child` is likely to be bugged if you're also extending the `Logger` class, due to some implementation details that make `this` keyword to point to unexpected things. Use with caution.
 
 ### Streams, `objectMode`, and `info` objects
 
@@ -456,7 +457,7 @@ considered for future releases.
 caller. (See: [Filtering `info` Objects](#filtering-info-objects)) below.
 
 `winston.format` is designed to be as simple as possible. To define a new
-format simple pass it a `transform(info, opts)` function to get a new
+format, simply pass it a `transform(info, opts)` function to get a new
 `Format`.
 
 The named `Format` returned can be used to create as many copies of the given
@@ -764,11 +765,11 @@ const logger = winston.createLogger({
       level: 'error',
       format: winston.format.json()
     }),
-    new transports.Http({
+    new winston.transports.Http({
       level: 'warn',
       format: winston.format.json()
     }),
-    new transports.Console({
+    new winston.transports.Console({
       level: 'info',
       format: winston.format.combine(
         winston.format.colorize(),
@@ -969,7 +970,7 @@ setTimeout(function () {
 }, 1000);
 ```
 
-Also you can start a timer and keep a reference that you can call `.done()``
+Also you can start a timer and keep a reference that you can call `.done()`
 on:
 
 ``` js
