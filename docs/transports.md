@@ -833,7 +833,7 @@ Options:
 
 ```typescript
 import * as winston from 'winston';
-import { ConsoleTransportInWorker } from '@rpi1337/winston-console-transport-in-worker';
+import { ConsoleTransportInWorker } from '@greeneyesai/winston-console-transport-in-worker';
 
 ...
 
