@@ -48,6 +48,7 @@ declare namespace winston {
     maxFiles: number | null;
     eol: string;
     tailable: boolean;
+    lazy: boolean;
 
     new(options?: FileTransportOptions): FileTransportInstance;
   }
