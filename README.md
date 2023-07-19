@@ -226,6 +226,7 @@ const logger = winston.createLogger({
 
 const childLogger = logger.child({ requestId: '451' });
 ```
+> `.child` is likely to be bugged if you're also extending the `Logger` class, due to some implementation details that make `this` keyword to point to unexpected things. Use with caution.
 
 ### Streams, `objectMode`, and `info` objects
 
