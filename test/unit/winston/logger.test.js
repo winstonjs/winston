@@ -768,11 +768,12 @@ describe('Logger Instance', function () {
         logger.info(null);
       });
 
-      it('.info(new Error()) uses Error instance as info', function (done) {
+      it('.info(new Error()) uses Error instance data as info', function (done) {
         const err = new Error('test');
         const logger = helpers.createLogger(function (info) {
           assume(info).instanceOf(Error);
-          assume(info).equals(err);
+          assume(info.message).equals(err.message);
+          assume(info.stack).equals(err.stack);
           done();
         });
 
@@ -955,11 +956,12 @@ describe('Logger Instance', function () {
         logger.log('info', null);
       });
 
-      it(`.log(level, new Error()) uses Error instance as info`, function (done) {
+      it(`.log(level, new Error()) uses Error instance data as info`, function (done) {
         const err = new Error('test');
         const logger = helpers.createLogger(function (info) {
           assume(info).instanceOf(Error);
-          assume(info).equals(err);
+          assume(info.message).equals(err.message);
+          assume(info.stack).equals(err.stack);
           done();
         });
 
