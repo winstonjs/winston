@@ -1,7 +1,7 @@
 {
   "name": "winston",
   "description": "A logger for just about everything.",
-  "version": "3.8.2",
+  "version": "3.10.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "maintainers": [
     "David Hyde <dabh@alumni.stanford.edu>"
@@ -41,7 +41,7 @@
     "@babel/core": "^7.17.2",
     "@babel/preset-env": "^7.16.7",
     "@dabh/eslint-config-populist": "^5.0.0",
-    "@types/node": "^18.0.0",
+    "@types/node": "^20.3.1",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
     "cross-spawn-async": "^2.2.5",

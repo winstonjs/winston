@@ -31,7 +31,7 @@ jobs:
             if (process.env.RELEASE_VERSION.includes('RC')) {
               core.setFailed('Release candidates are not valid releases!')
             }
-          
+
   tests:
     name: Libary Tests
     permissions:
@@ -42,10 +42,9 @@ jobs:
     strategy:
       matrix:
         node:
-          - 12
-          - 14
           - 16
           - 18
+          - 20
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

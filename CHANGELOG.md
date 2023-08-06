@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## [v3.9.0](https://github.com/winstonjs/winston/compare/v3.8.2...v3.9.0)
+### Functionality changes
+* Handle undefined errors in getAllInfo in exception-handler in https://github.com/winstonjs/winston/pull/2208; thanks to new contributor @eivindrs
+* fix: properly allow passing non-array transport in https://github.com/winstonjs/winston/pull/2256; thanks to new contributor @Tanuel
+* fix #1732 (Http Transport uses JSON format options as request options) in https://github.com/winstonjs/winston/pull/2272; thanks to new contributor @MoritzLoewenstein (minor version bump per comment on the issue)
+* fix: add guard clause to prevent FD leak in https://github.com/winstonjs/winston/pull/2301; thanks to new contributor @td-tomasz-joniec
+
+### Dependency updates by @dependabot + CI autotesting
+* Bump eslint from 8.23.0 to 8.32.0 by @dependabot in https://github.com/winstonjs/winston/pull/2209, https://github.com/winstonjs/winston/pull/2236, https://github.com/winstonjs/winston/pull/2258, & https://github.com/winstonjs/winston/pull/2271
+* Bump @babel/core from 7.19.0 to 7.20.12 by @dependabot in https://github.com/winstonjs/winston/pull/2206, https://github.com/winstonjs/winston/pull/2234, https://github.com/winstonjs/winston/pull/2259, & https://github.com/winstonjs/winston/pull/2275
+* Bump @types/node from 18.0.0 to 18.11.18 by @dependabot in https://github.com/winstonjs/winston/pull/2215, https://github.com/winstonjs/winston/pull/2235, & https://github.com/winstonjs/winston/pull/2264
+* Bump @babel/preset-env from 7.19.0 to 7.20.2 by @dependabot in https://github.com/winstonjs/winston/pull/2218 & https://github.com/winstonjs/winston/pull/2244
+* Bump safe-stable-stringify from 2.3.1 to 2.4.3 by @dependabot in https://github.com/winstonjs/winston/pull/2217 & https://github.com/winstonjs/winston/pull/2292
+* Bump @babel/cli from 7.18.10 to 7.19.3 by @dependabot in https://github.com/winstonjs/winston/pull/2216
+* Bump json5 from 2.2.1 to 2.2.3 by @dependabot in https://github.com/winstonjs/winston/pull/2260
+
+### Documentation changes
+* Fix readme typo in https://github.com/winstonjs/winston/pull/2230; thanks to new contributor @aretecode
+* create new example for ready to use in https://github.com/winstonjs/winston/pull/2240; thanks to new contributor @myagizmaktav
+* minor fixes to publishing.md
+
+### Build Infrastructure changes
+* GitHub Workflows security hardening in https://github.com/winstonjs/winston/pull/2252; thanks to new contributor @sashashura
+
 ## [v3.8.2](https://github.com/winstonjs/winston/compare/v3.8.1...v3.8.2)
 ### Patch-level changes
 * Add `.js` to main entry point in package.json in https://github.com/winstonjs/winston/pull/2177; thanks to new contributor @rumanbsl

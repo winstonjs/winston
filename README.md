@@ -226,6 +226,7 @@ const logger = winston.createLogger({
 
 const childLogger = logger.child({ requestId: '451' });
 ```
+> `.child` is likely to be bugged if you're also extending the `Logger` class, due to some implementation details that make `this` keyword to point to unexpected things. Use with caution.
 
 ### Streams, `objectMode`, and `info` objects
 
@@ -764,11 +765,11 @@ const logger = winston.createLogger({
       level: 'error',
       format: winston.format.json()
     }),
-    new transports.Http({
+    new winston.transports.Http({
       level: 'warn',
       format: winston.format.json()
     }),
-    new transports.Console({
+    new winston.transports.Console({
       level: 'info',
       format: winston.format.combine(
         winston.format.colorize(),

@@ -34,6 +34,7 @@ declare namespace winston {
     maxFiles?: number;
     eol?: string;
     tailable?: boolean;
+    lazy?: boolean;
   }
 
   interface FileTransportInstance extends Transport {
@@ -47,6 +48,7 @@ declare namespace winston {
     maxFiles: number | null;
     eol: string;
     tailable: boolean;
+    lazy: boolean;
 
     new(options?: FileTransportOptions): FileTransportInstance;
   }

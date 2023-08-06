@@ -102,6 +102,7 @@ looking for daily log rotation see [DailyRotateFile](#dailyrotatefile-transport)
 * __level:__ Level of messages that this transport should log (default: level set on parent logger).
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __eol:__ Line-ending character to use. (default: `os.EOL`).
+* __lazy:__ If true, log files will be created on demand, not at the initialization time.
 * __filename:__ The filename of the logfile to write output to.
 * __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.

@@ -51,7 +51,8 @@ describe('Http({ host, port, path })', function () {
   const dummyLog = {
     level: 'info',
     message: 'hello',
-    meta: {}
+    meta: {},
+    path: '/error'
   };
 
   afterEach(function (done) {
