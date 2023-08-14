@@ -15,7 +15,7 @@ const util = require('util');
 const { EOL } = require('os');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
-const { MESSAGE, SPLAT } = require('triple-beam');
+const { MESSAGE, SPLAT, LEVEL } = require('triple-beam');
 const winston = require('../../../lib/winston');
 const TransportStream = require('winston-transport');
 const format = require('../../../lib/winston').format;
@@ -749,6 +749,46 @@ describe('Logger Instance', function () {
         logger.info('Hello', {label: 'world'});
         logger.info('Hello %d', 100, {label: 'world'});
       });
+
+      it(`.log(level, object) does not mutate input`, function (done) {
+        const data = { message: 'hello' };
+
+        const logger = helpers.createLogger(function (info) {
+          assume(info[LEVEL]).equals('info');
+          assume(info.message).equals('hello');
+          assume(data[LEVEL]).equals(undefined);
+          assume(data).deep.equal({ message: 'hello' });
+          done();
+        });
+
+        logger.log('info', data);
+      });
+
+      it(`.log(level, array) does not mutate input`, function (done) {
+        const data = ['one', 'two', 'three'];
+
+        const logger = helpers.createLogger(function (info) {
+          assume(info[LEVEL]).equals('info');
+          assume(data[LEVEL]).equals(undefined);
+          assume(data).deep.equal(['one', 'two', 'three']);
+          done();
+        });
+
+        logger.log('info', data);
+      });
+
+      it(`.log(level, object, splat) does not mutate input`, function (done) {
+        const data = { message: 'hello' };
+
+        const logger = helpers.createLogger(function (info) {
+          assume(info[LEVEL]).equals('info');
+          assume(data[LEVEL]).equals(undefined);
+          assume(data).deep.equal({ message: 'hello' });
+          done();
+        });
+
+        logger.log('info', data, { label: 'test' });
+      });
     });
 
     describe('.info', function () {
@@ -780,6 +820,46 @@ describe('Logger Instance', function () {
         });
 
         logger.info(err);
+      });
+
+      it(`.info(object) does not mutate input`, function (done) {
+        const data = { message: 'hello' };
+
+        const logger = helpers.createLogger(function (info) {
+          assume(info.message).equals('hello');
+          assume(info[LEVEL]).equals('info');
+          assume(data).deep.equal({ message: 'hello' });
+          assume(data[LEVEL]).equals(undefined);
+          done();
+        });
+
+        logger.info(data);
+      });
+
+      it(`.info(array) does not mutate input`, function (done) {
+        const data = ['one', 'two', 'three'];
+
+        const logger = helpers.createLogger(function (info) {
+          assume(info[LEVEL]).equals('info');
+          assume(data).deep.equal(['one', 'two', 'three']);
+          assume(data[LEVEL]).equals(undefined);
+          done();
+        });
+
+        logger.info(data);
+      });
+
+      it(`.info(array) does not mutate input`, function (done) {
+        const data = { message: ['one', 'two', 'three'] };
+
+        const logger = helpers.createLogger(function (info) {
+          assume(info[LEVEL]).equals('info');
+          assume(data).deep.equal({ message: ['one', 'two', 'three'] });
+          assume(data[LEVEL]).equals(undefined);
+          done();
+        });
+
+        logger.info(data);
       });
 
       // TODO: This test needs finished or removed
