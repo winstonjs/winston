@@ -19,6 +19,8 @@ declare namespace winston {
   export import transports = Transports;
   export import transport = Transport;
 
+  type defaultLevels = "error" | "warn" | "info" | "http" | "verbose" | "debug" | "silly";
+
   class ExceptionHandler {
     constructor(logger: Logger);
     logger: Logger;
@@ -92,8 +94,8 @@ declare namespace winston {
     (infoObject: object): Logger;
   }
 
-  interface LoggerOptions {
-    levels?: Config.AbstractConfigSetLevels;
+  interface LoggerOptions<T extends string> {
+    levels?: Config.AbstractConfigSetLevels<T>;
     silent?: boolean;
     format?: logform.Format;
     level?: string;
@@ -106,7 +108,15 @@ declare namespace winston {
     rejectionHandlers?: any;
   }
 
-  class Logger extends NodeJSStream.Transform {
+  // Used to dynamically add log levels
+  type LoggerLogFunctionsMap<T extends string> = {
+    [key in T]: LeveledLogMethod;
+  };
+  type LoggerLogEnabledMap<T extends string> = {
+    [key in T]: () => boolean;
+  };
+
+  interface LoggerBase<T extends string> extends NodeJSStream.Transform {
     constructor(options?: LoggerOptions);
 
     silent: boolean;
@@ -126,26 +136,6 @@ declare namespace winston {
     clear(): this;
     close(): this;
 
-    // for cli and npm levels
-    error: LeveledLogMethod;
-    warn: LeveledLogMethod;
-    help: LeveledLogMethod;
-    data: LeveledLogMethod;
-    info: LeveledLogMethod;
-    debug: LeveledLogMethod;
-    prompt: LeveledLogMethod;
-    http: LeveledLogMethod;
-    verbose: LeveledLogMethod;
-    input: LeveledLogMethod;
-    silly: LeveledLogMethod;
-
-    // for syslog levels only
-    emerg: LeveledLogMethod;
-    alert: LeveledLogMethod;
-    crit: LeveledLogMethod;
-    warning: LeveledLogMethod;
-    notice: LeveledLogMethod;
-
     query(
       options?: QueryOptions,
       callback?: (err: Error, results: any) => void
@@ -160,13 +150,8 @@ declare namespace winston {
     child(options: Object): this;
 
     isLevelEnabled(level: string): boolean;
-    isErrorEnabled(): boolean;
-    isWarnEnabled(): boolean;
-    isInfoEnabled(): boolean;
-    isVerboseEnabled(): boolean;
-    isDebugEnabled(): boolean;
-    isSillyEnabled(): boolean;
   }
+  export type Logger<T extends string = defaultLevels> = LoggerBase<T> & LoggerLogFunctionsMap<T> & LoggerLogEnabledMap<T>;
 
   class Container {
     loggers: Map<string, Logger>;
