@@ -94,7 +94,7 @@ declare namespace winston {
     (infoObject: object): Logger;
   }
 
-  interface LoggerOptions<T extends string> {
+  interface LoggerOptions<T extends string = defaultLevels> {
     levels?: Config.AbstractConfigSetLevels<T>;
     silent?: boolean;
     format?: logform.Format;
@@ -117,11 +117,11 @@ declare namespace winston {
   };
 
   interface LoggerBase<T extends string> extends NodeJSStream.Transform {
-    constructor(options?: LoggerOptions);
+    constructor(options?: LoggerOptions<T>): Logger<T>;
 
     silent: boolean;
     format: logform.Format;
-    levels: Config.AbstractConfigSetLevels;
+    levels: Config.AbstractConfigSetLevels<T>;
     level: string;
     transports: Transport[];
     exceptions: ExceptionHandler;
@@ -145,7 +145,7 @@ declare namespace winston {
     startTimer(): Profiler;
     profile(id: string | number, meta?: Record<string, any>): this;
 
-    configure(options: LoggerOptions): void;
+    configure(options: LoggerOptions<T>): void;
 
     child(options: Object): this;
 
@@ -155,21 +155,21 @@ declare namespace winston {
 
   class Container {
     loggers: Map<string, Logger>;
-    options: LoggerOptions;
+    options: LoggerOptions<string>;
 
-    add(id: string, options?: LoggerOptions): Logger;
-    get(id: string, options?: LoggerOptions): Logger;
+    add(id: string, options?: LoggerOptions<string>): Logger;
+    get(id: string, options?: LoggerOptions<string>): Logger;
     has(id: string): boolean;
     close(id?: string): void;
 
-    constructor(options?: LoggerOptions);
+    constructor(options?: LoggerOptions<string>);
   }
 
   let version: string;
   let loggers: Container;
 
   let addColors: (target: Config.AbstractConfigSetColors) => any;
-  let createLogger: (options?: LoggerOptions) => Logger;
+  let createLogger: <T extends string>(options?: LoggerOptions<T>) => Logger<T>;
 
   // Pass-through npm level methods routed to the default logger.
   let error: LeveledLogMethod;
@@ -192,7 +192,7 @@ declare namespace winston {
   let clear: () => Logger;
   let startTimer: () => Profiler;
   let profile: (id: string | number) => Logger;
-  let configure: (options: LoggerOptions) => void;
+  let configure: <T extends string>(options: LoggerOptions<T>) => void;
   let child: (options: Object) => Logger;
   let level: string;
   let exceptions: ExceptionHandler;
