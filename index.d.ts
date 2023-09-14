@@ -113,7 +113,7 @@ declare namespace winston {
     [key in T]: LeveledLogMethod;
   };
   type LoggerLogEnabledMap<T extends string> = {
-    [key in T]: () => boolean;
+    [key in `is${Capitalize<T>}Enabled`]: () => boolean;
   };
 
   interface LoggerBase<T extends string> extends NodeJSStream.Transform {
