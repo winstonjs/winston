@@ -4,8 +4,8 @@
 /// <reference types="node" />
 
 declare namespace winston {
-  interface AbstractConfigSetLevels {
-    [key: string]: number;
+  interface AbstractConfigSetLevels<T extends string> {
+    [key: T]: number;
   }
 
   interface AbstractConfigSetColors {
