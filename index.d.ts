@@ -65,25 +65,25 @@ declare namespace winston {
     done(info?: any): boolean;
   }
 
-  type LogCallback = (
+  type LogCallback<T extends string = defaultLevels> = (
     error?: any,
-    level?: string,
+    level?: T,
     message?: string,
     meta?: any
   ) => void;
 
-  interface LogEntry {
-    level: string;
+  interface LogEntry<T extends string = defaultLevels> {
+    level: T;
     message: string;
     [optionName: string]: any;
   }
 
-  interface LogMethod {
-    (level: string, message: string, callback: LogCallback): Logger;
-    (level: string, message: string, meta: any, callback: LogCallback): Logger;
-    (level: string, message: string, ...meta: any[]): Logger;
-    (entry: LogEntry): Logger;
-    (level: string, message: any): Logger;
+  interface LogMethod<T extends string = defaultLevels> {
+    (level: T, message: string, callback: LogCallback<T>): Logger<T>;
+    (level: T, message: string, meta: any, callback: LogCallback<T>): Logger<T>;
+    (level: T, message: string, ...meta: any[]): Logger<T>;
+    (entry: LogEntry<T>): Logger<T>;
+    (level: T, message: any): Logger<T>;
   }
 
   interface LeveledLogMethod {
@@ -117,7 +117,7 @@ declare namespace winston {
   };
 
   interface LoggerBase<T extends string> extends NodeJSStream.Transform {
-    constructor(options?: LoggerOptions<T>): Logger<T>;
+    new <T extends string = defaultLevels>(options?: LoggerOptions<T>): Logger<T>;
 
     silent: boolean;
     format: logform.Format;
@@ -130,7 +130,7 @@ declare namespace winston {
     exitOnError: Function | boolean;
     defaultMeta?: any;
 
-    log: LogMethod;
+    log: LogMethod<T>;
     add(transport: Transport): this;
     remove(transport: Transport): this;
     clear(): this;
@@ -149,10 +149,10 @@ declare namespace winston {
 
     child(options: Object): this;
 
-    isLevelEnabled(level: string): boolean;
+    isLevelEnabled(level: T): boolean;
   }
   export type Logger<T extends string = defaultLevels> = LoggerBase<T> & LoggerLogFunctionsMap<T> & LoggerLogEnabledMap<T>;
-
+  export const Logger: Logger;
   class Container {
     loggers: Map<string, Logger>;
     options: LoggerOptions<string>;
@@ -181,7 +181,7 @@ declare namespace winston {
   let silly: LeveledLogMethod;
 
   // Other pass-through methods routed to the default logger.
-  let log: LogMethod;
+  let log: LogMethod<defaultLevels>;
   let query: (
     options?: QueryOptions,
     callback?: (err: Error, results: any) => void
@@ -192,7 +192,7 @@ declare namespace winston {
   let clear: () => Logger;
   let startTimer: () => Profiler;
   let profile: (id: string | number) => Logger;
-  let configure: <T extends string>(options: LoggerOptions<T>) => void;
+  let configure: <T extends string = defaultLevels>(options: LoggerOptions<T>) => void;
   let child: (options: Object) => Logger;
   let level: string;
   let exceptions: ExceptionHandler;
