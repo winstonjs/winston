@@ -7,7 +7,7 @@ const fs = require('fs');
 const { MESSAGE } = require('triple-beam');
 const split = require('split2');
 const assume = require('assume');
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const testFileFixturesPath = path.join(
   __dirname,
   '..',

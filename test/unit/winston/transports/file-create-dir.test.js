@@ -4,7 +4,7 @@ const fs = require('fs');
 const assert = require('assert');
 const path = require('path');
 const winston = require('../../../../lib/winston');
-const rimraf = require("rimraf");
+const { rimraf } = require('rimraf');
 
 /* eslint-disable no-sync */
 

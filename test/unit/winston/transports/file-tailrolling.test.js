@@ -1,6 +1,6 @@
 /* eslint-disable no-sync */
 const assert = require('assert');
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const winston = require('../../../../lib/winston');
