@@ -5,7 +5,7 @@
  * MIT LICENSE
  *
  */
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const assume = require('assume');
