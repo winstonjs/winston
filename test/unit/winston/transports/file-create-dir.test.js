@@ -12,7 +12,7 @@ describe('winston/transports/file/createLogDir', function () {
   const logDir = path.resolve(__dirname, '../../../fixtures/temp_logs');
 
   beforeEach(function () {
-    rimraf(logDir, (err) => {
+    return rimraf(logDir).catch(err => {
       if (err){
         console.log('Error encountered when removing `temp_logs` dir')
         console.log(err);
