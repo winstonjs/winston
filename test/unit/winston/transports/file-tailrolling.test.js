@@ -12,7 +12,7 @@ const { MESSAGE } = require('triple-beam');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  return rimraf(path.join(testLogFixturesPath, 'testtailrollingfiles*')).then(() => done());
+  rimraf(path.join(testLogFixturesPath, 'testtailrollingfiles*')).then(() => done());
 }
 
 
