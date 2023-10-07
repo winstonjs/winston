@@ -5,7 +5,7 @@
  * MIT LICENSE
  *
  */
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const assume = require('assume');
@@ -18,7 +18,7 @@ const MESSAGE = Symbol.for('message');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testmaxsize*'), done);
+  rimraf(path.join(testLogFixturesPath, 'testmaxsize*')).then(() => done());
 }
 
 describe('File (maxsize)', function () {
