@@ -675,10 +675,21 @@ To colorize the standard logging level add
 ```js
 winston.format.combine(
   winston.format.colorize(),
-  winston.format.json()
+  winston.format.simple()
 );
 ```
-where `winston.format.json()` is whatever other formatter you want to use.  The `colorize` formatter must come before any formatters adding text you wish to color.
+where `winston.format.simple()` is whatever other formatter you want to use.  The `colorize` formatter must come before any formatters adding text you wish to color.
+
+### Colorizing full log line when json formatting logs
+
+To colorize the full log line with the json formatter you can apply the following
+
+```js
+winston.format.combine(
+  winston.format.json(),
+  winston.format.colorize({ all })
+);
+```
 
 ## Transports
 

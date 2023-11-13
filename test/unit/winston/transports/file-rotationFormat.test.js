@@ -7,7 +7,7 @@ const fs = require('fs');
 const { MESSAGE } = require('triple-beam');
 const split = require('split2');
 const assume = require('assume');
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const testFileFixturesPath = path.join(
   __dirname,
   '..',
@@ -21,7 +21,7 @@ const testFileFixturesPath = path.join(
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(testFileFixturesPath, 'rotation*'), done);
+  rimraf(path.join(testFileFixturesPath, 'rotation*')).then(() => done());
 }
 
 // Validate Filename according to rotation
