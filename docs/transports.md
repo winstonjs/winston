@@ -49,6 +49,7 @@ there are additional transports written by
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
   * [Newrelic](#newrelic-transport) (errors only)
+  * [New Relic](#new-relic-agent-transport)
   * [Papertrail](#papertrail-transport)
   * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
@@ -656,6 +657,25 @@ The Newrelic transport will send your errors to newrelic and accepts the follwin
 
 If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic module saving devs from anoying errors ;)
 
+### New Relic Agent Transport
+
+[winston-newrelic-agent-transport][47] is a New Relic transport that leverages the New Relic agent:
+
+``` js
+import winston from 'winston'
+import NewrelicTransport from 'winston-newrelic-agent-transport'
+
+const options = {}
+
+const logger = winston.createLogger({
+  transports: [
+    new NewrelicTransport(options)
+  ]
+})
+```
+
+The New Relic agent typically automatically sends Winston logs to New Relic when using CommonJS. With CommonJS no additional transport should be needed. However, when using ECMAScript modules, the automatic sending of logs can with certain coding patterns not work. This transport leverages the New Relic agent to send logs to New Relic for the times when automatic log sending is not working.
+
 ### Papertrail Transport
 
 [winston-papertrail][27] is a Papertrail transport:
@@ -1010,3 +1030,4 @@ That's why we say it's a logger for just about everything
 [44]: https://github.com/Quintinity/humio-winston
 [45]: https://github.com/datalust/winston-seq
 [46]: https://github.com/arpad1337/winston-console-transport-in-worker
+[47]: https://github.com/kimnetics/winston-newrelic-agent-transport
