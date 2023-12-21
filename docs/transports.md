@@ -676,6 +676,10 @@ const logger = winston.createLogger({
 
 The New Relic agent typically automatically sends Winston logs to New Relic when using CommonJS. With CommonJS no additional transport should be needed. However, when using ECMAScript modules, the automatic sending of logs can with certain coding patterns not work. This transport leverages the New Relic agent to send logs to New Relic for the times when automatic log sending is not working.
 
+Options:
+* __level__: The Winston logging level to use as the maximum level of messages that the transport will log.
+* __rejectCriteria__: The rejectCriteria option allows you to specify an array of regexes that will be matched against either the Winston info object or log message to determine whether or not a log message should be rejected and not logged to New Relic.
+
 ### Papertrail Transport
 
 [winston-papertrail][27] is a Papertrail transport:
