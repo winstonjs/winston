@@ -21,7 +21,7 @@ const testFileFixturesPath = path.join(
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(testFileFixturesPath, 'rotation*')).then(() => done());
+  rimraf(path.join(testFileFixturesPath, 'rotation*'), {glob: true}).then(() => done());
 }
 
 // Validate Filename according to rotation

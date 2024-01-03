@@ -4,7 +4,7 @@
  */
 
 /* eslint-disable no-sync */
-const { rimraf } = require('rimraf');
+const { rimrafSync } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const { MESSAGE } = require('triple-beam');
@@ -22,7 +22,8 @@ const testLogFixturesPath = path.join(
 
 
 function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testarchive*')).then(() => done());
+  rimrafSync(path.join(testLogFixturesPath, 'testarchive*'), {glob: true});
+  done();
 }
 
 describe('winston/transports/file/zippedArchive', function () {
