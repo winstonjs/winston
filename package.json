@@ -34,7 +34,7 @@
     "safe-stable-stringify": "^2.3.1",
     "stack-trace": "0.0.x",
     "triple-beam": "^1.3.0",
-    "winston-transport": "^4.5.0"
+    "winston-transport": "^4.6.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.0",
@@ -60,7 +60,7 @@
   "types": "./index.d.ts",
   "scripts": {
     "lint": "eslint lib/*.js lib/winston/*.js lib/winston/**/*.js --resolve-plugins-relative-to ./node_modules/@dabh/eslint-config-populist",
-    "test": "mocha",
+    "test": "rimraf test/fixtures/logs/* && mocha",
     "test:coverage": "nyc npm run test:unit",
     "test:unit": "mocha test/unit",
     "test:integration": "mocha test/integration",
