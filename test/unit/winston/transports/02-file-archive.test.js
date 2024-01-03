@@ -22,7 +22,7 @@ const testLogFixturesPath = path.join(
 
 
 function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testarchive*'), done);
+  rimraf(path.join(testLogFixturesPath, 'testarchive*')).then(() => done());
 }
 
 describe('winston/transports/file/zippedArchive', function () {
