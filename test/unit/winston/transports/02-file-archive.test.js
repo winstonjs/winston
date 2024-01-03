@@ -4,7 +4,7 @@
  */
 
 /* eslint-disable no-sync */
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const { MESSAGE } = require('triple-beam');
