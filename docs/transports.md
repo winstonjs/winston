@@ -665,20 +665,18 @@ If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic
 import winston from 'winston'
 import NewrelicTransport from 'winston-newrelic-agent-transport'
 
-const options = {}
+const logger = winston.createLogger()
 
-const logger = winston.createLogger({
-  transports: [
-    new NewrelicTransport(options)
-  ]
-})
+const options = {}
+logger.add(new NewrelicTransport(options))
 ```
 
-The New Relic agent typically automatically sends Winston logs to New Relic when using CommonJS. With CommonJS no additional transport should be needed. However, when using ECMAScript modules, the automatic sending of logs can with certain coding patterns not work. This transport leverages the New Relic agent to send logs to New Relic for the times when automatic log sending is not working.
+The New Relic agent typically automatically forwards Winston logs to New Relic when using CommonJS. With CommonJS no additional transport should be needed. However, when using ECMAScript modules, the automatic forwarding of logs can with certain coding patterns not work. If the New Relic agent is not automatically forwarding your logs, this transport provides a solution.
 
 Options:
-* __level__: The Winston logging level to use as the maximum level of messages that the transport will log.
-* __rejectCriteria__: The rejectCriteria option allows you to specify an array of regexes that will be matched against either the Winston info object or log message to determine whether or not a log message should be rejected and not logged to New Relic.
+
+* __level__ (optional): The Winston logging level to use as the maximum level of messages that the transport will log.
+* __rejectCriteria__ (optional): The rejectCriteria option allows you to specify an array of regexes that will be matched against either the Winston info object or log message to determine whether or not a log message should be rejected and not logged to New Relic.
 
 ### Papertrail Transport
 
