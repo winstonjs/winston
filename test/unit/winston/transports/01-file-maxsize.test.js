@@ -18,7 +18,7 @@ const MESSAGE = Symbol.for('message');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testmaxsize*')).then(() => done());
+  rimraf(path.join(testLogFixturesPath, 'testmaxsize*'), {glob: true}).then(() => done());
 }
 
 describe('File (maxsize)', function () {

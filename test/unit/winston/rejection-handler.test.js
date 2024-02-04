@@ -69,12 +69,14 @@ describe('UnhandledRejectionHandler', function () {
   });
 
   it('.handle()', function (done) {
+    process.removeAllListeners('unhandledRejection');
     var existing = helpers.clearRejections();
     var writeable = new stream.Writable({
       objectMode: true,
       write: function (info) {
         assume(info).is.an('object');
         assume(info.error).is.an('error');
+        assume(info.rejection).is.true();
         assume(info.error.message).equals('wtf this rejection');
         assume(info.message).includes('unhandledRejection: wtf this rejection');
         assume(info.stack).is.a('string');
@@ -103,7 +105,7 @@ describe('UnhandledRejectionHandler', function () {
       handler.catcher
     ]);
 
-    helpers.reject('wtf this rejection').then(done());
+    helpers.reject(new Error('wtf this rejection'));
   });
 
   it('.getAllInfo(undefined)', function () {
