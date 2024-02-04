@@ -48,7 +48,6 @@ there are additional transports written by
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
-  * [Newrelic](#newrelic-transport) (errors only)
   * [Papertrail](#papertrail-transport)
   * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
@@ -640,22 +639,6 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 
 *Metadata:* Stringified as JSON in email.
 
-### Newrelic Transport
-
-[newrelic-winston][23] is a Newrelic transport:
-
-``` js
-const winston = require('winston');
-const Newrelic = require('newrelic-winston');
-logger.add(new Newrelic(options));
-```
-
-The Newrelic transport will send your errors to newrelic and accepts the follwing optins:
-
-* __env__:  the current evironment. Defatuls to `process.env.NODE_ENV`
-
-If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic module saving devs from anoying errors ;)
-
 ### Papertrail Transport
 
 [winston-papertrail][27] is a Papertrail transport:
@@ -986,7 +969,6 @@ That's why we say it's a logger for just about everything
 [20]: https://github.com/jorgebay/winston-cassandra
 [21]: https://github.com/jpoon/winston-azuretable
 [22]: https://github.com/rickcraig/winston-airbrake2
-[23]: https://github.com/namshi/winston-newrelic
 [24]: https://github.com/sematext/winston-logsene
 [25]: https://github.com/timdp/winston-aws-cloudwatch
 [26]: https://github.com/lazywithclass/winston-cloudwatch
