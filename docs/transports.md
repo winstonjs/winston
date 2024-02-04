@@ -48,6 +48,7 @@ there are additional transports written by
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
+  * [New Relic](#new-relic-agent-transport)
   * [Papertrail](#papertrail-transport)
   * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
@@ -639,6 +640,27 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 
 *Metadata:* Stringified as JSON in email.
 
+### New Relic Agent Transport
+
+[winston-newrelic-agent-transport][47] is a New Relic transport that leverages the New Relic agent:
+
+``` js
+import winston from 'winston'
+import NewrelicTransport from 'winston-newrelic-agent-transport'
+
+const logger = winston.createLogger()
+
+const options = {}
+logger.add(new NewrelicTransport(options))
+```
+
+The New Relic agent typically automatically forwards Winston logs to New Relic when using CommonJS. With CommonJS no additional transport should be needed. However, when using ECMAScript modules, the automatic forwarding of logs can with certain coding patterns not work. If the New Relic agent is not automatically forwarding your logs, this transport provides a solution.
+
+Options:
+
+* __level__ (optional): The Winston logging level to use as the maximum level of messages that the transport will log.
+* __rejectCriteria__ (optional): The rejectCriteria option allows you to specify an array of regexes that will be matched against either the Winston info object or log message to determine whether or not a log message should be rejected and not logged to New Relic.
+
 ### Papertrail Transport
 
 [winston-papertrail][27] is a Papertrail transport:
@@ -992,3 +1014,4 @@ That's why we say it's a logger for just about everything
 [44]: https://github.com/Quintinity/humio-winston
 [45]: https://github.com/datalust/winston-seq
 [46]: https://github.com/arpad1337/winston-console-transport-in-worker
+[47]: https://github.com/kimnetics/winston-newrelic-agent-transport
