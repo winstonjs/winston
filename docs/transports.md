@@ -59,6 +59,7 @@ there are additional transports written by
   * [SQLite3](#sqlite3-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
   * [Sumo Logic](#sumo-logic-transport)
+  * [VS Code extension](#vscode-extension)
   * [Worker Thread based async Console transport](#worker-thread-based-async-console-transport)
   * [Winlog2 Transport](#winlog2-transport)
 
@@ -832,6 +833,40 @@ Options:
 ### SSE transport with KOA 2
 [winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.
 
+### VS Code extension
+
+[winston-transport-vscode][48] is a transport for VS Code extension development.
+
+```js
+const vscode = require('vscode');
+const winston = require('winston');
+const { OutputChannelTransport } = require('winston-transport-vscode');
+
+const outputChannel = vscode.window.createOutputChannel('My extension');
+
+const logger = winston.createLogger({
+  transports: [new OutputChannelTransport({ outputChannel })],
+});
+```
+
+The extension includes dedicated log levels and format for using with VS Code's
+LogOutputChannel.
+
+```js
+const { LogOutputChannelTransport } = require('winston-transport-vscode');
+
+const outputChannel = vscode.window.createOutputChannel('My extension', {
+  log: true,
+});
+
+const logger = winston.createLogger({
+  levels: LogOutputChannelTransport.config.levels,
+  format: LogOutputChannelTransport.format(),
+  transports: [new LogOutputChannelTransport({ outputChannel })],
+});
+```
+
+
 ### Worker Thread based async Console transport
 
 [winston-console-transport-in-worker][46]
@@ -1015,3 +1050,4 @@ That's why we say it's a logger for just about everything
 [45]: https://github.com/datalust/winston-seq
 [46]: https://github.com/arpad1337/winston-console-transport-in-worker
 [47]: https://github.com/kimnetics/winston-newrelic-agent-transport
+[48]: https://github.com/loderunner/winston-transport-vscode
