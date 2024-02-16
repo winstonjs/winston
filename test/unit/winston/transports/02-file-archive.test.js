@@ -48,8 +48,8 @@ describe('winston/transports/file/zippedArchive', function () {
       assume(
         fs.existsSync(path.join(testLogFixturesPath, 'testarchive.log.gz'))
       ).false();
+      done();
     });
-    done();
   });
 
   it('should create multiple zip files', function (done) {
