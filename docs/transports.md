@@ -59,7 +59,7 @@ there are additional transports written by
   * [SQLite3](#sqlite3-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
   * [Sumo Logic](#sumo-logic-transport)
-  * [VS Code extension](#vscode-extension)
+  * [VS Code extension](#vs-code-extension)
   * [Worker Thread based async Console transport](#worker-thread-based-async-console-transport)
   * [Winlog2 Transport](#winlog2-transport)
 
