@@ -910,7 +910,7 @@ logger.exitOnError = ignoreEpipe;
 
 ### Handling Uncaught Promise Rejections with winston
 
-With `winston`, it is possible to catch and log `uncaughtRejection` events
+With `winston`, it is possible to catch and log `unhandledRejection` events
 from your process. With your own logger instance you can enable this behavior
 when it's created or later on in your applications lifecycle:
 
