@@ -21,6 +21,7 @@ const TransportStream = require('winston-transport');
 const format = require('../../../lib/winston').format;
 const helpers = require('../../helpers');
 const mockTransport = require('../../helpers/mocks/mock-transport');
+const mockEcsFormat = require('../../helpers/mocks/mock-ecsFormat');
 const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 describe('Logger Instance', function () {
@@ -920,6 +921,15 @@ describe('Logger Instance', function () {
         const log = logger.info;
         log('test');
       });
+
+      it('adjust defaultMeta correctly to given format', (done) => {
+        let logger = helpers.createLogger(function (info){
+          assume(info.service).is.a('object');
+          done();
+        }, mockEcsFormat(), {service: 'user-account'});
+        logger.log({level: 'info'});
+      });
+
     });
   });
 
