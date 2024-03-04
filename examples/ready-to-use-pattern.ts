@@ -31,6 +31,7 @@ const wLogger = (input: { logName: string; level: string }): winston.Logger =>
         level: `${input.level}`,
 
         format: winston.format.combine(
+          winston.format.timestamp(),
           winston.format.printf(
             info =>
               // https://stackoverflow.com/a/69044670/20358783 more detailLocaleString
