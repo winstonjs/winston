@@ -65,12 +65,14 @@ declare namespace winston {
     batchInterval?: number;
     batchCount?: number;
     replacer?: (key: string, value: any) => any;
+    maximumDepth?: number;
   }
 
   interface HttpTransportInstance extends Transport {
     name: string;
     ssl: boolean;
     host: string;
+    maximumDepth: number;
     port: number;
     auth?: { username?: string | undefined, password?: string | undefined, bearer?: string | undefined };
     path: string;

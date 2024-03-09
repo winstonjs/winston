@@ -32,7 +32,8 @@ function mockHttpServer(done, expectedLog) {
   return { server, mock };
 }
 
-function assumeError(err) {
+function assumeError(err, hello) {
+  console.log(err, hello)
   if (err) {
     assume(err).falsy();
   }
@@ -150,7 +151,7 @@ describe('Http({ host, port, path })', function () {
       server = context.server;
     });
 
-    it('should be able to handle options with circular structure', function (done) {
+    it.only('should be able to handle options with circular structure', function (done) {
       const httpTransport = new Http({
         host: host,
         port: server.address().port,
