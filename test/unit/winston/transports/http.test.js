@@ -32,8 +32,7 @@ function mockHttpServer(done, expectedLog) {
   return { server, mock };
 }
 
-function assumeError(err, hello) {
-  console.log(err, hello)
+function assumeError(err) {
   if (err) {
     assume(err).falsy();
   }
@@ -137,7 +136,7 @@ describe('Http({ host, port, path })', function () {
 
   });
 
-  describe('circular structure', function () {
+  describe.only('circular structure', function () {
     const circularLog = {
       level: 'error',
       message: 'hello',
@@ -151,9 +150,24 @@ describe('Http({ host, port, path })', function () {
       server = context.server;
     });
 
-    it.only('should be able to handle options with circular structure', function (done) {
+    it('should be able to handle options with circular structure', function (done) {
       const httpTransport = new Http({
         host: host,
+        port: server.address().port,
+        path: 'log'
+      })
+        .on('error', assumeError)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
+
+      httpTransport.log(circularLog, assumeError);
+    });
+
+    it('should be able to handle options with circular structure when passing maximumDepth', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        maximumDepth: 5,
         port: server.address().port,
         path: 'log'
       })
