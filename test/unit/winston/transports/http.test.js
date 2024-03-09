@@ -136,7 +136,7 @@ describe('Http({ host, port, path })', function () {
 
   });
 
-  describe.only('circular structure', function () {
+  describe('circular structure', function () {
     const circularLog = {
       level: 'error',
       message: 'hello',
