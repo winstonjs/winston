@@ -139,6 +139,13 @@ declare namespace winston {
     input: LeveledLogMethod;
     silly: LeveledLogMethod;
 
+    // for syslog levels only
+    emerg: LeveledLogMethod;
+    alert: LeveledLogMethod;
+    crit: LeveledLogMethod;
+    warning: LeveledLogMethod;
+    notice: LeveledLogMethod;
+
     query(
       options?: QueryOptions,
       callback?: (err: Error, results: any) => void
