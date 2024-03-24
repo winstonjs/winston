@@ -163,5 +163,20 @@ describe('Http({ host, port, path })', function () {
 
       httpTransport.log(circularLog, assumeError);
     });
+
+    it('should be able to handle options with circular structure when passing maximumDepth', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        maximumDepth: 5,
+        port: server.address().port,
+        path: 'log'
+      })
+        .on('error', assumeError)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
+
+      httpTransport.log(circularLog, assumeError);
+    });
   });
 });
