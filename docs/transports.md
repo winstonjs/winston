@@ -48,6 +48,7 @@ there are additional transports written by
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
+  * [MySQL](#mysql-transport)
   * [New Relic](#new-relic-agent-transport)
   * [Papertrail](#papertrail-transport)
   * [PostgresQL](#postgresql-transport)
@@ -640,6 +641,68 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 * __silent:__ Boolean flag indicating whether to suppress output.
 
 *Metadata:* Stringified as JSON in email.
+
+### MySQL Transport
+
+[winston-mysql](https://github.com/charles-zh/winston-mysql) is MySQL plugin for winston logger.
+
+#### installation
+
+Creates a table in the database first:
+
+```sql
+ CREATE TABLE `sys_logs_default` (
+ `id` INT NOT NULL AUTO_INCREMENT,
+ `level` VARCHAR(16) NOT NULL,
+ `message` VARCHAR(2048) NOT NULL,
+ `meta` VARCHAR(2048) NOT NULL,
+ `timestamp` DATETIME NOT NULL,
+ PRIMARY KEY (`id`)); 
+```
+
+> Or you can use the JSON format meta field in MySQL database table. That is great for searching & parsing, but it only supports MySQL 5.7+. Bellow the same example but using JSON field.
+
+```sql
+ CREATE TABLE `sys_logs_json` (
+ `id` INT NOT NULL AUTO_INCREMENT,
+ `level` VARCHAR(16) NOT NULL,
+ `message` VARCHAR(2048) NOT NULL,
+ `meta` JSON NOT NULL,
+ `timestamp` DATETIME NOT NULL,
+ PRIMARY KEY (`id`));
+
+```
+
+Configs the transport to winston:
+
+```javascript
+import MySQLTransport from 'winston-mysql';
+
+const options = {
+    host: '${MYSQL_HOST}',
+    user: '${MYSQL_USER}',
+    password: '${MYSQL_PASSWORD}',
+    database: '${MYSQL_DATABASE}',
+    table: 'sys_logs_default'
+};
+
+const logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple(),
+        }),
+        new MySQLTransport(options),
+    ],
+});
+
+/// ...
+let msg = 'My Log';
+logger.info(msg, {message: msg, type: 'demo'});
+```
+
 
 ### New Relic Agent Transport
 
