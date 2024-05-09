@@ -644,11 +644,9 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 
 ### MySQL Transport
 
-[winston-mysql](https://github.com/charles-zh/winston-mysql) is MySQL plugin for winston logger.
+[winston-mysql](https://github.com/charles-zh/winston-mysql) is a MySQL transport for Winston.
 
-#### installation
-
-Creates a table in the database first:
+Create a table in your database first:
 
 ```sql
  CREATE TABLE `sys_logs_default` (
@@ -660,20 +658,9 @@ Creates a table in the database first:
  PRIMARY KEY (`id`)); 
 ```
 
-> Or you can use the JSON format meta field in MySQL database table. That is great for searching & parsing, but it only supports MySQL 5.7+. Bellow the same example but using JSON field.
+> You can also specify `meta` to be a `JSON` field on MySQL 5.7+, i.e., ``meta` JSON NOT NULL`, which is helfpul for searching and parsing.
 
-```sql
- CREATE TABLE `sys_logs_json` (
- `id` INT NOT NULL AUTO_INCREMENT,
- `level` VARCHAR(16) NOT NULL,
- `message` VARCHAR(2048) NOT NULL,
- `meta` JSON NOT NULL,
- `timestamp` DATETIME NOT NULL,
- PRIMARY KEY (`id`));
-
-```
-
-Configs the transport to winston:
+Configure Winston with the transport:
 
 ```javascript
 import MySQLTransport from 'winston-mysql';
