@@ -48,6 +48,7 @@ there are additional transports written by
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
+  * [MySQL](#mysql-transport)
   * [New Relic](#new-relic-agent-transport)
   * [Papertrail](#papertrail-transport)
   * [PostgresQL](#postgresql-transport)
@@ -640,6 +641,55 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 * __silent:__ Boolean flag indicating whether to suppress output.
 
 *Metadata:* Stringified as JSON in email.
+
+### MySQL Transport
+
+[winston-mysql](https://github.com/charles-zh/winston-mysql) is a MySQL transport for Winston.
+
+Create a table in your database first:
+
+```sql
+ CREATE TABLE `sys_logs_default` (
+ `id` INT NOT NULL AUTO_INCREMENT,
+ `level` VARCHAR(16) NOT NULL,
+ `message` VARCHAR(2048) NOT NULL,
+ `meta` VARCHAR(2048) NOT NULL,
+ `timestamp` DATETIME NOT NULL,
+ PRIMARY KEY (`id`)); 
+```
+
+> You can also specify `meta` to be a `JSON` field on MySQL 5.7+, i.e., ``meta` JSON NOT NULL`, which is helfpul for searching and parsing.
+
+Configure Winston with the transport:
+
+```javascript
+import MySQLTransport from 'winston-mysql';
+
+const options = {
+    host: '${MYSQL_HOST}',
+    user: '${MYSQL_USER}',
+    password: '${MYSQL_PASSWORD}',
+    database: '${MYSQL_DATABASE}',
+    table: 'sys_logs_default'
+};
+
+const logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple(),
+        }),
+        new MySQLTransport(options),
+    ],
+});
+
+/// ...
+let msg = 'My Log';
+logger.info(msg, {message: msg, type: 'demo'});
+```
+
 
 ### New Relic Agent Transport
 
