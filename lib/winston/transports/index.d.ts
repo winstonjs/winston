@@ -9,6 +9,8 @@ import * as Transport from 'winston-transport';
 
 declare namespace winston {
   interface ConsoleTransportOptions extends Transport.TransportStreamOptions {
+    consoleLevels?: Record<string, string>,
+    /** @deprecated Use `consoleLevels` instead */
     consoleWarnLevels?: string[],
     stderrLevels?: string[];
     debugStdout?: boolean;

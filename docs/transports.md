@@ -92,7 +92,8 @@ The Console transport takes a few simple options:
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __eol:__ string indicating the end-of-line characters to use (default `os.EOL`)
 * __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `[]`)
-* __consoleWarnLevels__ Array of strings containing the levels to log using console.warn or to stderr (in Node.js) instead of stdout, for example `['warn', 'debug']`. (default `[]`)
+* __consoleLevels__ Map of levels to their corresponding console level (default: see [`Console`](../lib/winston/transports/console.js))
+* __consoleWarnLevels__ **DEPRECATED** Array of strings containing the levels to log using console.warn or to stderr (in Node.js) instead of stdout, for example `['warn', 'debug']`. (default `[]`)
 
 ### File Transport
 ``` js

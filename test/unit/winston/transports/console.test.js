@@ -25,6 +25,9 @@ const transports = {
   consoleWarnLevels: new winston.transports.Console({
     consoleWarnLevels: ['warn', 'debug']
   }),
+  consoleLevels: new winston.transports.Console({
+    consoleLevels: {'warning': 'warn'}
+  }),
   eol: new winston.transports.Console({ eol: 'X' }),
   syslog: new winston.transports.Console({
     levels: winston.config.syslog.levels
@@ -118,6 +121,11 @@ describe('Console transport', function () {
     transports.consoleWarnLevels,
     ['warn', 'debug'],
     'consoleWarnLevels'
+  ));
+  it("{ consoleLevels: {'warning': 'warn'} } logs to them appropriately", assertLogLevelsValues(
+    transports.consoleLevels,
+    ['warning'],
+    'consoleLevels'
   ));
 
   it('{ eol } adds a custom EOL delimiter', function (done) {
