@@ -35,14 +35,19 @@ function assumeExpectedInfo(info, target = {}) {
   });
 }
 
+function assumeNonMutatedObject(originalObject) {
+  assume(originalObject[LEVEL]).equals(undefined);
+}
+
 describe('format.errors (integration)', function () {
   it('logger.log(level, error)', (done) => {
     const logger = helpers.createLogger(function (info) {
       assumeExpectedInfo(info);
       done();
     }, format.errors());
+    const err = new Error('Errors lack .toJSON() lulz');
 
-    logger.log('info', new Error('Errors lack .toJSON() lulz'));
+    logger.log('info', err);
   });
 
   it('logger.log(level, error) [custom error properties]', (done) => {
@@ -51,7 +56,7 @@ describe('format.errors (integration)', function () {
         something: true,
         wut: 'another string'
       });
-
+      assumeNonMutatedObject(err);
       done();
     }, format.errors());
 
@@ -67,13 +72,15 @@ describe('format.errors (integration)', function () {
       thisIsMeta: true,
       anyValue: 'a string'
     };
+    const err = new Error('Errors lack .toJSON() lulz');
 
     const logger = helpers.createLogger(function (info) {
       assumeExpectedInfo(info, meta);
+      assumeNonMutatedObject(err);
       done();
     }, format.errors());
 
-    logger.log('info', new Error('Errors lack .toJSON() lulz'), meta);
+    logger.log('info', err, meta);
   });
 
   it('logger.log(level, error, meta) [custom error properties]', (done) => {
@@ -87,6 +94,7 @@ describe('format.errors (integration)', function () {
         something: true,
         wut: 'another string'
       }, meta));
+      assumeNonMutatedObject(err);
 
       done();
     }, format.errors());
@@ -103,14 +111,14 @@ describe('format.errors (integration)', function () {
       assumeExpectedInfo(info, {
         message: 'Caught error: Errors lack .toJSON() lulz'
       });
-
+      assumeNonMutatedObject(err);
       done();
     }, format.combine(
       format.errors(),
       format.printf(info => info.message)
     ));
-
-    logger.log('info', 'Caught error:', new Error('Errors lack .toJSON() lulz'));
+      const err = new Error('Errors lack .toJSON() lulz');
+    logger.log('info', 'Caught error:', err);
   });
 
   it('logger.log(level, msg, meta<error>) [custom error properties]', (done) => {
@@ -125,7 +133,7 @@ describe('format.errors (integration)', function () {
         something: true,
         wut: 'another string'
       });
-
+      assumeNonMutatedObject(err);
       done();
     }, format.combine(
       format.errors(),
@@ -138,10 +146,12 @@ describe('format.errors (integration)', function () {
   it('logger.<level>(error)', (done) => {
     const logger = helpers.createLogger(function (info) {
       assumeExpectedInfo(info);
+      assumeNonMutatedObject(err);
       done();
     }, format.errors());
+    const err = new Error('Errors lack .toJSON() lulz')
 
-    logger.info(new Error('Errors lack .toJSON() lulz'));
+    logger.info(err);
   });
 
   it('logger.<level>(error) [custom error properties]', (done) => {
@@ -150,7 +160,7 @@ describe('format.errors (integration)', function () {
         something: true,
         wut: 'another string'
       });
-
+      assumeNonMutatedObject(err);
       done();
     }, format.errors());
 
@@ -169,10 +179,11 @@ describe('format.errors (integration)', function () {
 
     const logger = helpers.createLogger(function (info) {
       assumeExpectedInfo(info, meta);
+      assumeNonMutatedObject(err);
       done();
     }, format.errors());
-
-    logger.info(new Error('Errors lack .toJSON() lulz'), meta);
+    const err = new Error('Errors lack .toJSON() lulz');
+    logger.info(err, meta);
   });
 
   it('logger.<level>(error, meta) [custom error properties]', (done) => {
@@ -186,7 +197,7 @@ describe('format.errors (integration)', function () {
         something: true,
         wut: 'another string'
       }, meta));
-
+      assumeNonMutatedObject(err);
       done();
     }, format.errors());
 
@@ -202,14 +213,15 @@ describe('format.errors (integration)', function () {
       assumeExpectedInfo(info, {
         message: 'Caught error: Errors lack .toJSON() lulz'
       });
-
+      assumeNonMutatedObject(err);
       done();
     }, format.combine(
       format.errors(),
       format.printf(info => info.message)
     ));
+    const err = new Error('Errors lack .toJSON() lulz');
 
-    logger.info('Caught error:', new Error('Errors lack .toJSON() lulz'));
+    logger.info('Caught error:', err);
   });
 
   it('logger.<level>(msg, meta<error>) [custom error properties]', (done) => {
@@ -224,7 +236,7 @@ describe('format.errors (integration)', function () {
         something: true,
         wut: 'another string'
       });
-
+      assumeNonMutatedObject(err);
       done();
     }, format.combine(
       format.errors(),
@@ -264,4 +276,4 @@ describe('format.errors (integration)', function () {
       throw err;
     }).catch(logger.error.bind(logger));
   });
-});
+  });
