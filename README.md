@@ -687,7 +687,7 @@ To colorize the full log line with the json formatter you can apply the followin
 ```js
 winston.format.combine(
   winston.format.json(),
-  winston.format.colorize({ all })
+  winston.format.colorize({ all: true })
 );
 ```
 
