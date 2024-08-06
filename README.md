@@ -123,11 +123,11 @@ transports may produce a high memory usage issue.
     * [Using the Default Logger](#using-the-default-logger)
     * [Awaiting logs to be written in `winston`](#awaiting-logs-to-be-written-in-winston)
     * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
+    * [Routing Console transport messages to the console instead of stdout and stderr](#routing-console-transport-messages-to-the-console-instead-of-stdout-and-stderr)
   * [Installation](#installation)
   * [Run Tests](#run-tests)
-    * [Routing Console transport messages to the console instead of stdout and stderr](#routing-console-transport-messages-to-the-console-instead-of-stdout-and-stderr)
-      * [Author: Charlie Robbins](#author-charlie-robbins)
-      * [Contributors: Jarrett Cruger, David Hyde, Chris Alderson](#contributors-jarrett-cruger-david-hyde-chris-alderson)
+    * [Author: Charlie Robbins](#author-charlie-robbins)
+    * [Contributors: Jarrett Cruger, David Hyde, Chris Alderson](#contributors-jarrett-cruger-david-hyde-chris-alderson)
 
 ## Logging
 
@@ -1209,24 +1209,6 @@ const category1 = container.get('category1');
 category1.info('logging to file and console transports');
 ```
 
-## Installation
-
-``` bash
-npm install winston
-```
-
-``` bash
-yarn add winston
-```
-
-## Run Tests
-
-All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and
-[`assume`][assume].  They can be run with `npm`.
-
-``` bash
-npm test
-```
 
 ### Routing Console transport messages to the console instead of stdout and stderr
 
@@ -1247,6 +1229,25 @@ const logger = winston.createLogger({
     new winston.transports.Console({ forceConsole: true }),
   ]
 });
+```
+
+## Installation
+
+``` bash
+npm install winston
+```
+
+``` bash
+yarn add winston
+```
+
+## Run Tests
+
+All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and
+[`assume`][assume].  They can be run with `npm`.
+
+``` bash
+npm test
 ```
 
 #### Author: [Charlie Robbins]
