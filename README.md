@@ -84,50 +84,40 @@ transports may produce a high memory usage issue.
 
 ## Table of contents
 
-* [winston](#winston)
-  * [winston@3](#winston3)
-  * [Looking for `winston@2.x` documentation?](#looking-for-winston2x-documentation)
-  * [Motivation](#motivation)
-  * [Quick Start](#quick-start)
-  * [Usage](#usage)
-  * [Table of contents](#table-of-contents)
-  * [Logging](#logging)
-    * [Creating your own Logger](#creating-your-own-logger)
-    * [Creating child loggers](#creating-child-loggers)
-    * [Streams, `objectMode`, and `info` objects](#streams-objectmode-and-info-objects)
-  * [Formats](#formats)
-    * [Combining formats](#combining-formats)
-    * [String interpolation](#string-interpolation)
-    * [Filtering `info` Objects](#filtering-info-objects)
-    * [Creating custom formats](#creating-custom-formats)
-  * [Logging Levels](#logging-levels)
-    * [Using Logging Levels](#using-logging-levels)
-    * [Using Custom Logging Levels](#using-custom-logging-levels)
-    * [Colorizing Standard logging levels](#colorizing-standard-logging-levels)
-    * [Colorizing full log line when json formatting logs](#colorizing-full-log-line-when-json-formatting-logs)
-  * [Transports](#transports)
+* [Motivation](#motivation)
+* [Quick Start](#quick-start)
+* [Usage](#usage)
+* [Table of Contents](#table-of-contents)
+* [Logging](#logging)
+  * [Creating your logger](#creating-your-own-logger)
+  * [Streams, `objectMode`, and `info` objects](#streams-objectmode-and-info-objects)
+* [Formats]
+  * [Combining formats](#combining-formats)
+  * [String interpolation](#string-interpolation)
+  * [Filtering `info` Objects](#filtering-info-objects)
+  * [Creating custom formats](#creating-custom-formats)
+* [Logging levels]
+  * [Using logging levels](#using-logging-levels)
+  * [Using custom logging levels](#using-custom-logging-levels)
+* [Transports]
   * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
   * [Adding Custom Transports](#adding-custom-transports)
   * [Common Transport options](#common-transport-options)
-  * [Exceptions](#exceptions)
-    * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
-    * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
-      * [Example 1](#example-1)
-      * [Example 2](#example-2)
-  * [Rejections](#rejections)
-    * [Handling Uncaught Promise Rejections with winston](#handling-uncaught-promise-rejections-with-winston)
-  * [Profiling](#profiling)
-  * [Querying Logs](#querying-logs)
-  * [Streaming Logs](#streaming-logs)
-  * [Further Reading](#further-reading)
-    * [Using the Default Logger](#using-the-default-logger)
-    * [Awaiting logs to be written in `winston`](#awaiting-logs-to-be-written-in-winston)
-    * [Working with multiple Loggers in winston](#working-with-multiple-loggers-in-winston)
-    * [Routing Console transport messages to the console instead of stdout and stderr](#routing-console-transport-messages-to-the-console-instead-of-stdout-and-stderr)
-  * [Installation](#installation)
-  * [Run Tests](#run-tests)
-    * [Author: Charlie Robbins](#author-charlie-robbins)
-    * [Contributors: Jarrett Cruger, David Hyde, Chris Alderson](#contributors-jarrett-cruger-david-hyde-chris-alderson)
+* [Exceptions](#exceptions)
+  * [Handling Uncaught Exceptions with winston](#handling-uncaught-exceptions-with-winston)
+  * [To Exit or Not to Exit](#to-exit-or-not-to-exit)
+* [Rejections](#rejections)
+  * [Handling Uncaught Promise Rejections with winston](#handling-uncaught-promise-rejections-with-winston)
+* [Profiling](#profiling)
+* [Streaming Logs](#streaming-logs)
+* [Querying Logs](#querying-logs)
+* [Further Reading](#further-reading)
+  * [Using the default logger](#using-the-default-logger)
+  * [Awaiting logs to be written in `winston`](#awaiting-logs-to-be-written-in-winston)
+  * [Working with multiple Loggers in `winston`](#working-with-multiple-loggers-in-winston)
+  * [Routing Console transport messages to the console instead of stdout and stderr](#routing-console-transport-messages-to-the-console-instead-of-stdout-and-stderr)
+* [Installation](#installation)
+* [Run Tests](#run-tests)
 
 ## Logging
 
@@ -159,7 +149,7 @@ const logger = winston.createLogger({
 });
 ```
 
-A logger accepts the following parameters:
+A logger accepts the following parameters:
 
 | Name          | Default                     |  Description    |
 | ------------- | --------------------------- | --------------- |
@@ -271,7 +261,7 @@ Several of the formats in `logform` itself add additional properties:
 | `label`     | `label()`       | Custom label associated with each message. |
 | `ms`        | `ms()`          | Number of milliseconds since the previous log message. |
 
-As a consumer you may add whatever properties you wish – _internal state is
+As a consumer you may add whatever properties you wish – _internal state is
 maintained by `Symbol` properties:_
 
 - `Symbol.for('level')` _**(READ-ONLY)**:_ equal to `level` property.
@@ -301,7 +291,7 @@ console.log(SPLAT === Symbol.for('splat'));
 // true
 ```
 
-> **NOTE:** any `{ message }` property in a `meta` object provided will
+> **NOTE:** any `{ message }` property in a `meta` object provided will
 > automatically be concatenated to any `msg` already provided: For
 > example the below will concatenate 'world' onto 'hello':
 >
@@ -391,10 +381,10 @@ const logger = createLogger({
   transports: [new transports.Console()]
 });
 
-// info: test message my string {}
+// info: test message my string {}
 logger.log('info', 'test message %s', 'my string');
 
-// info: test message 123 {}
+// info: test message 123 {}
 logger.log('info', 'test message %d', 123);
 
 // info: test message first second {number: 123}
@@ -461,7 +451,7 @@ method: `transform(info, opts)` and return the mutated `info`:
 They are expected to return one of two things:
 
 - **An `info` Object** representing the modified `info` argument. Object
-references need not be preserved if immutability is preferred. All current
+references need not be preserved if immutability is preferred. All current
 built-in formats consider `info` mutable, but [immutablejs] is being
 considered for future releases.
 - **A falsey value** indicating that the `info` argument should be ignored by the
@@ -1209,25 +1199,22 @@ const category1 = container.get('category1');
 category1.info('logging to file and console transports');
 ```
 
-
 ### Routing Console transport messages to the console instead of stdout and stderr
 
 By default the `winston.transports.Console` transport sends messages to `stdout` and `stderr`. This
-is fine in most situations, however there are some cases where this isn't desirable including:
+is fine in most situations; however, there are some cases where this isn't desirable, including:
 
-* Debugging using VSCode and attaching to, rather than launching, a Node.js process
-* Writing JSON format messages in AWS Lambda
-* Logging during Jest tests with the `--silent` option
+- Debugging using VSCode and attaching to, rather than launching, a Node.js process
+- Writing JSON format messages in AWS Lambda
+- Logging during Jest tests with the `--silent` option
 
 To make the transport log use `console.log()`, `console.warn()` and `console.error()`
 instead, set the `forceConsole` option to `true`:
 
-``` js
+```js
 const logger = winston.createLogger({
   level: 'info',
-  transports: [
-    new winston.transports.Console({ forceConsole: true }),
-  ]
+  transports: [new winston.transports.Console({ forceConsole: true })]
 });
 ```
 
