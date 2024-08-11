@@ -1,5 +1,4 @@
 const assume = require('assume');
-const mocha = require('mocha');
 
 const helpers = require('.');
 const winston = require('../../lib/winston');
