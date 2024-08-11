@@ -23,12 +23,12 @@ jobs:
     strategy:
       matrix:
         node:
-          - 12
-          - 14
           - 16
+          - 18
+          - 20
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
       - name: Install Dependencies
@@ -40,7 +40,7 @@ jobs:
       - name: Test Coverage
         run: npm run test:coverage
       - name: Report test coverage to Coveralls.io
-        if: matrix.node == '16'
+        if: matrix.node == '20'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

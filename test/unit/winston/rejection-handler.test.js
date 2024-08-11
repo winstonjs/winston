@@ -19,7 +19,7 @@ describe('UnhandledRejectionHandler', function () {
     listener: 'unhandledRejection',
     toggleSetting: 'handleRejections',
     trigger(msg) {
-      process.on('unhandledRejection', (e, p) => console.log('my handler is called', e, p))
+      process.on('unhandledRejection', (e, p) => console.log('my handler is called', e, p));
       process.emit('unhandledRejection', msg, helpers.reject(msg));
     }
   });

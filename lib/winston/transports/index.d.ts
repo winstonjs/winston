@@ -3,16 +3,17 @@
 
 /// <reference types="node" />
 
-import {Agent} from "http";
+import { Agent } from 'http';
 
 import * as Transport from 'winston-transport';
 
 declare namespace winston {
   interface ConsoleTransportOptions extends Transport.TransportStreamOptions {
-    consoleWarnLevels?: string[],
+    consoleWarnLevels?: string[];
     stderrLevels?: string[];
     debugStdout?: boolean;
     eol?: string;
+    forceConsole?: boolean;
   }
 
   interface ConsoleTransportInstance extends Transport {
@@ -20,7 +21,7 @@ declare namespace winston {
     stderrLevels: string[];
     eol: string;
 
-    new(options?: ConsoleTransportOptions): ConsoleTransportInstance;
+    new (options?: ConsoleTransportOptions): ConsoleTransportInstance;
   }
 
   interface FileTransportOptions extends Transport.TransportStreamOptions {
@@ -34,6 +35,7 @@ declare namespace winston {
     maxFiles?: number;
     eol?: string;
     tailable?: boolean;
+    lazy?: boolean;
   }
 
   interface FileTransportInstance extends Transport {
@@ -47,15 +49,20 @@ declare namespace winston {
     maxFiles: number | null;
     eol: string;
     tailable: boolean;
+    lazy: boolean;
 
-    new(options?: FileTransportOptions): FileTransportInstance;
+    new (options?: FileTransportOptions): FileTransportInstance;
   }
 
   interface HttpTransportOptions extends Transport.TransportStreamOptions {
     ssl?: any;
     host?: string;
     port?: number;
-    auth?: { username?: string | undefined, password?: string | undefined, bearer?: string | undefined };
+    auth?: {
+      username?: string | undefined;
+      password?: string | undefined;
+      bearer?: string | undefined;
+    };
     path?: string;
     agent?: Agent;
     headers?: object;
@@ -63,18 +70,24 @@ declare namespace winston {
     batchInterval?: number;
     batchCount?: number;
     replacer?: (key: string, value: any) => any;
+    maximumDepth?: number;
   }
 
   interface HttpTransportInstance extends Transport {
     name: string;
     ssl: boolean;
     host: string;
+    maximumDepth: number;
     port: number;
-    auth?: { username?: string | undefined, password?: string | undefined, bearer?: string | undefined };
+    auth?: {
+      username?: string | undefined;
+      password?: string | undefined;
+      bearer?: string | undefined;
+    };
     path: string;
     agent?: Agent | null;
 
-    new(options?: HttpTransportOptions): HttpTransportInstance;
+    new (options?: HttpTransportOptions): HttpTransportInstance;
   }
 
   interface StreamTransportOptions extends Transport.TransportStreamOptions {
@@ -85,7 +98,7 @@ declare namespace winston {
   interface StreamTransportInstance extends Transport {
     eol: string;
 
-    new(options?: StreamTransportOptions): StreamTransportInstance;
+    new (options?: StreamTransportOptions): StreamTransportInstance;
   }
 
   interface Transports {
