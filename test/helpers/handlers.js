@@ -42,7 +42,7 @@ module.exports = function ({ getAllInfo, helper, listener, name, setup, toggleSe
     it(`new ${name}()`, function () {
       assume(function () {
         // eslint-disable-next-line no-new
-          new winston[name]();
+        new winston[name]();
       }).throws(/Logger is required/);
     });
 
@@ -86,7 +86,6 @@ module.exports = function ({ getAllInfo, helper, listener, name, setup, toggleSe
     it('.handle()', function (done) {
       var msg = new Date().toString();
       var writeable = helpers.writeable(function (info) {
-        console.log('in writeable', info);
         assume(info).is.an('object');
         assume(info.error).is.an('error');
         assume(info.error.message).equals(msg);
