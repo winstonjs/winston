@@ -4,25 +4,7 @@ const mocha = require('mocha');
 const helpers = require('.');
 const winston = require('../../lib/winston');
 
-module.exports = function ({ getAllInfo, helper, listener, name, setup, toggleSetting, trigger }) {
-  before(function () {
-    /*
-     * This is an awful and fragile hack that
-     * needs to be changed ASAP.
-     * https://github.com/mochajs/mocha/issues/1985
-     */
-    var _runTest = this.originalRunTest = mocha.Runner.prototype.runTest;
-
-    mocha.Runner.prototype.runTest = function () {
-      this.allowUncaught = true;
-      _runTest.apply(this, arguments);
-    };
-  });
-
-  after(function () {
-    mocha.Runner.prototype.runTest = this.originalRunTest;
-  });
-
+module.exports = function ({ helper, listener, name, setup, toggleSetting, trigger }) {
   describe('basics', function () {
     var handler;
 
@@ -70,7 +52,7 @@ module.exports = function ({ getAllInfo, helper, listener, name, setup, toggleSe
 
     it('.getAllInfo(undefined)', function () {
       // eslint-disable-next-line no-undefined
-      handler.getAllInfo(getAllInfo);
+      handler.getAllInfo(undefined);
     });
   });
 
