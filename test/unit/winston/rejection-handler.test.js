@@ -18,9 +18,6 @@ describe('UnhandledRejectionHandler', function () {
     setup: 'clearRejections',
     listener: 'unhandledRejection',
     toggleSetting: 'handleRejections',
-    trigger(msg) {
-      process.on('unhandledRejection', (e, p) => console.log('my handler is called', e, p));
-      process.emit('unhandledRejection', msg, helpers.reject(msg));
-    }
+    trigger: msg => helpers.reject(new Error(msg))
   });
 });

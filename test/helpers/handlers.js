@@ -23,53 +23,55 @@ module.exports = function ({ getAllInfo, helper, listener, name, setup, toggleSe
     mocha.Runner.prototype.runTest = this.originalRunTest;
   });
 
-  it('has expected methods', function () {
-    var handler = helpers[helper]();
-    assume(handler.handle).is.a('function');
-    assume(handler.unhandle).is.a('function');
-    assume(handler.getAllInfo).is.a('function');
-    assume(handler.getProcessInfo).is.a('function');
-    assume(handler.getOsInfo).is.a('function');
-    assume(handler.getTrace).is.a('function');
-  });
+  describe('basics', function () {
+    var handler;
 
-  it(`new ${name}()`, function () {
-    assume(function () {
-      // eslint-disable-next-line no-new
-      new winston[name]();
-    }).throws(/Logger is required/);
-  });
+    beforeEach(function () {
+      handler = helpers[helper]();
+    });
 
-  it(`new ${name}(logger)`, function () {
-    var logger = winston.createLogger();
-    var handler = new winston[name](logger);
-    assume(handler.logger).equals(logger);
-  });
+    it('has expected methods', function () {
+      assume(handler.handle).is.a('function');
+      assume(handler.unhandle).is.a('function');
+      assume(handler.getAllInfo).is.a('function');
+      assume(handler.getProcessInfo).is.a('function');
+      assume(handler.getOsInfo).is.a('function');
+      assume(handler.getTrace).is.a('function');
+    });
 
-  it('.getProcessInfo()', function () {
-    var handler = helpers[helper]();
-    helpers.assertProcessInfo(handler.getProcessInfo());
-  });
+    it(`new ${name}()`, function () {
+      assume(function () {
+        // eslint-disable-next-line no-new
+          new winston[name]();
+      }).throws(/Logger is required/);
+    });
 
-  it('.getOsInfo()', function () {
-    var handler = helpers[helper]();
-    helpers.assertOsInfo(handler.getOsInfo());
-  });
+    it(`new ${name}(logger)`, function () {
+      var logger = winston.createLogger();
+      var handler_ = new winston[name](logger);
+      assume(handler_.logger).equals(logger);
+    });
 
-  it('.getTrace(new Error)', function () {
-    var handler = helpers[helper]();
-    helpers.assertTrace(handler.getTrace(new Error()));
-  });
+    it('.getProcessInfo()', function () {
+      helpers.assertProcessInfo(handler.getProcessInfo());
+    });
 
-  it('.getTrace()', function () {
-    var handler = helpers[helper]();
-    helpers.assertTrace(handler.getTrace());
-  });
+    it('.getOsInfo()', function () {
+      helpers.assertOsInfo(handler.getOsInfo());
+    });
 
-  it('.getAllInfo(undefined)', function () {
-    var handler = helpers[helper]();
-    // eslint-disable-next-line no-undefined
-    handler.getAllInfo(getAllInfo);
+    it('.getTrace(new Error)', function () {
+      helpers.assertTrace(handler.getTrace(new Error()));
+    });
+
+    it('.getTrace()', function () {
+      helpers.assertTrace(handler.getTrace());
+    });
+
+    it('.getAllInfo(undefined)', function () {
+      // eslint-disable-next-line no-undefined
+      handler.getAllInfo(getAllInfo);
+    });
   });
 
   describe('when error case is triggered', function () {
