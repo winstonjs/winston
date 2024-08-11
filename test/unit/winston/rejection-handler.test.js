@@ -6,7 +6,7 @@
  *
  */
 
-const baseHandlerTests = require('../../helpers/handlers');
+const baseHandlerTests = require('../../helpers/handler-tests');
 const helpers = require('../../helpers');
 
 describe('UnhandledRejectionHandler', function () {

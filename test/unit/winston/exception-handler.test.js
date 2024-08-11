@@ -6,7 +6,7 @@
  *
  */
 
-const baseHandlerTests = require('../../helpers/handlers');
+const baseHandlerTests = require('../../helpers/handler-tests');
 const helpers = require('../../helpers');
 
 describe('ExceptionHandler', function () {
@@ -15,7 +15,6 @@ describe('ExceptionHandler', function () {
   baseHandlerTests({
     name: 'ExceptionHandler',
     helper: 'exceptionHandler',
-    getAllInfo: new Error('catpants'),
     setup: 'clearExceptions',
     listener: 'uncaughtException',
     toggleSetting: 'handleExceptions',
