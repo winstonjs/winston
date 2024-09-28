@@ -8,11 +8,9 @@
 
 const assume = require('assume'),
     fs = require('fs'),
-    path = require('path'),
     through = require('through2'),
     spawn = require('child_process').spawn,
     stream = require('stream'),
-    util = require('util'),
     winston = require('../../lib/winston'),
     mockTransport = require('./mocks/mock-transport');
 
@@ -100,7 +98,7 @@ helpers.clearExceptions = function () {
  */
 helpers.clearRejections = function () {
   var listeners = process.listeners('unhandledRejection');
-  process.removeAllListeners('unhandledRejections');
+  process.removeAllListeners('unhandledRejection');
 
   return {
     restore: function () {
@@ -125,9 +123,7 @@ helpers.throw = function (msg) {
  * @param {String} msg Error mesage to use
  */
 helpers.reject = function (msg) {
-  return new Promise((resolve, reject) => {
-    reject(msg);
-  });
+  return Promise.reject(msg);
 };
 
 /**
