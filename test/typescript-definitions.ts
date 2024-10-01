@@ -57,3 +57,42 @@ logger.isInfoEnabled();
 logger.isVerboseEnabled();
 logger.isDebugEnabled();
 logger.isSillyEnabled();
+
+let logger2 = winston.createLogger({
+    levels: {
+        "one": 1,
+        two: 2
+    },
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console({ level: 'info' }),
+    ],
+});
+
+logger2.isOneEnabled();
+// @ts-expect-error
+logger2.isSillyEnabled();
+
+let loggerFromClass = new winston.Logger({});
+loggerFromClass.isInfoEnabled();
+loggerFromClass.debug("");
+// @ts-expect-error
+loggerFromClass.a("");
+// @ts-expect-error
+loggerFromClass.isAEnabled();
+
+
+let loggerFromClass2 = new winston.Logger({
+    levels: {
+        "a": 2,
+        "b": 3
+    }
+});
+// @ts-expect-error
+loggerFromClass2.isInfoEnabled();
+// @ts-expect-error
+loggerFromClass2.debug("");
+
+loggerFromClass2.a("");
+loggerFromClass2.isAEnabled();
