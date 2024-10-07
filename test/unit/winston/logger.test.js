@@ -201,6 +201,32 @@ describe('Logger Instance', function () {
   });
 
   describe('Log Levels', function () {
+    it('create log level methods using Logger class', function (done) {
+      stdMocks.use();
+      const logger = new winston.Logger({
+        level: 'info',
+        transports: [new winston.transports.Console()],
+        format: winston.format.combine(winston.format.splat(), winston.format.colorize({ all: true }), winston.format.simple())
+      })
+      logger.error('test');
+      logger.warn('test');
+      logger.info('test');
+      logger.verbose('test');
+      logger.debug('test');
+      logger.silly('test');
+
+      stdMocks.restore();
+
+      assume(logger.error).is.a('function');
+      assume(logger.warn).is.a('function');
+      assume(logger.info).is.a('function');
+      assume(logger.verbose).is.a('function');
+      assume(logger.debug).is.a('function');
+      assume(logger.silly).is.a('function');
+
+      done();
+    });
+
     it('report unknown levels', function (done) {
       stdMocks.use();
       let logger = helpers.createLogger(function (info) {
