@@ -1016,6 +1016,19 @@ describe('Logger Instance', function () {
 
         logger.log('info', '%d%% such %s %j', 100, 'wow', {much: 'javascript'}, {thisIsMeta: true});
       });
+
+      it(`.log(level, new Error()) creates info with error cause`, function (done) {
+        const errCause = new Error("error cause");
+        const err = new Error('test', { cause: errCause });
+        const logger = helpers.createLogger(function (info) {
+          assume(info).instanceOf(Error);
+          assume(info).equals(err);
+          assume(info.cause).equals(errCause)
+          done();
+        });
+
+        logger.log('info', err);
+      });
     });
   });
 });
