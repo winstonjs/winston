@@ -346,6 +346,9 @@ describe('Logger Instance', function () {
           transports: [new winston.transports.Console()]
         });
 
+        assume(logger.getHighestLogLevel).is.a('function');
+        assume(logger.getHighestLogLevel()).equals(4);
+
         assume(logger.isLevelEnabled).is.a('function');
 
         assume(logger.isErrorEnabled).is.a('function');
@@ -380,6 +383,9 @@ describe('Logger Instance', function () {
           transports: [transport]
         });
 
+        assume(logger.getHighestLogLevel).is.a('function');
+        assume(logger.getHighestLogLevel()).equals(5);
+
         assume(logger.isLevelEnabled).is.a('function');
 
         assume(logger.isErrorEnabled).is.a('function');
@@ -410,6 +416,9 @@ describe('Logger Instance', function () {
           levels: winston.config.npm.levels,
           transports: []
         });
+
+        assume(logger.getHighestLogLevel).is.a('function');
+        assume(logger.getHighestLogLevel()).equals(4);
 
         assume(logger.isLevelEnabled).is.a('function');
 
@@ -446,6 +455,9 @@ describe('Logger Instance', function () {
           transports: [new winston.transports.Console()]
         });
 
+        assume(logger.getHighestLogLevel).is.a('function');
+        assume(logger.getHighestLogLevel()).equals(1);
+
         assume(logger.isLevelEnabled).is.a('function');
 
         assume(logger.isBadEnabled).is.a('function');
@@ -471,6 +483,9 @@ describe('Logger Instance', function () {
           },
           transports: []
         });
+
+        assume(logger.getHighestLogLevel).is.a('function');
+        assume(logger.getHighestLogLevel()).equals(1);
 
         assume(logger.isLevelEnabled).is.a('function');
 
@@ -500,6 +515,9 @@ describe('Logger Instance', function () {
           },
           transports: [transport]
         });
+
+        assume(logger.getHighestLogLevel).is.a('function');
+        assume(logger.getHighestLogLevel()).equals(2);
 
         assume(logger.isLevelEnabled).is.a('function');
 
