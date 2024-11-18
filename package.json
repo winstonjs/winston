@@ -10,6 +10,10 @@
     "type": "git",
     "url": "https://github.com/winstonjs/winston.git"
   },
+  "bugs": {
+    "url": "https://github.com/winstonjs/winston/issues"
+  },
+  "homepage": "https://github.com/winstonjs/winston#readme",
   "keywords": [
     "winston",
     "logger",
