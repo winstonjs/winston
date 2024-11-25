@@ -268,7 +268,9 @@ Options:
 * __logStreamName:__ The name of the CloudWatch log stream to which to log. *[required]*
 * __awsConfig:__ An object containing your `accessKeyId`, `secretAccessKey`, `region`, etc.
 
-Alternatively, you may be interested in [winston-cloudwatch][26].
+~~Alternatively, you may be interested in [winston-cloudwatch][26].~~
+`lazywithclass/winston-cloudwatch` is no longer maintained. Use
+[@initd-sg/winston-cloudwatch](https://github.com/initdsg/winston-cloudwatch)
 
 ### Amazon DynamoDB Transport
 The [winston-dynamodb][36] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
@@ -656,7 +658,7 @@ Create a table in your database first:
  `message` VARCHAR(2048) NOT NULL,
  `meta` VARCHAR(2048) NOT NULL,
  `timestamp` DATETIME NOT NULL,
- PRIMARY KEY (`id`)); 
+ PRIMARY KEY (`id`));
 ```
 
 > You can also specify `meta` to be a `JSON` field on MySQL 5.7+, i.e., ``meta` JSON NOT NULL`, which is helfpul for searching and parsing.
@@ -735,7 +737,7 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 
 ### Parseable Transport
 
-[Parseable](https://parseable.com/) is an open source, general purpose log analytics system. [Parseable-Winston](https://github.com/jybleau/parseable-node-loggers/tree/main/packages/winston#parseable-winston) is a Parseable transport for Winston.  
+[Parseable](https://parseable.com/) is an open source, general purpose log analytics system. [Parseable-Winston](https://github.com/jybleau/parseable-node-loggers/tree/main/packages/winston#parseable-winston) is a Parseable transport for Winston.
 
 ```js
 // Using cjs
