@@ -419,7 +419,7 @@ The Cloudant transport takes the following options:
     logstash    : Write logs in logstash format
 
 ### Datadog Transport
-[datadog-logger-integrations](https://github.com/marklai1998/datadog-logger-integrations) is a transport to ship your logs to DataDog.
+[datadog-logger-integrations][38] is a transport to ship your logs to DataDog.
 
 ```javascript
 var winston = require('winston')
@@ -1120,7 +1120,7 @@ That's why we say it's a logger for just about everything
 [35]: https://github.com/SerayaEryn/fast-file-rotate
 [36]: https://github.com/inspiredjw/winston-dynamodb
 [37]: https://github.com/logdna/logdna-winston
-[38]: https://github.com/itsfadnis/datadog-winston
+[38]: https://github.com/marklai1998/datadog-logger-integrations
 [39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
 [40]: https://github.com/punkish/winston-better-sqlite3
 [41]: https://github.com/aandrewww/winston-transport-sentry-node
