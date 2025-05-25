@@ -419,11 +419,11 @@ The Cloudant transport takes the following options:
     logstash    : Write logs in logstash format
 
 ### Datadog Transport
-[datadog-winston][38] is a transport to ship your logs to datadog.
+[datadog-logger-integrations][38] is a transport to ship your logs to DataDog.
 
 ```javascript
 var winston = require('winston')
-var DatadogWinston = require('datadog-winston')
+var { DataDogTransport } = require('datadog-logger-integrations/winston')
 
 var logger = winston.createLogger({
   // Whatever options you need
@@ -431,19 +431,21 @@ var logger = winston.createLogger({
 })
 
 logger.add(
-  new DatadogWinston({
-    apiKey: 'super_secret_datadog_api_key',
-    hostname: 'my_machine',
+  new DataDogTransport({
+    ddClientConfig: {
+      authMethods: {
+        apiKeyAuth: apiKey,
+      },
+    },
     service: 'super_service',
-    ddsource: 'nodejs',
-    ddtags: 'foo:bar,boo:baz'
+    ddSource: 'nodejs',
+    ddTags: 'foo:bar,boo:baz'
   })
 )
 ```
 
 Options:
-* __apiKey__: Your datadog api key *[required]*
-* __hostname__: The machine/server hostname
+* __ddClientConfig__: DataDog client config *[required]*
 * __service__: The name of the application or service generating the logs
 * __ddsource__: The technology from which the logs originated
 * __ddtags__: Metadata associated with the logs
@@ -1118,7 +1120,7 @@ That's why we say it's a logger for just about everything
 [35]: https://github.com/SerayaEryn/fast-file-rotate
 [36]: https://github.com/inspiredjw/winston-dynamodb
 [37]: https://github.com/logdna/logdna-winston
-[38]: https://github.com/itsfadnis/datadog-winston
+[38]: https://github.com/marklai1998/datadog-logger-integrations
 [39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
 [40]: https://github.com/punkish/winston-better-sqlite3
 [41]: https://github.com/aandrewww/winston-transport-sentry-node
