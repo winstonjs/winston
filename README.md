@@ -574,10 +574,11 @@ winston.info("127.0.0.1 - there's no place like home");
 ```
 
 `winston` allows you to define a `level` property on each transport which
-specifies the **maximum** level of messages that a transport should log. For
-example, using the `syslog` levels you could log only `error` messages to the
-console and everything `info` and below to a file (which includes `error`
-messages):
+specifies the **maximum** level (that is, the minimum severity, as explained 
+on Logging Levels above) of messages that a transport should log. For
+example, using the `npm` levels you could log only `error` messages to the
+console and everything `info` and below (which includes `error`
+messages, but will exclude eg. http and verbose) to a file :
 
 ``` js
 const logger = winston.createLogger({
