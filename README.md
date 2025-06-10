@@ -591,6 +591,10 @@ const logger = winston.createLogger({
     })
   ]
 });
+
+logger.debug('Will not be logged in either transport!');
+logger.info('Will be logged only in File!');
+logger.error('Will be logged by both transports!');
 ```
 
 You may also dynamically change the log level of a transport:
