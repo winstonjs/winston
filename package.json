@@ -25,7 +25,6 @@
   ],
   "dependencies": {
     "@dabh/diagnostics": "^2.0.2",
-    "@colors/colors": "^1.6.0",
     "async": "^3.2.3",
     "is-stream": "^2.0.0",
     "logform": "^2.7.0",
@@ -40,8 +39,9 @@
     "@babel/cli": "^7.23.9",
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
+    "@colors/colors": "^1.6.0",
     "@dabh/eslint-config-populist": "^4.4.0",
-    "@types/node": "^20.11.24",
+    "@types/node": "^20.19.0",
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
     "cross-spawn-async": "^2.2.5",
