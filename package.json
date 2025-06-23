@@ -45,7 +45,7 @@
     "abstract-winston-transport": "^0.5.1",
     "assume": "^2.2.0",
     "cross-spawn-async": "^2.2.5",
-    "eslint": "^8.57.0",
+    "eslint": "^9.29.0",
     "hock": "^1.4.1",
     "mocha": "^10.3.0",
     "nyc": "^17.1.0",
