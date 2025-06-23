@@ -23,9 +23,10 @@ var helpers = exports;
  * @param {function} write Write function for the specified stream
  * @returns {Logger} A winston.Logger instance
  */
-helpers.createLogger = function (write, format) {
+helpers.createLogger = function (write, format, defaultMeta) {
   return winston.createLogger({
     format,
+    defaultMeta,
     transports: [
       mockTransport.createMockTransport(write)
     ]
