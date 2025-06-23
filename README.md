@@ -208,8 +208,9 @@ const logger = winston.createLogger({
 //
 // Replaces the previous transports with those in the
 // new configuration wholesale.
-//
+//use %DATE% as a placeholder for date
 const DailyRotateFile = require('winston-daily-rotate-file');
+const opts = {filename:"./logs/log%DATE%.log"};
 logger.configure({
   level: 'verbose',
   transports: [
