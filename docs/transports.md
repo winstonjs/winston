@@ -107,6 +107,9 @@ looking for daily log rotation see [DailyRotateFile](#dailyrotatefile-transport)
 * __eol:__ Line-ending character to use. (default: `os.EOL`).
 * __lazy:__ If true, log files will be created on demand, not at the initialization time.
 * __filename:__ The filename of the logfile to write output to.
+* __mode:__ File permissions to apply to the created log file (e.g., `0o660`).
+* __uid:__ User ID to apply to the created log file (ownership). Optional.
+* __gid:__ Group ID to apply to the created log file (ownership). Optional.
 * __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
 * __tailable:__ If true, log files will be rolled based on maxsize and maxfiles, but in ascending order. The __filename__ will always have the most recent log lines. The larger the appended number, the older the log file.  This option requires __maxFiles__ to be set, or it will be ignored.
