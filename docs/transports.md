@@ -48,8 +48,10 @@ there are additional transports written by
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
-  * [Newrelic](#newrelic-transport) (errors only)
+  * [MySQL](#mysql-transport)
+  * [New Relic](#new-relic-agent-transport)
   * [Papertrail](#papertrail-transport)
+  * [Parseable](#parseable)
   * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
   * [Sentry](#sentry-transport)
@@ -59,6 +61,7 @@ there are additional transports written by
   * [SQLite3](#sqlite3-transport)
   * [SSE with KOA 2](#sse-transport-with-koa-2)
   * [Sumo Logic](#sumo-logic-transport)
+  * [VS Code extension](#vs-code-extension)
   * [Worker Thread based async Console transport](#worker-thread-based-async-console-transport)
   * [Winlog2 Transport](#winlog2-transport)
 
@@ -102,6 +105,7 @@ looking for daily log rotation see [DailyRotateFile](#dailyrotatefile-transport)
 * __level:__ Level of messages that this transport should log (default: level set on parent logger).
 * __silent:__ Boolean flag indicating whether to suppress output (default false).
 * __eol:__ Line-ending character to use. (default: `os.EOL`).
+* __lazy:__ If true, log files will be created on demand, not at the initialization time.
 * __filename:__ The filename of the logfile to write output to.
 * __maxsize:__ Max size in bytes of the logfile, if the size is exceeded then a new file is created, a counter will become a suffix of the log file.
 * __maxFiles:__ Limit the number of files created when the size of the logfile is exceeded.
@@ -264,7 +268,9 @@ Options:
 * __logStreamName:__ The name of the CloudWatch log stream to which to log. *[required]*
 * __awsConfig:__ An object containing your `accessKeyId`, `secretAccessKey`, `region`, etc.
 
-Alternatively, you may be interested in [winston-cloudwatch][26].
+~~Alternatively, you may be interested in [winston-cloudwatch][26].~~
+`lazywithclass/winston-cloudwatch` is no longer maintained. Use
+[@initd-sg/winston-cloudwatch](https://github.com/initdsg/winston-cloudwatch)
 
 ### Amazon DynamoDB Transport
 The [winston-dynamodb][36] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
@@ -415,11 +421,11 @@ The Cloudant transport takes the following options:
     logstash    : Write logs in logstash format
 
 ### Datadog Transport
-[datadog-winston][38] is a transport to ship your logs to datadog.
+[datadog-logger-integrations][38] is a transport to ship your logs to DataDog.
 
 ```javascript
 var winston = require('winston')
-var DatadogWinston = require('datadog-winston')
+var { DataDogTransport } = require('datadog-logger-integrations/winston')
 
 var logger = winston.createLogger({
   // Whatever options you need
@@ -427,19 +433,21 @@ var logger = winston.createLogger({
 })
 
 logger.add(
-  new DatadogWinston({
-    apiKey: 'super_secret_datadog_api_key',
-    hostname: 'my_machine',
+  new DataDogTransport({
+    ddClientConfig: {
+      authMethods: {
+        apiKeyAuth: apiKey,
+      },
+    },
     service: 'super_service',
-    ddsource: 'nodejs',
-    ddtags: 'foo:bar,boo:baz'
+    ddSource: 'nodejs',
+    ddTags: 'foo:bar,boo:baz'
   })
 )
 ```
 
 Options:
-* __apiKey__: Your datadog api key *[required]*
-* __hostname__: The machine/server hostname
+* __ddClientConfig__: DataDog client config *[required]*
 * __service__: The name of the application or service generating the logs
 * __ddsource__: The technology from which the logs originated
 * __ddtags__: Metadata associated with the logs
@@ -639,21 +647,75 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 
 *Metadata:* Stringified as JSON in email.
 
-### Newrelic Transport
+### MySQL Transport
 
-[newrelic-winston][23] is a Newrelic transport:
+[winston-mysql](https://github.com/charles-zh/winston-mysql) is a MySQL transport for Winston.
 
-``` js
-const winston = require('winston');
-const Newrelic = require('newrelic-winston');
-logger.add(new Newrelic(options));
+Create a table in your database first:
+
+```sql
+ CREATE TABLE `sys_logs_default` (
+ `id` INT NOT NULL AUTO_INCREMENT,
+ `level` VARCHAR(16) NOT NULL,
+ `message` VARCHAR(2048) NOT NULL,
+ `meta` VARCHAR(2048) NOT NULL,
+ `timestamp` DATETIME NOT NULL,
+ PRIMARY KEY (`id`));
 ```
 
-The Newrelic transport will send your errors to newrelic and accepts the follwing optins:
+> You can also specify `meta` to be a `JSON` field on MySQL 5.7+, i.e., ``meta` JSON NOT NULL`, which is helfpul for searching and parsing.
 
-* __env__:  the current evironment. Defatuls to `process.env.NODE_ENV`
+Configure Winston with the transport:
 
-If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic module saving devs from anoying errors ;)
+```javascript
+import MySQLTransport from 'winston-mysql';
+
+const options = {
+    host: '${MYSQL_HOST}',
+    user: '${MYSQL_USER}',
+    password: '${MYSQL_PASSWORD}',
+    database: '${MYSQL_DATABASE}',
+    table: 'sys_logs_default'
+};
+
+const logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple(),
+        }),
+        new MySQLTransport(options),
+    ],
+});
+
+/// ...
+let msg = 'My Log';
+logger.info(msg, {message: msg, type: 'demo'});
+```
+
+
+### New Relic Agent Transport
+
+[winston-newrelic-agent-transport][47] is a New Relic transport that leverages the New Relic agent:
+
+``` js
+import winston from 'winston'
+import NewrelicTransport from 'winston-newrelic-agent-transport'
+
+const logger = winston.createLogger()
+
+const options = {}
+logger.add(new NewrelicTransport(options))
+```
+
+The New Relic agent typically automatically forwards Winston logs to New Relic when using CommonJS. With CommonJS no additional transport should be needed. However, when using ECMAScript modules, the automatic forwarding of logs can with certain coding patterns not work. If the New Relic agent is not automatically forwarding your logs, this transport provides a solution.
+
+Options:
+
+* __level__ (optional): The Winston logging level to use as the maximum level of messages that the transport will log.
+* __rejectCriteria__ (optional): The rejectCriteria option allows you to specify an array of regexes that will be matched against either the Winston info object or log message to determine whether or not a log message should be rejected and not logged to New Relic.
 
 ### Papertrail Transport
 
@@ -674,6 +736,33 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 * __logFormat:__ a log formatting function with the signature `function(level, message)`, which allows custom formatting of the level or message prior to delivery
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
+
+### Parseable Transport
+
+[Parseable](https://parseable.com/) is an open source, general purpose log analytics system. [Parseable-Winston](https://github.com/jybleau/parseable-node-loggers/tree/main/packages/winston#parseable-winston) is a Parseable transport for Winston.
+
+```js
+// Using cjs
+const { ParseableTransport } = require('parseable-winston')
+const winston = require('winston')
+
+const parseable = new ParseableTransport({
+  url: process.env.PARSEABLE_LOGS_URL, // Ex: 'https://parsable.myserver.local/api/v1/logstream'
+  username: process.env.PARSEABLE_LOGS_USERNAME,
+  password: process.env.PARSEABLE_LOGS_PASSWORD,
+  logstream: process.env.PARSEABLE_LOGS_LOGSTREAM, // The logstream name
+  tags: { tag1: 'tagValue' } // optional tags to be added with each ingestion
+})
+
+const logger = winston.createLogger({
+  levels: winston.config.syslog.levels,
+  transports: [parseable],
+  defaultMeta: { instance: 'app', hostname: 'app1' }
+})
+
+logger.info('User took the goggles', { userid: 1, user: { name: 'Rainier Wolfcastle' } })
+logger.warning('The goggles do nothing', { userid: 1 })
+```
 
 ### PostgresQL Transport
 
@@ -826,13 +915,47 @@ Options:
 ### SSE transport with KOA 2
 [winston-koa-sse](https://github.com/alexvictoor/winston-koa-sse) is a transport that leverages on Server Sent Event. With this transport you can use your browser console to view your server logs.
 
+### VS Code extension
+
+[winston-transport-vscode][48] is a transport for VS Code extension development.
+
+```js
+const vscode = require('vscode');
+const winston = require('winston');
+const { OutputChannelTransport } = require('winston-transport-vscode');
+
+const outputChannel = vscode.window.createOutputChannel('My extension');
+
+const logger = winston.createLogger({
+  transports: [new OutputChannelTransport({ outputChannel })],
+});
+```
+
+The extension includes dedicated log levels and format for using with VS Code's
+LogOutputChannel.
+
+```js
+const { LogOutputChannelTransport } = require('winston-transport-vscode');
+
+const outputChannel = vscode.window.createOutputChannel('My extension', {
+  log: true,
+});
+
+const logger = winston.createLogger({
+  levels: LogOutputChannelTransport.config.levels,
+  format: LogOutputChannelTransport.format(),
+  transports: [new LogOutputChannelTransport({ outputChannel })],
+});
+```
+
+
 ### Worker Thread based async Console transport
 
 [winston-console-transport-in-worker][46]
 
 ```typescript
 import * as winston from 'winston';
-import { ConsoleTransportInWorker } from '@rpi1337/winston-console-transport-in-worker';
+import { ConsoleTransportInWorker } from '@greeneyesai/winston-console-transport-in-worker';
 
 ...
 
@@ -985,7 +1108,6 @@ That's why we say it's a logger for just about everything
 [20]: https://github.com/jorgebay/winston-cassandra
 [21]: https://github.com/jpoon/winston-azuretable
 [22]: https://github.com/rickcraig/winston-airbrake2
-[23]: https://github.com/namshi/winston-newrelic
 [24]: https://github.com/sematext/winston-logsene
 [25]: https://github.com/timdp/winston-aws-cloudwatch
 [26]: https://github.com/lazywithclass/winston-cloudwatch
@@ -1000,7 +1122,7 @@ That's why we say it's a logger for just about everything
 [35]: https://github.com/SerayaEryn/fast-file-rotate
 [36]: https://github.com/inspiredjw/winston-dynamodb
 [37]: https://github.com/logdna/logdna-winston
-[38]: https://github.com/itsfadnis/datadog-winston
+[38]: https://github.com/marklai1998/datadog-logger-integrations
 [39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
 [40]: https://github.com/punkish/winston-better-sqlite3
 [41]: https://github.com/aandrewww/winston-transport-sentry-node
@@ -1009,3 +1131,5 @@ That's why we say it's a logger for just about everything
 [44]: https://github.com/Quintinity/humio-winston
 [45]: https://github.com/datalust/winston-seq
 [46]: https://github.com/arpad1337/winston-console-transport-in-worker
+[47]: https://github.com/kimnetics/winston-newrelic-agent-transport
+[48]: https://github.com/loderunner/winston-transport-vscode

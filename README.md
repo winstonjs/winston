@@ -56,10 +56,14 @@ const logger = winston.createLogger({
   defaultMeta: { service: 'user-service' },
   transports: [
     //
-    // - Write all logs with importance level of `error` or less to `error.log`
-    // - Write all logs with importance level of `info` or less to `combined.log`
+    // - Write all logs with importance level of `error` or higher to `error.log`
+    //   (i.e., error, fatal, but not other levels)
     //
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    //
+    // - Write all logs with importance level of `info` or higher to `combined.log`
+    //   (i.e., fatal, error, warn, and info, but not trace)
+    //
     new winston.transports.File({ filename: 'combined.log' }),
   ],
 });
@@ -115,6 +119,7 @@ transports may produce a high memory usage issue.
   * [Using the default logger](#using-the-default-logger)
   * [Awaiting logs to be written in `winston`](#awaiting-logs-to-be-written-in-winston)
   * [Working with multiple Loggers in `winston`](#working-with-multiple-loggers-in-winston)
+  * [Routing Console transport messages to the console instead of stdout and stderr](#routing-console-transport-messages-to-the-console-instead-of-stdout-and-stderr)
 * [Installation](#installation)
 * [Run Tests](#run-tests)
 
@@ -148,7 +153,7 @@ const logger = winston.createLogger({
 });
 ```
 
-A logger accepts the following parameters:
+A logger accepts the following parameters:
 
 | Name          | Default                     |  Description    |
 | ------------- | --------------------------- | --------------- |
@@ -226,6 +231,7 @@ const logger = winston.createLogger({
 
 const childLogger = logger.child({ requestId: '451' });
 ```
+> `.child` is likely to be bugged if you're also extending the `Logger` class, due to some implementation details that make `this` keyword to point to unexpected things. Use with caution.
 
 ### Streams, `objectMode`, and `info` objects
 
@@ -259,7 +265,7 @@ Several of the formats in `logform` itself add additional properties:
 | `label`     | `label()`       | Custom label associated with each message. |
 | `ms`        | `ms()`          | Number of milliseconds since the previous log message. |
 
-As a consumer you may add whatever properties you wish – _internal state is
+As a consumer you may add whatever properties you wish – _internal state is
 maintained by `Symbol` properties:_
 
 - `Symbol.for('level')` _**(READ-ONLY)**:_ equal to `level` property.
@@ -289,7 +295,7 @@ console.log(SPLAT === Symbol.for('splat'));
 // true
 ```
 
-> **NOTE:** any `{ message }` property in a `meta` object provided will
+> **NOTE:** any `{ message }` property in a `meta` object provided will
 > automatically be concatenated to any `msg` already provided: For
 > example the below will concatenate 'world' onto 'hello':
 >
@@ -379,10 +385,10 @@ const logger = createLogger({
   transports: [new transports.Console()]
 });
 
-// info: test message my string {}
+// info: test message my string {}
 logger.log('info', 'test message %s', 'my string');
 
-// info: test message 123 {}
+// info: test message 123 {}
 logger.log('info', 'test message %d', 123);
 
 // info: test message first second {number: 123}
@@ -449,7 +455,7 @@ method: `transform(info, opts)` and return the mutated `info`:
 They are expected to return one of two things:
 
 - **An `info` Object** representing the modified `info` argument. Object
-references need not be preserved if immutability is preferred. All current
+references need not be preserved if immutability is preferred. All current
 built-in formats consider `info` mutable, but [immutablejs] is being
 considered for future releases.
 - **A falsey value** indicating that the `info` argument should be ignored by the
@@ -674,10 +680,21 @@ To colorize the standard logging level add
 ```js
 winston.format.combine(
   winston.format.colorize(),
-  winston.format.json()
+  winston.format.simple()
 );
 ```
-where `winston.format.json()` is whatever other formatter you want to use.  The `colorize` formatter must come before any formatters adding text you wish to color.
+where `winston.format.simple()` is whatever other formatter you want to use.  The `colorize` formatter must come before any formatters adding text you wish to color.
+
+### Colorizing full log line when json formatting logs
+
+To colorize the full log line with the json formatter you can apply the following
+
+```js
+winston.format.combine(
+  winston.format.json(),
+  winston.format.colorize({ all: true })
+);
+```
 
 ## Transports
 
@@ -764,11 +781,11 @@ const logger = winston.createLogger({
       level: 'error',
       format: winston.format.json()
     }),
-    new transports.Http({
+    new winston.transports.Http({
       level: 'warn',
       format: winston.format.json()
     }),
-    new transports.Console({
+    new winston.transports.Console({
       level: 'info',
       format: winston.format.combine(
         winston.format.colorize(),
@@ -898,7 +915,7 @@ logger.exitOnError = ignoreEpipe;
 
 ### Handling Uncaught Promise Rejections with winston
 
-With `winston`, it is possible to catch and log `uncaughtRejection` events
+With `winston`, it is possible to catch and log `unhandledRejection` events
 from your process. With your own logger instance you can enable this behavior
 when it's created or later on in your applications lifecycle:
 
@@ -1184,6 +1201,25 @@ container.add('category1', {
 
 const category1 = container.get('category1');
 category1.info('logging to file and console transports');
+```
+
+### Routing Console transport messages to the console instead of stdout and stderr
+
+By default the `winston.transports.Console` transport sends messages to `stdout` and `stderr`. This
+is fine in most situations; however, there are some cases where this isn't desirable, including:
+
+- Debugging using VSCode and attaching to, rather than launching, a Node.js process
+- Writing JSON format messages in AWS Lambda
+- Logging during Jest tests with the `--silent` option
+
+To make the transport log use `console.log()`, `console.warn()` and `console.error()`
+instead, set the `forceConsole` option to `true`:
+
+```js
+const logger = winston.createLogger({
+  level: 'info',
+  transports: [new winston.transports.Console({ forceConsole: true })]
+});
 ```
 
 ## Installation

@@ -8,7 +8,7 @@
 
 /* eslint-disable no-sync */
 const assert = require('assert');
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
 const winston = require('../../../../lib/winston');
@@ -20,7 +20,7 @@ const { MESSAGE } = require('triple-beam');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testarchive*'), done);
+  rimraf(path.join(testLogFixturesPath, 'testarchive*'), {glob: true}).then(() => done());
 }
 
 

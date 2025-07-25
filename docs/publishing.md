@@ -7,7 +7,7 @@ The release process here mostly follows along with the [vbump script](https://gi
 1. Paste the same version number, with or without the v (with is probably better) in the release title box.
 1. Click 'Generate release notes' and cut & paste the draft contents into the changelog.
 1. Paste the contents of the changelog for this release in the 'Describe this release' box.
-1. Check to make sure you've caught everything using GitHub's compare tool ([example here](https://github.com/winstonjs/winston/compare/v3.6.0...master)).
+1. Check to make sure you've caught everything (including direct commits) using GitHub's compare tool ([example here](https://github.com/winstonjs/winston/compare/v3.6.0...master)).
 1. Update the changelog. It's nice to thank the contributors here.  It's nice to organize this by which changes would merit which level of semver bump, and especially call out any breaking changes (major-version-number) concisely at the start.
 1. **Update the version number in package.json and package-lock.json**, bumping as appropriate for [semver](https://semver.org/) based on the most significant position change trigger from the changelog you just wrote/reviewed.  Do not miss this step! Also note there are two places in package-lock where this gets updated: at the top level and under the empty-string entry of packages.
 1. Update the tag and version number on the Draft a New Release page, with the same number (which might've changed while drafting changelog notes).

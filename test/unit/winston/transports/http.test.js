@@ -79,7 +79,7 @@ describe('Http({ host, port, path })', function () {
 
   });
 
-  describe('bacth mode: max message', function () {
+  describe('batch mode: max message', function () {
 
     beforeEach(function (done) {
       context = mockHttpServer(done, [dummyLog, dummyLog, dummyLog, dummyLog, dummyLog]);
@@ -108,7 +108,7 @@ describe('Http({ host, port, path })', function () {
 
   });
 
-  describe('bacth mode: timeout', function () {
+  describe('batch mode: timeout', function () {
 
     beforeEach(function (done) {
       context = mockHttpServer(done, [dummyLog, dummyLog]);
@@ -153,6 +153,21 @@ describe('Http({ host, port, path })', function () {
     it('should be able to handle options with circular structure', function (done) {
       const httpTransport = new Http({
         host: host,
+        port: server.address().port,
+        path: 'log'
+      })
+        .on('error', assumeError)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
+
+      httpTransport.log(circularLog, assumeError);
+    });
+
+    it('should be able to handle options with circular structure when passing maximumDepth', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        maximumDepth: 5,
         port: server.address().port,
         path: 'log'
       })
