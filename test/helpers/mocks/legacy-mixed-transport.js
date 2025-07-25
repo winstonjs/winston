@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
 const events = require('events');
-const util = require('util')
+const util = require('util');
 const Transport = require('../../../').Transport;
 
 //

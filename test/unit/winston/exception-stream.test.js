@@ -31,5 +31,5 @@ describe('ExceptionStream', function () {
       var stream = new ExceptionStream();
       stream._write({ exception: true });
     }).throws('ExceptionStream requires a TransportStream instance.');
-  })
+  });
 });

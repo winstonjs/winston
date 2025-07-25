@@ -31,7 +31,7 @@ function logOnInterval(opts, done) {
     transport.once('open', open);
   }
 
-  let counters = {
+  const counters = {
     write: 0,
     read: 0
   };

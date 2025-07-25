@@ -1,6 +1,6 @@
-const stream = require('stream')
+const stream = require('stream');
 const winston = require('../../../lib/winston');
-const {Writable} = require("stream");
+const { Writable } = require('stream');
 
 /**
  * Returns a new Winston transport instance which will invoke
@@ -15,7 +15,7 @@ function createMockTransport(write) {
     write: write
   });
 
-  return new winston.transports.Stream({ stream: writeable })
+  return new winston.transports.Stream({ stream: writeable });
 }
 
 /**
@@ -28,10 +28,10 @@ function inMemory(array, options = {}) {
     objectMode: true,
     write: (chunk, encoding, next) => {
       array.push(chunk);
-      next()
+      next();
     }
   });
-  return new winston.transports.Stream({stream: memoryStream, ...options})
+  return new winston.transports.Stream({ stream: memoryStream, ...options });
 }
 
 module.exports = {

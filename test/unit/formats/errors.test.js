@@ -241,7 +241,7 @@ describe('format.errors (integration)', function () {
     }, format.errors());
 
     new Promise((done, reject) => {
-      throw new Error('Errors lack .toJSON() lulz')
+      throw new Error('Errors lack .toJSON() lulz');
     }).catch(logger.error.bind(logger));
   });
 

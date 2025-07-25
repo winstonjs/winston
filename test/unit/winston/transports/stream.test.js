@@ -42,7 +42,7 @@ describe('Stream({ stream })', function () {
 
   it('should throw when not passed a stream', function () {
     assume(function () {
-      const stream = new winston.transports.Stream()
-    }).throws('options.stream is required.');''
+      const stream = new winston.transports.Stream();
+    }).throws('options.stream is required.');'';
   });
 });

@@ -21,12 +21,12 @@ const testFileFixturesPath = path.join(
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(testFileFixturesPath, 'rotation*'), {glob: true}).then(() => done());
+  rimraf(path.join(testFileFixturesPath, 'rotation*'), { glob: true }).then(() => done());
 }
 
 // Validate Filename according to rotation
 function isCorrectFormat(filename) {
-  let time = filename.split('rotation')[1].split('.')[0];
+  const time = filename.split('rotation')[1].split('.')[0];
   return new Date(time).getTime() > 0;
 }
 
@@ -39,7 +39,7 @@ describe('winston/transports/file/rotationFormat', function () {
     testDone = true;
     removeFixtures(done);
   });
-  
+
   it('should create multiple files correctly with rotation Function', function (done) {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
     const rotationTransport = new winston.transports.File({
