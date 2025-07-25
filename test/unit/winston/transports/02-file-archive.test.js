@@ -22,7 +22,7 @@ const testLogFixturesPath = path.join(
 
 
 function removeFixtures(done) {
-  rimrafSync(path.join(testLogFixturesPath, 'testarchive*'), {glob: true});
+  rimrafSync(path.join(testLogFixturesPath, 'testarchive*'), { glob: true });
   done();
 }
 
@@ -31,7 +31,7 @@ describe('winston/transports/file/zippedArchive', function () {
   this.afterEach(removeFixtures);
 
   it('should not create zip when file is being used', function (done) {
-    let archiveTransport = new winston.transports.File({
+    const archiveTransport = new winston.transports.File({
       zippedArchive: true,
       level: 'info',
       format: winston.format.printf(info => info.message),
@@ -55,7 +55,7 @@ describe('winston/transports/file/zippedArchive', function () {
   it('should create multiple zip files', function (done) {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
 
-    let archiveTransport = new winston.transports.File({
+    const archiveTransport = new winston.transports.File({
       zippedArchive: true,
       level: 'info',
       format: winston.format.printf(info => info.message),
@@ -112,7 +112,7 @@ describe('winston/transports/file/zippedArchive', function () {
   it('should have correct no zip files with maxfiles', function (done) {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
 
-    let archiveTransport = new winston.transports.File({
+    const archiveTransport = new winston.transports.File({
       zippedArchive: true,
       level: 'info',
       format: winston.format.printf(info => info.message),
@@ -174,7 +174,7 @@ describe('winston/transports/file/zippedArchive', function () {
   it('should have zip files with tailable', function (done) {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
 
-    let archiveTransport = new winston.transports.File({
+    const archiveTransport = new winston.transports.File({
       zippedArchive: true,
       level: 'info',
       format: winston.format.printf(info => info.message),
@@ -235,7 +235,7 @@ describe('winston/transports/file/zippedArchive', function () {
   });
   it('should not create extra file', function (done) {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
-    let archiveTransport = new winston.transports.File({
+    const archiveTransport = new winston.transports.File({
       zippedArchive: true,
       level: 'info',
       format: winston.format.printf(info => info.message),
@@ -307,7 +307,7 @@ describe('winston/transports/file/zippedArchive', function () {
       });
     });
 
-    //Listent to file open event called when the file is opened
+    // Listent to file open event called when the file is opened
     archiveTransport.on('open', file => {
       files.push(file + '.gz');
     });

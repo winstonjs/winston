@@ -13,11 +13,11 @@ describe('winston/transports/file/createLogDir', function () {
 
   beforeEach(function () {
     return rimraf(logDir).catch(err => {
-      if (err){
-        console.log('Error encountered when removing `temp_logs` dir')
+      if (err) {
+        console.log('Error encountered when removing `temp_logs` dir');
         console.log(err);
       }
-    })
+    });
   });
 
   it('should create directory if it does not exist', function () {

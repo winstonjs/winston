@@ -87,7 +87,7 @@ describe('Logger (legacy API)', function () {
 
     deprecated.forEach(function (opts) {
       assume(function () {
-        var logger = winston.createLogger(opts)
+        var logger = winston.createLogger(opts);
       }).throws(/Use a custom/);
     });
   });

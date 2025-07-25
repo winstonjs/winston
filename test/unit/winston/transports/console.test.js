@@ -35,7 +35,7 @@ const transports = {
       beta: 1,
       gamma: 2,
       delta: 3,
-      epsilon: 4,
+      epsilon: 4
     },
     stderrLevels: ['delta', 'epsilon']
   })
@@ -84,7 +84,7 @@ describe('Console transport', function () {
       assume(output.stdout).length(7);
     });
 
-    it("should set stderrLevels to [] by default", assertLogLevelsValues(
+    it('should set stderrLevels to [] by default', assertLogLevelsValues(
       transports.defaults,
       [],
       'stderrLevels'
@@ -94,17 +94,17 @@ describe('Console transport', function () {
   describe('throws an appropriate error when', function () {
     it("if stderrLevels is set, but not an Array { stderrLevels: 'Not an Array' }", function () {
       assume(function () {
-        let throwing = new winston.transports.Console({
+        const throwing = new winston.transports.Console({
           stderrLevels: 'Not an Array'
-        })
+        });
       }).throws(/Cannot make set from type other than Array of string elements/);
     });
 
     it("if stderrLevels contains non-string elements { stderrLevels: ['good', /^invalid$/, 'valid']", function () {
       assume(function () {
-        let throwing = new winston.transports.Console({
+        const throwing = new winston.transports.Console({
           stderrLevels: ['good', /^invalid$/, 'valid']
-        })
+        });
       }).throws(/Cannot make set from type other than Array of string elements/);
     });
   });
@@ -125,8 +125,8 @@ describe('Console transport', function () {
     transports.eol.log({ [MESSAGE]: 'info: testing. 1 2 3...' }, function () {
       stdMocks.restore();
 
-      var output = stdMocks.flush(),
-          line   = output.stdout[0];
+      var output = stdMocks.flush();
+      var line   = output.stdout[0];
 
       assume(line).equal('info: testing. 1 2 3...X');
       done();

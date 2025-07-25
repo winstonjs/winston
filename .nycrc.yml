@@ -4,5 +4,5 @@ reporter:
 check-coverage: true
 branches: 61.51
 lines: 70.85
-functions: 70.00
+functions: 73.08
 statements: 70.54

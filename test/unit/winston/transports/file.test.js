@@ -9,7 +9,7 @@ const split = require('split2');
 const assume = require('assume');
 const testFileFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'file');
 
-function noop() {};
+function noop() {}
 
 describe('File({ filename })', function () {
   this.timeout(10 * 1000);
@@ -22,7 +22,7 @@ describe('File({ filename })', function () {
 
     var info = { [MESSAGE]: 'this is my log message' };
     var logged = 0;
-    var read = 0
+    var read = 0;
 
     function cleanup() {
       fs.unlinkSync(filename);

@@ -5,7 +5,7 @@
  * MIT LICENSE
  *
  */
-
+/* eslint-disable no-new */
 const assume = require('assume');
 const Logger = require('../../../lib/winston/logger');
 const Profiler = require('../../../lib/winston/profiler');
@@ -37,17 +37,17 @@ describe('Profiler', function () {
     }, 200);
   });
 
-  it('non logger object', function(){
-    assume(function() {
+  it('non logger object', function () {
+    assume(function () {
       new Profiler(new Error('Unknown error'));
     }).throws('Logger is required for profiling');
 
     assume(function () {
-      new Profiler({a:'b'});
+      new Profiler({ a: 'b' });
     }).throws('Logger is required for profiling');
 
-    assume(function(){
-      new Profiler([1,2,3,4]);
+    assume(function () {
+      new Profiler([1, 2, 3, 4]);
     }).throws('Logger is required for profiling');
 
     assume(function () {
@@ -57,9 +57,9 @@ describe('Profiler', function () {
     assume(function () {
       new Profiler(2);
     }).throws('Logger is required for profiling');
-    
+
     assume(function () {
       new Profiler('1');
     }).throws('Logger is required for profiling');
-  })
+  });
 });

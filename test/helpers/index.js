@@ -6,13 +6,13 @@
  *
  */
 
-const assume = require('assume'),
-    fs = require('fs'),
-    through = require('through2'),
-    spawn = require('child_process').spawn,
-    stream = require('stream'),
-    winston = require('../../lib/winston'),
-    mockTransport = require('./mocks/mock-transport');
+const assume = require('assume');
+const fs = require('fs');
+const through = require('through2');
+const spawn = require('child_process').spawn;
+const stream = require('stream');
+const winston = require('../../lib/winston');
+const mockTransport = require('./mocks/mock-transport');
 
 var helpers = exports;
 

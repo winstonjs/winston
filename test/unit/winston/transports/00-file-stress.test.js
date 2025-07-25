@@ -150,7 +150,7 @@ describe('File (stress)', function () {
         });
     }, 10000);
   });
-  
+
   it('should handle a high volume of writes with lazy option enabled', function (done) {
     const logger = winston.createLogger({
       transports: [

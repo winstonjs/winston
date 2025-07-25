@@ -18,7 +18,7 @@ const MESSAGE = Symbol.for('message');
 // Remove all log fixtures
 //
 function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testmaxsize*'), {glob: true}).then(() => done());
+  rimraf(path.join(testLogFixturesPath, 'testmaxsize*'), { glob: true }).then(() => done());
 }
 
 describe('File (maxsize)', function () {
@@ -38,7 +38,7 @@ describe('File (maxsize)', function () {
       format: winston.format.printf(info => info.message),
       filename: path.join(testLogFixturesPath, 'testmaxsize.log'),
       maxsize: 4096
-    })
+    });
 
     //
     // Have to wait for `fs.stats` to be done in `maxsizeTransport.open()`.
@@ -139,7 +139,7 @@ describe('File (maxsize)', function () {
 
       //
       // Assets the no of files and all the files have been created with the
-      // correct filesize 
+      // correct filesize
       //
       function assumeFilesCreated() {
         assume(files.length).equals(fillWith.length);
@@ -190,20 +190,20 @@ describe('File (maxsize)', function () {
       }
 
       // Initial Log
-      let count =1;
+      let count = 1;
       logKbytes(3);
 
       // Listen to file close event called when the file is closed
-      lazyTransport.on('fileclosed', ()=>{
+      lazyTransport.on('fileclosed', () => {
         if (count === fillWith.length) {
           assumeFilesCreated();
           return;
         }
         count += 1;
-        setImmediate(()=>{logKbytes(3);});
-      })
+        setImmediate(() => {logKbytes(3);});
+      });
 
-      //Listent to file open event called when the file is opened
+      // Listent to file open event called when the file is opened
       lazyTransport.on('open', file => {
         files.push(file);
       });
