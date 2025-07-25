@@ -5,6 +5,7 @@
  * MIT LICENSE
  *
  */
+/* eslint-disable no-new */
 const assume = require('assume');
 const Logger = require('../../../lib/winston/logger');
 const Profiler = require('../../../lib/winston/profiler');
