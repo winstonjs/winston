@@ -8,21 +8,16 @@ const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', '
 
 const { MESSAGE } = require('triple-beam');
 
-//
 // Remove all log fixtures
-//
-function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testtailrollingfiles*'), {glob: true}).then(() => done());
+function removeFixtures() {
+  rimraf(path.join(testLogFixturesPath, 'testtailrollingfiles*'), { glob: true });
 }
-
-
 
 let tailrollTransport = null;
 
 describe('winston/transports/file/tailrolling', function () {
   describe('An instance of the File Transport', function () {
-    before(removeFixtures);
-    after(removeFixtures);
+    beforeEach(removeFixtures);
 
     it('init logger AFTER cleaning up old files', function () {
       tailrollTransport = new winston.transports.File({

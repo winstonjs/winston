@@ -19,18 +19,17 @@ const { MESSAGE } = require('triple-beam');
 //
 // Remove all log fixtures
 //
-function removeFixtures(done) {
-  rimraf(path.join(testLogFixturesPath, 'testarchive*'), {glob: true}).then(() => done());
+function removeFixtures() {
+  rimraf(path.join(testLogFixturesPath, 'testarchive*'), { glob: true });
 }
 
 
 let archiveTransport = null;
 
 describe('winston/transports/file/zippedArchive', function () {
-  describe('An instance of the File Transport with tailable true', function () {
-    before(removeFixtures);
-    after(removeFixtures);
+  beforeEach(removeFixtures);
 
+  describe('An instance of the File Transport with tailable true', function () {
     it('init logger AFTER cleaning up old files', function () {
       archiveTransport = new winston.transports.File({
         timestamp: true,

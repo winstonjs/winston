@@ -10,7 +10,7 @@ const baseHandlerTests = require('../../helpers/handler-tests');
 const helpers = require('../../helpers');
 
 describe('UnhandledRejectionHandler', function () {
-  this.timeout(100);
+  jest.setTimeout(100);
 
   baseHandlerTests({
     name: 'RejectionHandler',

@@ -17,7 +17,7 @@ const split = require('split2');
 const winston = require('../../../../lib/winston');
 
 describe('File (stress)', function () {
-  this.timeout(30 * 1000);
+  jest.setTimeout(30 * 1000);
 
   const fileStressLogFile = path.resolve(__dirname, '../../../fixtures/logs/file-stress-test.log');
   beforeEach(function () {

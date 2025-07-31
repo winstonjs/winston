@@ -8,8 +8,11 @@
  *
  */
 
+
+// TODO: test was disabled due to the removal of the vows dependency.
+it.todo('File MaxFiles Transport Test');
+
 /*
- TODO(invalid-test): test is no longer valid as we don't have the vows dependency anymore
 var assert = require('assert'),
     exec = require('child_process').exec,
     fs = require('fs'),

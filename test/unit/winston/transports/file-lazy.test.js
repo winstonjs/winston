@@ -11,7 +11,7 @@ const assume = require('assume');
 function noop() {}
 
 describe('Lazy Option Test', function () {
-  this.timeout(10 * 1000);
+  jest.setTimeout(10 * 1000);
   var logPath = path.join(
     __dirname,
     '..',

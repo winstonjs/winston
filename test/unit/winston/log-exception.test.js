@@ -16,7 +16,7 @@ const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs')
 const testHelperScriptsPath = path.join(__dirname, '..', '..', 'helpers', 'scripts');
 
 describe('Logger, ExceptionHandler', function () {
-  this.timeout(5000);
+  jest.setTimeout(5000);
 
   describe('.exceptions.unhandle()', function () {
     it('does not log to any transports', function (done) {

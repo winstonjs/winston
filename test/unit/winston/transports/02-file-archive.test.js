@@ -21,14 +21,12 @@ const testLogFixturesPath = path.join(
 );
 
 
-function removeFixtures(done) {
-  rimrafSync(path.join(testLogFixturesPath, 'testarchive*'), {glob: true});
-  done();
+function removeFixtures() {
+  rimrafSync(path.join(testLogFixturesPath, 'testarchive*'), { glob: true });
 }
 
 describe('winston/transports/file/zippedArchive', function () {
-  this.beforeEach(removeFixtures);
-  this.afterEach(removeFixtures);
+  beforeEach(removeFixtures);
 
   it('should not create zip when file is being used', function (done) {
     let archiveTransport = new winston.transports.File({

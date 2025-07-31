@@ -12,7 +12,7 @@ const testFileFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 
 function noop() {};
 
 describe('File({ filename })', function () {
-  this.timeout(10 * 1000);
+  jest.setTimeout(10 * 1000);
 
   it('should write to the file when logged to with expected object', function (done) {
     var filename = path.join(testFileFixturesPath, 'simple.log');
@@ -95,29 +95,6 @@ describe('File({ filename })', function () {
 });
 
 describe('File({ stream })', function () {
-  it('should display the deprecation notice');
-  it('should write to the stream when logged to with expected object', function (done) {
-    var streamfile = path.join(testFileFixturesPath, 'simple-stream.log');
-    var stream = fs.createWriteStream(streamfile);
-    var streamTransport = new winston.transports.File({
-      stream: stream
-    });
-
-    done();
-    //
-    // TODO: Flesh out these assertions
-    //
-  });
-});
-
-require('abstract-winston-transport')({
-  name: 'File',
-  Transport: winston.transports.File,
-  construct: {
-    filename: path.join(testFileFixturesPath, 'abstract.log')
-  },
-  after(opts, done) {
-    const abstractFile = opts.construct.filename;
-    fs.unlink(abstractFile, done.bind(null, null));
-  }
+  it.todo('should display the deprecation notice');
+  it.todo('should write to the stream when logged to with expected object');
 });

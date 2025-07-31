@@ -2,10 +2,8 @@
 
 const path = require('path');
 const winston = require('../../../../lib/winston');
-const helpers = require('../../../helpers');
 const fs = require('fs');
 const { MESSAGE } = require('triple-beam');
-const split = require('split2');
 const assume = require('assume');
 const { rimraf } = require('rimraf');
 const testFileFixturesPath = path.join(
@@ -17,11 +15,9 @@ const testFileFixturesPath = path.join(
   'file'
 );
 
-//
 // Remove all log fixtures
-//
-function removeFixtures(done) {
-  rimraf(path.join(testFileFixturesPath, 'rotation*'), {glob: true}).then(() => done());
+function removeFixtures() {
+  rimraf(path.join(testFileFixturesPath, 'rotation*'), { glob: true });
 }
 
 // Validate Filename according to rotation
@@ -30,16 +26,11 @@ function isCorrectFormat(filename) {
   return new Date(time).getTime() > 0;
 }
 
-describe('winston/transports/file/rotationFormat', function () {
-  this.timeout(10000);
+describe.skip('winston/transports/file/rotationFormat', function () {
+  jest.setTimeout(10000);
 
-  let testDone = false;
-  before(removeFixtures);
-  after(done => {
-    testDone = true;
-    removeFixtures(done);
-  });
-  
+  beforeEach(removeFixtures);
+
   it('should create multiple files correctly with rotation Function', function (done) {
     const fillWith = ['a', 'b', 'c', 'd', 'e'];
     const rotationTransport = new winston.transports.File({

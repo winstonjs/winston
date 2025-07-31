@@ -38,7 +38,7 @@ describe('winston', function () {
     assume(winston.version).equals(require('../../package.json').version);
   });
 
-  it('abstract-winston-logger');
+  it.todo('abstract-winston-logger');
 
   //
   // TODO: Migrate this test once abstract-winston-{transport,logger}
