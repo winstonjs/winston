@@ -24,8 +24,8 @@
     "stream"
   ],
   "dependencies": {
-    "@dabh/diagnostics": "^2.0.2",
     "@colors/colors": "^1.6.0",
+    "@dabh/diagnostics": "^2.0.2",
     "async": "^3.2.3",
     "is-stream": "^2.0.0",
     "logform": "^2.7.0",
@@ -47,6 +47,7 @@
     "cross-spawn-async": "^2.2.5",
     "eslint": "^8.57.0",
     "hock": "^1.4.1",
+    "jest": "^30.0.5",
     "mocha": "^10.3.0",
     "nyc": "^17.1.0",
     "rimraf": "5.0.1",
