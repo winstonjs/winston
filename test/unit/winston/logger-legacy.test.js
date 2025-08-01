@@ -9,74 +9,13 @@
 'use strict';
 
 const assume = require('assume');
-const path = require('path');
-const stream = require('readable-stream');
-const util = require('util');
-const isStream = require('is-stream');
-const stdMocks = require('std-mocks');
-const { MESSAGE } = require('triple-beam');
 const winston = require('../../../lib/winston');
 const LegacyTransport = require('../../helpers/mocks/legacy-transport');
 const LegacyMixedTransport = require('../../helpers/mocks/legacy-mixed-transport');
-const TransportStream = require('winston-transport');
-const helpers = require('../../helpers');
 
-/*
- * Assumes that the `TransportClass` with the given { name, displayName }
- * are properly handled by a winston Logger.
- */
-function assumeAcceptsLegacy({ displayName, name, TransportClass }) {
-  return function () {
-    it(`.add(${name})`, function () {
-      stdMocks.use();
-      var logger = winston.createLogger();
-      var transport = new TransportClass();
-      logger.add(transport);
-      stdMocks.restore();
-      var output = stdMocks.flush();
-
-      assume(logger._readableState.pipesCount).equals(1);
-      assume(logger._readableState.pipes.transport).is.an('object');
-      assume(logger._readableState.pipes.transport).equals(transport);
-      assume(output.stderr.join('')).to.include(`${name} is a legacy winston transport. Consider upgrading`);
-    });
-
-    it(`.add(${name}) multiple`, function () {
-      stdMocks.use();
-      var logger = winston.createLogger({
-        transports: [
-          new TransportClass(),
-          new TransportClass(),
-          new TransportClass()
-        ]
-      });
-
-      stdMocks.restore();
-      var output = stdMocks.flush();
-
-      assume(logger._readableState.pipesCount).equals(3);
-      var errorMsg = `${name} is a legacy winston transport. Consider upgrading`;
-      assume(output.stderr.join('')).to.include(errorMsg);
-    });
-
-    it('.remove() [LegacyTransportStream]', function () {
-      var transports = [
-        new winston.transports.Console(),
-        new TransportClass()
-      ];
-
-      const logger = winston.createLogger({ transports: transports });
-      assume(logger.transports.length).equals(2);
-      logger.remove(transports[1]);
-      assume(logger.transports.length).equals(1);
-      assume(logger.transports[0]).equals(transports[0]);
-    });
-  };
-}
-
-describe('Logger (legacy API)', function () {
-  it('new Logger({ DEPRECATED })', function () {
-    var deprecated = [
+describe('Deprecated APIs', function () {
+  describe('Instantiation Options', function () {
+    const deprecatedOptionTestCases = [
       { colors: true },
       { emitErrs: true },
       { formatters: [] },
@@ -85,33 +24,89 @@ describe('Logger (legacy API)', function () {
       { stripColors: true }
     ];
 
-    deprecated.forEach(function (opts) {
-      assume(function () {
-        var logger = winston.createLogger(opts)
-      }).throws(/Use a custom/);
+    it.each(deprecatedOptionTestCases)('should throw when instantiating with deprecated option of %s', function (option) {
+      const invalidInstantiation = () => winston.createLogger(option);
+
+      assume(invalidInstantiation).throws(/Use a custom/);
     });
   });
 
-  describe(
-    'LegacyTransport (inherits from winston@2 Transport)',
-    assumeAcceptsLegacy({
-      displayName: 'LegacyTransport',
-      TransportClass: LegacyTransport,
-      name: 'legacy-test'
-    })
-  );
+  describe('Instance methods', function () {
+    const deprecatedMethodTestCases = ['cli'];
 
-  describe(
-    'LegacyMixedTransport (inherits from winston@3 Transport)',
-    assumeAcceptsLegacy({
-      displayName: 'LegacyMixedTransport',
-      TransportClass: LegacyMixedTransport,
-      name: 'legacy-mixed-test'
-    })
-  );
+    it.each(deprecatedMethodTestCases)(
+      'should throw when invoking deprecated %s() instance method', function (deprecatedMethod) {
+        const logger = winston.createLogger();
 
-  it('.cli() throws', function () {
-    var logger = winston.createLogger();
-    assume(logger.cli).throws(/Use a custom/);
+        assume(logger[deprecatedMethod]).throws(/Use a custom/);
+      });
+  });
+
+
+  describe('Transports', () => {
+    const legacyTransportTestCases = [
+      {
+        scenario: 'Transport inheriting from winston@2',
+        transport: LegacyTransport
+      },
+      {
+        scenario: 'Transport inheriting from winston@3 but conforming to winston@2 API',
+        transport: LegacyMixedTransport
+      }
+    ];
+
+    describe.each(legacyTransportTestCases)('$scenario', ({ transport: TransportClass }) => {
+      let consoleErrorSpy;
+      let logger;
+      const expectedDeprecationMessage = `${new TransportClass().name} is a legacy winston transport. Consider upgrading`;
+      const getCallsToConsoleError = () => consoleErrorSpy.mock.calls.length;
+      const getFlatConsoleErrorOutput = () => consoleErrorSpy.mock.calls.flat().join('');
+
+      beforeEach(() => {
+        consoleErrorSpy = jest.spyOn(console, 'error');
+      });
+
+      afterEach(() => {
+        jest.resetAllMocks();
+      });
+
+      it(`.add() is successful but logs deprecation notice`, function () {
+        const expectedTransport = new TransportClass();
+        logger = winston.createLogger();
+
+        logger.add(expectedTransport);
+
+        assume(logger._readableState.pipesCount).equals(1);
+        assume(getCallsToConsoleError()).equals(1);
+        assume(getFlatConsoleErrorOutput()).to.include(expectedDeprecationMessage);
+      });
+
+      it(`.add() multiple transports is successful but logs deprecation notice`, function () {
+        logger = winston.createLogger();
+
+        logger.add(new TransportClass());
+        logger.add(new TransportClass());
+        logger.add(new TransportClass());
+
+
+        assume(logger._readableState.pipesCount).equals(3);
+        assume(getCallsToConsoleError()).equals(3);
+        assume(getFlatConsoleErrorOutput()).to.include(expectedDeprecationMessage);
+      });
+
+      it('.remove() is successful', function () {
+        const consoleTransport = new winston.transports.Console();
+        const legacyTransport = new TransportClass();
+
+        logger = winston.createLogger();
+        logger.add(consoleTransport);
+        logger.add(legacyTransport);
+
+        assume(logger.transports.length).equals(2);
+        logger.remove(legacyTransport);
+        assume(logger.transports.length).equals(1);
+        assume(logger.transports[0]).equals(consoleTransport);
+      });
+    });
   });
 });
