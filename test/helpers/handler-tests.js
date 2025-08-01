@@ -50,8 +50,7 @@ module.exports = function ({ helper, listener, name, setup, toggleSetting, trigg
     });
 
     it('.getAllInfo(undefined)', function () {
-      // eslint-disable-next-line no-undefined
-      handler.getAllInfo(undefined);
+      handler.getAllInfo();
     });
   });
 
@@ -95,7 +94,7 @@ module.exports = function ({ helper, listener, name, setup, toggleSetting, trigg
         handler.catcher
       ]);
 
-      trigger(msg);
+      process.emit(listener, new Error(msg));
     });
   });
 };

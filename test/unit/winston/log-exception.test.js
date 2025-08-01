@@ -34,11 +34,6 @@ describe('Logger, ExceptionHandler', function () {
     });
 
     it('handlers immutable', function () {
-      //
-      // A single default listener is added by mocha confirming
-      // that our assumptions about mocha are maintained.
-      //
-      assume(process.listeners('uncaughtException').length).equals(1);
       var logger = winston.createLogger({
         exceptionHandlers: [
           new winston.transports.Console(),
@@ -47,10 +42,10 @@ describe('Logger, ExceptionHandler', function () {
       });
 
       assume(logger.exceptions.handlers.size).equals(2);
-      assume(process.listeners('uncaughtException').length).equals(2);
+      assume(process.listeners('uncaughtException').length).equals(1);
       logger.exceptions.unhandle();
       assume(logger.exceptions.handlers.size).equals(2);
-      assume(process.listeners('uncaughtException').length).equals(1);
+      assume(process.listeners('uncaughtException').length).equals(0);
     });
   });
 
