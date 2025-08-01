@@ -10,8 +10,6 @@
 
 const assume = require('assume');
 const path = require('path');
-const stream = require('readable-stream');
-const util = require('util');
 const { EOL } = require('os');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
@@ -797,15 +795,7 @@ describe('Logger Instance', function () {
         logger.info(err);
       });
 
-      // TODO: This test needs finished or removed
-      it.skip(`.info('any string', new Error())`, function (done) {
-        const err = new Error('test');
-        const logger = helpers.createLogger(function (info) {
-          done();
-        });
-
-        logger.info(err);
-      });
+      it.todo(`https://github.com/winstonjs/winston/issues/2103`);
     });
   });
 
