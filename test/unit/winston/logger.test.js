@@ -199,18 +199,13 @@ describe('Logger Instance', function () {
   });
 
   describe('Log Levels', function () {
-    it('report unknown levels', function (done) {
-      stdMocks.use();
-      let logger = helpers.createLogger(function (info) {
-      });
-      let expected = {message: 'foo', level: 'bar'};
-      logger.log(expected);
+    it('report unknown levels', function () {
+      const consoleErrorSpy = jest.spyOn(console, 'error');
+      let logger = winston.createLogger();
 
-      stdMocks.restore();
-      let output = stdMocks.flush();
+      logger.log({ message: 'foo', level: 'bar' });
 
-      assume(output.stderr).deep.equals(['[winston] Unknown logger level: bar\n']);
-      done();
+      assume(consoleErrorSpy.mock.calls[0]).deep.equals(['[winston] Unknown logger level: %s', 'bar']);
     });
 
     it('.<level>()', function (done) {
