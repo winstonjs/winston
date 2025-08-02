@@ -7,7 +7,7 @@
  */
 
 /* eslint-disable no-sync */
-const assert = require('assert');
+const assume = require('assume');
 const { rimraf } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
@@ -16,78 +16,74 @@ const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', '
 
 const { MESSAGE } = require('triple-beam');
 
-//
-// Remove all log fixtures
-//
 function removeFixtures() {
   rimraf(path.join(testLogFixturesPath, 'testarchive*'), { glob: true });
 }
+function getFilePath(filename) {
+  return path.join(testLogFixturesPath, filename);
+}
+const assertFileExists = (filename) => {
+  assume(() => fs.statSync(getFilePath(filename))).does.not.throw();
+};
+const assertFileDoesNotExist = (filename) => {
+  assume(() => fs.statSync(getFilePath(filename))).throws();
+};
 
 
-let archiveTransport = null;
+describe('File Transport in archive mode and tailable true', function () {
+  const archiveTransport = new winston.transports.File({
+    timestamp: true,
+    json: false,
+    zippedArchive: true,
+    tailable: true,
+    filename: 'testarchive.log',
+    dirname: testLogFixturesPath,
+    maxsize: 4096,
+    maxFiles: 3
+  });
 
-describe('winston/transports/file/zippedArchive', function () {
-  beforeEach(removeFixtures);
+  beforeEach(() => {
+    removeFixtures();
+  });
+
+  afterEach(() => {
+    removeFixtures();
+  });
 
   describe('An instance of the File Transport with tailable true', function () {
-    it('init logger AFTER cleaning up old files', function () {
-      archiveTransport = new winston.transports.File({
-        timestamp: true,
-        json: false,
-        zippedArchive: true,
-        tailable: true,
-        filename: 'testarchive.log',
-        dirname: testLogFixturesPath,
-        maxsize: 4096,
-        maxFiles: 3
-      });
-    });
-
-    it('when created archived files are rolled', function (done) {
-      let created = 0;
-      let loggedTotal = 0;
-
-      function data(ch, kb) {
-        return String.fromCharCode(65 + ch).repeat(kb * 1024 - 1);
-      }
-
-      function logKbytes(kbytes, txt) {
+    // Helper function to log 4KB of data to trigger file rotation
+    function logKbytes(kbytes) {
+      const kbStr = 'A'.repeat(1023); // 1023 chars + newline = 1024 bytes per log
+      for (let i = 0; i < kbytes; i++) {
         const toLog = {};
-        toLog[MESSAGE] = data(txt, kbytes);
+        toLog[MESSAGE] = kbStr;
         archiveTransport.log(toLog);
       }
+    }
 
-      archiveTransport.on('logged', function (info) {
-        loggedTotal += info[MESSAGE].length + 1;
-        if (loggedTotal >= 14 * 1024) { // just over 3 x 4kb files
-          return done();
-        }
+    it('should create and properly roll archived files with maximum of 3 files', async function () {
+      // We need to log enough data to create 3 files of 4KB each = 12KB total
+      // Log data in chunks with slight delays to allow file rotation
+      logKbytes(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-        if (loggedTotal % 4096 === 0) {
-          created++;
-        }
-        // eslint-disable-next-line max-nested-callbacks
-        setTimeout(() => logKbytes(1, created), 1);
-      });
+      logKbytes(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-      logKbytes(1, created);
-    });
+      logKbytes(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-    it('should be only 3 files called testarchive.log, testarchive1.log.gz and testarchive2.log.gz', function () {
-      for (var num = 0; num < 4; num++) {
-        const file = !num ? 'testarchive.log' : 'testarchive' + num + '.log.gz';
-        const fullpath = path.join(testLogFixturesPath, file);
+      logKbytes(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-        if (num === 3) {
-          return assert.throws(function () {
-            fs.statSync(fullpath);
-          }, Error);
-        }
+      // Give file system operations time to complete archiving
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-        assert.doesNotThrow(function () {
-          fs.statSync(fullpath);
-        }, Error);
-      }
+      // Verify the expected files exist
+      assertFileExists('testarchive.log');
+      assertFileExists('testarchive1.log.gz');
+      assertFileExists('testarchive2.log.gz');
+      assertFileDoesNotExist('testarchive3.log.gz');
     });
   });
 });
