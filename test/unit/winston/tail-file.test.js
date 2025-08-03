@@ -53,8 +53,9 @@ function logOnInterval(opts, done) {
 }
 
 
-describe.skip('tailFile', function () {
+describe('tailFile', function () {
   jest.setTimeout(10 * 1000);
+
   it('is a function', function () {
     assume(tailFile).is.a('function');
     assume(tailFile.length).equals(2);
