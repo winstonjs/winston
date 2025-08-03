@@ -7,7 +7,7 @@
  */
 
 /* eslint-disable no-sync */
-const assume = require('assume');
+const assert = require('assert');
 const { rimraf } = require('rimraf');
 const fs = require('fs');
 const path = require('path');
@@ -23,14 +23,20 @@ function getFilePath(filename) {
   return path.join(testLogFixturesPath, filename);
 }
 const assertFileExists = (filename) => {
-  assume(() => fs.statSync(getFilePath(filename))).does.not.throw();
+  assert.doesNotThrow(
+    () => fs.statSync(getFilePath(filename)),
+    `Expected file ${filename} to exist`
+  );
 };
 const assertFileDoesNotExist = (filename) => {
-  assume(() => fs.statSync(getFilePath(filename))).throws();
+  assert.throws(
+    () => fs.statSync(getFilePath(filename)),
+    `Expected file ${filename} to not exist`
+  );
 };
 
 
-describe('File Transport', function () {
+describe('File Transport with Archiving enabled', function () {
   let archiveTransport;
   // Helper function to log 4KB of data to trigger file rotation
   function logKbytesViaTransport(kbytes) {
@@ -51,7 +57,7 @@ describe('File Transport', function () {
     await new Promise(resolve => setTimeout(resolve, 500));
   });
 
-  describe('with Archive mode and tailable enabled', function () {
+  describe('Tailable enabled', function () {
     beforeAll(() => {
       archiveTransport = new winston.transports.File({
         timestamp: true,
@@ -91,12 +97,13 @@ describe('File Transport', function () {
     });
   });
 
-  describe('with Archive mode and tailable disabled', function () {
+  describe('Tailable disabled', function () {
     beforeAll(() => {
       archiveTransport = new winston.transports.File({
         timestamp: true,
         json: false,
         zippedArchive: true,
+        tailable: false,
         filename: 'testarchive.log',
         dirname: testLogFixturesPath,
         maxsize: 4096,
