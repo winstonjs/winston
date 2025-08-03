@@ -66,6 +66,78 @@ describe('Logger Instance', function () {
     });
   });
 
+  describe('Get Highest Log Level', function () {
+    it('should return the highest log level', function () {
+      let logger = winston.createLogger();
+
+      const highestLogLevel = logger.getHighestLogLevel();
+
+      assume(highestLogLevel).equals(2);
+    });
+  });
+
+  describe('Is Log Level Enabled', function () {
+    const defaultLevelTestCases = [
+      'error',
+      'warn',
+      'info',
+      'http',
+      'verbose',
+      'debug',
+      'silly'
+    ];
+
+    it.each(defaultLevelTestCases)('should indicate "%s" level is enabled if logger is constructed with that level', function (level) {
+      let logger = winston.createLogger({level});
+
+      const isLevelEnabled = logger.isLevelEnabled(level);
+
+      assume(isLevelEnabled).to.be.true();
+    });
+
+    it('should only enable levels "info" and above by default', function () {
+      let logger = winston.createLogger();
+
+      const isHttpEnabled = logger.isLevelEnabled('http');
+      const isInfoEnabled = logger.isLevelEnabled('info');
+      const isWarnEnabled = logger.isLevelEnabled('warn');
+      const isErrorEnabled = logger.isLevelEnabled('error');
+
+      assume(isHttpEnabled).to.be.false();
+      assume(isInfoEnabled).to.be.true();
+      assume(isWarnEnabled).to.be.true();
+      assume(isErrorEnabled).to.be.true();
+    });
+
+    const invalidLevelTestCases = [
+      null,
+      undefined
+    ];
+    it.each(invalidLevelTestCases)('should indicate "%s" level is not enabled', function (level) {
+      let logger = winston.createLogger();
+
+      const isLevelEnabled = logger.isLevelEnabled(level);
+
+      assume(isLevelEnabled).to.be.false();
+    });
+
+    it('should indicate all levels are disabled if configured with a level of null', function () {
+      const logger = winston.createLogger({ level: null });
+
+      const levelEnabledResults = [];
+      levelEnabledResults.push(logger.isLevelEnabled('silly'));
+      levelEnabledResults.push(logger.isLevelEnabled('debug'));
+      levelEnabledResults.push(logger.isLevelEnabled('verbose'));
+      levelEnabledResults.push(logger.isLevelEnabled('http'));
+      levelEnabledResults.push(logger.isLevelEnabled('info'));
+      levelEnabledResults.push(logger.isLevelEnabled('warn'));
+      levelEnabledResults.push(logger.isLevelEnabled('error'));
+
+      const isEveryLevelDisabled = levelEnabledResults.every(result => result === false);
+      assume(isEveryLevelDisabled).to.be.true();
+    });
+  });
+
   describe('Transports', function() {
     describe('add', function () {
       it('should throw error when adding an invalid transport', function () {
