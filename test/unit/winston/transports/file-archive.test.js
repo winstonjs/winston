@@ -30,50 +30,54 @@ const assertFileDoesNotExist = (filename) => {
 };
 
 
-describe('File Transport in archive mode and tailable true', function () {
-  const archiveTransport = new winston.transports.File({
-    timestamp: true,
-    json: false,
-    zippedArchive: true,
-    tailable: true,
-    filename: 'testarchive.log',
-    dirname: testLogFixturesPath,
-    maxsize: 4096,
-    maxFiles: 3
-  });
-
+describe('File Transport', function () {
+  let archiveTransport;
+  // Helper function to log 4KB of data to trigger file rotation
+  function logKbytesViaTransport(kbytes) {
+    const kbStr = 'A'.repeat(1023); // 1023 chars + newline = 1024 bytes per log
+    for (let i = 0; i < kbytes; i++) {
+      const toLog = {};
+      toLog[MESSAGE] = kbStr;
+      archiveTransport.log(toLog);
+    }
+  }
   beforeEach(() => {
     removeFixtures();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     removeFixtures();
+    // Allow time for file system operations to complete
+    await new Promise(resolve => setTimeout(resolve, 500));
   });
 
-  describe('An instance of the File Transport with tailable true', function () {
-    // Helper function to log 4KB of data to trigger file rotation
-    function logKbytes(kbytes) {
-      const kbStr = 'A'.repeat(1023); // 1023 chars + newline = 1024 bytes per log
-      for (let i = 0; i < kbytes; i++) {
-        const toLog = {};
-        toLog[MESSAGE] = kbStr;
-        archiveTransport.log(toLog);
-      }
-    }
+  describe('with Archive mode and tailable enabled', function () {
+    beforeAll(() => {
+      archiveTransport = new winston.transports.File({
+        timestamp: true,
+        json: false,
+        zippedArchive: true,
+        tailable: true,
+        filename: 'testarchive.log',
+        dirname: testLogFixturesPath,
+        maxsize: 4096,
+        maxFiles: 3
+      });
+    });
 
     it('should create and properly roll archived files with maximum of 3 files', async function () {
       // We need to log enough data to create 3 files of 4KB each = 12KB total
       // Log data in chunks with slight delays to allow file rotation
-      logKbytes(4);
+      logKbytesViaTransport(4);
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      logKbytes(4);
+      logKbytesViaTransport(4);
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      logKbytes(4);
+      logKbytesViaTransport(4);
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      logKbytes(4);
+      logKbytesViaTransport(4);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       // Give file system operations time to complete archiving
@@ -83,6 +87,45 @@ describe('File Transport in archive mode and tailable true', function () {
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log.gz');
       assertFileExists('testarchive2.log.gz');
+      assertFileDoesNotExist('testarchive3.log.gz');
+    });
+  });
+
+  describe('with Archive mode and tailable disabled', function () {
+    beforeAll(() => {
+      archiveTransport = new winston.transports.File({
+        timestamp: true,
+        json: false,
+        zippedArchive: true,
+        filename: 'testarchive.log',
+        dirname: testLogFixturesPath,
+        maxsize: 4096,
+        maxFiles: 3
+      });
+    });
+
+    it('should create and properly archive files with maximum of 3 files', async function () {
+      // We need to log enough data to create 3 files of 4KB each = 12KB total
+      // Log data in chunks with slight delays to allow file rotation
+      logKbytesViaTransport(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      logKbytesViaTransport(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      logKbytesViaTransport(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      logKbytesViaTransport(4);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      // Give file system operations time to complete archiving
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Verify the expected files exist
+      assertFileExists('testarchive1.log.gz');
+      assertFileExists('testarchive2.log.gz');
+      assertFileExists('testarchive3.log');
       assertFileDoesNotExist('testarchive3.log.gz');
     });
   });
