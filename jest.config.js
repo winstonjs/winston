@@ -3,6 +3,9 @@
  */
 module.exports = {
   collectCoverage: false,
+  collectCoverageFrom: [
+    '<rootDir>/lib/**/*.js'
+  ],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
   testMatch: [
