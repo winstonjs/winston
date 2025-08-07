@@ -8,6 +8,7 @@
 
 const assume = require('assume');
 const fs = require('fs');
+const fsPromise = require('node:fs/promises');
 const path = require('path');
 const { spawn } = require('child_process');
 const winston = require('../../../lib/winston');
@@ -66,24 +67,106 @@ describe('Logger, ExceptionHandler', function () {
     }, 1000);
   });
 
-  describe('.exceptions.handle()', function () {
+  describe('Exception Handler', function () {
+    let filePath;
+    let processExitSpy;
+
+    beforeEach(function () {
+      filePath = path.join(testLogFixturesPath, 'unhandled-exception.log');
+      processExitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {});
+    });
+
+    afterEach(async () => {
+      helpers.tryUnlink(filePath);
+      jest.resetAllMocks();
+    });
+
     describe('should save the error information to the specified file', function () {
-      it('when strings are thrown as errors', helpers.assertHandleExceptions({
-        script: path.join(testHelperScriptsPath, 'log-string-exception.js'),
-        logfile: path.join(testLogFixturesPath, 'string-exception.log'),
-        message: 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL'
-      }));
+      describe ('with a Custom Logger instance', function () {
+        let logger;
+        beforeEach(function () {
+          filePath = path.join(testLogFixturesPath, 'unhandled-exception.log');
+          processExitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {});
+          logger = winston.createLogger({
+            transports: [
+              new winston.transports.File({
+                filename: filePath,
+                handleExceptions: true
+              })
+            ]
+          });
+          logger.exceptions.handle();
+        });
 
-      it('with a custom winston.Logger instance', helpers.assertHandleExceptions({
-        script: path.join(testHelperScriptsPath, 'log-exceptions.js'),
-        logfile: path.join(testLogFixturesPath, 'exception.log')
-      }));
+        it('when strings are thrown as errors', async () => {
+          const expectedMessage = 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL';
 
-      it('with the default winston logger', helpers.assertHandleExceptions({
-        script: path.join(testHelperScriptsPath, 'default-exceptions.js'),
-        logfile: path.join(testLogFixturesPath, 'default-exception.log')
-      }));
+          process.emit('uncaughtException', expectedMessage);
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          expect(processExitSpy).toHaveBeenCalledTimes(1);
+          expect(processExitSpy).toHaveBeenCalledWith(1);
+
+          // Read the log file and verify its contents
+          const contents = await fsPromise.readFile(filePath, { encoding: 'utf8' });
+          const data = JSON.parse(contents);
+
+          // Assert on the log data
+          assume(data).is.an('object');
+          helpers.assertProcessInfo(data.process);
+          helpers.assertOsInfo(data.os);
+          helpers.assertTrace(data.trace);
+          assume(data.message).includes('uncaughtException: ' + expectedMessage);
+        });
+
+        it('with a custom winston.Logger instance', async () => {
+          const expectedMessage = 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL';
+
+          process.emit('uncaughtException', expectedMessage);
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          expect(processExitSpy).toHaveBeenCalledTimes(1);
+          expect(processExitSpy).toHaveBeenCalledWith(1);
+
+          // Read the log file and verify its contents
+          const contents = await fsPromise.readFile(filePath, { encoding: 'utf8' });
+          const data = JSON.parse(contents);
+
+          // Assert on the log data
+          assume(data).is.an('object');
+          helpers.assertProcessInfo(data.process);
+          helpers.assertOsInfo(data.os);
+          helpers.assertTrace(data.trace);
+          assume(data.message).includes('uncaughtException: ' + expectedMessage);
+        });
+      });
+
+      it('with the default winston logger', async () => {
+        const expectedMessage = 'OMG NEVER DO THIS STRING EXCEPTIONS ARE AWFUL';
+        winston.exceptions.handle([
+          new winston.transports.File({
+            filename: filePath,
+            handleExceptions: true
+          })
+        ]);
+
+        process.emit('uncaughtException', expectedMessage);
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        expect(processExitSpy).toHaveBeenCalledTimes(1);
+        expect(processExitSpy).toHaveBeenCalledWith(1);
+
+        // Read the log file and verify its contents
+        const contents = await fsPromise.readFile(filePath, { encoding: 'utf8' });
+        const data = JSON.parse(contents);
+
+        // Assert on the log data
+        assume(data).is.an('object');
+        helpers.assertProcessInfo(data.process);
+        helpers.assertOsInfo(data.os);
+        helpers.assertTrace(data.trace);
+        assume(data.message).includes('uncaughtException: ' + expectedMessage);
+      });
     });
   });
-
 });
