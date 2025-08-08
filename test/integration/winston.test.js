@@ -6,13 +6,11 @@
  *
  */
 
-const { format } = require('util');
 const assume = require('assume');
 const winston = require('../../lib/winston');
 
-describe('winston', function () {
-
-  it('winston.transports', function () {
+describe('Winston', function () {
+  it('should expose transports', function () {
     assume(winston.transports).is.an('object');
     assume(winston.Transport).is.a('function');
     assume(!winston.transports.Transport).true();
@@ -20,52 +18,89 @@ describe('winston', function () {
     assume(winston.transports.File).is.a('function');
   });
 
-  it('has expected initial state', function () {
+  it('should have the expected initial state', function () {
     assume(winston.default.transports).deep.equals([]);
     assume(winston.level).equals('info');
   });
 
-  it('has expected methods', function () {
-    assume(winston.config).is.an('object');
-    ['createLogger', 'add', 'remove', 'clear', 'child']
-      .concat(Object.keys(winston.config.npm.levels))
-      .forEach(function (key) {
-        assume(winston[key]).is.a('function', 'winston.' + key);
-      });
-  });
-
-  it('exposes version', function () {
-    assume(winston.version).equals(require('../../package.json').version);
-  });
-
-  it.todo('abstract-winston-logger');
-
-  //
-  // TODO: Migrate this test once abstract-winston-{transport,logger}
-  // test suite modules are completed.
-  //
-  // "the log() method": helpers.testNpmLevels(winston, "should respond without an error", function (err) {
-  //   assert.isNull(err);
-  // })
-
-  describe('deprecates winston < 3.0.0 properties', function () {
-    var deprecated = {
-      functions: ['addRewriter', 'addFilter', 'cli', 'clone', 'extend'],
-      properties: ['emitErrs', 'levelLength', 'padLevels', 'stripColors']
-    };
-
-    deprecated.functions.forEach(function (prop) {
-      it(format('.%s()', prop), function () {
-        assume(winston[prop]).throws();
-      });
+  describe('exposed interface', function () {
+    const expectedMethods = [
+      'log',
+      'query',
+      'stream',
+      'add',
+      'remove',
+      'clear',
+      'profile',
+      'startTimer',
+      'handleExceptions',
+      'unhandleExceptions',
+      'handleRejections',
+      'unhandleRejections',
+      'configure',
+      'child',
+      'createLogger'
+    ];
+    it.each(expectedMethods)('should expose a method of "%s()"', function (method) {
+      const actualMethod = winston[method];
+      assume(actualMethod).is.a('function', 'winston.' + method);
+      assume(actualMethod).does.not.throw();
     });
 
-    deprecated.properties.forEach(function (prop) {
-      it(format('.%s', prop), function () {
-        assume(function () {
-          var value = winston[prop];
-        }).throws();
-      });
+    const expectedProperties = [
+      { property: 'level', type: 'string' },
+      { property: 'exceptions', type: 'object' },
+      { property: 'rejections', type: 'object' },
+      { property: 'exitOnError', type: 'boolean' }
+    ];
+    it.each(expectedProperties)('should expose a property of "$property"', function ({ property, type }) {
+      const actualProperty = winston[property];
+      assume(actualProperty).is.of.a(type);
+      assume(actualProperty).does.not.throw();
+    });
+
+    const expectedLevelMethods = [
+      'error',
+      'warn',
+      'info',
+      'http',
+      'verbose',
+      'debug',
+      'silly'
+    ];
+    it.each(expectedLevelMethods)('should expose a level method of "%s()"', function (levelMethod) {
+      const actualLevelMethod = winston[levelMethod];
+      assume(actualLevelMethod).is.a('function', 'winston.' + levelMethod);
+      assume(actualLevelMethod).does.not.throw();
+    });
+
+    it('exposes the configuration', function () {
+      assume(winston.config).is.an('object');
+    });
+
+    it('exposes the version', function () {
+      assume(winston.version).equals(require('../../package.json').version);
+    });
+  });
+
+
+  describe('Deprecated Winston properties from < v3.x', function () {
+    const deprecatedFunctions = ['addRewriter', 'addFilter', 'cli', 'clone', 'extend'];
+    const deprecatedProperties = ['emitErrs', 'levelLength', 'padLevels', 'stripColors'];
+
+
+    it.each(deprecatedFunctions)('should throw when the deprecated function "%s()" is invoked', function (functionName) {
+      const invokeFn = function () {
+        winston[functionName]();
+      };
+      assume(invokeFn).throws();
+    });
+
+    it.each(deprecatedProperties)('should throw when the deprecated property "%s" is accessed', function (property) {
+      const accessProperty = function () {
+        winston[property];
+      };
+      assume(accessProperty).throws();
     });
   });
 });
