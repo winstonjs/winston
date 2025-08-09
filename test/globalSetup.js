@@ -2,7 +2,7 @@ const path = require('path');
 const { rimraf } = require('rimraf');
 
 function cleanTestArtifacts() {
-  console.debug('Cleaning test artifacts...');
+  console.debug('\nCleaning test artifacts...');
   const testArtifacts = path.join(__dirname, 'fixtures', 'logs');
   rimraf.sync(path.join(testArtifacts, '*log*'), { glob: true });
 }
