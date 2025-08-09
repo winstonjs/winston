@@ -10,8 +10,8 @@ const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', '
 
 const { MESSAGE } = require('triple-beam');
 
-function removeFixtures() {
-  rimraf(path.join(testLogFixturesPath, 'test*'), { glob: true });
+async function removeFixtures() {
+  await rimraf(path.join(testLogFixturesPath, 'test*'), { glob: true });
 }
 function getFilePath(filename) {
   return path.join(testLogFixturesPath, filename);
@@ -55,16 +55,15 @@ describe('File Transport', function () {
       const logPayload = { level: 'info', [MESSAGE]: kbStr };
       transport.log(logPayload);
     }
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
-  beforeEach(() => {
-    removeFixtures();
+
+  beforeEach(async () => {
+    await removeFixtures();
   });
 
   afterEach(async () => {
-    removeFixtures();
-    // Allow time for file system operations to complete
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await removeFixtures();
   });
 
   describe('Filename Option', function () {
@@ -91,8 +90,6 @@ describe('File Transport', function () {
       });
 
       await logKbytesToTransport(transport, 4);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
 
       assertFileExists('testarchive.log');
       assertFileExists('testarchive_.log');
@@ -151,9 +148,6 @@ describe('File Transport', function () {
       await logKbytesToTransport(transport, 4, 'B');
       await logKbytesToTransport(transport, 4, 'C');
 
-      // Give file system operations time to complete archiving
-      await new Promise(resolve => setTimeout(resolve, 500));
-
       // Verify the expected files exist and their contents are correct
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log');
@@ -164,7 +158,7 @@ describe('File Transport', function () {
       assertFileContentsStartWith('testarchive.log');
       assertFileContentsStartWith('testarchive1.log', 'C');
       assertFileContentsStartWith('testarchive2.log', 'B');
-      // TODO: I would expect the first file that was rolled to be filled with the first log message
+      // FIX: I would expect the first file that was rolled to be filled with the first log message
       // assertFileContentsStartWith('testarchive3.log', 'A');
     });
 
@@ -179,9 +173,6 @@ describe('File Transport', function () {
       await logKbytesToTransport(transport, 4, 'B');
       await logKbytesToTransport(transport, 4, 'C');
 
-      // Give file system operations time to complete archiving
-      await new Promise(resolve => setTimeout(resolve, 500));
-
       // Verify the expected files exist
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log');
@@ -190,7 +181,7 @@ describe('File Transport', function () {
 
       // Verify the contents of the files are in the expected order
       assertFileContentsStartWith('testarchive.log');
-      // TODO: only two of the files are filled and are not in the expected order
+      // FIX: only two of the files are filled and are not in the expected order
       // assertFileContentsStartWith('testarchive1.log', 'A');
       // assertFileContentsStartWith('testarchive2.log', 'B');
       // assertFileContentsStartWith('testarchive3.log', 'C');
@@ -232,7 +223,7 @@ describe('File Transport', function () {
   });
 
 
-  // TODO: Rewrite these tests in mocha
+  // TODO: Reintroduce these tests
   //
   // "Error object in metadata #610": {
   //   topic: function () {

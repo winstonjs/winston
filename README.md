@@ -1234,12 +1234,15 @@ yarn add winston
 
 ## Run Tests
 
-All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and
-[`assume`][assume].  They can be run with `npm`.
-
 ``` bash
-npm test
+npm test # Runs all tests
+npm run test:unit # Runs all Unit tests with coverage
+npm run test:test # Runs all integration tests
+npm run test:test # Runs all integration tests
+npm run typescript:test # Runs tests verifying Typescript types
 ```
+
+All of the winston tests are written with [`jest`][jest]. Assertions use a mix of [`assume`][assume] and the built-in jest assertion library.
 
 #### Author: [Charlie Robbins]
 #### Contributors: [Jarrett Cruger], [David Hyde], [Chris Alderson]
@@ -1254,8 +1257,6 @@ npm test
 
 [RFC5424]: https://tools.ietf.org/html/rfc5424
 [util.format]: https://nodejs.org/dist/latest/docs/api/util.html#util_util_format_format_args
-[mocha]: https://mochajs.org
-[nyc]: https://github.com/istanbuljs/nyc
 [assume]: https://github.com/bigpipe/assume
 [logform]: https://github.com/winstonjs/logform#readme
 [winston-transport]: https://github.com/winstonjs/winston-transport
