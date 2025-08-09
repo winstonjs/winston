@@ -2,7 +2,7 @@ reporter:
   - text
   - lcov
 check-coverage: true
-branches: 61.51
-lines: 70.85
-functions: 70.00
-statements: 70.54
+branches: 64.04
+lines: 72.48
+functions: 74.54
+statements: 72.25
