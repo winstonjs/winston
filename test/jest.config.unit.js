@@ -9,10 +9,5 @@ module.exports = {
   testMatch: [
     '<rootDir>/test/unit/**/*.test.js'
   ],
-  collectCoverage: true,
-  collectCoverageFrom: [
-    './lib/**/*.js'
-  ],
-  // Reset mocks before each test to ensure clean state
-  resetMocks: true
+  collectCoverage: true
 };

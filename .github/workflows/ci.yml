@@ -31,18 +31,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+
       - name: Install Dependencies
         run: npm clean-install
+
       - name: Lint
         run: npm run lint
+
       - name: Unit Tests (with coverage)
         run: npm run test:unit
+
       - name: Integration Tests
         run: npm run test:integration
+
       - name: Report test coverage to Coveralls.io
         if: matrix.node == '20'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: TypeScript Test
-        run: npx --package typescript tsc --project test
+        run: npm run test:typescript
