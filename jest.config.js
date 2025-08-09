@@ -16,10 +16,10 @@ module.exports = {
   verbose: true,
   coverageThreshold: {
     global: {
-      functions: 70.00,
-      lines: 70.85,
-      statements: 70.54,
-      branches: 61.51
+      functions: 74.54,
+      lines: 72.48,
+      statements: 72.25,
+      branches: 64.04
     }
   }
 };
