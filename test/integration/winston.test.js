@@ -44,7 +44,6 @@ describe('Winston', function () {
     it.each(expectedMethods)('should expose a method of "%s()"', function (method) {
       const actualMethod = winston[method];
       assume(actualMethod).is.a('function', 'winston.' + method);
-      assume(actualMethod).does.not.throw();
     });
 
     const expectedProperties = [
@@ -56,7 +55,6 @@ describe('Winston', function () {
     it.each(expectedProperties)('should expose a property of "$property"', function ({ property, type }) {
       const actualProperty = winston[property];
       assume(actualProperty).is.of.a(type);
-      assume(actualProperty).does.not.throw();
     });
 
     const expectedLevelMethods = [

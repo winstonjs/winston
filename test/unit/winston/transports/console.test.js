@@ -132,12 +132,6 @@ describe('Console transport', function () {
   });
 });
 
-// NOTE: This results in less than obvious import side effects, by running tests that are exported from the
-// abstract-winston-transport module. What's the value of this?
-// require('abstract-winston-transport')({
-//   name: 'Console',
-//   Transport: winston.transports.Console
-// });
 
 // TODO(invalid-test): test is no longer valid as we don't have the vows dependency anymore
 // vows.describe('winston/transports/console').addBatch({

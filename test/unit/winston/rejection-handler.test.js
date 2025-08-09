@@ -7,7 +7,6 @@
  */
 
 const baseHandlerTests = require('../../helpers/handler-tests');
-const helpers = require('../../helpers');
 
 describe('UnhandledRejectionHandler', function () {
   jest.setTimeout(100);
@@ -17,7 +16,6 @@ describe('UnhandledRejectionHandler', function () {
     helper: 'rejectionHandler',
     setup: 'clearRejections',
     listener: 'unhandledRejection',
-    toggleSetting: 'handleRejections',
-    trigger: msg => helpers.reject(new Error(msg))
+    toggleSetting: 'handleRejections'
   });
 });

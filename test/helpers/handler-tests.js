@@ -3,7 +3,7 @@ const assume = require('assume');
 const helpers = require('.');
 const winston = require('../../lib/winston');
 
-module.exports = function ({ helper, listener, name, setup, toggleSetting, trigger }) {
+module.exports = function ({ helper, listener, name, setup, toggleSetting }) {
   describe('basics', function () {
     var handler;
 
