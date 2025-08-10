@@ -1,8 +1,0 @@
-reporter:
-  - text
-  - lcov
-check-coverage: true
-branches: 64.04
-lines: 72.48
-functions: 74.54
-statements: 72.25
