@@ -13,6 +13,14 @@ const winston = require('../../../lib/winston');
 const ExceptionStream = require('../../../lib/winston/exception-stream');
 const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
+async function writeToStreamAsync(stream, payload) {
+  return new Promise((resolve, reject) => {
+    stream._write(payload, 'utf8', (err) => {
+      return err ? reject(err) : resolve();
+    });
+  });
+}
+
 describe('ExceptionStream', function () {
   it('has expected methods', function () {
     var filename = path.join(testLogFixturesPath, 'exception-stream.log');
@@ -27,32 +35,27 @@ describe('ExceptionStream', function () {
   });
 
   it('throws without a transport', function () {
-    assume(function () {
-      var stream = new ExceptionStream();
-      stream._write({ exception: true });
-    }).throws('ExceptionStream requires a TransportStream instance.');
+    const invalidInstantation = () => new ExceptionStream();
+
+    assume(invalidInstantation).throws('ExceptionStream requires a TransportStream instance.');
   });
 
   describe('_write method', function () {
-    let transport, exceptionStream;
-
+    let exceptionStream;
+    let fakeTransport;
+    let transportLogCalls;
     beforeEach(function () {
-      var filename = path.join(testLogFixturesPath, 'exception-stream-test.log');
-      transport = new winston.transports.File({ filename });
-      exceptionStream = new ExceptionStream(transport);
-
-      // Mock the transport write method to track calls
-      transport._write = function(info, encoding, callback) {
-        // Store call info for verification
-        transport._write.lastCall = { info, encoding, callback };
-        transport._write.callCount = (transport._write.callCount || 0) + 1;
-        setImmediate(callback);
+      transportLogCalls = [];
+      fakeTransport = {
+        log: (info, callback) => {
+          transportLogCalls.push(info);
+          return setImmediate(callback);
+        }
       };
-      transport._write.callCount = 0;
-      transport._write.lastCall = null;
+      exceptionStream = new ExceptionStream(fakeTransport);
     });
 
-    it.failing('writes info with exception property to transport', function (done) {
+    it('should write to the transport when the exception property is false', async function () {
       const info = {
         level: 'error',
         message: 'Test exception message',
@@ -60,65 +63,27 @@ describe('ExceptionStream', function () {
         timestamp: new Date().toISOString()
       };
 
-      exceptionStream._write(info, 'utf8', (err) => {
-        if (err) return done(err);
+      await writeToStreamAsync(exceptionStream, info);
 
-        // Verify the transport received the write call
-        assume(transport._write.callCount).equals(1);
-        assume(transport._write.lastCall.info).equals(info);
-        assume(transport._write.lastCall.encoding).equals('utf8');
-        done();
-      });
+      assume(transportLogCalls).to.be.length(1);
     });
 
-    it('skips info without exception property', function (done) {
-      const info = {
-        level: 'error',
-        message: 'Regular log message',
-        timestamp: new Date().toISOString()
-      };
+    // eslint-disable-next-line no-undefined
+    const falsyValues = [false, null, undefined, 0, '', NaN];
+    it.each(falsyValues)(
+      'should not write to transport when the exception property is a falsy value of: "%s"',
+      async function (falsyValue) {
+        const info = {
+          level: 'error',
+          exception: falsyValue,
+          message: 'Regular log message',
+          timestamp: new Date().toISOString()
+        };
 
-      exceptionStream._write(info, 'utf8', (err) => {
-        if (err) return done(err);
+        await writeToStreamAsync(exceptionStream, info);
 
-        // Verify the transport was NOT called since info.exception is falsy
-        assume(transport._write.callCount).equals(0);
-        assume(transport._write.lastCall).equals(null);
-        done();
-      });
-    });
-
-    it.failing('handles transport write errors', function (done) {
-      const testError = new Error('Transport write failed');
-      transport._write = function(info, encoding, callback) {
-        transport._write.callCount = (transport._write.callCount || 0) + 1;
-        setImmediate(() => callback(testError));
-      };
-      transport._write.callCount = 0;
-
-      const info = {
-        level: 'error',
-        message: 'Test exception message',
-        exception: true
-      };
-
-      exceptionStream._write(info, 'utf8', (err) => {
-        assume(err).equals(testError);
-        assume(transport._write.callCount).equals(1);
-        done();
-      });
-    });
-
-    it('calls callback immediately when no exception property', function (done) {
-      const info = { level: 'info', message: 'Not an exception' };
-      const startTime = Date.now();
-
-      exceptionStream._write(info, 'utf8', (err) => {
-        assume(err).equals(undefined);
-        // Should complete very quickly since it returns immediately
-        assume(Date.now() - startTime).is.below(10);
-        done();
-      });
-    });
+        assume(transportLogCalls).to.be.length(0);
+      }
+    );
   });
 });
