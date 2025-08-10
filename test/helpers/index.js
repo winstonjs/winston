@@ -110,21 +110,6 @@ helpers.clearRejections = function () {
   };
 };
 
-/**
- * Throws an exception with the specified `msg`
- * @param {String} msg Error mesage to use
- */
-helpers.throw = function (msg) {
-  throw new Error(msg);
-};
-
-/**
- * Causes a Promise rejection with the specified `msg`
- * @param {String} msg Error mesage to use
- */
-helpers.reject = function (msg) {
-  return Promise.reject(msg);
-};
 
 /**
  * Attempts to unlink the specifyed `filename` ignoring errors

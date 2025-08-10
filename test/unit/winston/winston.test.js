@@ -7,7 +7,7 @@
  */
 
 const assume = require('assume');
-const winston = require('../../lib/winston');
+const winston = require('../../../lib/winston');
 
 describe('Winston', function () {
   it('should expose transports', function () {
@@ -77,7 +77,7 @@ describe('Winston', function () {
     });
 
     it('exposes the version', function () {
-      assume(winston.version).equals(require('../../package.json').version);
+      assume(winston.version).equals(require('../../../package.json').version);
     });
   });
 

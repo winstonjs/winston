@@ -4,11 +4,63 @@
 const assert = require('assert');
 const { rimraf } = require('rimraf');
 const fs = require('fs');
+const fsPromise = require('node:fs/promises');
 const path = require('path');
 const winston = require('../../../../lib/winston');
 const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
-
 const { MESSAGE } = require('triple-beam');
+
+/**
+ * Sends logs to the provided transport. Supports logging a specified total data size at a given chunk size.
+ *
+ * @param {Object} transport - The winston transport to log to.
+ * @param {Object} [opts={}] - Options for logging.
+ * @param {number} [opts.kbytes=1] - The number of kilobytes to log.
+ * @param {string} [opts.char='A'] - The character to use for logging.
+ * @param {number} [opts.chunkSize=1] - The size of each log chunk in kilobytes.
+ * @returns {Promise<void>} A promise that resolves when logging is complete.
+ */
+async function logToTransport(transport, opts = {}) {
+  const chunkSize = opts.chunkSize ?? 1; // Default chunk size to 1KB if not provided
+  const char = opts.char ?? 'A'; // Default character to 'A' if not provided
+  const totalKBytes = opts.kbytes ?? 1; // Default total size to 1KB if not provided
+
+  const bytesPerChunk = chunkSize * 1024 - 1; // Convert kilobytes to bytes and account for newline character
+  const kbStr = char.repeat(bytesPerChunk); // create chunk of desired size with specified character
+
+  for (let i = 0; i < totalKBytes; i++) {
+    const logPayload = { level: 'info', [MESSAGE]: kbStr };
+    await new Promise((resolve, reject) => {
+      transport.log(logPayload, (err) => {
+        return err ? reject() : resolve();
+      });
+    });
+  }
+}
+
+/**
+ * Waits for a file to exist by repeatedly checking for its presence.
+ *
+ * @param {string} filename - The name of the file to wait for.
+ * @param {number} [timeout=1000] - Maximum time to wait in milliseconds before throwing an error.
+ * @param {number} [interval=20] - Interval in milliseconds between file existence checks.
+ * @returns {Promise<void>} A promise that resolves when the file exists or rejects on timeout.
+ * @throws {Error} If the file does not exist after the timeout period.
+ */
+async function waitForFile(filename, timeout = 1000, interval = 20) {
+  const start = Date.now();
+  const filepath = getFilePath(filename);
+  while (Date.now() - start < timeout) {
+    try {
+      await fsPromise.access(filepath);
+      return; // File exists
+    } catch {
+      // File doesn't exist yet, keep waiting
+    }
+    await new Promise(r => setTimeout(r, interval));
+  }
+  throw new Error(`Timed out waiting for file: ${filename}`);
+}
 
 async function removeFixtures() {
   await rimraf(path.join(testLogFixturesPath, 'test*'), { glob: true });
@@ -36,7 +88,13 @@ const assertFileContentsStartWith = (filename, char) => {
     `Content of file ${filename} was not filled with ${char}`
   );
 };
-
+const assertFileSizeLessThan = (filename, maxSizeBytes) => {
+  const stats = fs.statSync(getFilePath(filename));
+  assert.ok(
+    stats.size <= maxSizeBytes,
+    `Expected file ${filename} to not exceed ${maxSizeBytes} bytes, but was ${stats.size} bytes`
+  );
+};
 
 describe('File Transport', function () {
   const defaultTransportOptions = {
@@ -44,19 +102,8 @@ describe('File Transport', function () {
     json: false,
     filename: 'testarchive.log',
     dirname: testLogFixturesPath,
-    maxsize: 4096,
-    maxFiles: 4
+    maxsize: 4096
   };
-
-  // Helper function to log 4KB of data to trigger file rotation
-  async function logKbytesToTransport(transport, kbytes, char = 'A') {
-    const kbStr = char.repeat(1023); // 1023 chars + newline = 1024 bytes per log
-    for (let i = 0; i < kbytes; i++) {
-      const logPayload = { level: 'info', [MESSAGE]: kbStr };
-      transport.log(logPayload);
-    }
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
 
   beforeEach(async () => {
     await removeFixtures();
@@ -64,6 +111,19 @@ describe('File Transport', function () {
 
   afterEach(async () => {
     await removeFixtures();
+  });
+
+  describe('Construction', () => {
+    const conflictingOptionTestCases = [
+      { stream: true, filename: true },
+      { stream: true, dirname: true },
+      { stream: true, maxsize: true }
+    ];
+    it.each(conflictingOptionTestCases)('should throw an error if conflicting options are provided', (opts) => {
+      const instantion = () => new winston.transports.File(opts);
+
+      assert.throws(instantion, 'Conflicting options did not result in an error');
+    });
   });
 
   describe('Filename Option', function () {
@@ -74,7 +134,8 @@ describe('File Transport', function () {
         filename: expeectedFilename
       });
 
-      await logKbytesToTransport(transport, 1);
+      await logToTransport(transport);
+      await waitForFile(expeectedFilename);
 
       assertFileExists(expeectedFilename);
     });
@@ -82,17 +143,20 @@ describe('File Transport', function () {
 
   describe('Rotation Format option', function () {
     it('should create multiple files correctly with rotation Function', async function () {
+      let i = 0;
       const transport = new winston.transports.File({
         ...defaultTransportOptions,
-        rotationFormat: () => {
-          return '_';
-        }
+        rotationFormat: () => `_${i++}`
       });
 
-      await logKbytesToTransport(transport, 4);
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive.log');
+
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive_1.log');
 
       assertFileExists('testarchive.log');
-      assertFileExists('testarchive_.log');
+      assertFileExists('testarchive_1.log');
     });
   });
 
@@ -103,15 +167,18 @@ describe('File Transport', function () {
         zippedArchive: true
       });
 
-      await logKbytesToTransport(transport, 1);
+      await logToTransport(transport, { kbytes: 1 });
+      await waitForFile('testarchive.log');
       assertFileExists('testarchive.log');
       assertFileDoesNotExist('testarchive1.log');
 
-      await logKbytesToTransport(transport, 4);
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive1.log');
       assertFileExists('testarchive.log.gz');
       assertFileExists('testarchive1.log');
 
-      await logKbytesToTransport(transport, 4);
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive2.log');
       assertFileExists('testarchive1.log.gz');
       assertFileExists('testarchive2.log');
     });
@@ -122,31 +189,133 @@ describe('File Transport', function () {
         zippedArchive: false
       });
 
-      await logKbytesToTransport(transport, 1);
+      await logToTransport(transport, { kbytes: 1 });
+      await waitForFile('testarchive.log');
       assertFileExists('testarchive.log');
       assertFileDoesNotExist('testarchive1.log');
 
-      await logKbytesToTransport(transport, 4);
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive1.log');
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log');
 
-      await logKbytesToTransport(transport, 4);
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive2.log');
+      assertFileExists('testarchive1.log');
+      assertFileExists('testarchive2.log');
+    });
+  });
+
+  describe('Maxsize option', function () {
+    it('should create a new file the configured max size is exceeded', async function () {
+      const transport = new winston.transports.File({
+        ...defaultTransportOptions,
+        maxsize: 2048
+      });
+
+      await logToTransport(transport, { kbytes: 1 });
+      await waitForFile('testarchive.log');
+
+      await logToTransport(transport, { kbytes: 2 });
+      await waitForFile('testarchive1.log');
+
+      // Verify both files exist after rotation
+      assertFileExists('testarchive.log');
+      assertFileExists('testarchive1.log');
+    });
+
+    it('should not exceed max size for any file', async function () {
+      const transport = new winston.transports.File({
+        ...defaultTransportOptions,
+        maxsize: 2048
+      });
+
+      await logToTransport(transport, { kbytes: 3 });
+      await waitForFile('testarchive.log');
+
+      await logToTransport(transport, { kbytes: 2 });
+      await waitForFile('testarchive1.log');
+      await waitForFile('testarchive2.log');
+
+      // Verify both files exist after rotation
+      assertFileSizeLessThan('testarchive.log', 2048);
+      assertFileSizeLessThan('testarchive1.log', 2048);
+      assertFileSizeLessThan('testarchive2.log', 2048);
+    });
+  });
+
+  describe('Maxfiles option', function () {
+    it('should not exceed the max files', async function () {
+      const transport = new winston.transports.File({
+        ...defaultTransportOptions,
+        maxsize: 2024, // Small size to trigger frequent rotations
+        maxFiles: 3, // Only allow 3 files total
+        lazy: true
+      });
+
+      // Log well beyond enough data to create 3 files
+      await logToTransport(transport);
+      await logToTransport(transport);
+      await logToTransport(transport);
+      await logToTransport(transport);
+      await logToTransport(transport);
+      await logToTransport(transport);
+      await logToTransport(transport);
+
+      // Wait for the last expected file
+      await new Promise(resolve => setTimeout(resolve, 5000));
+
+      // Should have 3 files total (maxFiles)
+      assertFileExists('testarchive.log');
+      assertFileExists('testarchive1.log');
+      assertFileDoesNotExist('testarchive3.log'); // This should not exist because maxFiles = 3
+    }, 10000);
+
+    it('should delete the oldest file when maxfiles is met', async function () {
+      const transport = new winston.transports.File({
+        ...defaultTransportOptions,
+        maxsize: 1024, // Small size to trigger frequent rotations
+        maxFiles: 2, // Only allow 2 files total
+        lazy: true // Ensure files are created immediately
+      });
+
+      // Create first log file
+      await logToTransport(transport);
+      await waitForFile('testarchive.log');
+
+      // Create second log file
+      await logToTransport(transport);
+      await waitForFile('testarchive1.log');
+
+      // Create third log file (should delete the oldest one)
+      await logToTransport(transport, { kbytes: 0.5 });
+      await waitForFile('testarchive2.log');
+
+      // Should only have 2 most recent files (maxFiles = 2)
+      assertFileDoesNotExist('testarchive.log'); // The oldest file should be deleted
       assertFileExists('testarchive1.log');
       assertFileExists('testarchive2.log');
     });
   });
 
   describe('Tailable option', function () {
+    // eslint-disable-next-line max-statements
     it('should write to original file and older files will be in ascending order', async function () {
       const transport = new winston.transports.File({
         ...defaultTransportOptions,
+        maxFiles: 4,
         tailable: true
       });
 
       // We need to log enough data to create 3 files of 4KB each = 12KB total
-      await logKbytesToTransport(transport, 4, 'A');
-      await logKbytesToTransport(transport, 4, 'B');
-      await logKbytesToTransport(transport, 4, 'C');
+      await logToTransport(transport, { kbytes: 4, char: 'A' });
+      await waitForFile('testarchive.log');
+      await logToTransport(transport, { kbytes: 4, char: 'B' });
+      await waitForFile('testarchive1.log');
+      await logToTransport(transport, { kbytes: 4, char: 'C' });
+      await waitForFile('testarchive2.log');
+      await logToTransport(transport, { kbytes: 1, char: 'D' });
+      await waitForFile('testarchive3.log');
 
       // Verify the expected files exist and their contents are correct
       assertFileExists('testarchive.log');
@@ -155,10 +324,11 @@ describe('File Transport', function () {
       assertFileExists('testarchive3.log');
 
       // Verify the contents of the files are in the expected order
-      assertFileContentsStartWith('testarchive.log');
+      assertFileContentsStartWith('testarchive.log', 'D');
       assertFileContentsStartWith('testarchive1.log', 'C');
       assertFileContentsStartWith('testarchive2.log', 'B');
       // FIX: I would expect the first file that was rolled to be filled with the first log message
+      // instead the file is empty. Investigation needed.
       // assertFileContentsStartWith('testarchive3.log', 'A');
     });
 
@@ -169,22 +339,27 @@ describe('File Transport', function () {
       });
 
       // We need to log enough data to create 3 files of 4KB each = 12KB total
-      await logKbytesToTransport(transport, 4, 'A');
-      await logKbytesToTransport(transport, 4, 'B');
-      await logKbytesToTransport(transport, 4, 'C');
+      await logToTransport(transport, { kbytes: 4, char: 'A' });
+      await waitForFile('testarchive.log');
+      await logToTransport(transport, { kbytes: 4, char: 'B' });
+      await waitForFile('testarchive1.log');
+      await logToTransport(transport, { kbytes: 4, char: 'C' });
+      await waitForFile('testarchive2.log');
 
       // Verify the expected files exist
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log');
       assertFileExists('testarchive2.log');
-      assertFileExists('testarchive2.log');
 
       // Verify the contents of the files are in the expected order
       assertFileContentsStartWith('testarchive.log');
-      // FIX: only two of the files are filled and are not in the expected order
+      // FIX: only two of the files are filled and are not in the expected order. File contents are as follows:
+      //   file testarchive.log  - empty
+      //   file testarchive1.log - 'B'
+      //   file testarchive2.log - 'C'
+      //   file testarchive3.log - empty
       // assertFileContentsStartWith('testarchive1.log', 'A');
       // assertFileContentsStartWith('testarchive2.log', 'B');
-      // assertFileContentsStartWith('testarchive3.log', 'C');
     });
   });
 
@@ -195,7 +370,8 @@ describe('File Transport', function () {
         lazy: true
       });
 
-      await logKbytesToTransport(transport, 4);
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive.log');
 
       assertFileExists('testarchive.log');
       assertFileDoesNotExist('testarchive1.log');
@@ -207,8 +383,8 @@ describe('File Transport', function () {
         lazy: false
       });
 
-      await logKbytesToTransport(transport, 4);
-
+      await logToTransport(transport, { kbytes: 4 });
+      await waitForFile('testarchive.log');
 
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log');

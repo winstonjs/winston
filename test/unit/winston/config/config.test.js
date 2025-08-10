@@ -8,7 +8,6 @@
 
 const assume = require('assume');
 const winston = require('../../../../lib/winston');
-const helpers = require('../../../helpers');
 
 describe('winston.config', function () {
   it('should have expected methods', function () {
