@@ -45,4 +45,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install proper types and run TypeScript Test
-        run: npm -D @types/node@${{ matrix.node }} && npx --package typescript tsc --project test
+        run: npm install -D @types/node@${{ matrix.node }} && npx --package typescript tsc --project test
