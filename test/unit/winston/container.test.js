@@ -86,4 +86,36 @@ describe('Container', function () {
       assume(all.someOtherLogger._readableState.pipes).equals(all.someLogger._readableState.pipes);
     });
   });
+
+  describe('getOrCreate', function () {
+    var container;
+    var defaultTest;
+
+    beforeEach(function () {
+      container = new winston.Container();
+    });
+
+    it('creates a new logger if not exists', function () {
+      defaultTest = container.getOrCreate('test-logger', {
+        defaultMeta: { foo: 'bar' }
+      });
+
+      assume(defaultTest.defaultMeta).deep.equals({ foo: 'bar' });
+    });
+
+    it('returns existing logger if already created (ignores new options)', function () {
+      const logger1 = container.getOrCreate('test-logger', {
+        defaultMeta: { foo: 'bar' }
+      });
+
+      const logger2 = container.getOrCreate('test-logger', {
+        defaultMeta: { baz: 'qux' }
+      });
+
+      assume(logger1).equals(logger2);
+
+      assume(logger2.defaultMeta).deep.equals({ foo: 'bar' });
+    });
+  });
+
 });
