@@ -24,7 +24,7 @@
     "stream"
   ],
   "dependencies": {
-    "@dabh/diagnostics": "^2.0.2",
+    "@dabh/diagnostics": "^2.0.5",
     "@colors/colors": "^1.6.0",
     "async": "^3.2.3",
     "is-stream": "^2.0.0",
