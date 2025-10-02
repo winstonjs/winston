@@ -44,5 +44,5 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: TypeScript Test
-        run: npx --package typescript tsc --project test
+      - name: Install proper types and run TypeScript Test
+        run: npm install -D @types/node@${{ matrix.node }} && npx --package typescript tsc --project test
