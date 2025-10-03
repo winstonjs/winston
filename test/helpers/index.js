@@ -110,21 +110,6 @@ helpers.clearRejections = function () {
   };
 };
 
-/**
- * Throws an exception with the specified `msg`
- * @param {String} msg Error mesage to use
- */
-helpers.throw = function (msg) {
-  throw new Error(msg);
-};
-
-/**
- * Causes a Promise rejection with the specified `msg`
- * @param {String} msg Error mesage to use
- */
-helpers.reject = function (msg) {
-  return Promise.reject(msg);
-};
 
 /**
  * Attempts to unlink the specifyed `filename` ignoring errors
@@ -225,76 +210,3 @@ helpers.assertLogger = function (logger, level) {
   });
 };
 
-/**
- * Asserts that the script located at `options.script` logs a single exception
- * (conforming to the ExceptionHandler structure) at the specified `options.logfile`.
- * @param  {Object} options Configuration for this test.
- * @returns {function} Test macro asserting that `options.script` performs the
- *                    expected behavior.
- */
-helpers.assertHandleExceptions = function (options) {
-  return function (done) {
-    var child = spawn('node', [options.script]);
-
-    if (process.env.DEBUG) {
-      child.stdout.pipe(process.stdout);
-      child.stderr.pipe(process.stdout);
-    }
-
-    helpers.tryUnlink(options.logfile);
-    child.on('exit', function () {
-      fs.readFile(options.logfile, function (err, data) {
-        assume(err).equals(null);
-        data = JSON.parse(data);
-
-        assume(data).is.an('object');
-        helpers.assertProcessInfo(data.process);
-        helpers.assertOsInfo(data.os);
-        helpers.assertTrace(data.trace);
-        if (options.message) {
-          assume(data.message).include('uncaughtException: ' + options.message);
-        }
-
-        done();
-      });
-    });
-  };
-};
-
-/**
- * Asserts that the script located at `options.script` logs a single rejection
- * (conforming to the RejectionHandler structure) at the specified `options.logfile`.
- * @param  {Object} options Configuration for this test.
- * @returns {function} Test macro asserting that `options.script` performs the
- *                    expected behavior.
- */
-helpers.assertHandleRejections = function (options) {
-  return function (done) {
-    var child = spawn('node', [options.script]);
-
-    if (process.env.DEBUG) {
-      child.stdout.pipe(process.stdout);
-      child.stderr.pipe(process.stdout);
-    }
-
-    helpers.tryUnlink(options.logfile);
-    child.on('exit', function () {
-      fs.readFile(options.logfile, function (err, data) {
-        assume(err).equals(null);
-        data = JSON.parse(data);
-
-        assume(data).is.an('object');
-        helpers.assertProcessInfo(data.process);
-        helpers.assertOsInfo(data.os);
-        helpers.assertTrace(data.trace);
-        if (options.message) {
-          assume(data.message).include(
-            'unhandledRejection: ' + options.message
-          );
-        }
-
-        done();
-      });
-    });
-  };
-};

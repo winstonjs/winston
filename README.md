@@ -1234,15 +1234,17 @@ yarn add winston
 
 ## Run Tests
 
-All of the winston tests are written with [`mocha`][mocha], [`nyc`][nyc], and
-[`assume`][assume].  They can be run with `npm`.
-
 ``` bash
-npm test
+npm test # Runs all tests
+npm run test:unit # Runs all Unit tests with coverage
+npm run test:integration # Runs all integration tests
+npm run test:typescript # Runs tests verifying Typescript types
 ```
 
+All of the winston tests are written with [jest]. Assertions use a mix of [assume] and the built-in jest assertion library.
+
 #### Author: [Charlie Robbins]
-#### Contributors: [Jarrett Cruger], [David Hyde], [Chris Alderson]
+#### Contributors: [Jarrett Cruger], [David Hyde], [Chris Alderson], [Jonathon Terry]
 
 [Transports]: #transports
 [Logging levels]: #logging-levels
@@ -1254,11 +1256,10 @@ npm test
 
 [RFC5424]: https://tools.ietf.org/html/rfc5424
 [util.format]: https://nodejs.org/dist/latest/docs/api/util.html#util_util_format_format_args
-[mocha]: https://mochajs.org
-[nyc]: https://github.com/istanbuljs/nyc
 [assume]: https://github.com/bigpipe/assume
 [logform]: https://github.com/winstonjs/logform#readme
 [winston-transport]: https://github.com/winstonjs/winston-transport
+[jest]: https://jestjs.io/
 
 [Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x
 
@@ -1269,3 +1270,4 @@ npm test
 [Jarrett Cruger]: https://github.com/jcrugzz
 [David Hyde]: https://github.com/dabh
 [Chris Alderson]: https://github.com/chrisalderson
+[Jonathon Terry]: https://github.com/maverick1872

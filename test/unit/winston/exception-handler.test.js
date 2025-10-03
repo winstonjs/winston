@@ -7,17 +7,15 @@
  */
 
 const baseHandlerTests = require('../../helpers/handler-tests');
-const helpers = require('../../helpers');
 
 describe('ExceptionHandler', function () {
-  this.timeout(100);
+  jest.setTimeout(100);
 
   baseHandlerTests({
     name: 'ExceptionHandler',
     helper: 'exceptionHandler',
     setup: 'clearExceptions',
     listener: 'uncaughtException',
-    toggleSetting: 'handleExceptions',
-    trigger: msg => helpers.throw(msg)
+    toggleSetting: 'handleExceptions'
   });
 });

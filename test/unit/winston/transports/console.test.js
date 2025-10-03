@@ -8,11 +8,9 @@
  *
  */
 
-const path = require('path');
 const assume = require('assume');
 const { LEVEL, MESSAGE } = require('triple-beam');
 const winston = require('../../../../lib/winston');
-const helpers = require('../../../helpers');
 const stdMocks = require('std-mocks');
 
 const defaultLevels = winston.config.npm.levels;
@@ -134,10 +132,6 @@ describe('Console transport', function () {
   });
 });
 
-require('abstract-winston-transport')({
-  name: 'Console',
-  Transport: winston.transports.Console
-});
 
 // TODO(invalid-test): test is no longer valid as we don't have the vows dependency anymore
 // vows.describe('winston/transports/console').addBatch({

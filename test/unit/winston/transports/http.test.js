@@ -116,7 +116,7 @@ describe('Http({ host, port, path })', function () {
     });
 
     it('test timeout reached', function (done) {
-      this.timeout(5000);
+      jest.setTimeout(5000);
       const httpTransport = new Http({
         host: host,
         port: server.address().port,

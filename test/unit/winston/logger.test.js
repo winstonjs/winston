@@ -10,8 +10,6 @@
 
 const assume = require('assume');
 const path = require('path');
-const stream = require('readable-stream');
-const util = require('util');
 const { EOL } = require('os');
 const isStream = require('is-stream');
 const stdMocks = require('std-mocks');
@@ -65,6 +63,78 @@ describe('Logger Instance', function () {
       assume(logger.transports.length).equals(1);
       assume(logger.transports[0].name).equals('console');
       assume(logger.format).not.equals(format);
+    });
+  });
+
+  describe('Get Highest Log Level', function () {
+    it('should return the highest log level', function () {
+      let logger = winston.createLogger();
+
+      const highestLogLevel = logger.getHighestLogLevel();
+
+      assume(highestLogLevel).equals(2);
+    });
+  });
+
+  describe('Is Log Level Enabled', function () {
+    const defaultLevelTestCases = [
+      'error',
+      'warn',
+      'info',
+      'http',
+      'verbose',
+      'debug',
+      'silly'
+    ];
+
+    it.each(defaultLevelTestCases)('should indicate "%s" level is enabled if logger is constructed with that level', function (level) {
+      let logger = winston.createLogger({level});
+
+      const isLevelEnabled = logger.isLevelEnabled(level);
+
+      assume(isLevelEnabled).to.be.true();
+    });
+
+    it('should only enable levels "info" and above by default', function () {
+      let logger = winston.createLogger();
+
+      const isHttpEnabled = logger.isLevelEnabled('http');
+      const isInfoEnabled = logger.isLevelEnabled('info');
+      const isWarnEnabled = logger.isLevelEnabled('warn');
+      const isErrorEnabled = logger.isLevelEnabled('error');
+
+      assume(isHttpEnabled).to.be.false();
+      assume(isInfoEnabled).to.be.true();
+      assume(isWarnEnabled).to.be.true();
+      assume(isErrorEnabled).to.be.true();
+    });
+
+    const invalidLevelTestCases = [
+      null,
+      undefined
+    ];
+    it.each(invalidLevelTestCases)('should indicate "%s" level is not enabled', function (level) {
+      let logger = winston.createLogger();
+
+      const isLevelEnabled = logger.isLevelEnabled(level);
+
+      assume(isLevelEnabled).to.be.false();
+    });
+
+    it('should indicate all levels are disabled if configured with a level of null', function () {
+      const logger = winston.createLogger({ level: null });
+
+      const levelEnabledResults = [];
+      levelEnabledResults.push(logger.isLevelEnabled('silly'));
+      levelEnabledResults.push(logger.isLevelEnabled('debug'));
+      levelEnabledResults.push(logger.isLevelEnabled('verbose'));
+      levelEnabledResults.push(logger.isLevelEnabled('http'));
+      levelEnabledResults.push(logger.isLevelEnabled('info'));
+      levelEnabledResults.push(logger.isLevelEnabled('warn'));
+      levelEnabledResults.push(logger.isLevelEnabled('error'));
+
+      const isEveryLevelDisabled = levelEnabledResults.every(result => result === false);
+      assume(isEveryLevelDisabled).to.be.true();
     });
   });
 
@@ -201,18 +271,13 @@ describe('Logger Instance', function () {
   });
 
   describe('Log Levels', function () {
-    it('report unknown levels', function (done) {
-      stdMocks.use();
-      let logger = helpers.createLogger(function (info) {
-      });
-      let expected = {message: 'foo', level: 'bar'};
-      logger.log(expected);
+    it('report unknown levels', function () {
+      const consoleErrorSpy = jest.spyOn(console, 'error');
+      let logger = winston.createLogger();
 
-      stdMocks.restore();
-      let output = stdMocks.flush();
+      logger.log({ message: 'foo', level: 'bar' });
 
-      assume(output.stderr).deep.equals(['[winston] Unknown logger level: bar\n']);
-      done();
+      assume(consoleErrorSpy.mock.calls[0]).deep.equals(['[winston] Unknown logger level: %s', 'bar']);
     });
 
     it('.<level>()', function (done) {
@@ -797,15 +862,7 @@ describe('Logger Instance', function () {
         logger.info(err);
       });
 
-      // TODO: This test needs finished or removed
-      it.skip(`.info('any string', new Error())`, function (done) {
-        const err = new Error('test');
-        const logger = helpers.createLogger(function (info) {
-          done();
-        });
-
-        logger.info(err);
-      });
+      it.todo(`https://github.com/winstonjs/winston/issues/2103`);
     });
   });
 
