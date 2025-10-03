@@ -60,11 +60,14 @@
   "types": "./index.d.ts",
   "scripts": {
     "lint": "eslint lib/*.js lib/winston/*.js lib/winston/**/*.js --resolve-plugins-relative-to ./node_modules/@dabh/eslint-config-populist",
-    "test": "rimraf test/fixtures/logs/* && mocha",
+    "lint:all": "eslint lib/**/*.js test/**/*.js --resolve-plugins-relative-to ./node_modules/@dabh/eslint-config-populist",
+    "pretest": "rimraf test/fixtures/logs/*",
+    "test": "mocha",
     "test:coverage": "nyc npm run test:unit",
     "test:unit": "mocha test/unit",
     "test:integration": "mocha test/integration",
-    "build": "rimraf dist && babel lib -d dist",
+    "prebuild": "rimraf dist",
+    "build": "babel lib -d dist",
     "prepublishOnly": "npm run build"
   },
   "engines": {
