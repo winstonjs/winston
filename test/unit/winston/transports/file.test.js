@@ -377,7 +377,7 @@ describe('File Transport', function () {
       assertFileDoesNotExist('testarchive1.log');
     });
 
-    it('should create log files on initialization when lazy is enabled', async function () {
+    it('should create log files on initializaiton when lazy is enabled', async function () {
       const transport = new winston.transports.File({
         ...defaultTransportOptions,
         lazy: false
@@ -388,7 +388,7 @@ describe('File Transport', function () {
 
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log');
-      assertFileDoesNotExist('testarchive2.log');
+      assertFileDoesNotExist('testarchive2.log', 'A');
     });
   });
 
