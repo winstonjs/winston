@@ -120,24 +120,24 @@ describe('File Transport', function () {
       { stream: true, maxsize: true }
     ];
     it.each(conflictingOptionTestCases)('should throw an error if conflicting options are provided', (opts) => {
-      const instantion = () => new winston.transports.File(opts);
+      const instantition = () => new winston.transports.File(opts);
 
-      assert.throws(instantion, 'Conflicting options did not result in an error');
+      assert.throws(instantition, 'Conflicting options did not result in an error');
     });
   });
 
   describe('Filename Option', function () {
     it('should log to the file with the given filename', async function () {
-      const expeectedFilename = 'testfilename.log';
+      const expectedFilename = 'testfilename.log';
       const transport = new winston.transports.File({
         ...defaultTransportOptions,
-        filename: expeectedFilename
+        filename: expectedFilename
       });
 
       await logToTransport(transport);
-      await waitForFile(expeectedFilename);
+      await waitForFile(expectedFilename);
 
-      assertFileExists(expeectedFilename);
+      assertFileExists(expectedFilename);
     });
   });
 
@@ -377,7 +377,7 @@ describe('File Transport', function () {
       assertFileDoesNotExist('testarchive1.log');
     });
 
-    it('should create log files on initializaiton when lazy is enabled', async function () {
+    it('should create log files on initialization when lazy is enabled', async function () {
       const transport = new winston.transports.File({
         ...defaultTransportOptions,
         lazy: false

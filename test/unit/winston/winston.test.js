@@ -1,5 +1,5 @@
 /*
- * logger-test.js: Tests for instances of the winston Logger
+ * winston.test.js: Tests for instances of the winston Logger
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
