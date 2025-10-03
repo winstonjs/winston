@@ -352,7 +352,8 @@ describe('File Transport', function () {
       assertFileExists('testarchive2.log');
 
       // Verify the contents of the files are in the expected order
-      assertFileContentsStartWith('testarchive.log');
+      // eslint-disable-next-line -- intentionally asserting file starts with no values
+      assertFileContentsStartWith('testarchive.log', undefined);
       // FIX: only two of the files are filled and are not in the expected order. File contents are as follows:
       //   file testarchive.log  - empty
       //   file testarchive1.log - 'B'
@@ -388,7 +389,7 @@ describe('File Transport', function () {
 
       assertFileExists('testarchive.log');
       assertFileExists('testarchive1.log');
-      assertFileDoesNotExist('testarchive2.log', 'A');
+      assertFileDoesNotExist('testarchive2.log');
     });
   });
 
