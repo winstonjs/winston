@@ -1244,7 +1244,7 @@ npm run test:typescript # Runs tests verifying Typescript types
 All of the winston tests are written with [jest]. Assertions use a mix of [assume] and the built-in jest assertion library.
 
 #### Author: [Charlie Robbins]
-#### Contributors: [Jarrett Cruger], [David Hyde], [Chris Alderson]
+#### Contributors: [Jarrett Cruger], [David Hyde], [Chris Alderson], [Jonathon Terry]
 
 [Transports]: #transports
 [Logging levels]: #logging-levels
@@ -1270,3 +1270,4 @@ All of the winston tests are written with [jest]. Assertions use a mix of [assum
 [Jarrett Cruger]: https://github.com/jcrugzz
 [David Hyde]: https://github.com/dabh
 [Chris Alderson]: https://github.com/chrisalderson
+[Jonathon Terry]: https://github.com/maverick1872
