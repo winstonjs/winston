@@ -1237,12 +1237,11 @@ yarn add winston
 ``` bash
 npm test # Runs all tests
 npm run test:unit # Runs all Unit tests with coverage
-npm run test:test # Runs all integration tests
-npm run test:test # Runs all integration tests
-npm run typescript:test # Runs tests verifying Typescript types
+npm run test:integration # Runs all integration tests
+npm run test:typescript # Runs tests verifying Typescript types
 ```
 
-All of the winston tests are written with [`jest`][jest]. Assertions use a mix of [`assume`][assume] and the built-in jest assertion library.
+All of the winston tests are written with [jest]. Assertions use a mix of [assume] and the built-in jest assertion library.
 
 #### Author: [Charlie Robbins]
 #### Contributors: [Jarrett Cruger], [David Hyde], [Chris Alderson]
@@ -1260,6 +1259,7 @@ All of the winston tests are written with [`jest`][jest]. Assertions use a mix o
 [assume]: https://github.com/bigpipe/assume
 [logform]: https://github.com/winstonjs/logform#readme
 [winston-transport]: https://github.com/winstonjs/winston-transport
+[jest]: https://jestjs.io/
 
 [Read the `winston@2.x` documentation]: https://github.com/winstonjs/winston/tree/2.x
 
