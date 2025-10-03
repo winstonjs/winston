@@ -1,0 +1,41 @@
+name: "Generate & Ship Release #ShipIt"
+
+on:
+  push:
+    tags:
+      - release-**
+jobs:
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Create release from tag
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          makeLatest: true
+          generateReleaseNotes: true
+
+  publish-version:
+    name: Publish Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: 'https://registry.npmjs.org'
+          scope: ${{ vars.NPM_SCOPE }} # If this is not an organization I have to specify this.
+
+      - name: Prepare for publish
+        run: npm ci --ignore-scripts
+
+      - name: Publish package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: npm publish --access public

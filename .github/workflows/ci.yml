@@ -3,18 +3,37 @@ name: CI Checks
 on:
   pull_request:
     branches:
-      - main
       - master
   push:
     branches:
-      - main
       - master
 
 permissions:
   contents: read #  to fetch code (actions/checkout)
 
 jobs:
-  Tests:
+  release_checks:
+    name: Release Checks
+    runs-on: ubuntu-latest
+    if: contains( github.event.pull_request.head.ref, 'release')
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Get version
+        run: |
+          echo "RELEASE_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
+
+      - name: Is valid release?
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if (process.env.RELEASE_VERSION.includes('RC')) {
+              core.setFailed('Release candidates are not valid releases!')
+            }
+
+  tests:
+    name: Libary Tests
     permissions:
       contents: read #  to fetch code (actions/checkout)
       checks: write #  to create new checks (coverallsapp/github-action)
@@ -31,18 +50,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+
       - name: Install Dependencies
-        run: npm clean-install
+        run: npm ci --ignore-scripts
+
       - name: Lint
         run: npm run lint
+
       - name: Integration Tests
         run: npm run test:integration
+
       - name: Test Coverage
         run: npm run test:coverage
+
       - name: Report test coverage to Coveralls.io
         if: matrix.node == '20'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: TypeScript Test
         run: npx --package typescript tsc --project test
