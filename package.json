@@ -26,7 +26,6 @@
 	"dependencies": {
 		"@dabh/diagnostics": "^2.0.8",
 		"@colors/colors": "^1.6.0",
-		"@dabh/diagnostics": "^2.0.2",
 		"async": "^3.2.3",
 		"is-stream": "^2.0.0",
 		"logform": "^2.7.0",
