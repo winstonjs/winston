@@ -20,6 +20,7 @@ const format = require('../../../lib/winston').format;
 const helpers = require('../../helpers');
 const mockTransport = require('../../helpers/mocks/mock-transport');
 const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
+const fs = require('fs');
 
 describe('Logger Instance', function () {
   describe('Configuration', function () {
@@ -695,8 +696,8 @@ describe('Logger Instance', function () {
 
       const expected = [
         'Now witness the power of the fully armed and operational logger',
-        'Consider the philosophical and metaphysical – BANANA BANANA BANANA',
-        'I was god once. I saw – you were doing well until everyone died.'
+        'Consider the philosophical and metaphysical – BANANA BANANA BANANA',
+        'I was god once. I saw – you were doing well until everyone died.'
       ];
 
       expected.forEach(msg => logger.info(msg));
@@ -1105,5 +1106,43 @@ describe('Logger Instance', function () {
         logger.log('info', err);
       });
     });
+  });
+});
+
+describe('Logger reconfiguration', function () {
+  it('should not throw write after end when reconfiguring file transport', function (done) {
+    this.timeout(10000); // Give plenty of time for file I/O
+  
+    const logFile1 = path.join(__dirname, '../../fixtures/logs/reconfig1.log');
+    const logFile2 = path.join(__dirname, '../../fixtures/logs/reconfig2.log');
+  
+    [logFile1, logFile2].forEach(f => { if (fs.existsSync(f)) fs.unlinkSync(f); });
+  
+    const logger = winston.createLogger({
+      transports: [
+        new winston.transports.File({ filename: logFile1 })
+      ]
+    });
+  
+    logger.on('error', (err) => {
+      console.error('Logger error:', err);
+      done(err);
+    });
+  
+    // Listen for finish event to ensure all logs are flushed
+    logger.on('finish', () => {
+      [logFile1, logFile2].forEach(f => { if (fs.existsSync(f)) fs.unlinkSync(f); });
+      done();
+    });
+  
+    logger.info('first log');
+    // Reconfigure with a new file transport
+    logger.configure({
+      transports: [
+        new winston.transports.File({ filename: logFile2 })
+      ]
+    });
+    logger.info('second log');
+    logger.end(); // This will flush and close all streams, triggering 'finish'
   });
 });
