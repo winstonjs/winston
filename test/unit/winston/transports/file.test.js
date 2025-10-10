@@ -439,5 +439,39 @@ describe('File Transport', function () {
   // "An instance of the File Transport": require('./transport')(winston.transports.File, {
   //   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
   // })
+
+  it('should create a log file with specific permissions (mode)', function (done) {
+    const logFile = path.join(__dirname, '../../fixtures/logs/permissioned.log');
+    const logger = winston.createLogger({
+      transports: [
+        new winston.transports.File({
+          filename: logFile,
+          mode: 0o660
+        })
+      ]
+    });
+  
+    // Catch logger errors
+    logger.on('error', (err) => {
+      done(err);
+    });
+  
+    logger.on('finish', () => {
+      try {
+        const stats = fs.statSync(logFile);
+        // Mask to get the permission bits only
+        const actualMode = (stats.mode & 0o777).toString(8);
+        // Accept both 660 and 640, since umask may mask out group write
+        assume(['660', '640']).includes(actualMode);
+        fs.unlinkSync(logFile);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+  
+    logger.info('check my permissions');
+    logger.end();
+  });
 });
 
