@@ -399,6 +399,85 @@ describe('File Transport', function () {
     it.todo('should write to the stream when logged to with expected object');
   });
 
+  describe('Flushing on end (issue #1504)', function () {
+    it('should flush all messages to file when logger.end() is called', async function () {
+      const expectedFilename = 'test-flush.log';
+      const expectedMessageCount = 100;
+
+      const logger = winston.createLogger({
+        transports: [
+          new winston.transports.File({
+            filename: expectedFilename,
+            dirname: testLogFixturesPath
+          })
+        ]
+      });
+
+      // Log multiple messages
+      for (let i = 0; i < expectedMessageCount; i++) {
+        logger.info(`message ${i}`);
+      }
+      logger.info('THE LAST MESSAGE');
+
+      // Wait for logger to finish
+      await new Promise((resolve) => {
+        logger.on('finish', resolve);
+        logger.end();
+      });
+
+      // Verify all messages were written
+      await waitForFile(expectedFilename);
+      const fileContents = fs.readFileSync(getFilePath(expectedFilename), 'utf8');
+      const lines = fileContents.split('\n').filter(l => l.trim());
+
+      assert.strictEqual(
+        lines.length,
+        expectedMessageCount + 1,
+        `Expected ${expectedMessageCount + 1} lines, got ${lines.length}`
+      );
+      assert.ok(
+        fileContents.includes('THE LAST MESSAGE'),
+        'File should contain THE LAST MESSAGE'
+      );
+    });
+
+    it('should flush all messages when transport finish event is used', async function () {
+      const expectedFilename = 'test-flush-transport.log';
+      const expectedMessageCount = 50;
+
+      const transport = new winston.transports.File({
+        filename: expectedFilename,
+        dirname: testLogFixturesPath
+      });
+
+      const logger = winston.createLogger({
+        transports: [transport]
+      });
+
+      // Log multiple messages
+      for (let i = 0; i < expectedMessageCount; i++) {
+        logger.info(`message ${i}`);
+      }
+
+      // Wait for transport to finish (original issue pattern)
+      await new Promise((resolve) => {
+        transport.on('finish', resolve);
+        logger.end();
+      });
+
+      // Verify all messages were written
+      await waitForFile(expectedFilename);
+      const fileContents = fs.readFileSync(getFilePath(expectedFilename), 'utf8');
+      const lines = fileContents.split('\n').filter(l => l.trim());
+
+      assert.strictEqual(
+        lines.length,
+        expectedMessageCount,
+        `Expected ${expectedMessageCount} lines, got ${lines.length}`
+      );
+    });
+  });
+
 
   // TODO: Reintroduce these tests
   //
