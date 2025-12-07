@@ -973,6 +973,8 @@ describe('Logger Instance', function () {
           assume(msg.message).equals('dummy error');
           assume(msg.stack).includes('logger.test.js');
           assume(msg.service).equals('user-service');
+          assume(msg.cause.message).equals('dummy error cause');
+          assume(msg.cause.stack).includes('logger.test.js');
           done();
         });
 
@@ -983,7 +985,7 @@ describe('Logger Instance', function () {
         });
 
         const childLogger = logger.child({service: 'user-service'});
-        childLogger.error(Error('dummy error'));
+        childLogger.error(Error('dummy error', { cause: Error('dummy error cause') }));
       });
 
       it('defaultMeta() autobinds correctly', (done) => {
