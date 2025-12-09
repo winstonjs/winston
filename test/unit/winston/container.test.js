@@ -23,6 +23,29 @@ describe('Container', function () {
       assume(container.get('default-test')).equals(defaultTest);
     });
 
+    it('.getAll(default-test)', function () {
+      container.add('appLogger');
+      container.add('serviceLogger');
+
+      var allLogger = container.getAll();
+      var appLogger = container.getAll(/^app/);
+      var matchLogg = container.getAll(/Logger$/);
+      var emptyLogg = container.getAll(/Library/);
+
+      assume(allLogger.size).equals(3);
+      assume(allLogger.has('appLogger')).true();
+      assume(allLogger.has('serviceLogger')).true();
+
+      assume(appLogger.size).equals(1);
+      assume(appLogger.has('appLogger')).true();
+
+      assume(matchLogg.size).equals(2);
+      assume(matchLogg.has('appLogger')).true();
+      assume(matchLogg.has('serviceLogger')).true();
+
+      assume(emptyLogg.size).equals(0);
+    });
+
     it('.has(default-test)', function () {
       assume(container.has('default-test')).true();
     });
