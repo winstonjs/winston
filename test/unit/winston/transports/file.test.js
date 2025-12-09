@@ -478,6 +478,153 @@ describe('File Transport', function () {
     });
   });
 
+  describe('Symlink Option', function () {
+    it('should not write to a symlink when allowSymlinks is false', async function () {
+      const targetFilename = 'target.log';
+      const symlinkFilename = 'symlink.log';
+      const targetPath = getFilePath(targetFilename);
+      const symlinkPath = getFilePath(symlinkFilename);
+
+      // Create target file
+      fs.writeFileSync(targetPath, 'initial content');
+
+      // Create symlink
+      try {
+        fs.symlinkSync(targetPath, symlinkPath);
+      } catch (err) {
+        if (err.code !== 'EEXIST') throw err;
+      }
+
+      const transport = new winston.transports.File({
+        dirname: testLogFixturesPath,
+        filename: symlinkFilename,
+        allowSymlinks: false
+      });
+
+      // We expect this to fail silently or emit an error, but definitely NOT write to target
+      // Using a small amount of data to avoid filling the buffer and hanging
+      await logToTransport(transport, { kbytes: 1 });
+
+      // Give it a moment to potentially flush (or fail)
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const content = fs.readFileSync(targetPath, 'utf8');
+      assert.strictEqual(
+        content,
+        'initial content',
+        'Target file should not be modified'
+      );
+    });
+
+    it('should not write to a symlink when allowSymlinks is false and flags is "w"', async function () {
+      const targetFilename = 'target_w.log';
+      const symlinkFilename = 'symlink_w.log';
+      const targetPath = getFilePath(targetFilename);
+      const symlinkPath = getFilePath(symlinkFilename);
+
+      // Create target file
+      fs.writeFileSync(targetPath, 'initial content');
+
+      // Create symlink
+      try {
+        fs.symlinkSync(targetPath, symlinkPath);
+      } catch (err) {
+        if (err.code !== 'EEXIST') throw err;
+      }
+
+      const transport = new winston.transports.File({
+        dirname: testLogFixturesPath,
+        filename: symlinkFilename,
+        allowSymlinks: false,
+        options: { flags: 'w' }
+      });
+
+      await logToTransport(transport, { kbytes: 1 });
+
+      // Give it a moment to potentially flush (or fail)
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const content = fs.readFileSync(targetPath, 'utf8');
+      assert.strictEqual(
+        content,
+        'initial content',
+        'Target file should not be modified'
+      );
+    });
+
+    it('should not write to a symlink when allowSymlinks is false and flags is number', async function () {
+      const targetFilename = 'target_num.log';
+      const symlinkFilename = 'symlink_num.log';
+      const targetPath = getFilePath(targetFilename);
+      const symlinkPath = getFilePath(symlinkFilename);
+
+      // Create target file
+      fs.writeFileSync(targetPath, 'initial content');
+
+      // Create symlink
+      try {
+        fs.symlinkSync(targetPath, symlinkPath);
+      } catch (err) {
+        if (err.code !== 'EEXIST') throw err;
+      }
+
+      const transport = new winston.transports.File({
+        dirname: testLogFixturesPath,
+        filename: symlinkFilename,
+        allowSymlinks: false,
+        /* eslint-disable no-bitwise */
+        options: { flags: fs.constants.O_APPEND | fs.constants.O_CREAT | fs.constants.O_WRONLY }
+        /* eslint-enable no-bitwise */
+      });
+
+      await logToTransport(transport, { kbytes: 1 });
+
+      // Give it a moment to potentially flush (or fail)
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const content = fs.readFileSync(targetPath, 'utf8');
+      assert.strictEqual(
+        content,
+        'initial content',
+        'Target file should not be modified'
+      );
+    });
+
+    it('should write to a symlink when allowSymlinks is true (default)', async function () {
+      const targetFilename = 'target_default.log';
+      const symlinkFilename = 'symlink_default.log';
+      const targetPath = getFilePath(targetFilename);
+      const symlinkPath = getFilePath(symlinkFilename);
+
+      // Create target file
+      fs.writeFileSync(targetPath, 'initial content');
+
+      // Create symlink
+      try {
+        fs.symlinkSync(targetPath, symlinkPath);
+      } catch (err) {
+        if (err.code !== 'EEXIST') throw err;
+      }
+
+      const transport = new winston.transports.File({
+        dirname: testLogFixturesPath,
+        filename: symlinkFilename
+        // allowSymlinks: true is default
+      });
+
+      await logToTransport(transport, { kbytes: 1 });
+
+      // Wait for write
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const content = fs.readFileSync(targetPath, 'utf8');
+      assert.notStrictEqual(
+        content,
+        'initial content',
+        'Target file should be modified'
+      );
+    });
+  });
 
   // TODO: Reintroduce these tests
   //
