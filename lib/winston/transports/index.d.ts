@@ -36,6 +36,8 @@ declare namespace winston {
     eol?: string;
     tailable?: boolean;
     lazy?: boolean;
+    mode?: number;
+    dirMode?: number;
   }
 
   interface FileTransportInstance extends Transport {

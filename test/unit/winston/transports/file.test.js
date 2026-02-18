@@ -479,6 +479,48 @@ describe('File Transport', function () {
   });
 
 
+  describe('Mode option', function () {
+    it('should pass mode to the write stream options', function () {
+      const transport = new winston.transports.File({
+        filename: 'testmode.log',
+        dirname: testLogFixturesPath,
+        mode: 0o640
+      });
+
+      assert.strictEqual(transport.options.mode, 0o640);
+    });
+
+    it('should not set mode on stream options when mode is not provided', function () {
+      const transport = new winston.transports.File({
+        filename: 'testmode-default.log',
+        dirname: testLogFixturesPath
+      });
+
+      assert.strictEqual(transport.options.mode, undefined);
+    });
+  });
+
+  describe('DirMode option', function () {
+    it('should store dirMode when provided', function () {
+      const transport = new winston.transports.File({
+        filename: 'testdirmode.log',
+        dirname: testLogFixturesPath,
+        dirMode: 0o750
+      });
+
+      assert.strictEqual(transport.dirMode, 0o750);
+    });
+
+    it('should default dirMode to null when not provided', function () {
+      const transport = new winston.transports.File({
+        filename: 'testdirmode-default.log',
+        dirname: testLogFixturesPath
+      });
+
+      assert.strictEqual(transport.dirMode, null);
+    });
+  });
+
   // TODO: Reintroduce these tests
   //
   // "Error object in metadata #610": {
