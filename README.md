@@ -1271,3 +1271,20 @@ All of the winston tests are written with [jest]. Assertions use a mix of [assum
 [David Hyde]: https://github.com/dabh
 [Chris Alderson]: https://github.com/chrisalderson
 [Jonathon Terry]: https://github.com/maverick1872
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'app.log' })
+  ]
+});
+
+logger.info('Application started');
+logger.error('Example error message');
+
