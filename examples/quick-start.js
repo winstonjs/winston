@@ -97,3 +97,14 @@ logger.warn('Maybe important error: ', new Error('Error passed as meta'));
 logger.log('error', 'Important error: ', new Error('Error passed as meta'));
 
 logger.error(new Error('Error as info'));
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'debug',
+  format: winston.format.simple(),
+  transports: [new winston.transports.Console()]
+});
+
+logger.info('Server started');
+logger.warn('Low disk space warning');
+logger.error('Unexpected error occurred', { service: 'api-service' });
