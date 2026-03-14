@@ -97,3 +97,19 @@ logger.warn('Maybe important error: ', new Error('Error passed as meta'));
 logger.log('error', 'Important error: ', new Error('Error passed as meta'));
 
 logger.error(new Error('Error as info'));
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'app.log' })
+  ]
+});
+
+logger.info('Application started');
+logger.error('Example error message');
