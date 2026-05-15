@@ -988,6 +988,31 @@ describe('Logger Instance', function () {
         childLogger.error(Error('dummy error', { cause: Error('dummy error cause') }));
       });
 
+it('preserves prototype of info object in child logger', (done) => {
+        class CustomError extends Error {
+          constructor(message) {
+            super(message);
+            this.custom = true;
+          }
+        }
+
+        const assertFn = ((msg) => {
+          assume(msg.level).equals('error');
+          assume(msg.custom).is.true();
+          assume(msg.requestId).equals('123');
+          done();
+        });
+
+        const logger = winston.createLogger({
+          transports: [
+            mockTransport.createMockTransport(assertFn)
+          ]
+        });
+
+        const childLogger = logger.child({ requestId: '123' });
+        childLogger.error(new CustomError('custom error'));
+      });
+
       it('defaultMeta() autobinds correctly', (done) => {
         const logger = helpers.createLogger(info => {
           assume(info.message).equals('test');
