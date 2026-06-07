@@ -24,9 +24,9 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - 16
-          - 18
-          - 20
+          - 22
+          - 24
+          - 26
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -46,7 +46,7 @@ jobs:
         run: npm run test:integration
 
       - name: Report test coverage to Coveralls.io
-        if: matrix.node == '20'
+        if: matrix.node == '24'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

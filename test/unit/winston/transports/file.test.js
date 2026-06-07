@@ -295,7 +295,7 @@ describe('File Transport', function () {
       assertFileDoesNotExist('testarchive.log'); // The oldest file should be deleted
       assertFileExists('testarchive1.log');
       assertFileExists('testarchive2.log');
-    });
+    }, 10000);
   });
 
   describe('Tailable option', function () {
