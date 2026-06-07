@@ -139,6 +139,64 @@ describe('File Transport', function () {
 
       assertFileExists(expectedFilename);
     });
+
+    it('should reuse an existing file that is under maxsize on open', async function () {
+      // Pre-create a non-empty log file that is smaller than maxsize so that,
+      // when the transport opens, stat() deterministically takes the
+      // "existing file with room" path. Without this, whether that path runs
+      // depends on leftover filesystem state between tests, which made coverage
+      // flaky across runners and Node versions.
+      fs.writeFileSync(getFilePath('testarchive.log'), 'preexisting\n');
+
+      const transport = new winston.transports.File({
+        ...defaultTransportOptions
+      });
+
+      await logToTransport(transport);
+      await waitForFile('testarchive.log');
+
+      assertFileExists('testarchive.log');
+      // The pre-existing content must be retained (appended to, not truncated).
+      const contents = fs.readFileSync(getFilePath('testarchive.log'), 'utf8');
+      assert.ok(
+        contents.startsWith('preexisting\n'),
+        'Expected the existing file to be reused rather than overwritten'
+      );
+    });
+  });
+
+  describe('Backpressure', function () {
+    it('should wait for drain and requeue logs when the stream buffer fills', async function () {
+      // No maxsize: keep this focused on backpressure without triggering rotation.
+      const transport = new winston.transports.File({
+        timestamp: true,
+        json: false,
+        filename: 'testbackpressure.log',
+        dirname: testLogFixturesPath
+      });
+
+      // The internal PassThrough has a 16KB highWaterMark, so a single message
+      // larger than that makes stream.write() return false synchronously (this is
+      // governed by the in-memory buffer, not disk speed, so it is deterministic
+      // on every machine). This exercises the backpressure path that was
+      // previously only hit nondeterministically by the file stress tests, which
+      // made coverage flaky across runners and Node versions.
+      const oversized = 'a'.repeat(32 * 1024);
+      const written = transport.log({ level: 'info', [MESSAGE]: oversized }, () => {});
+
+      assert.strictEqual(written, false, 'Expected an oversized write to report backpressure');
+      assert.strictEqual(transport._drain, true, 'Expected the transport to be draining after an oversized write');
+
+      // A second log that arrives while draining must take the requeue path; its
+      // callback only fires once the drain event has flushed the buffer and the
+      // queued log has been written. Awaiting it (with no fixed timeout) keeps the
+      // assertion robust regardless of how long draining takes under load.
+      await new Promise((resolve, reject) => {
+        transport.log({ level: 'info', [MESSAGE]: 'after-drain' }, err => err ? reject(err) : resolve());
+      });
+
+      assert.strictEqual(transport._drain, false, 'Expected draining to finish once the queued log was flushed');
+    });
   });
 
   describe('Rotation Format option', function () {
