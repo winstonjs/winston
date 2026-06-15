@@ -32,7 +32,7 @@
 		"one-time": "^1.0.0",
 		"readable-stream": "^3.4.0",
 		"safe-stable-stringify": "^2.3.1",
-		"stack-trace": "0.0.x",
+		"stack-trace": "1.0.x",
 		"triple-beam": "^1.3.0",
 		"winston-transport": "^4.9.0"
 	},
