@@ -105,3 +105,22 @@ describe('Create Logger', function () {
         extendedLogger.warn('a warning', {with: 'meta', test: 4});
     });
 });
+
+    it('level method with single-object arg preserves falsy message property', function (done) {
+        // Regression: `logger.info({ message: '', extra: 'x' })` should forward the
+        // original object, not wrap it as `{ message: { message: '', extra: 'x' } }`.
+        const logger = winston.createLogger({
+            level: 'info',
+            exitOnError: false,
+            transports: []
+        });
+
+        logger.write = function (info) {
+            assume(info.message).equals('');
+            assume(info.extra).equals('x');
+            assume(typeof info.message).equals('string');
+            done();
+        };
+
+        logger.info({ message: '', extra: 'x' });
+    });
