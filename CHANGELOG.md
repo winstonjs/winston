@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## UNRELEASED
+
+**TypeScript**
+- [#2528] Fix backward-compatible `TransformableInfo` type for logform 2.7.0+ breaking change
+
 ## [v3.9.0](https://github.com/winstonjs/winston/compare/v3.8.2...v3.9.0)
 ### Functionality changes
 * Handle undefined errors in getAllInfo in exception-handler in https://github.com/winstonjs/winston/pull/2208; thanks to new contributor @eivindrs
