@@ -37,7 +37,7 @@
 		"winston-transport": "^4.9.0"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.23.9",
+		"@babel/cli": "^8.0.1",
 		"@babel/core": "^7.24.0",
 		"@babel/preset-env": "^7.24.0",
 		"@dabh/eslint-config-populist": "^4.4.0",
