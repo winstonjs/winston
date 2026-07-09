@@ -94,6 +94,18 @@ The Console transport takes a few simple options:
 * __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `[]`)
 * __consoleWarnLevels__ Array of strings containing the levels to log using console.warn or to stderr (in Node.js) instead of stdout, for example `['warn', 'debug']`. (default `[]`)
 
+* **Note on Colorization:** The `colorize` option is no longer supported directly within the Console transport options in winston v3. To add colors to your console logs, you must use `winston.format.combine` and `winston.format.colorize()`. For example:
+  ```js
+  const logger = winston.createLogger({
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.simple()
+    ),
+    transports: [new winston.transports.Console()]
+  });
+  ```
+
+
 ### File Transport
 ``` js
 logger.add(new winston.transports.File(options));
