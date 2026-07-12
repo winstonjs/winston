@@ -19,7 +19,13 @@ const TransportStream = require('winston-transport');
 const format = require('../../../lib/winston').format;
 const helpers = require('../../helpers');
 const mockTransport = require('../../helpers/mocks/mock-transport');
-const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
+const testLogFixturesPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  'fixtures',
+  'logs'
+);
 
 describe('Logger Instance', function () {
   describe('Configuration', function () {
@@ -51,7 +57,7 @@ describe('Logger Instance', function () {
 
     it('.configure({ transports, format })', function () {
       let logger = winston.createLogger(),
-          format = logger.format;
+        format = logger.format;
 
       assume(logger.transports.length).equals(0);
 
@@ -87,13 +93,16 @@ describe('Logger Instance', function () {
       'silly'
     ];
 
-    it.each(defaultLevelTestCases)('should indicate "%s" level is enabled if logger is constructed with that level', function (level) {
-      let logger = winston.createLogger({level});
+    it.each(defaultLevelTestCases)(
+      'should indicate "%s" level is enabled if logger is constructed with that level',
+      function (level) {
+        let logger = winston.createLogger({ level });
 
-      const isLevelEnabled = logger.isLevelEnabled(level);
+        const isLevelEnabled = logger.isLevelEnabled(level);
 
-      assume(isLevelEnabled).to.be.true();
-    });
+        assume(isLevelEnabled).to.be.true();
+      }
+    );
 
     it('should only enable levels "info" and above by default', function () {
       let logger = winston.createLogger();
@@ -109,17 +118,17 @@ describe('Logger Instance', function () {
       assume(isErrorEnabled).to.be.true();
     });
 
-    const invalidLevelTestCases = [
-      null,
-      undefined
-    ];
-    it.each(invalidLevelTestCases)('should indicate "%s" level is not enabled', function (level) {
-      let logger = winston.createLogger();
+    const invalidLevelTestCases = [null, undefined];
+    it.each(invalidLevelTestCases)(
+      'should indicate "%s" level is not enabled',
+      function (level) {
+        let logger = winston.createLogger();
 
-      const isLevelEnabled = logger.isLevelEnabled(level);
+        const isLevelEnabled = logger.isLevelEnabled(level);
 
-      assume(isLevelEnabled).to.be.false();
-    });
+        assume(isLevelEnabled).to.be.false();
+      }
+    );
 
     it('should indicate all levels are disabled if configured with a level of null', function () {
       const logger = winston.createLogger({ level: null });
@@ -133,12 +142,14 @@ describe('Logger Instance', function () {
       levelEnabledResults.push(logger.isLevelEnabled('warn'));
       levelEnabledResults.push(logger.isLevelEnabled('error'));
 
-      const isEveryLevelDisabled = levelEnabledResults.every(result => result === false);
+      const isEveryLevelDisabled = levelEnabledResults.every(
+        result => result === false
+      );
       assume(isEveryLevelDisabled).to.be.true();
     });
   });
 
-  describe('Transports', function() {
+  describe('Transports', function () {
     describe('add', function () {
       it('should throw error when adding an invalid transport', function () {
         let logger = winston.createLogger();
@@ -149,12 +160,15 @@ describe('Logger Instance', function () {
 
       it('should add the expected transport', function (done) {
         let logger = winston.createLogger();
-        let expected = {message: 'foo', level: 'info'};
+        let expected = { message: 'foo', level: 'info' };
         let transport = new TransportStream({
           log: function (info) {
             assume(info.message).equals('foo');
             assume(info.level).equals('info');
-            assume(JSON.parse(info[MESSAGE])).deep.equals({level: 'info', message: 'foo'});
+            assume(JSON.parse(info[MESSAGE])).deep.equals({
+              level: 'info',
+              message: 'foo'
+            });
             done();
           }
         });
@@ -181,9 +195,11 @@ describe('Logger Instance', function () {
         });
 
         assume(logger.transports.length).equals(2);
-        assume(logger.transports.map(function (wrap) {
-          return wrap.transport || wrap;
-        })).deep.equals(transports);
+        assume(
+          logger.transports.map(function (wrap) {
+            return wrap.transport || wrap;
+          })
+        ).deep.equals(transports);
       });
     });
 
@@ -191,26 +207,33 @@ describe('Logger Instance', function () {
       it('should do nothing if transport was not added', function () {
         let transports = [
           new winston.transports.Console(),
-          new winston.transports.File({filename: path.join(testLogFixturesPath, 'filelog.log')})
+          new winston.transports.File({
+            filename: path.join(testLogFixturesPath, 'filelog.log')
+          })
         ];
 
-        let logger = winston.createLogger({transports: transports})
-            .remove(new winston.transports.Console());
+        let logger = winston
+          .createLogger({ transports: transports })
+          .remove(new winston.transports.Console());
 
         assume(logger.transports.length).equals(2);
-        assume(logger.transports.map(function (wrap) {
-          // Unwrap LegacyTransportStream instances
-          return wrap.transport || wrap;
-        })).deep.equals(transports);
+        assume(
+          logger.transports.map(function (wrap) {
+            // Unwrap LegacyTransportStream instances
+            return wrap.transport || wrap;
+          })
+        ).deep.equals(transports);
       });
 
       it('should remove transport when matching one is found', function () {
         let transports = [
           new winston.transports.Console(),
-          new winston.transports.File({filename: path.join(testLogFixturesPath, 'filelog.log')})
+          new winston.transports.File({
+            filename: path.join(testLogFixturesPath, 'filelog.log')
+          })
         ];
 
-        let logger = winston.createLogger({transports: transports});
+        let logger = winston.createLogger({ transports: transports });
 
         assume(logger.transports.length).equals(2);
         logger.remove(transports[0]);
@@ -277,7 +300,10 @@ describe('Logger Instance', function () {
 
       logger.log({ message: 'foo', level: 'bar' });
 
-      assume(consoleErrorSpy.mock.calls[0]).deep.equals(['[winston] Unknown logger level: %s', 'bar']);
+      assume(consoleErrorSpy.mock.calls[0]).deep.equals([
+        '[winston] Unknown logger level: %s',
+        'bar'
+      ]);
     });
 
     it('.<level>()', function (done) {
@@ -301,19 +327,25 @@ describe('Logger Instance', function () {
 
     it('default levels', function (done) {
       let logger = winston.createLogger();
-      let expected = {message: 'foo', level: 'debug'};
+      let expected = { message: 'foo', level: 'debug' };
 
       function logLevelTransport(level) {
         return new TransportStream({
           level: level,
           log: function (obj) {
             if (level === 'info') {
-              assume(obj).equals(undefined, 'Transport on level info should never be called');
+              assume(obj).equals(
+                undefined,
+                'Transport on level info should never be called'
+              );
             }
 
             assume(obj.message).equals('foo');
             assume(obj.level).equals('debug');
-            assume(JSON.parse(obj[MESSAGE])).deep.equals({level: 'debug', message: 'foo'});
+            assume(JSON.parse(obj[MESSAGE])).deep.equals({
+              level: 'debug',
+              message: 'foo'
+            });
             done();
           }
         });
@@ -323,9 +355,9 @@ describe('Logger Instance', function () {
       assume(logger.debug).is.a('function');
 
       logger
-          .add(logLevelTransport('info'))
-          .add(logLevelTransport('debug'))
-          .log(expected);
+        .add(logLevelTransport('info'))
+        .add(logLevelTransport('debug'))
+        .log(expected);
     });
 
     it('custom levels', function (done) {
@@ -337,19 +369,25 @@ describe('Logger Instance', function () {
         }
       });
 
-      let expected = {message: 'foo', level: 'test'};
+      let expected = { message: 'foo', level: 'test' };
 
       function filterLevelTransport(level) {
         return new TransportStream({
           level: level,
           log: function (obj) {
             if (level === 'bad') {
-              assume(obj).equals(undefined, 'transport on level "bad" should never be called');
+              assume(obj).equals(
+                undefined,
+                'transport on level "bad" should never be called'
+              );
             }
 
             assume(obj.message).equals('foo');
             assume(obj.level).equals('test');
-            assume(JSON.parse(obj[MESSAGE])).deep.equals({level: 'test', message: 'foo'});
+            assume(JSON.parse(obj[MESSAGE])).deep.equals({
+              level: 'test',
+              message: 'foo'
+            });
             done();
           }
         });
@@ -360,9 +398,9 @@ describe('Logger Instance', function () {
       assume(logger.ok).is.a('function');
 
       logger
-          .add(filterLevelTransport('bad'))
-          .add(filterLevelTransport('ok'))
-          .log(expected);
+        .add(filterLevelTransport('bad'))
+        .add(filterLevelTransport('ok'))
+        .log(expected);
     });
 
     it('sets transports levels', done => {
@@ -370,33 +408,39 @@ describe('Logger Instance', function () {
       const transport = new TransportStream({
         log(obj) {
           if (obj.level === 'info') {
-            assume(obj).equals(undefined, 'Transport on level info should never be called');
+            assume(obj).equals(
+              undefined,
+              'Transport on level info should never be called'
+            );
           }
 
           assume(obj.message).equals('foo');
           assume(obj.level).equals('error');
-          assume(JSON.parse(obj[MESSAGE])).deep.equals({level: 'error', message: 'foo'});
+          assume(JSON.parse(obj[MESSAGE])).deep.equals({
+            level: 'error',
+            message: 'foo'
+          });
           done();
         }
       });
 
       // Begin our test in the next tick after the pipe event is
       // emitted from the transport.
-      transport.once('pipe', () => setImmediate(() => {
-        const expectedError = {message: 'foo', level: 'error'};
-        const expectedInfo = {message: 'bar', level: 'info'};
+      transport.once('pipe', () =>
+        setImmediate(() => {
+          const expectedError = { message: 'foo', level: 'error' };
+          const expectedInfo = { message: 'bar', level: 'info' };
 
-        assume(logger.error).is.a('function');
-        assume(logger.info).is.a('function');
+          assume(logger.error).is.a('function');
+          assume(logger.info).is.a('function');
 
-        // Set the level
-        logger.level = 'error';
+          // Set the level
+          logger.level = 'error';
 
-        // Log the messages. "info" should never arrive.
-        logger
-            .log(expectedInfo)
-            .log(expectedError);
-      }));
+          // Log the messages. "info" should never arrive.
+          logger.log(expectedInfo).log(expectedError);
+        })
+      );
 
       logger = winston.createLogger({
         transports: [transport]
@@ -598,32 +642,29 @@ describe('Logger Instance', function () {
         assume(logger.isTestEnabled()).true();
         assume(logger.isOkEnabled()).true();
       });
-    })
+    });
   });
 
   describe('Transport Events', function () {
     it(`'finish' event awaits transports to emit 'finish'`, function (done) {
       const transports = [
         new TransportStream({
-          log: function () {
-          }
+          log: function () {}
         }),
         new TransportStream({
-          log: function () {
-          }
+          log: function () {}
         }),
         new TransportStream({
-          log: function () {
-          }
+          log: function () {}
         })
       ];
 
       const finished = [];
-      const logger = winston.createLogger({transports});
+      const logger = winston.createLogger({ transports });
 
       // Assert each transport emits finish
       transports.forEach((transport, i) => {
-        transport.on('finish', () => finished[i] = true);
+        transport.on('finish', () => (finished[i] = true));
       });
 
       // Manually end the last transport to simulate mixed
@@ -642,7 +683,7 @@ describe('Logger Instance', function () {
       setImmediate(() => logger.end());
     });
 
-    it('error', (done) => {
+    it('error', done => {
       const consoleTransport = new winston.transports.Console();
       const logger = winston.createLogger({
         transports: [consoleTransport]
@@ -656,7 +697,7 @@ describe('Logger Instance', function () {
       consoleTransport.emit('error', new Error());
     });
 
-    it('warn', (done) => {
+    it('warn', done => {
       const consoleTransport = new winston.transports.Console();
       const logger = winston.createLogger({
         transports: [consoleTransport]
@@ -669,14 +710,14 @@ describe('Logger Instance', function () {
       });
       consoleTransport.emit('warn', new Error());
     });
-  })
+  });
 
   describe('Formats', function () {
     it(`rethrows errors from user-defined formats`, function () {
       stdMocks.use();
       const logger = winston.createLogger({
         transports: [new winston.transports.Console()],
-        format: winston.format.printf((info) => {
+        format: winston.format.printf(info => {
           // Set a trap.
           if (info.message === 'ENDOR') {
             throw new Error('ITS A TRAP!');
@@ -706,7 +747,7 @@ describe('Logger Instance', function () {
       assume(actual.stdout).deep.equals(expected.map(msg => `${msg}${EOL}`));
       assume(actual.stderr).deep.equals([]);
     });
-  })
+  });
 
   describe('Profiling', function () {
     it('ending profiler with object argument should be included in output', function (done) {
@@ -725,7 +766,7 @@ describe('Logger Instance', function () {
         logger.profile('testing1', {
           something: 'ok',
           level: 'info'
-        })
+        });
       }, 100);
     });
 
@@ -749,7 +790,7 @@ describe('Logger Instance', function () {
         logger.profile('testing2', {
           something: 'ok',
           level: 'info'
-        })
+        });
       }, 100);
     });
 
@@ -801,7 +842,7 @@ describe('Logger Instance', function () {
           if (logged.length === 1) done();
         });
 
-        logger.info('Hello', {label: 'world'});
+        logger.info('Hello', { label: 'world' });
       });
 
       it(`.info('Hello %d') does not mutate unnecessarily with string interpolation tokens`, function (done) {
@@ -814,7 +855,7 @@ describe('Logger Instance', function () {
           if (logged.length === 1) done();
         });
 
-        logger.info('Hello %j', {label: 'world'}, {extra: true});
+        logger.info('Hello %j', { label: 'world' }, { extra: true });
       });
 
       it(`.info('Hello') and .info('Hello %d') preserve meta with splat format`, function (done) {
@@ -827,8 +868,8 @@ describe('Logger Instance', function () {
           if (logged.length === 2) done();
         }, format.splat());
 
-        logger.info('Hello', {label: 'world'});
-        logger.info('Hello %d', 100, {label: 'world'});
+        logger.info('Hello', { label: 'world' });
+        logger.info('Hello %d', 100, { label: 'world' });
       });
     });
 
@@ -868,75 +909,67 @@ describe('Logger Instance', function () {
 
   describe('Metadata Precedence', function () {
     describe('Should support child loggers & defaultMeta', () => {
-      it('sets child meta for text messages correctly', (done) => {
-        const assertFn = ((msg) => {
+      it('sets child meta for text messages correctly', done => {
+        const assertFn = msg => {
           assume(msg.level).equals('info');
           assume(msg.message).equals('dummy message');
           assume(msg.requestId).equals('451');
           done();
-        });
+        };
 
         const logger = winston.createLogger({
-          transports: [
-            mockTransport.createMockTransport(assertFn)
-          ]
+          transports: [mockTransport.createMockTransport(assertFn)]
         });
 
-        const childLogger = logger.child({requestId: '451'});
+        const childLogger = logger.child({ requestId: '451' });
         childLogger.info('dummy message');
       });
 
-      it('sets child meta for json messages correctly', (done) => {
-        const assertFn = ((msg) => {
+      it('sets child meta for json messages correctly', done => {
+        const assertFn = msg => {
           assume(msg.level).equals('info');
           assume(msg.message.text).equals('dummy');
           assume(msg.requestId).equals('451');
           done();
-        });
+        };
 
         const logger = winston.createLogger({
-          transports: [
-            mockTransport.createMockTransport(assertFn)
-          ]
+          transports: [mockTransport.createMockTransport(assertFn)]
         });
 
-        const childLogger = logger.child({requestId: '451'});
-        childLogger.info({text: 'dummy'});
+        const childLogger = logger.child({ requestId: '451' });
+        childLogger.info({ text: 'dummy' });
       });
 
-      it('merges child and provided meta correctly', (done) => {
-        const assertFn = ((msg) => {
+      it('merges child and provided meta correctly', done => {
+        const assertFn = msg => {
           assume(msg.level).equals('info');
           assume(msg.message).equals('dummy message');
           assume(msg.service).equals('user-service');
           assume(msg.requestId).equals('451');
           done();
-        });
+        };
 
         const logger = winston.createLogger({
-          transports: [
-            mockTransport.createMockTransport(assertFn)
-          ]
+          transports: [mockTransport.createMockTransport(assertFn)]
         });
 
-        const childLogger = logger.child({service: 'user-service'});
-        childLogger.info('dummy message', {requestId: '451'});
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.info('dummy message', { requestId: '451' });
       });
 
-      it('provided meta take precedence over defaultMeta', (done) => {
-        const assertFn = ((msg) => {
+      it('provided meta take precedence over defaultMeta', done => {
+        const assertFn = msg => {
           assume(msg.level).equals('info');
           assume(msg.message).equals('dummy message');
           assume(msg.service).equals('audit-service');
           assume(msg.requestId).equals('451');
           done();
-        });
+        };
 
         const logger = winston.createLogger({
-          defaultMeta: {service: 'user-service'},
-          transports: [
-            mockTransport.createMockTransport(assertFn)
-          ]
+          defaultMeta: { service: 'user-service' },
+          transports: [mockTransport.createMockTransport(assertFn)]
         });
 
         logger.info('dummy message', {
@@ -945,30 +978,28 @@ describe('Logger Instance', function () {
         });
       });
 
-      it('provided meta take precedence over child meta', (done) => {
-        const assertFn = ((msg) => {
+      it('provided meta take precedence over child meta', done => {
+        const assertFn = msg => {
           assume(msg.level).equals('info');
           assume(msg.message).equals('dummy message');
           assume(msg.service).equals('audit-service');
           assume(msg.requestId).equals('451');
           done();
-        });
+        };
 
         const logger = winston.createLogger({
-          transports: [
-            mockTransport.createMockTransport(assertFn)
-          ]
+          transports: [mockTransport.createMockTransport(assertFn)]
         });
 
-        const childLogger = logger.child({service: 'user-service'});
+        const childLogger = logger.child({ service: 'user-service' });
         childLogger.info('dummy message', {
           requestId: '451',
           service: 'audit-service'
         });
       });
 
-      it('handles error stack traces in child loggers correctly', (done) => {
-        const assertFn = ((msg) => {
+      it('handles error stack traces in child loggers correctly', done => {
+        const assertFn = msg => {
           assume(msg.level).equals('error');
           assume(msg.message).equals('dummy error');
           assume(msg.stack).includes('logger.test.js');
@@ -976,19 +1007,19 @@ describe('Logger Instance', function () {
           assume(msg.cause.message).equals('dummy error cause');
           assume(msg.cause.stack).includes('logger.test.js');
           done();
-        });
+        };
 
         const logger = winston.createLogger({
-          transports: [
-            mockTransport.createMockTransport(assertFn)
-          ]
+          transports: [mockTransport.createMockTransport(assertFn)]
         });
 
-        const childLogger = logger.child({service: 'user-service'});
-        childLogger.error(Error('dummy error', { cause: Error('dummy error cause') }));
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.error(
+          Error('dummy error', { cause: Error('dummy error cause') })
+        );
       });
 
-it('preserves prototype of info object in child logger', (done) => {
+      it('preserves prototype of info object in child logger', done => {
         class CustomError extends Error {
           constructor(message) {
             super(message);
@@ -996,24 +1027,22 @@ it('preserves prototype of info object in child logger', (done) => {
           }
         }
 
-        const assertFn = ((msg) => {
+        const assertFn = msg => {
           assume(msg.level).equals('error');
           assume(msg.custom).is.true();
           assume(msg.requestId).equals('123');
           done();
-        });
+        };
 
         const logger = winston.createLogger({
-          transports: [
-            mockTransport.createMockTransport(assertFn)
-          ]
+          transports: [mockTransport.createMockTransport(assertFn)]
         });
 
         const childLogger = logger.child({ requestId: '123' });
         childLogger.error(new CustomError('custom error'));
       });
 
-      it('defaultMeta() autobinds correctly', (done) => {
+      it('defaultMeta() autobinds correctly', done => {
         const logger = helpers.createLogger(info => {
           assume(info.message).equals('test');
           done();
@@ -1036,7 +1065,7 @@ it('preserves prototype of info object in child logger', (done) => {
           done();
         });
 
-        logger.log('info', 'Some super awesome log message')
+        logger.log('info', 'Some super awesome log message');
       });
 
       it(`.log(level, undefined) creates info with { message: undefined }`, function (done) {
@@ -1069,7 +1098,7 @@ it('preserves prototype of info object in child logger', (done) => {
       });
 
       it('.log(level, message, meta)', function (done) {
-        let meta = {one: 2};
+        let meta = { one: 2 };
         let logger = helpers.createLogger(function (info) {
           assume(info).is.an('object');
           assume(info.level).equals('info');
@@ -1084,48 +1113,64 @@ it('preserves prototype of info object in child logger', (done) => {
 
       it('.log(level, formatStr, ...splat)', function (done) {
         const format = winston.format.combine(
-            winston.format.splat(),
-            winston.format.printf(info => `${info.level}: ${info.message}`)
+          winston.format.splat(),
+          winston.format.printf(info => `${info.level}: ${info.message}`)
         );
 
         let logger = helpers.createLogger(function (info) {
           assume(info).is.an('object');
           assume(info.level).equals('info');
           assume(info.message).equals('100% such wow {"much":"javascript"}');
-          assume(info[SPLAT]).deep.equals([100, 'wow', {much: 'javascript'}]);
-          assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"}');
+          assume(info[SPLAT]).deep.equals([100, 'wow', { much: 'javascript' }]);
+          assume(info[MESSAGE]).equals(
+            'info: 100% such wow {"much":"javascript"}'
+          );
           done();
         }, format);
 
-        logger.log('info', '%d%% such %s %j', 100, 'wow', {much: 'javascript'});
+        logger.log('info', '%d%% such %s %j', 100, 'wow', {
+          much: 'javascript'
+        });
       });
 
       it('.log(level, formatStr, ...splat, meta)', function (done) {
         const format = winston.format.combine(
-            winston.format.splat(),
-            winston.format.printf(info => `${info.level}: ${info.message} ${JSON.stringify({thisIsMeta: info.thisIsMeta})}`)
+          winston.format.splat(),
+          winston.format.printf(
+            info =>
+              `${info.level}: ${info.message} ${JSON.stringify({ thisIsMeta: info.thisIsMeta })}`
+          )
         );
 
         let logger = helpers.createLogger(function (info) {
           assume(info).is.an('object');
           assume(info.level).equals('info');
           assume(info.message).equals('100% such wow {"much":"javascript"}');
-          assume(info[SPLAT]).deep.equals([100, 'wow', {much: 'javascript'}]);
+          assume(info[SPLAT]).deep.equals([100, 'wow', { much: 'javascript' }]);
           assume(info.thisIsMeta).true();
-          assume(info[MESSAGE]).equals('info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}');
+          assume(info[MESSAGE]).equals(
+            'info: 100% such wow {"much":"javascript"} {"thisIsMeta":true}'
+          );
           done();
         }, format);
 
-        logger.log('info', '%d%% such %s %j', 100, 'wow', {much: 'javascript'}, {thisIsMeta: true});
+        logger.log(
+          'info',
+          '%d%% such %s %j',
+          100,
+          'wow',
+          { much: 'javascript' },
+          { thisIsMeta: true }
+        );
       });
 
       it(`.log(level, new Error()) creates info with error cause`, function (done) {
-        const errCause = new Error("error cause");
+        const errCause = new Error('error cause');
         const err = new Error('test', { cause: errCause });
         const logger = helpers.createLogger(function (info) {
           assume(info).instanceOf(Error);
           assume(info).equals(err);
-          assume(info.cause).equals(errCause)
+          assume(info.cause).equals(errCause);
           done();
         });
 
@@ -1136,204 +1181,203 @@ it('preserves prototype of info object in child logger', (done) => {
 });
 
 describe('Lazy Logging', function () {
-    it('should NOT invoke function when log level is disabled', function () {
-      let invoked = false;
-      const logger = winston.createLogger({
-        level: 'info',
-        transports: [new winston.transports.Console()]
-      });
-
-      logger.debug(() => {
-        invoked = true;
-        return 'This should not be logged';
-      });
-
-      assume(invoked).to.be.false();
+  it('should NOT invoke function when log level is disabled', function () {
+    let invoked = false;
+    const logger = winston.createLogger({
+      level: 'info',
+      transports: [new winston.transports.Console()]
     });
 
-    it('should invoke function when log level is enabled', function (done) {
-      let invoked = false;
-      const logger = helpers.createLogger(function (info) {
-        assume(invoked).to.be.true();
-        assume(info.message).equals('Function was called');
-        assume(info.level).equals('debug');
-        done();
-      });
-
-      logger.level = 'debug';
-
-      logger.debug(() => {
-        invoked = true;
-        return 'Function was called';
-      });
+    logger.debug(() => {
+      invoked = true;
+      return 'This should not be logged';
     });
 
-    it('should support lazy logging with info level', function (done) {
-      let errorCalled = false;
-      let debugCalled = false;
-      const logger = winston.createLogger({
-        level: 'info',
-        transports: [
-          new TransportStream({
-            log: function (info) {
-              if (info.level === 'error') {
-                errorCalled = true;
-                assume(info.message).equals('Error message');
-              }
-              done();
+    assume(invoked).to.be.false();
+  });
+
+  it('should invoke function when log level is enabled', function (done) {
+    let invoked = false;
+    const logger = helpers.createLogger(function (info) {
+      assume(invoked).to.be.true();
+      assume(info.message).equals('Function was called');
+      assume(info.level).equals('debug');
+      done();
+    });
+
+    logger.level = 'debug';
+
+    logger.debug(() => {
+      invoked = true;
+      return 'Function was called';
+    });
+  });
+
+  it('should support lazy logging with info level', function (done) {
+    let errorCalled = false;
+    let debugCalled = false;
+    const logger = winston.createLogger({
+      level: 'info',
+      transports: [
+        new TransportStream({
+          log: function (info) {
+            if (info.level === 'error') {
+              errorCalled = true;
+              assume(info.message).equals('Error message');
             }
-          })
-        ]
-      });
+            done();
+          }
+        })
+      ]
+    });
 
-      // debug should NOT be called
+    // debug should NOT be called
+    logger.debug(() => {
+      debugCalled = true;
+      return 'Debug should not be called';
+    });
+
+    // error SHOULD be called
+    logger.error(() => 'Error message');
+
+    assume(debugCalled).to.be.false();
+    assume(errorCalled).to.be.true();
+  });
+
+  it('should handle function returning undefined as empty string', function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals('');
+      done();
+    });
+
+    logger.level = 'info';
+    logger.info(() => undefined);
+  });
+
+  it('should preserve hot-path optimization for single string argument', function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals('Regular string message');
+      assume(info.level).equals('info');
+      done();
+    });
+
+    logger.info('Regular string message');
+  });
+
+  it('should preserve hot-path optimization for single object argument', function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals('Object message');
+      assume(info.level).equals('info');
+      assume(info.customField).equals('customValue');
+      done();
+    });
+
+    logger.info({ message: 'Object message', customField: 'customValue' });
+  });
+
+  it('should be backwards compatible with string + metadata', function (done) {
+    const logger = helpers.createLogger(function (info) {
+      assume(info.message).equals('Message with metadata');
+      assume(info.level).equals('info');
+      assume(info.userId).equals(123);
+      done();
+    });
+
+    logger.info('Message with metadata', { userId: 123 });
+  });
+
+  it('should NOT invoke lazy function when level is disabled with child logger', function () {
+    let invoked = false;
+    const logger = winston.createLogger({
+      level: 'info',
+      transports: [new winston.transports.Console()]
+    });
+
+    const childLogger = logger.child({ requestId: '123' });
+
+    childLogger.debug(() => {
+      invoked = true;
+      return 'Child debug message';
+    });
+
+    assume(invoked).to.be.false();
+  });
+
+  it('should invoke lazy function when level is enabled with child logger', function (done) {
+    let invoked = false;
+    const logger = helpers.createLogger(function (info) {
+      assume(invoked).to.be.true();
+      assume(info.message).equals('Child log message');
+      assume(info.requestId).equals('123');
+      done();
+    });
+
+    logger.level = 'debug';
+    const childLogger = logger.child({ requestId: '123' });
+
+    childLogger.debug(() => {
+      invoked = true;
+      return 'Child log message';
+    });
+  });
+
+  it('should support lazy logging with isLevelEnabledFunctions', function () {
+    const logger = winston.createLogger({
+      level: 'warn',
+      transports: [new winston.transports.Console()]
+    });
+
+    assume(logger.isDebugEnabled()).to.be.false();
+    assume(logger.isInfoEnabled()).to.be.false();
+    assume(logger.isWarnEnabled()).to.be.true();
+    assume(logger.isErrorEnabled()).to.be.true();
+  });
+
+  it('should avoid expensive computations when level is disabled', function () {
+    let expensiveCallCount = 0;
+    const logger = winston.createLogger({
+      level: 'error',
+      transports: [new winston.transports.Console()]
+    });
+
+    // Simulate 100 expensive debug logs when debug is disabled
+    for (let i = 0; i < 100; i++) {
       logger.debug(() => {
-        debugCalled = true;
-        return 'Debug should not be called';
+        expensiveCallCount++;
+        return `Expensive computation ${i}`;
       });
+    }
 
-      // error SHOULD be called
-      logger.error(() => 'Error message');
+    assume(expensiveCallCount).equals(0);
+  });
 
-      assume(debugCalled).to.be.false();
-      assume(errorCalled).to.be.true();
+  it('should support lazy logging with custom levels', function (done) {
+    let customLevelCalled = false;
+    let logger = winston.createLogger({
+      levels: {
+        fatal: 0,
+        error: 1,
+        warn: 2,
+        info: 3,
+        debug: 4
+      },
+      transports: [
+        new TransportStream({
+          log: function (info) {
+            assume(customLevelCalled).to.be.true();
+            assume(info.level).equals('debug');
+            assume(info.message).equals('Custom level message');
+            done();
+          }
+        })
+      ]
     });
 
-    it('should handle function returning undefined as empty string', function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals('');
-        done();
-      });
+    logger.level = 'debug';
 
-      logger.level = 'info';
-      logger.info(() => undefined);
-    });
-
-    it('should preserve hot-path optimization for single string argument', function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals('Regular string message');
-        assume(info.level).equals('info');
-        done();
-      });
-
-      logger.info('Regular string message');
-    });
-
-    it('should preserve hot-path optimization for single object argument', function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals('Object message');
-        assume(info.level).equals('info');
-        assume(info.customField).equals('customValue');
-        done();
-      });
-
-      logger.info({ message: 'Object message', customField: 'customValue' });
-    });
-
-    it('should be backwards compatible with string + metadata', function (done) {
-      const logger = helpers.createLogger(function (info) {
-        assume(info.message).equals('Message with metadata');
-        assume(info.level).equals('info');
-        assume(info.userId).equals(123);
-        done();
-      });
-
-      logger.info('Message with metadata', { userId: 123 });
-    });
-
-    it('should NOT invoke lazy function when level is disabled with child logger', function () {
-      let invoked = false;
-      const logger = winston.createLogger({
-        level: 'info',
-        transports: [new winston.transports.Console()]
-      });
-
-      const childLogger = logger.child({ requestId: '123' });
-
-      childLogger.debug(() => {
-        invoked = true;
-        return 'Child debug message';
-      });
-
-      assume(invoked).to.be.false();
-    });
-
-    it('should invoke lazy function when level is enabled with child logger', function (done) {
-      let invoked = false;
-      const logger = helpers.createLogger(function (info) {
-        assume(invoked).to.be.true();
-        assume(info.message).equals('Child log message');
-        assume(info.requestId).equals('123');
-        done();
-      });
-
-      logger.level = 'debug';
-      const childLogger = logger.child({ requestId: '123' });
-
-      childLogger.debug(() => {
-        invoked = true;
-        return 'Child log message';
-      });
-    });
-
-    it('should support lazy logging with isLevelEnabledFunctions', function () {
-      const logger = winston.createLogger({
-        level: 'warn',
-        transports: [new winston.transports.Console()]
-      });
-
-      assume(logger.isDebugEnabled()).to.be.false();
-      assume(logger.isInfoEnabled()).to.be.false();
-      assume(logger.isWarnEnabled()).to.be.true();
-      assume(logger.isErrorEnabled()).to.be.true();
-    });
-
-    it('should avoid expensive computations when level is disabled', function () {
-      let expensiveCallCount = 0;
-      const logger = winston.createLogger({
-        level: 'error',
-        transports: [new winston.transports.Console()]
-      });
-
-      // Simulate 100 expensive debug logs when debug is disabled
-      for (let i = 0; i < 100; i++) {
-        logger.debug(() => {
-          expensiveCallCount++;
-          return `Expensive computation ${i}`;
-        });
-      }
-
-      assume(expensiveCallCount).equals(0);
-    });
-
-    it('should support lazy logging with custom levels', function (done) {
-      let customLevelCalled = false;
-      let logger = winston.createLogger({
-        levels: {
-          fatal: 0,
-          error: 1,
-          warn: 2,
-          info: 3,
-          debug: 4
-        },
-        transports: [
-          new TransportStream({
-            log: function (info) {
-              assume(customLevelCalled).to.be.true();
-              assume(info.level).equals('debug');
-              assume(info.message).equals('Custom level message');
-              done();
-            }
-          })
-        ]
-      });
-
-      logger.level = 'debug';
-
-      logger.debug(() => {
-        customLevelCalled = true;
-        return 'Custom level message';
-      });
+    logger.debug(() => {
+      customLevelCalled = true;
+      return 'Custom level message';
     });
   });
 });
