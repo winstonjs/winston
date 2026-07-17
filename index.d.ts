@@ -13,7 +13,38 @@ import * as Transports from './lib/winston/transports/index';
 
 declare namespace winston {
   // Hoisted namespaces from other modules
-  export import format = logform.format;
+  // Backward-compatible TransformableInfo for logform 2.7.0+
+  // https://github.com/winstonjs/winston/issues/2528
+  interface TransformableInfo {
+    level: string;
+    message: any;
+    [key: string]: any;
+  }
+  type TransformFunction = (info: TransformableInfo, opts?: any) => TransformableInfo | boolean;
+  type FormatWrap = (opts?: any) => logform.Format;
+
+  function format(transform: TransformFunction): FormatWrap;
+  namespace format {
+    function align(): logform.Format;
+    function cli(opts?: logform.CliOptions): logform.Format;
+    function colorize(opts?: logform.ColorizeOptions): logform.Colorizer;
+    function combine(...formats: logform.Format[]): logform.Format;
+    function errors(opts?: object): logform.Format;
+    function json(opts?: logform.JsonOptions): logform.Format;
+    function label(opts?: logform.LabelOptions): logform.Format;
+    function logstash(): logform.Format;
+    function metadata(opts?: logform.MetadataOptions): logform.Format;
+    function ms(): logform.Format;
+    function padLevels(opts?: logform.PadLevelsOptions): logform.Format;
+    function prettyPrint(opts?: logform.PrettyPrintOptions): logform.Format;
+    function printf(templateFunction: (info: TransformableInfo) => string): logform.Format;
+    function simple(): logform.Format;
+    function splat(): logform.Format;
+    function timestamp(opts?: logform.TimestampOptions): logform.Format;
+    function uncolorize(opts?: logform.UncolorizeOptions): logform.Format;
+  }
+
+  // Re-export logform types for consumers who need them
   export import Logform = logform;
   export import config = Config;
   export import transports = Transports;
