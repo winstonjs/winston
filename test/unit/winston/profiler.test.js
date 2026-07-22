@@ -62,4 +62,31 @@ describe('Profiler', function () {
       new Profiler('1');
     }).throws('Logger is required for profiling');
   })
+
+  it('accepts a Logger created from a different copy of the `Logger` module (e.g. duplicated/hoisted install or test-runner module reset)', function () {
+    // Regression test for https://github.com/winstonjs/winston/issues/2432:
+    // `new Profiler(logger)` used to reject an otherwise valid winston
+    // Logger whenever it was constructed against a different in-memory
+    // copy of the `./logger` class (an `instanceof` check across two
+    // "copies" of the same module always fails, even though both copies
+    // define an identical class). This happens for reasons outside the
+    // caller's control, e.g. a duplicated nested `winston` install, or
+    // (as reported in the issue) a test runner such as Jest resetting its
+    // module registry between test files.
+    jest.resetModules();
+    const createLogger = require('../../../lib/winston/create-logger');
+    const logger = createLogger({});
+
+    // Force a fresh copy of `./logger` (and therefore `./profiler`, which
+    // requires it) to be loaded, simulating the module-duplication
+    // scenario from the issue.
+    jest.resetModules();
+    const FreshProfiler = require('../../../lib/winston/profiler');
+
+    let profiler;
+    assume(function () {
+      profiler = new FreshProfiler(logger);
+    }).not.throws();
+    assume(profiler.logger).equals(logger);
+  });
 });
