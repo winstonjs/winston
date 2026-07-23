@@ -57,3 +57,23 @@ logger.isInfoEnabled();
 logger.isVerboseEnabled();
 logger.isDebugEnabled();
 logger.isSillyEnabled();
+
+// Default (npm) levels, inferred without an explicit generic argument.
+const npmLogger = winston.createLogger({ });
+npmLogger.error('oops').warn('careful').info('fyi').http('req').verbose('v').debug('d').silly('s');
+
+// Syslog levels: only syslog-shaped methods should be available.
+const syslogLogger = winston.createLogger({
+    levels: winston.config.syslog.levels,
+});
+syslogLogger.emerg('down').alert('page').crit('bad').warning('hmm').notice('fyi').debug('d');
+// @ts-expect-error - the 'silly' method belongs to npm/cli levels, not syslog
+syslogLogger.silly('nope');
+
+// Fully custom levels: methods are inferred straight from the literal object.
+const customLogger = winston.createLogger({
+    levels: { ok: 0, meh: 1, bad: 2 },
+});
+customLogger.ok('fine').meh('eh').bad('uh oh');
+// @ts-expect-error - typo'd level name should not type-check
+customLogger.badd('typo');

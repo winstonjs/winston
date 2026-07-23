@@ -17,7 +17,7 @@ declare namespace winston {
     colors: AbstractConfigSetColors;
   }
 
-  interface CliConfigSetLevels extends AbstractConfigSetLevels {
+  interface CliConfigSetLevels {
     error: number;
     warn: number;
     help: number;
@@ -43,7 +43,7 @@ declare namespace winston {
     silly: string | string[];
   }
 
-  interface NpmConfigSetLevels extends AbstractConfigSetLevels {
+  interface NpmConfigSetLevels {
     error: number;
     warn: number;
     info: number;
@@ -63,7 +63,7 @@ declare namespace winston {
     silly: string | string[];
   }
 
-  interface SyslogConfigSetLevels extends AbstractConfigSetLevels {
+  interface SyslogConfigSetLevels {
     emerg: number;
     alert: number;
     crit: number;
