@@ -63,16 +63,16 @@ declare namespace winston {
     done(info?: any): boolean;
   }
 
-  interface LogEntry {
-    level: string;
+  interface LogEntry<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels> {
+    level: keyof Levels,
     message: string;
     [optionName: string]: any;
   }
 
-  interface LogMethod {
-    (level: string, message: string, ...meta: any[]): Logger;
-    (entry: LogEntry): Logger;
-    (level: string, message: any): Logger;
+  interface LogMethod<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels> {
+    (level: keyof Levels, message: string, ...meta: any[]): Logger<Levels>;
+    (entry: LogEntry<Levels>): Logger<Levels>;
+    (level: keyof Levels, message: any): Logger<Levels>;
   }
 
   interface LeveledLogMethod<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels> {
@@ -113,7 +113,7 @@ declare namespace winston {
     exitOnError: Function | boolean;
     defaultMeta?: any;
 
-    log: LogMethod;
+    log: LogMethod<Levels>;
     add(transport: Transport): this;
     remove(transport: Transport): this;
     clear(): this;
