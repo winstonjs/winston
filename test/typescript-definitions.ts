@@ -77,3 +77,6 @@ const customLogger = winston.createLogger({
 customLogger.ok('fine').meh('eh').bad('uh oh');
 // @ts-expect-error - typo'd level name should not type-check
 customLogger.badd('typo');
+
+// @ts-expect-error - level values must be numbers
+winston.createLogger({ levels: { ok: 'not a number' } });

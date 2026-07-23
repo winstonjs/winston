@@ -75,17 +75,17 @@ declare namespace winston {
     (level: string, message: any): Logger;
   }
 
-  interface LeveledLogMethod<Levels extends object = Config.NpmConfigSetLevels> {
+  interface LeveledLogMethod<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels> {
     (message: string, ...meta: any[]): Logger<Levels>;
     (message: any): Logger<Levels>;
     (infoObject: object): Logger<Levels>;
   }
 
-  type LeveledLogMethods<Levels extends object> = {
+  type LeveledLogMethods<Levels extends Config.AbstractConfigSetLevels<Levels>> = {
     [level in keyof Levels]: LeveledLogMethod<Levels>;
   };
 
-  interface LoggerOptions<Levels extends object = Config.NpmConfigSetLevels> {
+  interface LoggerOptions<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels> {
     levels?: Levels;
     silent?: boolean;
     format?: logform.Format;
@@ -99,7 +99,7 @@ declare namespace winston {
     rejectionHandlers?: any;
   }
 
-  class LoggerInstance<Levels extends object = Config.NpmConfigSetLevels> extends NodeJSStream.Transform {
+  class LoggerInstance<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels> extends NodeJSStream.Transform {
     constructor(options?: LoggerOptions<Levels>);
 
     silent: boolean;
@@ -141,7 +141,7 @@ declare namespace winston {
     isSillyEnabled(): boolean;
   }
 
-  type Logger<Levels extends object = Config.NpmConfigSetLevels> = LoggerInstance<Levels> & LeveledLogMethods<Levels>;
+  type Logger<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels> = LoggerInstance<Levels> & LeveledLogMethods<Levels>;
 
   const Logger: typeof LoggerInstance;
 
@@ -149,8 +149,8 @@ declare namespace winston {
     loggers: Map<string, Logger>;
     options: LoggerOptions;
 
-    add<Levels extends object = Config.NpmConfigSetLevels>(id: string, options?: LoggerOptions<Levels>): Logger<Levels>;
-    get<Levels extends object = Config.NpmConfigSetLevels>(id: string, options?: LoggerOptions<Levels>): Logger<Levels>;
+    add<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels>(id: string, options?: LoggerOptions<Levels>): Logger<Levels>;
+    get<Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels>(id: string, options?: LoggerOptions<Levels>): Logger<Levels>;
     has(id: string): boolean;
     close(id?: string): void;
 
@@ -161,7 +161,7 @@ declare namespace winston {
   let loggers: Container;
 
   let addColors: (target: Config.AbstractConfigSetColors) => any;
-  let createLogger: <Levels extends object = Config.NpmConfigSetLevels>(options?: LoggerOptions<Levels>) => Logger<Levels>;
+  let createLogger: <Levels extends Config.AbstractConfigSetLevels<Levels> = Config.NpmConfigSetLevels>(options?: LoggerOptions<Levels>) => Logger<Levels>;
 
   // Pass-through npm level methods routed to the default logger.
   let error: LeveledLogMethod;
