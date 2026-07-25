@@ -11,6 +11,8 @@ import * as Transport from 'winston-transport';
 import * as Config from './lib/winston/config/index';
 import * as Transports from './lib/winston/transports/index';
 
+type NoInfer<T> = [T][T extends any ? 0 : never];
+
 declare namespace winston {
   // Hoisted namespaces from other modules
   export import format = logform.format;
@@ -89,7 +91,7 @@ declare namespace winston {
     levels?: Levels;
     silent?: boolean;
     format?: logform.Format;
-    level?: string;
+    level?: NoInfer<keyof Levels>;
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
@@ -105,7 +107,7 @@ declare namespace winston {
     silent: boolean;
     format: logform.Format;
     levels: Levels;
-    level: string;
+    level: keyof Levels;
     transports: Transport[];
     exceptions: ExceptionHandler;
     rejections: RejectionHandler;
