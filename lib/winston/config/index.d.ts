@@ -4,9 +4,9 @@
 /// <reference types="node" />
 
 declare namespace winston {
-  interface AbstractConfigSetLevels {
-    [key: string]: number;
-  }
+  type AbstractConfigSetLevels<Levels = any> = {
+    [level in keyof Levels]: number;
+  };
 
   interface AbstractConfigSetColors {
     [key: string]: string | string[];
@@ -17,7 +17,7 @@ declare namespace winston {
     colors: AbstractConfigSetColors;
   }
 
-  interface CliConfigSetLevels extends AbstractConfigSetLevels {
+  type CliConfigSetLevels = AbstractConfigSetLevels<{
     error: number;
     warn: number;
     help: number;
@@ -28,7 +28,7 @@ declare namespace winston {
     verbose: number;
     input: number;
     silly: number;
-  }
+  }>;
 
   interface CliConfigSetColors extends AbstractConfigSetColors {
     error: string | string[];
@@ -43,7 +43,7 @@ declare namespace winston {
     silly: string | string[];
   }
 
-  interface NpmConfigSetLevels extends AbstractConfigSetLevels {
+  type NpmConfigSetLevels = AbstractConfigSetLevels<{
     error: number;
     warn: number;
     info: number;
@@ -51,7 +51,7 @@ declare namespace winston {
     verbose: number;
     debug: number;
     silly: number;
-  }
+  }>;
 
   interface NpmConfigSetColors extends AbstractConfigSetColors {
     error: string | string[];
@@ -63,7 +63,7 @@ declare namespace winston {
     silly: string | string[];
   }
 
-  interface SyslogConfigSetLevels extends AbstractConfigSetLevels {
+  type SyslogConfigSetLevels = AbstractConfigSetLevels<{
     emerg: number;
     alert: number;
     crit: number;
@@ -72,7 +72,7 @@ declare namespace winston {
     notice: number;
     info: number;
     debug: number;
-  }
+  }>;
 
   interface SyslogConfigSetColors extends AbstractConfigSetColors {
     emerg: string | string[];
