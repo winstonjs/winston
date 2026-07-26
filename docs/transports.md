@@ -153,7 +153,7 @@ The Stream transport takes a few simple options:
 ## Maintained by winston contributors
 
 Starting with `winston@0.3.0` an effort was made to remove any transport which added additional dependencies to `winston`. At the time there were several transports already in `winston` which will have slowly waned in usage. The
-following transports are **actively maintained by members of the winston Github
+following transports are **actively maintained by members of the winston GitHub
 organization.**
 
 * [MongoDB](#mongodb-transport)
@@ -273,7 +273,7 @@ Options:
 [@initd-sg/winston-cloudwatch](https://github.com/initdsg/winston-cloudwatch)
 
 ### Amazon DynamoDB Transport
-The [winston-dynamodb][36] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
+The [winston-dynamodb][36] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supported by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
 
 ``` js
 const winston = require('winston');
@@ -417,7 +417,7 @@ The Cloudant transport takes the following options:
     username    : Username for the Cloudant DB instance
     password    : Password for the Cloudant DB instance
     host        : Host for the Cloudant DB instance
-    db          : Name of the databasename to put logs in
+    db          : Name of the database to put logs in
     logstash    : Write logs in logstash format
 
 ### Datadog Transport
@@ -764,9 +764,9 @@ logger.info('User took the goggles', { userid: 1, user: { name: 'Rainier Wolfcas
 logger.warning('The goggles do nothing', { userid: 1 })
 ```
 
-### PostgresQL Transport
+### PostgreSQL Transport
 
-[@pauleliet/winston-pg-native](https://github.com/petpano/winston-pg-native) is a PostgresQL transport supporting Winston 3.X.
+[@pauleliet/winston-pg-native](https://github.com/petpano/winston-pg-native) is a PostgreSQL transport supporting Winston 3.X.
 
 ### Pusher Transport
 [winston-pusher](https://github.com/meletisf/winston-pusher) is a Pusher transport.

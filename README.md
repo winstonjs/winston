@@ -31,7 +31,7 @@ example, one may want error logs to be stored in a persistent remote location
 `winston` aims to decouple parts of the logging process to make it more
 flexible and extensible. Attention is given to supporting flexibility in log
 formatting (see: [Formats]) & levels (see: [Using custom logging levels]), and
-ensuring those APIs decoupled from the implementation of transport logging
+ensuring those APIs are decoupled from the implementation of transport logging
 (i.e. how the logs are stored / indexed, see: [Adding Custom Transports]) to
 the API that they exposed to the programmer.
 
@@ -80,11 +80,11 @@ if (process.env.NODE_ENV !== 'production') {
 ```
 
 You may also log directly via the default logger exposed by
-`require('winston')`, but this merely intended to be a convenient shared
+`require('winston')`, but this is merely intended to be a convenient shared
 logger to use throughout your application if you so choose.
 Note that the default logger doesn't have any transports by default.
-You need add transports by yourself, and leaving the default logger without any
-transports may produce a high memory usage issue.
+You need to add transports yourself, and leaving the default logger without any
+transports may lead to high memory usage.
 
 ## Table of contents
 
