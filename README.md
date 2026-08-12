@@ -1232,6 +1232,20 @@ npm install winston
 yarn add winston
 ```
 
+### Node.js compatibility
+
+`winston` requires **Node.js 16.9.0 or later**. This floor is set by the
+dependency tree rather than by `winston`'s own source: `@dabh/diagnostics`
+pulls in `@so-ric/colorspace`, which uses the logical-OR assignment operator
+(`||=`, Node 15+) and `Object.hasOwn` (Node 16.9+).
+
+As a matter of policy, `winston` does not support Node.js versions that have
+reached end-of-life, and only currently-maintained releases are exercised in
+CI. If you are pinned to an older runtime, install a `winston` release from
+before the offending dependency was published, or pin the transitive
+dependency yourself — for example, `@dabh/diagnostics@2.0.3` predates the
+`@so-ric/colorspace` switch. Neither workaround is supported or tested.
+
 ## Run Tests
 
 ``` bash
