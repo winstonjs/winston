@@ -3,6 +3,13 @@
  */
 module.exports = {
   collectCoverage: false,
+  transform: {
+    'node_modules/stack-trace/.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }],
+    '^.+\\.js$': 'babel-jest'
+  },
+  transformIgnorePatterns: [
+    '/node_modules/(?!(stack-trace)/)'
+  ],
   collectCoverageFrom: [
     '<rootDir>/lib/**/*.js'
   ],
