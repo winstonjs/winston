@@ -37,6 +37,21 @@ describe('Profiler', function () {
     }, 200);
   });
 
+  it('.done(message) uses the string as info.message', function (done) {
+    const logger = new Logger();
+    logger.write = function (info) {
+      assume(info).is.an('object');
+      assume(info.level).equals('info');
+      assume(info.durationMs).is.a('number');
+      assume(info.message).equals('testing1');
+      done();
+    };
+    var profiler = new Profiler(logger);
+    setTimeout(function () {
+      profiler.done('testing1');
+    }, 200);
+  });
+
   it('non logger object', function(){
     assume(function() {
       new Profiler(new Error('Unknown error'));
