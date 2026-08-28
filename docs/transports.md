@@ -94,6 +94,32 @@ The Console transport takes a few simple options:
 * __stderrLevels__ Array of strings containing the levels to log to stderr instead of stdout, for example `['error', 'debug', 'info']`. (default `[]`)
 * __consoleWarnLevels__ Array of strings containing the levels to log using console.warn or to stderr (in Node.js) instead of stdout, for example `['warn', 'debug']`. (default `[]`)
 
+#### Colorizing Console output
+
+`colorize` is **not** a Console transport option. It is a format, so it must be
+composed into the logger's `format` (or the transport's `format`) — not passed
+as a bare option like `colorize: true`:
+
+``` js
+const { createLogger, format, transports } = require('winston');
+const { colorize, combine, timestamp, printf } = format;
+
+const logger = createLogger({
+  format: combine(
+    colorize(),
+    timestamp(),
+    printf(({ level, message, timestamp }) => `${timestamp} ${level}: ${message}`)
+  ),
+  transports: [new transports.Console()]
+});
+```
+
+Putting `colorize()` **after** any `printf` (or other formatter that composes
+the final message string) has no visible effect, because the colors are applied
+to the already-final message. If you use a custom `printf` format, apply
+`colorize()` first in the `combine()` chain so the level text is colored before
+the final message is built.
+
 ### File Transport
 ``` js
 logger.add(new winston.transports.File(options));
