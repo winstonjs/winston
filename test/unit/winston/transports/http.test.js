@@ -13,7 +13,7 @@ const stringifyJson = require('safe-stable-stringify');
 const host = '127.0.0.1';
 const port = 0;
 
-function mockHttpServer(done, expectedLog) {
+function mockHttpServer(done, expectedLog, statusCode = 200) {
 
   const mock = hock.createHock();
   const opts = {
@@ -25,7 +25,7 @@ function mockHttpServer(done, expectedLog) {
     .post('/' + opts.path, opts.payload)
     .min(1)
     .max(1)
-    .reply(200);
+    .reply(statusCode);
 
   var server = http.createServer(mock.handler);
   server.listen(port, '0.0.0.0', done);
@@ -74,6 +74,55 @@ describe('Http({ host, port, path })', function () {
       }).on('error', assumeError).on('logged', function () {
         onLogged(context, done);
       });
+      httpTransport.log(dummyLog, assumeError);
+    });
+
+  });
+
+  describe('successful HTTP status codes', function () {
+
+    beforeEach(function (done) {
+      context = mockHttpServer(done, dummyLog, 204);
+      server = context.server;
+    });
+
+    it('should accept non-200 2xx responses', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        port: server.address().port,
+        path: 'log'
+      })
+        .on('warn', done)
+        .on('logged', function () {
+          onLogged(context, done);
+        });
+
+      httpTransport.log(dummyLog, assumeError);
+    });
+
+  });
+
+  describe('unsuccessful HTTP status codes', function () {
+
+    beforeEach(function (done) {
+      context = mockHttpServer(done, dummyLog, 300);
+      server = context.server;
+    });
+
+    it('should reject non-2xx responses', function (done) {
+      const httpTransport = new Http({
+        host: host,
+        port: server.address().port,
+        path: 'log'
+      })
+        .on('warn', function (err) {
+          assume(err.message).equals('Invalid HTTP Status Code: 300');
+          onLogged(context, done);
+        })
+        .on('logged', function () {
+          done(new Error('Unexpected logged event'));
+        });
+
       httpTransport.log(dummyLog, assumeError);
     });
 
