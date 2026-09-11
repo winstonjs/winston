@@ -89,8 +89,6 @@ declare namespace winston {
     exitOnError?: Function | boolean;
     defaultMeta?: any;
     transports?: Transport[] | Transport;
-    handleExceptions?: boolean;
-    handleRejections?: boolean;
     exceptionHandlers?: any;
     rejectionHandlers?: any;
   }
