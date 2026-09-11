@@ -57,3 +57,18 @@ logger.isInfoEnabled();
 logger.isVerboseEnabled();
 logger.isDebugEnabled();
 logger.isSillyEnabled();
+
+// `handleExceptions` / `handleRejections` are transport options, not logger
+// options: `Logger#configure` never reads them off the options object, so
+// accepting them here silently did nothing. They belong on a transport.
+winston.createLogger({
+    transports: [
+        new winston.transports.Console({ handleExceptions: true, handleRejections: true }),
+    ],
+});
+
+// @ts-expect-error handleExceptions is not a LoggerOptions field
+winston.createLogger({ handleExceptions: true });
+
+// @ts-expect-error handleRejections is not a LoggerOptions field
+winston.createLogger({ handleRejections: true });
