@@ -10,6 +10,53 @@ const assume = require('assume');
 const winston = require('../../../lib/winston');
 
 describe('Container', function () {
+  describe('closing empty-string ids', function () {
+    it('closes only the logger with an empty-string id', function () {
+      const container = new winston.Container();
+      const closed = [];
+      container.add('').on('close', () => closed.push(''));
+      container.add('other').on('close', () => closed.push('other'));
+
+      container.close('');
+
+      assume(container.has('')).false();
+      assume(container.has('other')).true();
+      assume(closed).deep.equals(['']);
+      container.close();
+    });
+
+    it('keeps other loggers open when the empty-string id does not exist', function () {
+      const container = new winston.Container();
+      const other = container.add('other');
+
+      container.close('');
+
+      assume(container.has('other')).true();
+      assume(container.get('other')).equals(other);
+      container.close();
+    });
+
+    it('closes all loggers when no id is supplied', function () {
+      const container = new winston.Container();
+      container.add('');
+      container.add('other');
+
+      container.close();
+
+      assume(container.loggers.size).equals(0);
+    });
+
+    it('closes all loggers when the id is null', function () {
+      const container = new winston.Container();
+      container.add('');
+      container.add('other');
+
+      container.close(null);
+
+      assume(container.loggers.size).equals(0);
+    });
+  });
+
   describe('no transports', function () {
     var container = new winston.Container();
     var defaultTest;
