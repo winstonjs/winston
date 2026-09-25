@@ -96,6 +96,7 @@ transports may produce a high memory usage issue.
   * [Creating your logger](#creating-your-own-logger)
   * [Streams, `objectMode`, and `info` objects](#streams-objectmode-and-info-objects)
 * [Formats]
+  * [Filtering before formatting](#filtering-before-formatting)
   * [Combining formats](#combining-formats)
   * [String interpolation](#string-interpolation)
   * [Filtering `info` Objects](#filtering-info-objects)
@@ -160,6 +161,7 @@ A logger accepts the following parameters:
 | `level`       | `'info'`                    | Log only if [`info.level`](#streams-objectmode-and-info-objects) is less than or equal to this level  |
 | `levels`      | `winston.config.npm.levels` | Levels (and colors) representing log priorities            |
 | `format`      | `winston.format.json`       | Formatting for `info` messages  (see: [Formats])           |
+| `filterBeforeFormat` | `false`             | Skip logger formatting for levels rejected by every standard transport (see [Filtering before formatting](#filtering-before-formatting)) |
 | `transports`  | `[]` _(No transports)_      | Set of logging targets for `info` messages                 |
 | `exitOnError` | `true`                      | If false, handled exceptions will not cause `process.exit` |
 | `silent`      | `false`                     | If true, all logs are suppressed |
@@ -335,6 +337,19 @@ const logger = createLogger({
 
 To see what built-in formats are available and learn more about creating your
 own custom logging formats, see [`logform`][logform].
+
+### Filtering before formatting
+
+Set `filterBeforeFormat: true` in `createLogger` or `configure` to skip logger-wide
+formatting when every standard transport rejects a record's level. It defaults
+to `false` and respects current transport-level overrides. Handler-marked records,
+no-transport buffering, unknown levels and custom write/filter implementations
+retain the existing path.
+
+Discarded records also disappear from the logger's readable output, and their
+formatters do not run. Enable this only if you do not rely on those records,
+formatter side effects (including stateful formats such as `ms()`), or routing
+changes made by a formatter. Later level changes cannot recover discarded records.
 
 ### Combining formats
 

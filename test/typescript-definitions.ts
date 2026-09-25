@@ -2,6 +2,7 @@ import * as winston from '../index';
 
 let logger: winston.Logger = winston.createLogger({
     level: 'info',
+    filterBeforeFormat: true,
     format: winston.format.json(),
     transports: [
         new winston.transports.Console({ level: 'info' }),
@@ -9,6 +10,8 @@ let logger: winston.Logger = winston.createLogger({
 });
 
 let err: Error = new Error('ttdt');
+const filterBeforeFormat: boolean = logger.filterBeforeFormat;
+logger.configure({ filterBeforeFormat: false });
 logger.error('The error was: ', err);
 logger.log('info', 'hey dude', { foo: 'bar' });
 logger.log({ level: 'info', message: 'hey dude', meta: { foo: 'bar' } });
