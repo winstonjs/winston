@@ -85,6 +85,7 @@ declare namespace winston {
     levels?: Config.AbstractConfigSetLevels;
     silent?: boolean;
     format?: logform.Format;
+    filterBeforeFormat?: boolean;
     level?: string;
     exitOnError?: Function | boolean;
     defaultMeta?: any;
@@ -100,6 +101,7 @@ declare namespace winston {
 
     silent: boolean;
     format: logform.Format;
+    filterBeforeFormat: boolean;
     levels: Config.AbstractConfigSetLevels;
     level: string;
     transports: Transport[];
