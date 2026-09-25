@@ -340,47 +340,16 @@ own custom logging formats, see [`logform`][logform].
 
 ### Filtering before formatting
 
-Logger-wide formats normally run before transports filter by level. If your
-formatting is expensive, opt in to filtering rejected levels first:
+Set `filterBeforeFormat: true` in `createLogger` or `configure` to skip logger-wide
+formatting when every standard transport rejects a record's level. It defaults
+to `false` and respects current transport-level overrides. Handler-marked records,
+no-transport buffering, unknown levels and custom write/filter implementations
+retain the existing path.
 
-``` js
-const logger = winston.createLogger({
-  level: 'info',
-  filterBeforeFormat: true,
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [new winston.transports.Console()]
-});
-
-logger.debug('Skipped before timestamp and JSON formatting');
-logger.info('Formatted and logged');
-```
-
-The option defaults to `false`. When enabled, a record is discarded before the
-logger-wide format if every pipe target uses the standard `winston-transport`
-write/filter implementation and rejects its level. Each transport's explicit
-level takes precedence over its parent's level. Current transport levels and
-level maps are checked for every record, so configuration changes take effect
-without recreating the logger. This applies to `log`, level convenience methods,
-child loggers and direct `write` calls.
-
-Opting in also filters the logger's readable output: discarded records do not
-reach `data` listeners or later reads, and their formats do not run. Do not enable
-this option if you need to observe these records, rely on formatter side effects
-(including stateful formats such as `ms()`), or change routing in a formatter.
-Filtering uses the configuration at the time the logger processes the record;
-later transport-level changes cannot recover records already discarded.
-
-Exception/rejection-marked records, records logged without transports, and
-unknown levels retain the existing format/write path. The optimization also
-falls back when a target is a generic stream, a legacy transport, has custom
-write/filter methods, or has an unrecognized effective level. With multiple
-installed copies of `winston-transport`, transports from another copy may take
-this fallback too. These conservative fallbacks keep buffering and custom
-routing intact. Setting only a transport's `silent` flag does not skip
-logger-wide formatting.
+Discarded records also disappear from the logger's readable output, and their
+formatters do not run. Enable this only if you do not rely on those records,
+formatter side effects (including stateful formats such as `ms()`), or routing
+changes made by a formatter. Later level changes cannot recover discarded records.
 
 ### Combining formats
 
