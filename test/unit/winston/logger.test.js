@@ -404,6 +404,40 @@ describe('Logger Instance', function () {
     });
 
     describe('Log Levels Enabled', function () {
+      it('reports no enabled levels while the logger is silent', function () {
+        const logger = winston.createLogger({ level: 'info', silent: true });
+        assume(logger.isLevelEnabled('info')).false();
+        assume(logger.isInfoEnabled()).false();
+
+        logger.silent = false;
+        assume(logger.isInfoEnabled()).true();
+      });
+
+      it('ignores silent transports when checking enabled levels', function () {
+        const transport = new winston.transports.Console({
+          level: 'debug',
+          silent: true
+        });
+        const logger = winston.createLogger({ transports: [transport] });
+        assume(logger.isInfoEnabled()).false();
+        assume(logger.isDebugEnabled()).false();
+
+        transport.silent = false;
+        assume(logger.isDebugEnabled()).true();
+      });
+
+      it('uses the levels of active transports alongside silent transports', function () {
+        const logger = winston.createLogger({
+          transports: [
+            new winston.transports.Console({ level: 'debug', silent: true }),
+            new winston.transports.Console({ level: 'error' })
+          ]
+        });
+        assume(logger.isErrorEnabled()).true();
+        assume(logger.isInfoEnabled()).false();
+        assume(logger.isDebugEnabled()).false();
+      });
+
       it('default levels', function () {
         let logger = winston.createLogger({
           level: 'verbose',
