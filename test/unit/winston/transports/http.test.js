@@ -59,6 +59,38 @@ describe('Http({ host, port, path })', function () {
     server.close(done.bind(null, null));
   });
 
+  describe('basic authentication', function () {
+    [
+      { username: 'user', password: '' },
+      { username: '', password: 'token' },
+      { username: '', password: '' },
+      { username: 'user', password: 'secret' }
+    ].forEach(function (auth) {
+      it(`sends credentials ${JSON.stringify(auth)}`, function (done) {
+        let authorization;
+        server = http.createServer(function (req, res) {
+          authorization = req.headers.authorization;
+          req.resume();
+          res.end();
+        });
+        server.listen(port, host, function () {
+          const transport = new Http({ host, port: server.address().port, auth });
+          transport.on('warn', done);
+          transport.on('logged', function () {
+            try {
+              const encoded = Buffer.from(`${auth.username}:${auth.password}`).toString('base64');
+              assume(authorization).equals(`Basic ${encoded}`);
+              done();
+            } catch (err) {
+              done(err);
+            }
+          });
+          transport.log(dummyLog);
+        });
+      });
+    });
+  });
+
   describe('nominal', function () {
 
     beforeEach(function (done) {
