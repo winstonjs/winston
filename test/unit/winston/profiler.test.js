@@ -62,4 +62,25 @@ describe('Profiler', function () {
       new Profiler('1');
     }).throws('Logger is required for profiling');
   })
+
+  it('includes logger.defaultMeta and lets explicit fields win', function () {
+    const logger = new Logger({
+      defaultMeta: {service: 'api', message: 'from-default'}
+    });
+    let written;
+    logger.write = function (info) {
+      written = info;
+    };
+
+    new Profiler(logger).done({
+      message: 'finished',
+      requestId: 'r1'
+    });
+
+    assume(written.service).equals('api');
+    assume(written.requestId).equals('r1');
+    assume(written.message).equals('finished');
+    assume(written.level).equals('info');
+    assume(written.durationMs).is.a('number');
+  });
 });
