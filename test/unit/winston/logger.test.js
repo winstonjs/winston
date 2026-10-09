@@ -830,6 +830,21 @@ describe('Logger Instance', function () {
         logger.info('Hello', {label: 'world'});
         logger.info('Hello %d', 100, {label: 'world'});
       });
+
+      it(`.error(fmt, ...args, err) preserves Error stack with splat (#2527)`, function (done) {
+        const err = new Error('something went wrong');
+        const logger = helpers.createLogger(function (info) {
+          assume(info.message).equals('Oops 1');
+          assume(info.stack).is.a('string');
+          assume(info.stack).includes('something went wrong');
+          done();
+        }, format.combine(
+          format.errors({ stack: true }),
+          format.splat()
+        ));
+
+        logger.error('Oops %d', 1, err);
+      });
     });
 
     describe('.info', function () {
