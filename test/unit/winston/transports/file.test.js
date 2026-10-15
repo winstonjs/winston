@@ -6,6 +6,9 @@ const { rimraf } = require('rimraf');
 const fs = require('fs');
 const fsPromise = require('node:fs/promises');
 const path = require('path');
+const os = require('os');
+const zlib = require('zlib');
+const { once } = require('events');
 const winston = require('../../../../lib/winston');
 const testLogFixturesPath = path.join(__dirname, '..', '..', '..', 'fixtures', 'logs');
 const { MESSAGE } = require('triple-beam');
@@ -265,6 +268,116 @@ describe('File Transport', function () {
   });
 
   describe('Maxsize option', function () {
+    it.each([
+      { tailable: false, zippedArchive: false },
+      { tailable: true, zippedArchive: false },
+      { tailable: false, zippedArchive: true },
+      { tailable: true, zippedArchive: true },
+      { tailable: false, zippedArchive: true, endBeforeOpen: true }
+    ])('should flush records buffered during opening before rotating %j', async function ({ endBeforeOpen, ...options }) {
+      const dirname = fs.mkdtempSync(path.join(os.tmpdir(), 'winston-opening-'));
+      const createWriteStream = fs.createWriteStream;
+      let firstDestination;
+      const streamSpy = jest.spyOn(fs, 'createWriteStream').mockImplementationOnce((...args) => {
+        const destination = createWriteStream(...args);
+        firstDestination = destination;
+        for (const method of ['_write', '_writev']) {
+          const write = destination[method];
+          destination[method] = function (...writeArgs) {
+            setImmediate(() => write.apply(this, writeArgs));
+          };
+        }
+        return destination;
+      });
+      const transport = new winston.transports.File({
+        filename: path.join(dirname, 'opening.log'),
+        maxsize: 128,
+        maxFiles: 5,
+        ...options
+      });
+      const compressFile = transport._compressFile;
+      const archiveStates = [];
+      const archiveSpy = jest.spyOn(transport, '_compressFile').mockImplementation(function (...args) {
+        archiveStates.push(firstDestination.writableFinished);
+        return compressFile.apply(this, args);
+      });
+      const logger = winston.createLogger({
+        format: winston.format.printf(info => info.message),
+        transports: [transport]
+      });
+      const messages = ['first', 'oversized-' + 'x'.repeat(256), 'last'];
+      const rotated = new Promise(resolve => {
+        transport.once('open', () => transport.once('open', resolve));
+      });
+
+      try {
+        messages.forEach(message => logger.info(message));
+        const finished = once(logger, 'finish');
+        if (endBeforeOpen) logger.end();
+        await rotated;
+        if (!endBeforeOpen) {
+          logger.info('after rotation');
+          logger.end();
+        }
+        await finished;
+
+        const contents = fs.readdirSync(dirname).map(filename => {
+          const data = fs.readFileSync(path.join(dirname, filename));
+          return filename.endsWith('.gz') ? zlib.gunzipSync(data).toString() : data.toString();
+        });
+        assert.ok(contents.some(content => content === messages.join('\n') + '\n'));
+        const lines = contents.join('').trim().split('\n').sort();
+        assert.deepStrictEqual(lines, [...messages, ...(endBeforeOpen ? [] : ['after rotation'])].sort());
+        if (options.zippedArchive) assert.deepStrictEqual(archiveStates, [true]);
+      } finally {
+        archiveSpy.mockRestore();
+        streamSpy.mockRestore();
+        logger.close();
+        fs.rmSync(dirname, { recursive: true, force: true });
+      }
+    });
+
+    it('should keep accepting records if an opening file write fails', async function () {
+      const dirname = fs.mkdtempSync(path.join(os.tmpdir(), 'winston-opening-error-'));
+      const createWriteStream = fs.createWriteStream;
+      const streamSpy = jest.spyOn(fs, 'createWriteStream').mockImplementationOnce((...args) => {
+        const destination = createWriteStream(...args);
+        for (const method of ['_write', '_writev']) {
+          destination[method] = function (...writeArgs) {
+            writeArgs[writeArgs.length - 1](new Error('write failed'));
+          };
+        }
+        return destination;
+      });
+      const transport = new winston.transports.File({
+        filename: path.join(dirname, 'failure.log'),
+        maxsize: 128,
+        maxFiles: 5
+      });
+      const logger = winston.createLogger({
+        format: winston.format.printf(info => info.message),
+        transports: [transport]
+      });
+      const rotated = new Promise(resolve => {
+        transport.once('open', () => transport.once('open', resolve));
+      });
+
+      try {
+        logger.info('x'.repeat(256));
+        await rotated;
+        logger.info('after error');
+        const finished = once(logger, 'finish');
+        logger.end();
+        await finished;
+        assert.strictEqual(fs.readFileSync(path.join(dirname, 'failure1.log'), 'utf8'), 'after error\n');
+        assert.deepStrictEqual([...fs.readdirSync(dirname)].sort(), ['failure.log', 'failure1.log']);
+      } finally {
+        streamSpy.mockRestore();
+        logger.close();
+        fs.rmSync(dirname, { recursive: true, force: true });
+      }
+    });
+
     it('should create a new file the configured max size is exceeded', async function () {
       const transport = new winston.transports.File({
         ...defaultTransportOptions,
@@ -288,10 +401,13 @@ describe('File Transport', function () {
         maxsize: 2048
       });
 
-      await logToTransport(transport, { kbytes: 3 });
+      await once(transport, 'open');
+      for (let i = 0; i < 5; i++) {
+        const logged = once(transport, 'logged');
+        transport.log({ level: 'info', [MESSAGE]: 'A'.repeat(1023) });
+        await logged;
+      }
       await waitForFile('testarchive.log');
-
-      await logToTransport(transport, { kbytes: 2 });
       await waitForFile('testarchive1.log');
       await waitForFile('testarchive2.log');
 
@@ -385,9 +501,7 @@ describe('File Transport', function () {
       assertFileContentsStartWith('testarchive.log', 'D');
       assertFileContentsStartWith('testarchive1.log', 'C');
       assertFileContentsStartWith('testarchive2.log', 'B');
-      // FIX: I would expect the first file that was rolled to be filled with the first log message
-      // instead the file is empty. Investigation needed.
-      // assertFileContentsStartWith('testarchive3.log', 'A');
+      assertFileContentsStartWith('testarchive3.log', 'A');
     });
 
     it('should write to the newest file and older files will be in descending order', async function () {
@@ -410,15 +524,9 @@ describe('File Transport', function () {
       assertFileExists('testarchive2.log');
 
       // Verify the contents of the files are in the expected order
-      // eslint-disable-next-line -- intentionally asserting file starts with no values
-      assertFileContentsStartWith('testarchive.log', undefined);
-      // FIX: only two of the files are filled and are not in the expected order. File contents are as follows:
-      //   file testarchive.log  - empty
-      //   file testarchive1.log - 'B'
-      //   file testarchive2.log - 'C'
-      //   file testarchive3.log - empty
-      // assertFileContentsStartWith('testarchive1.log', 'A');
-      // assertFileContentsStartWith('testarchive2.log', 'B');
+      assertFileContentsStartWith('testarchive.log', 'A');
+      assertFileContentsStartWith('testarchive1.log', 'B');
+      assertFileContentsStartWith('testarchive2.log', 'C');
     });
   });
 
