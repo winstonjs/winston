@@ -22,6 +22,150 @@ const mockTransport = require('../../helpers/mocks/mock-transport');
 const testLogFixturesPath = path.join(__dirname, '..', '..', 'fixtures', 'logs');
 
 describe('Logger Instance', function () {
+  describe('metadata messages without primitive conversion', function () {
+    it.each(['missing types', 'missing isProxy', 'throwing isProxy'])('preserves coercion with a util shim: %s', function (shim) {
+      const isProxy = jest.fn(() => { throw new Error('isProxy is not supported in userland'); });
+      const types = shim === 'throwing isProxy' ? { isProxy } : {};
+      let logger;
+      try {
+        jest.doMock('util', () => Object.assign({}, jest.requireActual('util'), {
+          types: shim === 'missing types' ? null : types
+        }));
+        jest.isolateModules(() => {
+          logger = require('../../../lib/winston').createLogger();
+        });
+        const messages = [];
+        logger.on('data', info => { messages.push(info.message); });
+        try {
+          logger.log('info', 'context', { message: {}});
+          logger.log('info', 'context', { message: { detail: 'value' }});
+          expect(messages).toEqual(['context [object Object]', 'context [object Object]']);
+          expect(isProxy).toHaveBeenCalledTimes(shim === 'throwing isProxy' ? 1 : 0);
+        } finally {
+          logger.close();
+        }
+      } finally {
+        jest.dontMock('util');
+      }
+    });
+    it.each([
+      ['text', 'text'],
+      [42, '42'],
+      [true, 'true'],
+      [{ detail: 'value' }, '[object Object]'],
+      [{ toString() { return 'custom'; } }, 'custom'],
+      [Object.assign(Object.create(null), { valueOf() { return 42; } }), '42'],
+      [Object.assign(Object.create(null), { [Symbol.toPrimitive]() { return 'hook'; } }), 'hook']
+    ])('preserves normal conversion for %p', function (message, expected, done) {
+      const logger = winston.createLogger();
+      logger.on('data', info => {
+        assume(info.message).equals(`context ${expected}`);
+        logger.close();
+        done();
+      });
+      logger.log('info', 'context', { message });
+    });
+
+    it.each([Symbol.toPrimitive, 'toString', 'valueOf'])('reads the %s getter once', function (hook) {
+      for (const inherited of [false, true]) {
+        const owner = Object.create(null);
+        let reads = 0;
+        Object.defineProperty(owner, hook, {
+          get() {
+            reads++;
+            if (reads > 1) throw new TypeError('hook read twice');
+            return () => 'custom';
+          }
+        });
+        const message = inherited ? Object.create(owner) : owner;
+        const logger = winston.createLogger();
+        let actual;
+        logger.on('data', info => { actual = info.message; });
+        try {
+          logger.info('context', { message });
+          assume(actual).equals('context custom');
+          assume(reads).equals(1);
+        } finally {
+          logger.close();
+        }
+      }
+    });
+
+    it.each([Symbol.toPrimitive, 'toString', 'valueOf'])('propagates user TypeErrors from %s', function (hook) {
+      for (const accessor of [false, true]) {
+        const message = Object.create(null);
+        const error = new TypeError('user conversion error');
+        const fail = () => { throw error; };
+        Object.defineProperty(message, hook, accessor ? { get: fail } : { value: fail });
+        const logger = winston.createLogger();
+        try {
+          let caught;
+          try {
+            logger.info('context', { message });
+          } catch (err) {
+            caught = err;
+          }
+          expect(caught).toBe(error);
+        } finally {
+          logger.close();
+        }
+      }
+    });
+
+    it('does not inspect proxy prototypes or descriptors before conversion', function () {
+      const accesses = [];
+      const message = new Proxy(Object.create(null), {
+        getPrototypeOf() { throw new Error('unexpected prototype inspection'); },
+        getOwnPropertyDescriptor() { throw new Error('unexpected descriptor inspection'); },
+        get(target, key) {
+          accesses.push(key);
+          if (key === 'toString') return () => 'proxy';
+        }
+      });
+      const logger = winston.createLogger();
+      let actual;
+      logger.on('data', info => { actual = info.message; });
+      try {
+        logger.info('context', { message });
+        assume(actual).equals('context proxy');
+        expect(accesses).toEqual([Symbol.toPrimitive, 'toString']);
+      } finally {
+        logger.close();
+      }
+    });
+
+    it('preserves failed coercion for inherited dictionaries and non-callable hooks', function () {
+      const logger = winston.createLogger();
+      const dictionary = Object.create(null);
+      dictionary.detail = 'value';
+      try {
+        for (const message of [Object.create(dictionary), Object.assign(Object.create(null), { toString: 42 })]) {
+          expect(() => logger.info('context', { message })).toThrow(TypeError);
+        }
+        const { proxy, revoke } = Proxy.revocable({}, {});
+        revoke();
+        expect(() => logger.info('context', { message: proxy })).toThrow(TypeError);
+      } finally {
+        logger.close();
+      }
+    });
+
+    it.each([false, true])('logs a null-prototype message (circular: %s)', function (circular, done) {
+      const message = Object.assign(Object.create(null), { detail: 'value' });
+      if (circular) message.self = message;
+      const logger = winston.createLogger();
+      logger.on('data', info => {
+        assume(info.message).equals(circular
+          ? 'context {"detail":"value","self":"[Circular]"}'
+          : 'context {"detail":"value"}');
+        assume(info.extra).equals(42);
+        assume(info[SPLAT][0].message).equals(message);
+        logger.close();
+        done();
+      });
+      logger.info('context', { message, extra: 42 });
+    });
+  });
   describe('Configuration', function () {
     it('.configure()', function () {
       let logger = winston.createLogger({
