@@ -390,6 +390,23 @@ describe('File Transport', function () {
       // assertFileContentsStartWith('testarchive3.log', 'A');
     });
 
+    it('should be ignored and keep rotating when maxFiles is not set', async function () {
+      const transport = new winston.transports.File({
+        ...defaultTransportOptions,
+        filename: 'testtailablenomaxfiles.log',
+        tailable: true
+      });
+      await new Promise(resolve => transport.once('open', resolve));
+
+      await logToTransport(transport, { kbytes: 4, char: 'A' });
+      await waitForFile('testtailablenomaxfiles1.log');
+      await logToTransport(transport, { kbytes: 4, char: 'B' });
+      await waitForFile('testtailablenomaxfiles2.log');
+
+      assertFileContentsStartWith('testtailablenomaxfiles.log', 'A');
+      assertFileContentsStartWith('testtailablenomaxfiles1.log', 'B');
+    });
+
     it('should write to the newest file and older files will be in descending order', async function () {
       const transport = new winston.transports.File({
         ...defaultTransportOptions,
