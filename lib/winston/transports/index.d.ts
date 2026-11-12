@@ -11,6 +11,10 @@ declare namespace winston {
   interface ConsoleTransportOptions extends Transport.TransportStreamOptions {
     consoleWarnLevels?: string[];
     stderrLevels?: string[];
+    /**
+     * @deprecated Ignored since winston@3.0.0; all levels go to stdout
+     * unless listed in `stderrLevels` or `consoleWarnLevels`.
+     */
     debugStdout?: boolean;
     eol?: string;
     forceConsole?: boolean;
