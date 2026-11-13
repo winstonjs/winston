@@ -73,12 +73,14 @@ declare namespace winston {
     (level: string, message: string, ...meta: any[]): Logger;
     (entry: LogEntry): Logger;
     (level: string, message: any): Logger;
+    (...args: [LogEntry] | [string, any] | [string, string, ...any[]]): Logger;
   }
 
   interface LeveledLogMethod {
     (message: string, ...meta: any[]): Logger;
     (message: any): Logger;
     (infoObject: object): Logger;
+    (...args: [any] | [string, ...any[]]): Logger;
   }
 
   interface LoggerOptions {
