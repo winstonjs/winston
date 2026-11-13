@@ -57,3 +57,30 @@ logger.isInfoEnabled();
 logger.isVerboseEnabled();
 logger.isDebugEnabled();
 logger.isSillyEnabled();
+
+// Wrappers using Parameters retain every supported logging signature.
+function log(...args: Parameters<winston.LogMethod>): winston.Logger {
+    return logger.log(...args);
+}
+function info(...args: Parameters<winston.LeveledLogMethod>): winston.Logger {
+    return logger.info(...args);
+}
+log({ level: 'info', message: 'hello' });
+log('info', 'hello %s', 'world');
+log('info', { message: 'hello' });
+info('hello');
+info('hello %s', 'world');
+info({ message: 'hello' });
+info(err);
+info(42);
+
+// @ts-expect-error a message is required
+info();
+// @ts-expect-error a level alone is not a log entry
+log('info');
+// @ts-expect-error a log entry needs a level
+log({ message: 'hello' });
+// @ts-expect-error non-string messages do not accept additional metadata
+info({}, {});
+// @ts-expect-error non-string messages do not accept additional metadata
+log('info', {}, {});
