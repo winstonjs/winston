@@ -123,5 +123,5 @@ Below is the list of items that make up the roadmap through `3.4.0`. We are acti
 [logform]: https://github.com/winstonjs/logform
 [triple-beam]: https://github.com/winstonjs/triple-beam
 [abstract-winston-transport]: https://github.com/winstonjs/abstract-winston-transport
-[stress-test]: https://github.com/winstonjs/winston/blob/master/test/transports/file-stress.test.js
+[stress-test]: https://github.com/winstonjs/winston/blob/master/test/unit/winston/transports/00-file-stress.test.js
 [custom format]: https://github.com/winstonjs/winston#creating-custom-formats
