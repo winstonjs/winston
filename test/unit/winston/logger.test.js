@@ -1025,7 +1025,7 @@ it('preserves prototype of info object in child logger', (done) => {
     });
   });
 
-  describe('Backwards Compatability', function () {
+  describe('Backwards Compatibility', function () {
     describe('Winston V2 Log', function () {
       it('.log(level, message)', function (done) {
         let logger = helpers.createLogger(function (info) {
