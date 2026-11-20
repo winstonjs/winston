@@ -33,6 +33,7 @@ there are additional transports written by
   * [Amazon DynamoDB](#amazon-dynamodb-transport)
   * [Amazon Kinesis Firehose](#amazon-kinesis-firehose-transport)
   * [Amazon SNS](#amazon-sns-simple-notification-system-transport)
+  * [Axiom](#axiom-transport)
   * [Azure Table](#azure-table)
   * [Cassandra](#cassandra-transport)
   * [Cisco Spark](#cisco-spark-transport)
@@ -338,6 +339,34 @@ Options:
 * __level:__ lowest level this transport will log. (default: `info`)
 * __json:__ use json instead of a prettier (human friendly) string for meta information in the notification. (default: `false`)
 * __handleExceptions:__ set to true to have this transport handle exceptions. (default: `false`)
+
+### Axiom Transport
+
+[@axiomhq/winston](https://github.com/axiomhq/axiom-js/tree/main/packages/winston) is the official transport for sending logs to [Axiom](https://axiom.co).
+
+``` js
+const winston = require('winston');
+const { WinstonTransport: AxiomTransport } = require('@axiomhq/winston');
+
+const logger = winston.createLogger({
+  format: winston.format.json(),
+  transports: [
+    new AxiomTransport({
+      dataset: process.env.AXIOM_DATASET,
+      token: process.env.AXIOM_TOKEN,
+      edge: 'us-east-1.aws.edge.axiom.co'
+    })
+  ]
+});
+```
+
+Options:
+
+* __token:__ Axiom API token with permission to ingest into the dataset. *[required]*
+* __dataset:__ Name of the Axiom dataset. (default: the `AXIOM_DATASET` environment variable)
+* __edge:__ Edge domain of the region where the dataset is stored, for example `us-east-1.aws.edge.axiom.co` or `eu-central-1.aws.edge.axiom.co`.
+
+See the [Axiom documentation](https://axiom.co/docs/guides/winston) for error, exception and rejection handling.
 
 ### Azure Table
 
