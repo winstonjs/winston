@@ -1013,6 +1013,77 @@ it('preserves prototype of info object in child logger', (done) => {
         childLogger.error(new CustomError('custom error'));
       });
 
+      it('does not enumerate Error properties in child loggers', (done) => {
+        const assertFn = ((msg) => {
+          assume(msg).instanceOf(Error);
+          assume(msg.level).equals('error');
+          assume(msg.message).equals('dummy error');
+          assume(msg.stack).is.a('string');
+          assume(msg.stack).includes('dummy error');
+          // `message`, `stack` and `cause` are non-enumerable on the
+          // Error logged through the base logger, so they must not be
+          // enumerated on the info of a child logger either.
+          assume(Object.keys(msg).sort()).deep.equals(['level', 'requestId']);
+          assume('cause' in msg).is.false();
+          assume(msg.requestId).equals('451');
+          done();
+        });
+
+        const logger = winston.createLogger({
+          transports: [
+            mockTransport.createMockTransport(assertFn)
+          ]
+        });
+
+        const childLogger = logger.child({ requestId: '451' });
+        childLogger.error(new Error('dummy error'));
+      });
+
+      it('preserves a non-enumerable cause in child loggers', (done) => {
+        const cause = new Error('dummy error cause');
+        const assertFn = ((msg) => {
+          assume(msg).instanceOf(Error);
+          assume(msg.cause).equals(cause);
+          assume(Object.keys(msg).includes('cause')).is.false();
+          assume(Object.keys(msg).includes('message')).is.false();
+          assume(Object.keys(msg).includes('stack')).is.false();
+          const descriptor = Object.getOwnPropertyDescriptor(msg, 'cause');
+          assume(descriptor.enumerable).is.false();
+          done();
+        });
+
+        const logger = winston.createLogger({
+          transports: [
+            mockTransport.createMockTransport(assertFn)
+          ]
+        });
+
+        const childLogger = logger.child({ service: 'user-service' });
+        childLogger.error(new Error('dummy error', { cause }));
+      });
+
+      it('keeps Error subclass shape in nested child loggers', (done) => {
+        const assertFn = ((msg) => {
+          assume(msg).instanceOf(RangeError);
+          assume(msg.message).equals('dummy range error');
+          assume(Object.keys(msg).sort()).deep.equals(
+            ['level', 'requestId', 'service']
+          );
+          done();
+        });
+
+        const logger = winston.createLogger({
+          transports: [
+            mockTransport.createMockTransport(assertFn)
+          ]
+        });
+
+        const childLogger = logger
+          .child({ service: 'user-service' })
+          .child({ requestId: '451' });
+        childLogger.error(new RangeError('dummy range error'));
+      });
+
       it('defaultMeta() autobinds correctly', (done) => {
         const logger = helpers.createLogger(info => {
           assume(info.message).equals('test');
