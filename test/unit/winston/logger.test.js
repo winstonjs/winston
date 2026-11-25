@@ -709,6 +709,34 @@ describe('Logger Instance', function () {
   })
 
   describe('Profiling', function () {
+    ['testing', 'constructor', 'toString', '__proto__'].forEach(id => {
+      [0, 100].forEach(start => {
+        it(`profiles ${id} starting at ${start}`, function () {
+          const logger = new winston.Logger();
+          const now = jest.spyOn(Date, 'now')
+            .mockReturnValueOnce(start)
+            .mockReturnValueOnce(start + 25);
+          logger.write = jest.fn();
+
+          try {
+            logger.profile(id);
+            expect(logger.write).not.toHaveBeenCalled();
+            logger.profile(id);
+            expect(logger.write).toHaveBeenCalledTimes(1);
+            expect(logger.write).toHaveBeenCalledWith({
+              level: 'info',
+              durationMs: 25,
+              message: id
+            });
+            expect(Object.keys(logger.profilers)).toEqual([]);
+          } finally {
+            now.mockRestore();
+            logger.close();
+          }
+        });
+      });
+    });
+
     it('ending profiler with object argument should be included in output', function (done) {
       let logger = helpers.createLogger(function (info) {
         assume(info).is.an('object');
