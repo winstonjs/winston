@@ -57,3 +57,17 @@ logger.isInfoEnabled();
 logger.isVerboseEnabled();
 logger.isDebugEnabled();
 logger.isSillyEnabled();
+
+// `Parameters<>` and `infer` use the last overload, which must accept
+// everything the other overloads accept.
+function logWithSpread(...args: Parameters<winston.LeveledLogMethod>): void {
+    logger.info(...args);
+}
+logWithSpread('a log message');
+logWithSpread({ infoObjectKey: 'infoObjectVal' });
+
+function rawLogWithSpread(...args: Parameters<winston.LogMethod>): void {
+    logger.log(...args);
+}
+rawLogWithSpread('info', 'a log message');
+rawLogWithSpread({ level: 'info', message: 'a log message' });
