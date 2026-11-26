@@ -73,12 +73,18 @@ declare namespace winston {
     (level: string, message: string, ...meta: any[]): Logger;
     (entry: LogEntry): Logger;
     (level: string, message: any): Logger;
+    // TypeScript infers from the last overload, so it must accept
+    // everything the overloads above do.
+    (levelOrEntry: string | LogEntry, message?: any, ...meta: any[]): Logger;
   }
 
   interface LeveledLogMethod {
     (message: string, ...meta: any[]): Logger;
     (message: any): Logger;
     (infoObject: object): Logger;
+    // TypeScript infers from the last overload, so it must accept
+    // everything the overloads above do.
+    (message: any, ...meta: any[]): Logger;
   }
 
   interface LoggerOptions {
